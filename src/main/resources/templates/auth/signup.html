@@ -1,0 +1,77 @@
+
+<!-- signup.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>회원가입</title>
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      text-align: center;
+    }
+    input, select, button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+    }
+    input, select {
+      width: 250px;
+      background: #333;
+      color: white;
+    }
+    button {
+      width: 270px;
+      background: linear-gradient(to right, #8a2be2, #7f00ff);
+      color: white;
+      font-weight: bold;
+    }
+    a {
+      color: #aaa;
+      font-size: 0.9em;
+    }
+    .logo {
+      color: #8a2be2;
+      font-weight: bold;
+      font-size: 1.5em;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="logo">Moodlink</div>
+  <h1>SIGN UP</h1>
+  <form th:action="@{/signup}" method="post">
+    <input type="text" name="username" placeholder="ID">
+    <input type="password" name="password" placeholder="Password">
+    <input type="text" name="name" placeholder="username">
+    <select name="genre">
+      <option>장르</option>
+      <!-- Fill in actual genres -->
+    </select>
+    <select name="period">
+      <option>시대</option>
+      <!-- Fill in actual periods -->
+    </select>
+    <select name="country">
+      <option>대한민국</option>
+      <!-- Fill in actual countries -->
+    </select>
+    <button type="submit">Sign Up</button>
+  </form>
+  <p>Already have an account? <a th:href="@{/login}">Log in</a></p>
+</div>
+</body>
+</html>
