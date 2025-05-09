@@ -83,12 +83,13 @@
     <div class="header-right">
       <span class="welcome-text">안녕하세요 xx님!</span>
       <div class="header-buttons">
+        <button class="mypage-btn" th:onclick="'location.href=\'' + @{/users} + '\''">
+          마이페이지
+        </button>
         <button class="logout-btn" th:onclick="'location.href=\'' + @{/} + '\''">
           로그아웃
         </button>
-        <button class="mypage-btn" th:onclick="'location.href=\'' + @{/users} + '\''">
-          마이페이지로 돌아가기
-        </button>
+
       </div>
     </div>
   </header>
