@@ -14,3 +14,4 @@
 - refactor : 코드 리펙토링<br>
 - test : 테스트 코드, 리펙토링 테스트 코드 추가<br>
 - chore : 빌드 업무 수정, 패키지 매니저 수정<br>
+- merge : 병합 알림 -> ex ) (merge) main   뜻 : main과 병합했음 
