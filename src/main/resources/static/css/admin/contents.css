@@ -1,0 +1,105 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #1e1e1e;
+  color: white;
+}
+
+.add-btn {
+  background: linear-gradient(to right, #A64DFF, #6A00FF);
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.menu a {
+  display: block;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  color: white;
+  font-weight: bold;
+  width:150px;
+  text-decoration: none;
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+.menu a.active {
+  background: linear-gradient(to right, #A64DFF, #6A00FF);
+  border-radius: 5px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 0rem 1rem;
+}
+
+.item-card {
+  display: flex;
+  border: 1px solid #444;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.item-card img {
+  width: 80px;
+  height: 100px;
+  background-color: #ccc;
+  margin-right: 1rem;
+}
+
+.item-info {
+  flex: 1;
+}
+
+.item-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.item-buttons button {
+  background: linear-gradient(to right, #A64DFF, #6A00FF);
+  border: none;
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.pagination {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.pagination span, .pagination a {
+  margin: 0 5px;
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
+  background-color: #333;
+  color: white;
+  text-decoration: none;
+}
+
+.pagination .active {
+  background: linear-gradient(to right, #A64DFF, #6A00FF);
+}
+
+.empty-message {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}

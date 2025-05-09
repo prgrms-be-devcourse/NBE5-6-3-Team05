@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>관리자 페이지 - 영화 추가</title>
+  <link rel="stylesheet" th:href="@{/css/admin/contents-add.css}">
+
+</head>
+<main layout:fragment="content">
+  <!-- 돌아가기 버튼 -->
+  <button class="back-btn" onclick="window.history.back()">← 돌아가기</button>
+
+  <!-- 중앙 배치 form -->
+  <div class="main-area">
+    <div class="form-section">
+      <h3>영화 정보를 입력해주세요.</h3>
+
+      <form th:action="@{/admin/movies/add}" th:object="${movieAddRequest}" method="post" enctype="multipart/form-data">
+        <div class="info-group">
+          <div class="image-upload">
+            <div id="preview" class="image-preview"></div>
+            <input type="file" id="image-input" name="thumbnail" style="display:none"/>
+            <button class="genre-btn" onclick="document.getElementById('image-input').click()">이미지 추가</button>
+          </div>
+
+          <div>
+            <div class="form-row"><label>제목</label><textarea th:field="*{title}" class="input-line"/></div>
+            <span th:errors="*{title}" class="helper-text" ></span>
+            <div class="form-row"><label>감독</label><textarea th:field="*{director}" class="input-line" type="text" /></div>
+            <span th:errors="*{director}" class="helper-text" ></span>
+            <div class="form-row"><label>개봉일</label><input class="input-line" type="date" /></div>
+          </div>
+        </div>
+
+        <div class="form-row" style="flex-direction: column; align-items: flex-start;">
+          <label style="margin-bottom: 0.3rem;">장르</label>
+          <div class="selected-genres" id="selected-genres">선택된 장르 없음</div>
+          <div class="genre-list">
+            <button class="genre-btn" onclick="toggleGenre(this)">코미디</button>
+            <button class="genre-btn" onclick="toggleGenre(this)">가족</button>
+            <button class="genre-btn" onclick="toggleGenre(this)">스릴러</button>
+            <button class="genre-btn" onclick="toggleGenre(this)">액션</button>
+            <button class="genre-btn" onclick="toggleGenre(this)">드라마</button>
+          </div>
+        </div>
+
+        <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
+          <label>설명</label>
+          <textarea class="textarea"></textarea>
+        </div>
+
+        <button class="submit-btn">등록</button>
+      </form>
+    </div>
+  </div>
+</main>
+
+<script>
+  // 이미지 미리보기
+  const input = document.getElementById('image-input');
+  const preview = document.getElementById('preview');
+  input.addEventListener('change', function () {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => preview.style.backgroundImage = `url(${e.target.result})`;
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // 장르 선택
+  function toggleGenre(btn) {
+    btn.classList.toggle("selected");
+    const selected = [...document.querySelectorAll(".genre-btn.selected")].map(b => b.textContent);
+    document.getElementById("selected-genres").textContent = selected.length ? selected.join(", ") : "선택된 장르 없음";
+  }
+</script>
+</html>
