@@ -4,7 +4,8 @@
 ---
 
 # 깃 컨벤션
-- ex ) (feat) sign up complete
+- ex ) (feat) sign up complete<br><br>
+
 - feat : 새로운 기능 추가<br>
 - fix : 버그 수정<br>
 - docs : 문서 수정<br>
