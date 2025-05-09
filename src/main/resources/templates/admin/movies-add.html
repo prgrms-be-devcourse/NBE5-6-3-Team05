@@ -13,10 +13,10 @@
 
   <!-- 중앙 배치 form -->
   <div class="main-area">
+      <form th:action="@{/admin/movies/add}" th:object="${movieAddRequest}" method="post" enctype="multipart/form-data">
     <div class="form-section">
       <h3>영화 정보를 입력해주세요.</h3>
 
-      <form th:action="@{/admin/movies/add}" th:object="${movieAddRequest}" method="post" enctype="multipart/form-data">
         <div class="info-group">
           <div class="image-upload">
             <div id="preview" class="image-preview"></div>
@@ -25,9 +25,9 @@
           </div>
 
           <div>
-            <div class="form-row"><label>제목</label><textarea th:field="*{title}" class="input-line"/></div>
+            <div class="form-row"><label>제목</label><input th:field="*{title}" class="input-line"/></div>
             <span th:errors="*{title}" class="helper-text" ></span>
-            <div class="form-row"><label>감독</label><textarea th:field="*{director}" class="input-line" type="text" /></div>
+            <div class="form-row"><label>감독</label><input th:field="*{director}" class="input-line" type="text" /></div>
             <span th:errors="*{director}" class="helper-text" ></span>
             <div class="form-row"><label>개봉일</label><input class="input-line" type="date" /></div>
           </div>
@@ -51,8 +51,8 @@
         </div>
 
         <button class="submit-btn">등록</button>
-      </form>
     </div>
+      </form>
   </div>
 </main>
 

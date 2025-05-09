@@ -37,7 +37,7 @@ public class AdminController {
 
     // 영화 추가 화면
     @GetMapping("movies/add")
-    public String addMovie(){
+    public String addMovie(MovieAddRequest movieAddRequest, Model model){
         return "admin/movies-add";
     }
 
