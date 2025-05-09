@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<main>
+<h1>임시 result page</h1>
+
+</main>
+
+  <hr>
+  <form action="/main" method="get">
+    <button type="submit">메인화면으로 이동(헤더로 빼야됨, 모든 Role에 대해 적용)</button>
+  </form>
+  <br>
+  <br>
+  <form action="/member/signin" method="get">
+    <button type="submit">로그인화면으로 이동 및 로그아웃 (헤더로 빼야됨, User 및 Admin일 때 적용)</button>
+  </form>
+  <br>
+  <br>
+  <div>헤더 내용</div>
+  <br>
+  <hr>
+
+
+  <form action="/member/mypage" method="get">
+    <button type="submit">마이페이지으로 이동 (User 및 Admin일 때 적용)</button>
+  </form>
+  <br>
+  <br>
+  <form action="/recommend" method="get">
+    <button type="submit">키워드선택 및 추천페이지로 이동</button>
+  </form>
+  <br>
+  <br>
+  <div>페이지 이동 내용</div>
+  <br>
+  <hr>
+
+
+  <h2 th:text="${curatingReason}"></h2>
+  <div>curating reason 출력</div>
+  <br>
+  <hr>
+
+
+  <h2>컨텐츠 출력 영역</h2>
+  <div>각 컨텐츠마다 3개의 버튼 존재, search, details, *별표시</div>
+  <div>
+    Seach버튼: 해당 컨텐츠에 대한 외부 검색엔진 검색
+    <a href="https://www.youtube.com/watch?v=TpPwI_Lo0YY" target="_blank">해당 컨텐츠 검색결과</a>
+  </div>
+  <br>
+  <br>
+  <div>
+    details버튼: 해당 컨텐츠에 대한 상세정보 팝업창 띄우기
+  </div>
+  <br>
+  <br>
+  <div>
+    *버튼: 해당 컨텐츠 좋아요체크박스, 토글형, 입력 시 바로 db에 반영
+    <button id="toggleStar" onclick="toggle()">OFF</button>
+  </div>
+  <br>
+  <br>
+  <hr>
+
+<script>
+  function toggle() {
+    const btn = document.getElementById("toggleStar");
+    if (btn.innerText === "OFF") {
+      btn.innerText = "ON";
+      btn.style.backgroundColor = "yellow";
+    } else {
+      btn.innerText = "OFF";
+      btn.style.backgroundColor = "gray";
+    }
+  }
+</script>
+
+</body>
+</html>
