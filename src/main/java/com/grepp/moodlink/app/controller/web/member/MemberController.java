@@ -25,7 +25,7 @@ public class MemberController {
     private final MemberService memberService;
 
 
-    @GetMapping("")
+    @GetMapping
     public String showMyPage(HttpSession session ,Model model){
 //        String userId = (String) session.getAttribute("userId");
 //        if(userId == null){
@@ -44,7 +44,7 @@ public class MemberController {
 //
 //        }
 
-        return "/users";}
+        return "/users/mypage";}
 
     @GetMapping("/modify")
     public String showModifyMyPage(HttpSession session, Model model){
