@@ -24,10 +24,10 @@ public class MemberController {
 
 
     @GetMapping("/")
-    private String showMyPage(HttpSession session ,Model model){
+    public String showMyPage(HttpSession session ,Model model){
         String userId = (String) session.getAttribute("userId");
         if(userId == null){
-            return "redirct:/";
+            return "redirect:/";
         }
 
         Optional<MemberInfoDto> memberInfo = memberService.GetMemberInfo(userId);
@@ -45,10 +45,14 @@ public class MemberController {
         return "/users";}
 
     @GetMapping("/modify")
-    private String showModifyMyPage(){
-
-
-        return "/users";
+    public String showModifyMyPage(HttpSession session, Model model){
+        String userId = (String) session.getAttribute("userId");
+        if(userId == null){
+            return "redirect:/";
+        }
+        model.addAttribute("userId", userId);
+        model.addAttribute("username", memberService.GetUsername(userId));
+        return "/modify";
 
     }
 

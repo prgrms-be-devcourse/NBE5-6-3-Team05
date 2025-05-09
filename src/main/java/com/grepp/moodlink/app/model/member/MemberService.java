@@ -17,10 +17,12 @@ public class MemberService {
     @Transactional
 public Optional<MemberInfoDto> GetMemberInfo(String userId){
        Optional<Member> user = memberRepository.findById(userId);
-
-
         return user.map(MemberInfoDto::ToDto);
 
+    }
+
+    public String GetUsername(String userId){
+        return memberRepository.findByUsernameById(userId);
     }
 
 
