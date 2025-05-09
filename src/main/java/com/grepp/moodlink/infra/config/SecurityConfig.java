@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -70,22 +69,26 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(
                 (requests) -> requests
-                                  .requestMatchers(GET, "/", "/assets/**", "/download/**").permitAll()
                                   .requestMatchers(GET, "/member/signup", "/member/signin").permitAll()
                                   .requestMatchers(POST, "/member/signin", "/member/signup").permitAll()
                                   .anyRequest().permitAll()
             )
             .formLogin((form) -> form
-                                     .loginPage("/member/signin")
+                                     .loginPage("/signin")
                                      .usernameParameter("userId")
-                                     .loginProcessingUrl("/member/signin")
+                                     .loginProcessingUrl("/signin")
                                      .defaultSuccessUrl("/")
                                      .successHandler(successHandler())
                                      .permitAll()
             )
 //            .rememberMe(rememberMe -> rememberMe.key(rememberMeKey))
-            .logout(LogoutConfigurer::permitAll);
-        
+//            .logout(LogoutConfigurer::permitAll);
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/signin")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll());
         return http.build();
     }
     

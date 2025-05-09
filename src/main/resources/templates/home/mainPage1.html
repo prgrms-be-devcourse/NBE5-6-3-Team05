@@ -1,0 +1,89 @@
+
+<!--&lt;!&ndash; mainPage.html &ndash;&gt;-->
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <title>메인화면</title>-->
+<!--  <style>-->
+<!--    body {-->
+<!--      background-color: #111;-->
+<!--      color: white;-->
+<!--      font-family: 'Arial', sans-serif;-->
+<!--      padding: 30px;-->
+<!--    }-->
+<!--    .header {-->
+<!--      display: flex;-->
+<!--      justify-content: space-between;-->
+<!--      align-items: center;-->
+<!--    }-->
+<!--    .logo {-->
+<!--      color: #8a2be2;-->
+<!--      font-weight: bold;-->
+<!--      font-size: 1.5em;-->
+<!--    }-->
+<!--    .mypage {-->
+<!--      color: #ccc;-->
+<!--      font-size: 0.9em;-->
+<!--      border: 1px solid #8a2be2;-->
+<!--      padding: 5px 10px;-->
+<!--      border-radius: 10px;-->
+<!--    }-->
+<!--    .content {-->
+<!--      text-align: center;-->
+<!--      margin-top: 40px;-->
+<!--    }-->
+<!--    .category {-->
+<!--      display: flex;-->
+<!--      justify-content: center;-->
+<!--      gap: 40px;-->
+<!--      margin-top: 30px;-->
+<!--    }-->
+<!--    .category img {-->
+<!--      width: 120px;-->
+<!--      height: 170px;-->
+<!--      object-fit: cover;-->
+<!--      border: 2px solid white;-->
+<!--    }-->
+<!--    .buttons {-->
+<!--      margin-top: 30px;-->
+<!--    }-->
+<!--    .buttons button {-->
+<!--      background-color: #8a2be2;-->
+<!--      color: white;-->
+<!--      border: none;-->
+<!--      padding: 10px 15px;-->
+<!--      margin: 5px;-->
+<!--      border-radius: 5px;-->
+<!--    }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="header">-->
+<!--  <div class="logo">Moodlink</div>-->
+<!--  <div>-->
+<!--    <span th:if="${isAuthenticated}" th:text="'안녕하세요, ' + ${#authentication.name} + '님!'"></span>-->
+<!--    <a class="mypage" th:href="@{/}">마이페이지</a>-->
+<!--  </div>-->
+<!--</div>-->
+<!--<div class="content">-->
+<!--  <h2>오늘의 기분, 하나의 링크로 영화·도서·음악을 만나보세요.</h2>-->
+<!--  <div class="category">-->
+<!--    <div><img src="/img/music.jpg" alt="음악"><p>음악</p></div>-->
+<!--    <div><img src="/img/movie.jpg" alt="영화"><p>영화</p></div>-->
+<!--    <div><img src="/img/book.jpg" alt="도서"><p>도서</p></div>-->
+<!--  </div>-->
+<!--  <p><i>moodlink 이용자들의 추천 콘텐츠 입니다.</i></p>-->
+<!--  <div class="buttons">-->
+<!--    <button style="cursor: pointer" th:if="${!isAuthenticated}" th:onclick="|location.href='@{/signin}'|">로그인</button>-->
+<!--    <form th:action="@{/}" method="post">-->
+<!--    <button style="cursor: pointer" th:if="${isAuthenticated}">로그아웃</button>-->
+<!--    </form>-->
+<!--    <button style="background-color: darkred; cursor: pointer" >월드컵</button>-->
+<!--  </div>-->
+<!--  <div class="buttons">-->
+<!--  <button style="cursor: pointer" th:onclick="|location.href='@{/}'|">추천받기</button>-->
+<!--  </div>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
