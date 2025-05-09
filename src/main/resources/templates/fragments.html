@@ -92,7 +92,7 @@
     <div class="header-right">
       <span th:if="${isAuthenticated}" th:text="'안녕하세요, ' + ${username} + '님!'"></span>
       <div class="header-buttons">
-        <button class="mypage-btn" th:onclick="|location.href='@{/mypage}'|">마이페이지</button>
+        <button class="mypage-btn" th:if="${isAuthenticated}" th:onclick="|location.href='@{/mypage}'|">마이페이지</button>
         <form th:action="@{/logout}" method="post">
           <button class="logout-btn" th:if="${isAuthenticated}">로그아웃</button>
         </form>
