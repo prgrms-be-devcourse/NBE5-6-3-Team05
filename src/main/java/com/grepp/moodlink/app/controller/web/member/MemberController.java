@@ -26,17 +26,20 @@ public class MemberController {
     @GetMapping("/")
     private String showMyPage(HttpSession session ,Model model){
         String userId = (String) session.getAttribute("userId");
+        if(userId == null){
+            return "redirct:/";
+        }
+
         Optional<MemberInfoDto> memberInfo = memberService.GetMemberInfo(userId);
+
         if (memberInfo.isPresent()) {
             MemberInfoDto info = memberInfo.get();
-            model.addAttribute(info.getId());
-            model.addAttribute(info.getUsername());
-            model.addAttribute(info.getCreatedAt());
-            model.addAttribute(info.getUpdatedAt());
-            model.addAttribute(info.getContries());
+            model.addAttribute("userId" , info.getId());
+            model.addAttribute("username", info.getUsername());
+            model.addAttribute("createdAt",info.getCreatedAt());
+            model.addAttribute("updatedAt", info.getUpdatedAt());
+            model.addAttribute("countries", info.getContries());
 
-        } else {
-            // 값이 없을 때 처리
         }
 
 
