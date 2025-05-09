@@ -8,7 +8,6 @@
 <body>
 <div layout:fragment="content">
 <div class="container">
-  <div class="logo"><a th:href="@{/}">Moodlink</a></div>
   <h1>LOG IN</h1>
   <form th:action="@{/signin}" method="post" th:object="${signinRequest}">
     <input type="text" th:field="*{userId}" placeholder="ID">

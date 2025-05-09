@@ -86,7 +86,9 @@
 <body>
 <th:block th:fragment="frg_header">
   <header>
-    <div class="logo"><span>Moodlink</span></div>
+    <a th:href="@{/}">
+      <div class="logo"><span>Moodlink</span></div>
+    </a>
     <div class="header-right">
       <span th:if="${isAuthenticated}" th:text="'안녕하세요, ' + ${username} + '님!'"></span>
       <div class="header-buttons">
