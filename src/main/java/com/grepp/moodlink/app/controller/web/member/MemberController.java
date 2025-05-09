@@ -1,5 +1,6 @@
 package com.grepp.moodlink.app.controller.web.member;
 
+import com.grepp.moodlink.app.controller.web.member.payload.ModifyRequest;
 import com.grepp.moodlink.app.model.member.MemberRepository;
 import com.grepp.moodlink.app.model.member.MemberService;
 import com.grepp.moodlink.app.model.member.dto.MemberInfoDto;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -54,9 +56,19 @@ public class MemberController {
 //        model.addAttribute("username", memberService.GetUsername(userId));
         return "/users/modify";
 
-
-
     }
+
+    @PostMapping("/modify")
+    public String modifyProfile(ModifyRequest request ,HttpSession session){
+        String userId = (String) session.getAttribute("userId");
+        if(userId == null) {
+            return "redirect:/";
+        }
+        memberService.modifyProfile(userId, request.toDto());
+        return "redirect:/users";
+    }
+
+
 
     @GetMapping("/like")
     public String showLikePage(HttpSession session, Model model){
