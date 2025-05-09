@@ -42,8 +42,15 @@ public class MemberController {
 
         }
 
-
         return "/users";}
+
+    @GetMapping("/modify")
+    private String showModifyMyPage(){
+
+
+        return "/users";
+
+    }
 
 
 

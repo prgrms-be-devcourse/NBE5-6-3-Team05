@@ -2,7 +2,7 @@ package com.grepp.moodlink.app.model.member.dto;
 
 
 
-import com.grepp.moodlink.app.model.member.entity.User;
+import com.grepp.moodlink.app.model.member.entity.Member;
 import jakarta.persistence.Id;
 import java.time.LocalDate;
 import lombok.Data;
@@ -22,7 +22,7 @@ public class MemberInfoDto {
         private LocalDate updatedAt;
         private String contries;
 
-    public static MemberInfoDto ToDto(User user) {
+    public static MemberInfoDto ToDto(Member user) {
         MemberInfoDto dto = new MemberInfoDto();
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());
