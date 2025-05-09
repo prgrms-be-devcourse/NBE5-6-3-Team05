@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,8 +43,16 @@ public class MovieService {
 
             List<Integer> genreIds = dto.getGenreIds();
             List<String> genreNames = dto.getGenreNames();
-            Map<Integer, String> genre;
-
+            Map<Integer, String> genreMap = new HashMap<>();
+            for(int i = 0 ; i < genreIds.size(); i++){
+                genreMap.put(genreIds.get(i), genreNames.get(i));
+            }
+            Set<Genre> genres = genreMap.entrySet().stream()
+                    .map(entry -> genreRepository.findById(Long.valueOf(entry.getKey()))
+                            .orElseGet(() -> genreRepository.save(new Genre(entry.getKey(), entry.getValue())))
+                    )
+                    .collect(Collectors.toSet());
+            movie.setGenres(genres);
 
             movieRepository.save(movie);
         }
