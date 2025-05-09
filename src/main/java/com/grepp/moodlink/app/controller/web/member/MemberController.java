@@ -23,40 +23,45 @@ public class MemberController {
     private final MemberService memberService;
 
 
-    @GetMapping("/")
+    @GetMapping("")
     public String showMyPage(HttpSession session ,Model model){
-        String userId = (String) session.getAttribute("userId");
-        if(userId == null){
-            return "redirect:/";
-        }
-
-        Optional<MemberInfoDto> memberInfo = memberService.GetMemberInfo(userId);
-
-        if (memberInfo.isPresent()) {
-            MemberInfoDto info = memberInfo.get();
-            model.addAttribute("userId" , info.getId());
-            model.addAttribute("username", info.getUsername());
-            model.addAttribute("createdAt",info.getCreatedAt());
-            model.addAttribute("updatedAt", info.getUpdatedAt());
-            model.addAttribute("countries", info.getContries());
-
-        }
+//        String userId = (String) session.getAttribute("userId");
+//        if(userId == null){
+//            return "redirect:/";
+//        }
+//
+//        Optional<MemberInfoDto> memberInfo = memberService.GetMemberInfo(userId);
+//
+//        if (memberInfo.isPresent()) {
+//            MemberInfoDto info = memberInfo.get();
+//            model.addAttribute("userId" , info.getId());
+//            model.addAttribute("username", info.getUsername());
+//            model.addAttribute("createdAt",info.getCreatedAt());
+//            model.addAttribute("updatedAt", info.getUpdatedAt());
+//            model.addAttribute("countries", info.getContries());
+//
+//        }
 
         return "/users";}
 
     @GetMapping("/modify")
     public String showModifyMyPage(HttpSession session, Model model){
-        String userId = (String) session.getAttribute("userId");
-        if(userId == null){
-            return "redirect:/";
-        }
-        model.addAttribute("userId", userId);
-        model.addAttribute("username", memberService.GetUsername(userId));
-        return "/modify";
+//        String userId = (String) session.getAttribute("userId");
+//        if(userId == null){
+//            return "redirect:/";
+//        }
+//        model.addAttribute("userId", userId);
+//        model.addAttribute("username", memberService.GetUsername(userId));
+        return "/users/modify";
+
+
 
     }
 
-
+    @GetMapping("/like")
+    public String showLikePage(HttpSession session, Model model){
+        return "/users/like";
+    }
 
 
 
