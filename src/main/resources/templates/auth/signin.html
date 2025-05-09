@@ -1,54 +1,12 @@
 <!-- signin.html -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>로그인</title>
-  <style>
-    body {
-      background-color: #111;
-      color: white;
-      font-family: 'Arial', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .container {
-      text-align: center;
-    }
-    input, button {
-      display: block;
-      margin: 10px auto;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-    }
-    input {
-      width: 250px;
-      background: #333;
-      color: white;
-    }
-    button {
-      width: 270px;
-      background: linear-gradient(to right, #8a2be2, #7f00ff);
-      color: white;
-      font-weight: bold;
-    }
-    a {
-      color: #aaa;
-      font-size: 0.9em;
-    }
-    .logo {
-      color: #8a2be2;
-      font-weight: bold;
-      font-size: 1.5em;
-      margin-bottom: 20px;
-    }
-  </style>
-</head>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
 <body>
+<div layout:fragment="content">
 <div class="container">
   <div class="logo"><a th:href="@{/}">Moodlink</a></div>
   <h1>LOG IN</h1>
@@ -58,6 +16,7 @@
     <button style="cursor: pointer" type="submit">Sign In</button>
   </form>
   <p>Don't have an account? <a th:href="@{/signup}">Sign Up</a></p>
+</div>
 </div>
 </body>
 </html>

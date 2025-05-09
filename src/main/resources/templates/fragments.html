@@ -70,6 +70,15 @@
         background: linear-gradient(to right, #A64DFF, #6A00FF);
         color: white;
       }
+
+      .container {
+        text-align: center;
+      }
+
+      .main-content {
+        text-align: center;
+        margin-top: 40px;
+      }
     </style>
 
   </th:block>
@@ -77,12 +86,17 @@
 <body>
 <th:block th:fragment="frg_header">
   <header>
-    <a href="/"><div class="logo"><span>Moodlink</span></div></a>
+    <div class="logo"><span>Moodlink</span></div>
     <div class="header-right">
-      <span class="welcome-text">안녕하세요 xx님!</span>
+      <span th:if="${isAuthenticated}" th:text="'안녕하세요, ' + ${username} + '님!'"></span>
       <div class="header-buttons">
-        <a href="/users"><button class="mypage-btn">마이페이지</button></a>
-        <a href="/logout"><button class="logout-btn">로그아웃</button></a>
+        <button class="mypage-btn" th:onclick="|location.href='@{/mypage}'|">마이페이지</button>
+        <form th:action="@{/logout}" method="post">
+          <button class="logout-btn" th:if="${isAuthenticated}">로그아웃</button>
+        </form>
+        <form th:action="@{/signin}" method="get">
+          <button class="logout-btn" th:if="${!isAuthenticated}" th:href="@{/signin}">로그인</button>
+        </form>
       </div>
     </div>
   </header>
