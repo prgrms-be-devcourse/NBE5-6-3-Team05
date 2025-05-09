@@ -78,7 +78,7 @@ public class SecurityConfig {
                                      .loginPage("/signin")
                                      .usernameParameter("userId")
                                      .loginProcessingUrl("/signin")
-                                     .defaultSuccessUrl("/")
+//                                     .defaultSuccessUrl("/")
                                      .successHandler(successHandler())
                                      .permitAll()
             )

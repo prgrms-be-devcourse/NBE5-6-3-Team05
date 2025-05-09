@@ -2,7 +2,7 @@ package com.grepp.moodlink.infra.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -14,9 +14,9 @@ public class BaseEntity {
     protected Boolean activated = true;
     
     @CreatedDate
-    protected LocalDateTime createdAt = LocalDateTime.now();
+    protected LocalDate createdAt = LocalDate.now();
     @LastModifiedDate
-    protected LocalDateTime modifiedAt = LocalDateTime.now();
+    protected LocalDate modifiedAt;
     
     public void unActivated(){
         this.activated = false;
