@@ -1,4 +1,3 @@
-
 <!-- signup.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -51,27 +50,58 @@
 </head>
 <body>
 <div class="container">
-  <div class="logo">Moodlink</div>
+  <div class="logo"><a th:href="@{/}">Moodlink</a></div>
   <h1>SIGN UP</h1>
-  <form th:action="@{/signup}" method="post">
-    <input type="text" name="username" placeholder="ID">
-    <input type="password" name="password" placeholder="Password">
-    <input type="text" name="name" placeholder="username">
-    <select name="genre">
-      <option>장르</option>
-      <!-- Fill in actual genres -->
-    </select>
-    <select name="period">
-      <option>시대</option>
+  <form th:action="@{/signup}" method="post" th:object="${signupRequest}">
+    <input type="text" th:field="*{userId}" placeholder="ID">
+    <input type="password" th:field="*{password}" placeholder="Password">
+    <input type="text" th:field="*{username}" placeholder="username">
+
+<!--    <span>선호하는 장르 선택 :</span>-->
+      <select th:field="*{genre}">
+        <option value="" disabled selected>선호하는 장르 선택</option>
+        <option value="action">액션</option>
+        <option value="adventure">모험</option>
+        <option value="animation">애니메이션</option>
+        <option value="comedy">코미디</option>
+        <option value="crime">범죄</option>
+        <option value="documentary">다큐멘터리</option>
+        <option value="drama">드라마</option>
+        <option value="family">가족</option>
+        <option value="fantasy">판타지</option>
+        <option value="history">역사</option>
+        <option value="horror">공포</option>
+        <option value="music">음악</option>
+        <option value="mystery">미스터리</option>
+        <option value="romance">로맨스</option>
+        <option value="science_fiction">SF</option>
+        <option value="tv_movie">TV 영화</option>
+        <option value="thriller">스릴러</option>
+        <option value="war">전쟁</option>
+        <option value="western">서부</option>
+      </select>
+
+    <select th:field="*{periods}">
+      <option value="" disabled selected>선호하는 시대 선택</option>
+      <option value="ancient">고대 / 중세</option>
+      <option value="empire_age">제국주의 시대 (~19세기)</option>
+      <option value="ww1">1차 세계대전 (1914–1918)</option>
+      <option value="ww2">2차 세계대전 (1939–1945)</option>
+      <option value="cold_war">냉전 시대 (1945–1990)</option>
+      <option value="modern">현대 사회 (1990년대~2010년대)</option>
+      <option value="contemporary">동시대 / 근미래 (2020년대~)</option>
+      <option value="fictional">가상 시대 / 판타지</option>
+
       <!-- Fill in actual periods -->
     </select>
-    <select name="country">
-      <option>대한민국</option>
+    <select th:field="*{countries}">
+      <option value="" disabled selected>컨텐츠 제작 국가 선택</option>
+      <option value="korea">대한민국</option>
       <!-- Fill in actual countries -->
     </select>
-    <button type="submit">Sign Up</button>
+    <button style="cursor: pointer" type="submit">Sign Up</button>
   </form>
-  <p>Already have an account? <a th:href="@{/login}">Log in</a></p>
+  <p>Already have an account? <a th:href="@{/signin}">Log in</a></p>
 </div>
 </body>
 </html>

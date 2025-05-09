@@ -4,6 +4,7 @@ import com.grepp.moodlink.app.model.member.dto.MemberDto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
@@ -11,22 +12,33 @@ public class SignupRequest {
     
     @NotBlank
     private String userId;
+
     @NotBlank
-    @Size(min = 4, max = 10)
+    @Size(min = 4, max = 15)
     private String password;
+
     @NotBlank
-    @Email
-    private String email;
+    private String username;
+
     @NotBlank
-    @Size(min = 8, max = 14)
-    private String tel;
+    private String genre;
+
+    @NotBlank
+    private String periods;
+
+    @NotBlank
+    private String countries;
+
     
     public MemberDto toDto(){
         MemberDto memberDto = new MemberDto();
         memberDto.setUserId(userId);
         memberDto.setPassword(password);
-        memberDto.setEmail(email);
-        memberDto.setTel(tel);
+        memberDto.setUsername(username);
+        memberDto.setGenre(genre);
+        memberDto.setPeriods(periods);
+        memberDto.setCountries(countries);
+        memberDto.setCreatedAt(LocalDateTime.now());
         return memberDto;
     }
 }

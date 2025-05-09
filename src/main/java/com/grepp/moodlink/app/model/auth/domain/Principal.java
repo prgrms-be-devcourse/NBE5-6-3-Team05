@@ -16,6 +16,6 @@ public class Principal extends User {
     
     public static Principal createPrincipal(Member member,
         List<SimpleGrantedAuthority> authorities){
-        return new Principal(member.getUserId(), member.getPassword(), authorities);
+        return new Principal(member.getId(), member.getPassword(), authorities);
     }
 }

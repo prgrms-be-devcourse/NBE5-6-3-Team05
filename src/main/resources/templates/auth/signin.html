@@ -50,12 +50,12 @@
 </head>
 <body>
 <div class="container">
-  <div class="logo">Moodlink</div>
+  <div class="logo"><a th:href="@{/}">Moodlink</a></div>
   <h1>LOG IN</h1>
-  <form th:action="@{/signin}" method="post">
-    <input type="text" name="username" placeholder="ID">
-    <input type="password" name="password" placeholder="Password">
-    <button type="submit">Sign In</button>
+  <form th:action="@{/signin}" method="post" th:object="${signinRequest}">
+    <input type="text" th:field="*{userId}" placeholder="ID">
+    <input type="password" th:field="*{password}" placeholder="Password">
+    <button style="cursor: pointer" type="submit">Sign In</button>
   </form>
   <p>Don't have an account? <a th:href="@{/signup}">Sign Up</a></p>
 </div>
