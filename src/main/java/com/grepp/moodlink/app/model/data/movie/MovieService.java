@@ -1,0 +1,47 @@
+package com.grepp.moodlink.app.model.data.movie;
+
+import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
+import com.grepp.moodlink.app.model.data.movie.entity.Movie;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class MovieService {
+
+    private final MovieRepository movieRepository;
+    private final GenreRepository genreRepository;
+
+    public void saveMovies(List<MovieDto> movieDtos) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        for (MovieDto dto : movieDtos) {
+            Movie movie = new Movie();
+            movie.setId(String.valueOf(dto.getId()));
+            movie.setTitle(dto.getTitle());
+            movie.setDescription(dto.getOverview());
+            String dateStr = dto.getReleaseDate();
+            LocalDate releaseDate = null;
+            if (dateStr != null && !dateStr.isBlank()) {
+                releaseDate = LocalDate.parse(dateStr, formatter);
+            }
+            movie.setReleaseDate(releaseDate);
+            movie.setThumbnail(
+                "https://image.tmdb.org/t/p/original/" + String.valueOf(dto.getPosterPath()));
+            movie.setCreatedAt(LocalDate.now());
+
+            List<Integer> genreIds = dto.getGenreIds();
+            List<String> genreNames = dto.getGenreNames();
+            Map<Integer, String> genre;
+
+            movieRepository.save(movie);
+        }
+    }
+
+}

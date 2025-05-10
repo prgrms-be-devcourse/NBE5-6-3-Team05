@@ -1,7 +1,7 @@
 package com.grepp.moodlink.app.model.member.dto;
 
 import com.grepp.moodlink.app.model.auth.code.Role;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,6 +15,6 @@ public class MemberDto {
     private String genre;
     private String periods;
     private String countries;
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 //    private MemberInfoDto info;
 }

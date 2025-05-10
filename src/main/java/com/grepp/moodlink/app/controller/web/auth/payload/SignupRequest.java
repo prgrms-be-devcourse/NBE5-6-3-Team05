@@ -4,6 +4,7 @@ import com.grepp.moodlink.app.model.member.dto.MemberDto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Data;
 
@@ -38,7 +39,7 @@ public class SignupRequest {
         memberDto.setGenre(genre);
         memberDto.setPeriods(periods);
         memberDto.setCountries(countries);
-        memberDto.setCreatedAt(LocalDateTime.now());
+        memberDto.setCreatedAt(LocalDate.now());
         return memberDto;
     }
 }

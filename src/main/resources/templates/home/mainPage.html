@@ -1,116 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <th:block th:fragment="frg_static">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <style>
-      body {
-        height: 100vh;
-        margin: 0;
-        padding: 30px;
-        font-family: 'Segoe UI', sans-serif;
-        background: linear-gradient( #000000, #545454);
-        color: white;
-      }
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 
-      header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: -16px;
-        margin-bottom: 40px;
-      }
-
-      .logo {
-        font-size: 48px;
-        font-weight: bold;
-      }
-      .logo span {
-        background: linear-gradient(to bottom, #A64DFF, #6A00FF);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-
-      .header-right {
-        display: flex;
-        margin-top: -8px;
-        align-items: center;
-        gap: 16px;
-      }
-
-      .welcome-text {
-        font-size: 20px;
-        margin-right: 10px;
-      }
-
-      .header-buttons {
-        display: flex;
-        font-size: 20px;
-        gap: 10px;
-      }
-
-      .header-buttons button {
-        padding: 8px 16px;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        font-weight: bold;
-      }
-
-      .mypage-btn {
-        background: linear-gradient(to right, #A64DFF, #6A00FF);
-        color: white;
-      }
-
-      .login-btn {
-        background: linear-gradient(to right, #A64DFF, #6A00FF);
-        color: white;
-      }
-
-      .logout-btn {
-        background: linear-gradient(to right, #A64DFF, #6A00FF);
-        color: white;
-      }
-
-      .buttons {
-        margin-top: 30px;
-      }
-      .content {
-        text-align: center;
-        margin-top: 40px;
-      }
-      .category {
-        display: flex;
-        justify-content: center;
-        gap: 40px;
-        margin-top: 30px;
-      }
-    </style>
-
-  </th:block>
-</head>
 <body>
-<th:block th:fragment="frg_header">
-  <header>
-    <div class="logo"><span>Moodlink</span></div>
-    <div class="header-right">
-      <span th:if="${isAuthenticated}" th:text="'안녕하세요, ' + ${username} + '님!'"></span>
-      <div class="header-buttons">
-        <button class="mypage-btn" th:onclick="|location.href='@{/}'|">마이페이지</button>
-        <form th:action="@{/logout}" method="post">
-          <button class="logout-btn" th:if="${isAuthenticated}">로그아웃</button>
-          <button class="logout-btn" th:if="${!isAuthenticated}" th:href="@{/signin}">로그인</button>
-        </form>
-      </div>
-    </div>
-  </header>
-</th:block>
-
-<div class="content">
+<div layout:fragment="content">
+  <div class="main-content">
   <h2>오늘의 기분, 하나의 링크로 영화·도서·음악을 만나보세요.</h2>
   <div class="category">
     <div><img src="/img/music.jpg" alt="음악"><p>음악</p></div>
@@ -122,7 +18,8 @@
     <button style="background-color: darkred; cursor: pointer" >월드컵</button>
   </div>
   <div class="buttons">
-    <button style="cursor: pointer" th:onclick="|location.href='@{/}'|">추천받기</button>
+    <button style="cursor: pointer" th:onclick="|location.href='@{/recommend}'|">추천받기</button>
+  </div>
   </div>
 </div>
 </body>
