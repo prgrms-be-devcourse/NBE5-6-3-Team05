@@ -18,7 +18,7 @@ public class HomeService {
     public List<String> showContent() {
         List<String> thumbnail;
         String movie = movieRepository.findById(1L).get().getTitle();
-        thumbnail.add();
+//        thumbnail.add();
         return null;
     }
 }

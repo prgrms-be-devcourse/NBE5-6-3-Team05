@@ -15,8 +15,8 @@ public class HomeController {
 
     @GetMapping
     public String mainPage(Model model) {
-        List<String> thumbnail = homeService.showContent();
-        model.addAttribute("thumbnail",thumbnail);
+//        List<String> thumbnail = homeService.showContent();
+//        model.addAttribute("thumbnail",thumbnail);
         return "/home/mainPage";
     }
 }
