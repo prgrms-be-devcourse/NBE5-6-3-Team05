@@ -67,11 +67,13 @@ public class SecurityConfig {
         // ** : 모든 depth 의 모든 경로
         // Security Config 에는 인증과 관련된 설정만 지정 (PermitAll or Authenticated)
         http
+            .csrf().disable() // 추가
             .authorizeHttpRequests(
                 (requests) -> requests
                                   .requestMatchers(GET, "/member/signup", "/member/signin").permitAll()
                                   .requestMatchers(POST, "/member/signin", "/member/signup").permitAll()
-                                  .requestMatchers(GET, "/mypage").authenticated()
+                                    .requestMatchers("/movies/**").permitAll()
+                                    .requestMatchers(GET, "/mypage").authenticated()
                                   .anyRequest().permitAll()
             )
             .formLogin((form) -> form

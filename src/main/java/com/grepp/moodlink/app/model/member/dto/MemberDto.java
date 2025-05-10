@@ -2,7 +2,6 @@ package com.grepp.moodlink.app.model.member.dto;
 
 import com.grepp.moodlink.app.model.auth.code.Role;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
