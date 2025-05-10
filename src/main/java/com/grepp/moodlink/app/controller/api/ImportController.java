@@ -2,6 +2,8 @@ package com.grepp.moodlink.app.controller.api;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grepp.moodlink.app.model.book.BookService;
+import com.grepp.moodlink.app.model.book.dto.BookDto;
 import com.grepp.moodlink.app.model.movie.MovieService;
 import com.grepp.moodlink.app.model.movie.dto.MovieDto;
 import com.grepp.moodlink.app.model.music.MusicService;
@@ -28,6 +30,8 @@ public class ImportController {
     private final MusicService musicService;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private BookService bookService;
 
     @PostMapping("/movies")
     public ResponseEntity<String> importMovies(@RequestPart("file") MultipartFile file)
@@ -51,5 +55,17 @@ public class ImportController {
         );
         musicService.saveMusic(dtos);
         return ResponseEntity.ok("Music saved!");
+    }
+
+    @PostMapping("/books")
+    public ResponseEntity<String> importBook(@RequestPart("file") MultipartFile file)
+        throws IOException {
+        List<BookDto> dtos = objectMapper.readValue(
+            file.getInputStream(),
+            new TypeReference<List<BookDto>>() {
+            }
+        );
+        bookService.saveMusic(dtos);
+        return ResponseEntity.ok("Book saved!");
     }
 }
