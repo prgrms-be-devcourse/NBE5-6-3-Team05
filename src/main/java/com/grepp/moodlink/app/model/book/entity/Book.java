@@ -27,5 +27,6 @@ public class Book {
     @Column(columnDefinition = "TEXT")
     private String description;
     private String genre;
+    private Long likeCount;
 
 }
