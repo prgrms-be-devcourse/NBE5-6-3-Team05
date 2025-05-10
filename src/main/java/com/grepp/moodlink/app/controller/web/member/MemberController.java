@@ -72,6 +72,7 @@ public class MemberController {
 
     @GetMapping("/like")
     public String showLikePage(HttpSession session, Model model){
+
         return "/users/like";
     }
 

@@ -24,7 +24,7 @@ public class Member {
     private LocalDate updatedAt;
     private String genre;
     private String periods;
-    private String contries;
+    private String countries;
 
 }
 
