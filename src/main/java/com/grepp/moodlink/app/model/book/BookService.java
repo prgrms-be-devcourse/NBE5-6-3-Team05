@@ -2,10 +2,6 @@ package com.grepp.moodlink.app.model.book;
 
 import com.grepp.moodlink.app.model.book.dto.BookDto;
 import com.grepp.moodlink.app.model.book.entity.Book;
-import com.grepp.moodlink.app.model.music.MusicRepository;
-import com.grepp.moodlink.app.model.music.dto.MusicDto;
-import com.grepp.moodlink.app.model.music.entity.Music;
-import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
