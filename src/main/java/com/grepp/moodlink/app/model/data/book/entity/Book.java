@@ -1,4 +1,4 @@
-package com.grepp.moodlink.app.model.book.entity;
+package com.grepp.moodlink.app.model.data.book.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

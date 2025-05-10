@@ -1,7 +1,7 @@
-package com.grepp.moodlink.app.model.music;
+package com.grepp.moodlink.app.model.data.music;
 
-import com.grepp.moodlink.app.model.music.dto.MusicDto;
-import com.grepp.moodlink.app.model.music.entity.Music;
+import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
+import com.grepp.moodlink.app.model.data.music.entity.Music;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

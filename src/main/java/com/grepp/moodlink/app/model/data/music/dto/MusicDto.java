@@ -1,4 +1,4 @@
-package com.grepp.moodlink.app.model.music.dto;
+package com.grepp.moodlink.app.model.data.music.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;

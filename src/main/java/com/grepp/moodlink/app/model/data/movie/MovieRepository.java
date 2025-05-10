@@ -1,6 +1,6 @@
-package com.grepp.moodlink.app.model.movie;
+package com.grepp.moodlink.app.model.data.movie;
 
-import com.grepp.moodlink.app.model.movie.entity.Movie;
+import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

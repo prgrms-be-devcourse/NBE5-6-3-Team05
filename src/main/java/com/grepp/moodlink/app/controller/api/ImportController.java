@@ -2,12 +2,12 @@ package com.grepp.moodlink.app.controller.api;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.grepp.moodlink.app.model.book.BookService;
-import com.grepp.moodlink.app.model.book.dto.BookDto;
-import com.grepp.moodlink.app.model.movie.MovieService;
-import com.grepp.moodlink.app.model.movie.dto.MovieDto;
-import com.grepp.moodlink.app.model.music.MusicService;
-import com.grepp.moodlink.app.model.music.dto.MusicDto;
+import com.grepp.moodlink.app.model.data.book.BookService;
+import com.grepp.moodlink.app.model.data.book.dto.BookDto;
+import com.grepp.moodlink.app.model.data.movie.MovieService;
+import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
+import com.grepp.moodlink.app.model.data.music.MusicService;
+import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

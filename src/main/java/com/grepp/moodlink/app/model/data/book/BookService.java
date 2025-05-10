@@ -1,7 +1,7 @@
-package com.grepp.moodlink.app.model.book;
+package com.grepp.moodlink.app.model.data.book;
 
-import com.grepp.moodlink.app.model.book.dto.BookDto;
-import com.grepp.moodlink.app.model.book.entity.Book;
+import com.grepp.moodlink.app.model.data.book.dto.BookDto;
+import com.grepp.moodlink.app.model.data.book.entity.Book;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

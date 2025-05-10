@@ -1,4 +1,4 @@
-package com.grepp.moodlink.app.model.book.dto;
+package com.grepp.moodlink.app.model.data.book.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;

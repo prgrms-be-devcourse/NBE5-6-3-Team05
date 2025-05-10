@@ -1,9 +1,8 @@
-package com.grepp.moodlink.app.model.movie;
+package com.grepp.moodlink.app.model.data.movie;
 
-import com.grepp.moodlink.app.model.movie.dto.MovieDto;
-import com.grepp.moodlink.app.model.movie.entity.Movie;
+import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
+import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.grepp.moodlink.app.model.movie.entity;
+package com.grepp.moodlink.app.model.data.movie.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.grepp.moodlink.app.model.movie.dto;
+package com.grepp.moodlink.app.model.data.movie.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;

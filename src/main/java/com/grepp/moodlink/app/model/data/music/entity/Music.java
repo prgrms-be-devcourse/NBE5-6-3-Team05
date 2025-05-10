@@ -1,4 +1,4 @@
-package com.grepp.moodlink.app.model.music.entity;
+package com.grepp.moodlink.app.model.data.music.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
