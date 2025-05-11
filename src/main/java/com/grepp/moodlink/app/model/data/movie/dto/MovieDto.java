@@ -11,6 +11,7 @@ public class MovieDto {
 
     private boolean adult;
     private String backdropPath;
+    @JsonProperty("genre_ids")
     private List<Integer> genreIds;
     private int id;
     private String originalLanguage;
@@ -25,5 +26,6 @@ public class MovieDto {
     private boolean video;
     private double voteAverage;
     private int voteCount;
+    @JsonProperty("genre_names")
     private List<String> genreNames;
 }
