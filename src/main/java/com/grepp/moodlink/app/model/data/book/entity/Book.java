@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 public class Book {
 
     @Id
-    @Column(columnDefinition = "varchar(20)")
     private String isbn;
     private String title;
     @Column(columnDefinition = "TEXT")
