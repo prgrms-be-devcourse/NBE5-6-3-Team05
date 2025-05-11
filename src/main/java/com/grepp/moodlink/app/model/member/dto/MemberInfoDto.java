@@ -29,7 +29,7 @@ public class MemberInfoDto {
         dto.setRole(user.getRole());
         dto.setCreatedAt(user.getCreatedAt());
         dto.setUpdatedAt(user.getUpdatedAt());
-        dto.setContries(user.getContries());
+        dto.setContries(user.getCountries());
 
         return dto;
 

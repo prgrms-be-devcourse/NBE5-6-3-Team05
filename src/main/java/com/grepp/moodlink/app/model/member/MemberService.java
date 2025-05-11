@@ -29,7 +29,7 @@ public class MemberService {
         return memberRepository.findByUsernameById(userId);
     }
 
-
+    @Transactional
     public void modifyProfile(String userId, ModifyDto dto) {
         Member member = memberRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다"));
@@ -44,4 +44,10 @@ public class MemberService {
 
         memberRepository.save(member);
     }
+
+
+
+
+
+
 }

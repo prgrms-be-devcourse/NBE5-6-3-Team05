@@ -12,10 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LikeDetailBooks {
-    @Id
-    private Long id;
-
-    private Long likeId;
+public class LikeDetailBooks extends LikeDetailBase {
     private String bookId;
+
 }
