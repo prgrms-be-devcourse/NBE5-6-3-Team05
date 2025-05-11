@@ -1,5 +1,6 @@
 package com.grepp.moodlink.app.model.movie.entity;
 
+import com.grepp.moodlink.app.model.embedding.FloatArrayConverter;
 import com.grepp.moodlink.infra.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,10 +33,8 @@ public class Movie extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(columnDefinition = "vector")
-    @JdbcTypeCode(SqlTypes.VECTOR)
-    @Array(length = 3)
-    private float[] embedding;
+    @Column(columnDefinition = "BLOB")
+    private byte[] embedding;
     private LocalDate releaseDate;
     private LocalDateTime createdAt;
     @Column(columnDefinition = "TEXT")
