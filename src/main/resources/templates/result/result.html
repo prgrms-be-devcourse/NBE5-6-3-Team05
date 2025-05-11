@@ -3,21 +3,106 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <style>
+
+    .curation-header {
+      display: flex;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 8px 0;
+    }
+
+    .curation-label {
+      flex: 1;
+      max-width: 33.33%;
+      text-align: center;
+    }
+
+    .image-and-info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .curation-item {
+      display: flex;
+      justify-content: space-between; /* 좌우 정렬 */
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 20px;
+      padding-bottom: 40px; /* 또는 margin-bottom: 40px; */
+      border-bottom: 1px solid transparent; /* 시각적 분리도 가능 */
+    }
+
+    .curation-item > div {
+      flex: 1;                /* 3등분 */
+      max-width: 33.33%;      /* 각 박스 최대 너비 제한 */
+      display: flex;
+      justify-content: center;
+    }
+
+    .curation-item img {
+      max-width: 100%;       /* 박스 안에 맞게 이미지 축소 */
+      height: auto;
+      object-fit: contain;   /* 비율 유지 */
+    }
+
+    .image-block {
+      width: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .image-wrapper {
+      width: 240px;           /* 원하는 표준 크기 */
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f4f4f4; /* 여백 채우기용 */
+      overflow: hidden;
+    }
+
+    .image-wrapper img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain; /*  비율 유지하면서 맞춤 */
+    }
+
+    .title {
+      font-weight: bold;
+      margin-top: 8px;
+      text-align: left;
+      width: 100%;
+    }
+
+    .info-block {
+      width: 100px;
+      display: flex;
+      flex-direction: column;  /* 👈 이거 하나로 세로 정렬 */
+      gap: 8px;                /* 버튼 간 간격 */
+      align-items: flex-start; /* 좌측 정렬 (원하면 center로 바꿔도 됨) */
+    }
+  </style>
 </head>
 <body>
+
+
 <main>
 <h1>임시 result page</h1>
-
 </main>
 
   <hr>
   <form action="/main" method="get">
-    <button type="submit">메인화면으로 이동(헤더로 빼야됨, 모든 Role에 대해 적용)</button>
+    <button type="submit">메인화면(헤더로 빼야됨, 모든 Role에 대해 적용)</button>
   </form>
   <br>
   <br>
   <form action="/member/signin" method="get">
-    <button type="submit">로그인화면으로 이동 및 로그아웃 (헤더로 빼야됨, User 및 Admin일 때 적용)</button>
+    <button type="submit">로그인화면으로 이동 및 로그아웃 (헤더로 빼야됨, User일 때 Logout, anonymous일 때 Login)</button>
   </form>
   <br>
   <br>
@@ -27,7 +112,7 @@
 
 
   <form action="/member/mypage" method="get">
-    <button type="submit">마이페이지으로 이동 (User 및 Admin일 때 적용)</button>
+    <button type="submit">마이페이지(User일 때 적용, anonymous의 경우 클릭 시 "회원만 가능한 기능입니다" 출력 후 disable)</button>
   </form>
   <br>
   <br>
@@ -47,30 +132,85 @@
   <hr>
 
 
-  <h2>컨텐츠 출력 영역</h2>
-  <div>각 컨텐츠마다 3개의 버튼 존재, search, details, *별표시</div>
-  <div>
-    Seach버튼: 해당 컨텐츠에 대한 외부 검색엔진 검색
-    <a href="https://www.youtube.com/watch?v=TpPwI_Lo0YY" target="_blank">해당 컨텐츠 검색결과</a>
+<div class="curation-header">
+  <div class="curation-label">BOOK</div>
+  <div class="curation-label">MOVIE</div>
+  <div class="curation-label">SONG</div>
+</div>
+
+
+  <div th:each="item : ${items}" class="curation-item">
+
+    <!-- Book 영역 -->
+    <div class="book">
+      <div class="image-and-info">
+        <div class="image-block">
+          <div class="image-wrapper">
+           <img th:src="${item.book.imgUrl}" />
+          </div>
+          <div class="title" th:text="${item.book.name}"></div>
+        </div>
+
+        <div class="info-block">
+          <a th:href="${item.book.externalLink}" target="_blank">책 링크</a>
+          <button class="details-btn" data-type="book" th:attr="data-id=${item.book.name}">Details</button>
+          <button class="toggle-star-btn"
+                  onclick="toggle(this)"
+                  th:text="${item.book.status} ? 'ON' : 'OFF'"
+                  th:style="${item.book.status} ? 'background-color:yellow;' : 'background-color:gray;'">
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Movie 영역 -->
+    <div class="movie">
+      <div class="image-and-info">
+        <div class="image-block">
+          <div class="image-wrapper">
+           <img th:src="${item.movie.imgUrl}" />
+          </div>
+          <div class="title" th:text="${item.movie.name}"></div>
+        </div>
+        <div class="info-block">
+          <a th:href="${item.movie.externalLink}" target="_blank">영화 링크</a>
+          <button class="details-btn" data-type="movie" th:attr="data-id=${item.movie.name}">Details</button>
+          <button class="toggle-star-btn"
+                  onclick="toggle(this)"
+                  th:text="${item.movie.status} ? 'ON' : 'OFF'"
+                  th:style="${item.movie.status} ? 'background-color:yellow;' : 'background-color:gray;'">
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Song 영역 -->
+    <div class="song">
+      <div class="image-and-info">
+        <div class="image-block">
+          <div class="image-wrapper">
+           <img th:src="${item.song.imgUrl}" />
+          </div>
+          <div class="title" th:text="${item.song.name}"></div>
+        </div>
+        <div class="info-block">
+          <a th:href="${item.song.externalLink}" target="_blank">노래 링크</a>
+          <button class="details-btn" data-type="song" th:attr="data-id=${item.song.name}">Details</button>
+          <button class="toggle-star-btn"
+                  onclick="toggle(this)"
+                  th:text="${item.song.status} ? 'ON' : 'OFF'"
+                  th:style="${item.song.status} ? 'background-color:yellow;' : 'background-color:gray;'">
+          </button>
+        </div>
+      </div>
+    </div>
+
   </div>
-  <br>
-  <br>
-  <div>
-    details버튼: 해당 컨텐츠에 대한 상세정보 팝업창 띄우기
-  </div>
-  <br>
-  <br>
-  <div>
-    *버튼: 해당 컨텐츠 좋아요체크박스, 토글형, 입력 시 바로 db에 반영
-    <button id="toggleStar" onclick="toggle()">OFF</button>
-  </div>
-  <br>
-  <br>
-  <hr>
+
+
 
 <script>
-  function toggle() {
-    const btn = document.getElementById("toggleStar");
+  function toggle(btn) {
     if (btn.innerText === "OFF") {
       btn.innerText = "ON";
       btn.style.backgroundColor = "yellow";
