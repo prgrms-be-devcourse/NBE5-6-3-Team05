@@ -17,7 +17,8 @@ public class MusicService {
 
         for (MusicDto dto : musicDtos) {
             Music music = new Music();
-            music.setId(String.valueOf(dto.getId()));
+            long count = musicRepository.count();
+            music.setId("S" + count);
             music.setTitle(dto.getTitle());
             music.setGenre(dto.getGenre());
             music.setSinger(dto.getSinger());

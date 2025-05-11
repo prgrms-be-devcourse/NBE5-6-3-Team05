@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 public class BookDto {
     @JsonProperty("ISBN")
-    private Integer isbn;
+    private String isbn;
     private String title;
     private String image;
     private String author;

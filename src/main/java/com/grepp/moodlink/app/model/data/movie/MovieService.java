@@ -28,7 +28,8 @@ public class MovieService {
 
         for (MovieDto dto : movieDtos) {
             Movie movie = new Movie();
-            movie.setId(String.valueOf(dto.getId()));
+            long count = movieRepository.count();
+            movie.setId("M" + count);
             movie.setTitle(dto.getTitle());
             movie.setDescription(dto.getOverview());
             String dateStr = dto.getReleaseDate();
