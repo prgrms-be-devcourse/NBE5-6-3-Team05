@@ -1,10 +1,13 @@
 package com.grepp.moodlink.app.controller.web.member;
 
+import com.grepp.moodlink.app.controller.api.member.payload.LikeGenreResponse;
 import com.grepp.moodlink.app.controller.web.member.payload.ModifyRequest;
 import com.grepp.moodlink.app.model.member.MemberRepository;
 import com.grepp.moodlink.app.model.member.MemberService;
 import com.grepp.moodlink.app.model.member.dto.MemberInfoDto;
+import com.grepp.moodlink.app.model.recomend.LikeService;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,26 +26,35 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/users")
 public class MemberController {
     private final MemberService memberService;
+    private final LikeService likeService;
 
 
     @GetMapping
     public String showMyPage(HttpSession session ,Model model){
-//        String userId = (String) session.getAttribute("userId");
-//        if(userId == null){
-//            return "redirect:/";
-//        }
-//
-//        Optional<MemberInfoDto> memberInfo = memberService.GetMemberInfo(userId);
-//
-//        if (memberInfo.isPresent()) {
-//            MemberInfoDto info = memberInfo.get();
-//            model.addAttribute("userId" , info.getId());
-//            model.addAttribute("username", info.getUsername());
-//            model.addAttribute("createdAt",info.getCreatedAt());
-//            model.addAttribute("updatedAt", info.getUpdatedAt());
-//            model.addAttribute("countries", info.getContries());
-//
-//        }
+        String userId = (String) session.getAttribute("userId");
+        if(userId == null){
+            return "redirect:/";
+        }
+
+
+// 개인 정보 보여주는 로직
+        Optional<MemberInfoDto> memberInfo = memberService.GetMemberInfo(userId);
+
+        if (memberInfo.isPresent()) {
+            MemberInfoDto info = memberInfo.get();
+            model.addAttribute("userId" , info.getId());
+            model.addAttribute("username", info.getUsername());
+            model.addAttribute("createdAt",info.getCreatedAt());
+            model.addAttribute("updatedAt", info.getUpdatedAt());
+            model.addAttribute("countries", info.getCountries());
+
+        }
+
+        // 좋아하는 장르 보여주는 로직
+
+       List<LikeGenreResponse> likeGenre=likeService.getLikeGenreCount(userId);
+
+        model.addAttribute("mostLikeGenre", likeGenre);
 
         return "/users/mypage";}
 

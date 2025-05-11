@@ -20,7 +20,7 @@ public class MemberInfoDto {
         private String role = "ROLE_USER";
         private LocalDate createdAt;
         private LocalDate updatedAt;
-        private String contries;
+        private String countries;
 
     public static MemberInfoDto ToDto(Member user) {
         MemberInfoDto dto = new MemberInfoDto();
@@ -29,7 +29,7 @@ public class MemberInfoDto {
         dto.setRole(user.getRole());
         dto.setCreatedAt(user.getCreatedAt());
         dto.setUpdatedAt(user.getUpdatedAt());
-        dto.setContries(user.getCountries());
+        dto.setCountries(user.getCountries());
 
         return dto;
 
