@@ -1,4 +1,4 @@
-package com.grepp.moodlink.infra.app.controller.api.details;
+package com.grepp.moodlink.app.controller.api.details;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;

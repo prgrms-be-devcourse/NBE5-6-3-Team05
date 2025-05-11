@@ -1,10 +1,10 @@
-package com.grepp.moodlink.infra.app.model.result;
+package com.grepp.moodlink.app.model.result;
 
 
-import com.grepp.moodlink.infra.app.model.result.dto.BookDto;
-import com.grepp.moodlink.infra.app.model.result.dto.CuratingDetailDto;
-import com.grepp.moodlink.infra.app.model.result.dto.MovieDto;
-import com.grepp.moodlink.infra.app.model.result.dto.SongDto;
+import com.grepp.moodlink.app.model.result.dto.BookDto;
+import com.grepp.moodlink.app.model.result.dto.CuratingDetailDto;
+import com.grepp.moodlink.app.model.result.dto.MovieDto;
+import com.grepp.moodlink.app.model.result.dto.SongDto;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.grepp.moodlink.infra.app.model.result.dto;
+package com.grepp.moodlink.app.model.result.dto;
 
 
 import lombok.Data;
