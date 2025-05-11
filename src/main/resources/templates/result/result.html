@@ -180,7 +180,7 @@
     <div class="image-and-info">
       <div class="image-block">
         <div class="image-wrapper">
-          <img th:src="${item.book.imgUrl}"/>
+          <img th:src="${item.book.imgUrl}" alt="임의의 책 이미지"/>
         </div>
         <div class="title" th:text="${item.book.name}"></div>
       </div>
@@ -190,6 +190,8 @@
         <button class="details-btn" data-type="book" th:attr="data-id=${item.book.id}">Details
         </button>
         <button class="toggle-star-btn"
+                th:id="'toggle-book-' + ${item.book.id}"
+                th:attr="data-type='book', data-id=${item.book.id}"
                 onclick="toggle(this)"
                 th:text="${item.book.status} ? 'ON' : 'OFF'"
                 th:style="${item.book.status} ? 'background-color:yellow;' : 'background-color:gray;'">
@@ -203,7 +205,7 @@
     <div class="image-and-info">
       <div class="image-block">
         <div class="image-wrapper">
-          <img th:src="${item.movie.imgUrl}"/>
+          <img th:src="${item.movie.imgUrl}" alt="임의의 영화이미지"/>
         </div>
         <div class="title" th:text="${item.movie.name}"></div>
       </div>
@@ -212,6 +214,8 @@
         <button class="details-btn" data-type="movie" th:attr="data-id=${item.movie.id}">Details
         </button>
         <button class="toggle-star-btn"
+                th:id="'toggle-movie-' + ${item.movie.id}"
+                th:attr="data-type='movie', data-id=${item.movie.id}"
                 onclick="toggle(this)"
                 th:text="${item.movie.status} ? 'ON' : 'OFF'"
                 th:style="${item.movie.status} ? 'background-color:yellow;' : 'background-color:gray;'">
@@ -225,7 +229,7 @@
     <div class="image-and-info">
       <div class="image-block">
         <div class="image-wrapper">
-          <img th:src="${item.song.imgUrl}"/>
+          <img th:src="${item.song.imgUrl}" alt="임의의 노래이미지"/>
         </div>
         <div class="title" th:text="${item.song.name}"></div>
       </div>
@@ -234,6 +238,8 @@
         <button class="details-btn" data-type="song" th:attr="data-id=${item.song.id}">Details
         </button>
         <button class="toggle-star-btn"
+                th:id="'toggle-song-' + ${item.song.id}"
+                th:attr="data-type='song', data-id=${item.song.id}"
                 onclick="toggle(this)"
                 th:text="${item.song.status} ? 'ON' : 'OFF'"
                 th:style="${item.song.status} ? 'background-color:yellow;' : 'background-color:gray;'">
@@ -255,13 +261,21 @@
 <script>
   /// 토글 버튼 구현
   function toggle(btn) {
-    if (btn.innerText === "OFF") {
-      btn.innerText = "ON";
-      btn.style.backgroundColor = "yellow";
-    } else {
-      btn.innerText = "OFF";
-      btn.style.backgroundColor = "gray";
-    }
+    const type = btn.dataset.type;
+    const id = btn.dataset.id;
+
+    fetch(`/api/like/${type}/toggle`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id })
+    })
+    .then(res => res.json())
+    .then(data => {
+      const isOn = data.status;
+      btn.textContent = isOn ? 'ON' : 'OFF';
+      btn.style.backgroundColor = isOn ? 'yellow' : 'gray';
+    });
+
   }
 
   /// 모달창
