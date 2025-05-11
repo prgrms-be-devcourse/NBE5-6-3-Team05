@@ -21,18 +21,12 @@ public class ResultController {
 
     @GetMapping
     public String result(Model model) {
-        // TODO : result 화면 출력 내용물 가져오기
-
-        // Service에서 가져올 것
-        // 회원과 1:1 인 curating 가져오기
-        // List<curating_detail> curating_details 가져오기
-        // 각 curating_detail에서 영화, 음악, 도서 한 개씩 제목과 이미지 가져오기
-        // model에 추가
-
+        // 변경할 내용: Session을 통해 Role을 얻어내고, 그에 따른 service내부의 logic 변경
         List<CuratingDetailDto> tempList = resultService.curatingDetailDtoList();
-        System.out.println(tempList);
-        // TODO : curating reason 출력하기 // Session을 통해 가져오기
+
+        // 변경할 내용: curating reason을 Session을 통해 가져오기
         model.addAttribute("curatingReason", "원시천존 원시천존.. 이것은 curatingReason출력문");
+
         model.addAttribute("items", tempList);
         return "result/result";
     }

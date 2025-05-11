@@ -3,6 +3,7 @@ package com.grepp.moodlink.app.model.result;
 
 import com.grepp.moodlink.app.model.result.dto.BookDto;
 import com.grepp.moodlink.app.model.result.dto.CuratingDetailDto;
+import com.grepp.moodlink.app.model.result.dto.LikeItemDto;
 import com.grepp.moodlink.app.model.result.dto.MovieDto;
 import com.grepp.moodlink.app.model.result.dto.SongDto;
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 public class ResultService {
 
     public List<CuratingDetailDto> curatingDetailDtoList(){
+
+        // db에서 가져올 데이터들 start
         String tempBook1Url = "https://search.shopping.naver.com/book/catalog/54328632105";
         String tempBook1Img = "https://shopping-phinf.pstatic.net/main_5432863/54328632105.20250421201908.jpg";
         String tempMovie1Url = "https://www.youtube.com/watch?v=tj5YlG2n_G4";
@@ -27,18 +30,61 @@ public class ResultService {
 
 
         CuratingDetailDto temp1 = new CuratingDetailDto();
-        temp1.setBook(new BookDto("Catch Teenieping", tempBook1Img, tempBook1Url, false));
-        temp1.setMovie(new MovieDto("Matrix", tempMovie1Img, tempMovie1Url, false));
-        temp1.setSong(new SongDto("3636", tempSong1Img, tempSong1Url, true));
+        temp1.setBook(new BookDto("b1111", "Catch Teenieping", tempBook1Img, tempBook1Url, false));
+        temp1.setMovie(new MovieDto("m1111","Matrix", tempMovie1Img, tempMovie1Url, false));
+        temp1.setSong(new SongDto("s1111","3636", tempSong1Img, tempSong1Url, false));
 
         CuratingDetailDto temp2 = new CuratingDetailDto();
-        temp2.setBook(new BookDto("3636", tempSong1Img, tempSong1Url, false));
-        temp2.setMovie(new MovieDto("Matrix", tempMovie1Img, tempMovie1Url, false));
-        temp2.setSong(new SongDto("3636", tempSong1Img, tempSong1Url, false));
+        temp2.setBook(new BookDto("b2222","3636", tempSong1Img, tempSong1Url, false));
+        temp2.setMovie(new MovieDto("m2222","Matrix", tempMovie1Img, tempMovie1Url, false));
+        temp2.setSong(new SongDto("s2222","3636", tempSong1Img, tempSong1Url, false));
 
         List<CuratingDetailDto> items = new ArrayList<>();
         items.add(temp1);
         items.add(temp2);
+
+        LikeItemDto likeItemDto = new LikeItemDto();
+        likeItemDto.setSongs(new ArrayList<>(List.of(new SongDto("s1111","3636", tempSong1Img, tempSong1Url, true))));
+        // db에서 가져올 데이터들 end
+
+
+        // logic: Role이 User일 때 진행, Anonymous일 경우 각 데이터를 false로 그냥 둔다. (변경할 점)
+        String tempBookId = "";
+        String tempSongId = "";
+        String tempMovieId = "";
+
+        if(likeItemDto.getBooks() !=null){
+            for(BookDto bookDto: likeItemDto.getBooks()){
+                for(CuratingDetailDto item : items){
+                    tempBookId = item.getBook().getId();
+                    if (tempBookId.equals(bookDto.getId())){
+                        item.getBook().setStatus(true);
+                    }
+                }
+            }
+        }
+
+        if(likeItemDto.getSongs() !=null){
+            for(SongDto songDto: likeItemDto.getSongs()){
+                for(CuratingDetailDto item : items){
+                    tempSongId = item.getSong().getId();
+                    if (tempSongId.equals(songDto.getId())){
+                        item.getSong().setStatus(true);
+                    }
+                }
+            }
+        }
+
+        if(likeItemDto.getMovies() !=null){
+            for(MovieDto movieDto: likeItemDto.getMovies()){
+                for(CuratingDetailDto item : items){
+                    tempMovieId = item.getMovie().getId();
+                    if (tempMovieId.equals(movieDto.getId())){
+                        item.getMovie().setStatus(true);
+                    }
+                }
+            }
+        }
 
         return items;
     }

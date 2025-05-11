@@ -37,16 +37,16 @@
     }
 
     .curation-item > div {
-      flex: 1;                /* 3등분 */
-      max-width: 33.33%;      /* 각 박스 최대 너비 제한 */
+      flex: 1; /* 3등분 */
+      max-width: 33.33%; /* 각 박스 최대 너비 제한 */
       display: flex;
       justify-content: center;
     }
 
     .curation-item img {
-      max-width: 100%;       /* 박스 안에 맞게 이미지 축소 */
+      max-width: 100%; /* 박스 안에 맞게 이미지 축소 */
       height: auto;
-      object-fit: contain;   /* 비율 유지 */
+      object-fit: contain; /* 비율 유지 */
     }
 
     .image-block {
@@ -57,7 +57,7 @@
     }
 
     .image-wrapper {
-      width: 240px;           /* 원하는 표준 크기 */
+      width: 240px; /* 원하는 표준 크기 */
       height: 300px;
       display: flex;
       align-items: center;
@@ -82,9 +82,43 @@
     .info-block {
       width: 100px;
       display: flex;
-      flex-direction: column;  /* 👈 이거 하나로 세로 정렬 */
-      gap: 8px;                /* 버튼 간 간격 */
+      flex-direction: column; /* 👈 이거 하나로 세로 정렬 */
+      gap: 8px; /* 버튼 간 간격 */
       align-items: flex-start; /* 좌측 정렬 (원하면 center로 바꿔도 됨) */
+    }
+
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal.hidden {
+      display: none;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      width: 70vw; /* 화면 너비의 70% */
+      max-height: 90vh; /* 화면 높이의 80% */
+      overflow-y: auto; /* 내용이 넘치면 스크롤 */
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .close-button {
+      float: right;
+      cursor: pointer;
+      font-size: 20px;
     }
   </style>
 </head>
@@ -92,44 +126,44 @@
 
 
 <main>
-<h1>임시 result page</h1>
+  <h1>임시 result page</h1>
 </main>
 
-  <hr>
-  <form action="/signin" method="get">
-    <button type="submit">메인화면(헤더로 빼야됨, 모든 Role에 대해 적용)</button>
-  </form>
-  <br>
-  <br>
-  <form action="/signin" method="get">
-    <button type="submit">로그인화면으로 이동 및 로그아웃 (헤더로 빼야됨, User일 때 Logout, anonymous일 때 Login)</button>
-  </form>
-  <br>
-  <br>
-  <div>헤더 내용</div>
-  <br>
-  <hr>
+<hr>
+<form action="/signin" method="get">
+  <button type="submit">메인화면(헤더로 빼야됨, 모든 Role에 대해 적용)</button>
+</form>
+<br>
+<br>
+<form action="/signin" method="get">
+  <button type="submit">로그인화면으로 이동 및 로그아웃 (헤더로 빼야됨, User일 때 Logout, anonymous일 때 Login)</button>
+</form>
+<br>
+<br>
+<div>헤더 내용</div>
+<br>
+<hr>
 
 
-  <form action="/signin" method="get">
-    <button type="submit">마이페이지(User일 때 적용, anonymous의 경우 클릭 시 "회원만 가능한 기능입니다" 출력 후 disable)</button>
-  </form>
-  <br>
-  <br>
-  <form action="/recommend" method="get">
-    <button type="submit">키워드선택 및 추천페이지로 이동</button>
-  </form>
-  <br>
-  <br>
-  <div>페이지 이동 내용</div>
-  <br>
-  <hr>
+<form action="/signin" method="get">
+  <button type="submit">마이페이지(User일 때 적용, anonymous의 경우 클릭 시 "회원만 가능한 기능입니다" 출력 후 disable)</button>
+</form>
+<br>
+<br>
+<form action="/recommend" method="get">
+  <button type="submit">키워드선택 및 추천페이지로 이동</button>
+</form>
+<br>
+<br>
+<div>페이지 이동 내용</div>
+<br>
+<hr>
 
 
-  <h2 th:text="${curatingReason}"></h2>
-  <div>curating reason 출력</div>
-  <br>
-  <hr>
+<h2 th:text="${curatingReason}"></h2>
+<div>curating reason 출력</div>
+<br>
+<hr>
 
 
 <div class="curation-header">
@@ -139,77 +173,87 @@
 </div>
 
 
-  <div th:each="item : ${items}" class="curation-item">
+<div th:each="item : ${items}" class="curation-item">
 
-    <!-- Book 영역 -->
-    <div class="book">
-      <div class="image-and-info">
-        <div class="image-block">
-          <div class="image-wrapper">
-           <img th:src="${item.book.imgUrl}" />
-          </div>
-          <div class="title" th:text="${item.book.name}"></div>
+  <!-- Book 영역 -->
+  <div class="book">
+    <div class="image-and-info">
+      <div class="image-block">
+        <div class="image-wrapper">
+          <img th:src="${item.book.imgUrl}"/>
         </div>
+        <div class="title" th:text="${item.book.name}"></div>
+      </div>
 
-        <div class="info-block">
-          <a th:href="${item.book.externalLink}" target="_blank">책 링크</a>
-          <button class="details-btn" data-type="book" th:attr="data-id=${item.book.name}">Details</button>
-          <button class="toggle-star-btn"
-                  onclick="toggle(this)"
-                  th:text="${item.book.status} ? 'ON' : 'OFF'"
-                  th:style="${item.book.status} ? 'background-color:yellow;' : 'background-color:gray;'">
-          </button>
-        </div>
+      <div class="info-block">
+        <a th:href="${item.book.externalLink}" target="_blank">책 링크</a>
+        <button class="details-btn" data-type="book" th:attr="data-id=${item.book.id}">Details
+        </button>
+        <button class="toggle-star-btn"
+                onclick="toggle(this)"
+                th:text="${item.book.status} ? 'ON' : 'OFF'"
+                th:style="${item.book.status} ? 'background-color:yellow;' : 'background-color:gray;'">
+        </button>
       </div>
     </div>
-
-    <!-- Movie 영역 -->
-    <div class="movie">
-      <div class="image-and-info">
-        <div class="image-block">
-          <div class="image-wrapper">
-           <img th:src="${item.movie.imgUrl}" />
-          </div>
-          <div class="title" th:text="${item.movie.name}"></div>
-        </div>
-        <div class="info-block">
-          <a th:href="${item.movie.externalLink}" target="_blank">영화 링크</a>
-          <button class="details-btn" data-type="movie" th:attr="data-id=${item.movie.name}">Details</button>
-          <button class="toggle-star-btn"
-                  onclick="toggle(this)"
-                  th:text="${item.movie.status} ? 'ON' : 'OFF'"
-                  th:style="${item.movie.status} ? 'background-color:yellow;' : 'background-color:gray;'">
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Song 영역 -->
-    <div class="song">
-      <div class="image-and-info">
-        <div class="image-block">
-          <div class="image-wrapper">
-           <img th:src="${item.song.imgUrl}" />
-          </div>
-          <div class="title" th:text="${item.song.name}"></div>
-        </div>
-        <div class="info-block">
-          <a th:href="${item.song.externalLink}" target="_blank">노래 링크</a>
-          <button class="details-btn" data-type="song" th:attr="data-id=${item.song.name}">Details</button>
-          <button class="toggle-star-btn"
-                  onclick="toggle(this)"
-                  th:text="${item.song.status} ? 'ON' : 'OFF'"
-                  th:style="${item.song.status} ? 'background-color:yellow;' : 'background-color:gray;'">
-          </button>
-        </div>
-      </div>
-    </div>
-
   </div>
 
+  <!-- Movie 영역 -->
+  <div class="movie">
+    <div class="image-and-info">
+      <div class="image-block">
+        <div class="image-wrapper">
+          <img th:src="${item.movie.imgUrl}"/>
+        </div>
+        <div class="title" th:text="${item.movie.name}"></div>
+      </div>
+      <div class="info-block">
+        <a th:href="${item.movie.externalLink}" target="_blank">영화 링크</a>
+        <button class="details-btn" data-type="movie" th:attr="data-id=${item.movie.id}">Details
+        </button>
+        <button class="toggle-star-btn"
+                onclick="toggle(this)"
+                th:text="${item.movie.status} ? 'ON' : 'OFF'"
+                th:style="${item.movie.status} ? 'background-color:yellow;' : 'background-color:gray;'">
+        </button>
+      </div>
+    </div>
+  </div>
 
+  <!-- Song 영역 -->
+  <div class="song">
+    <div class="image-and-info">
+      <div class="image-block">
+        <div class="image-wrapper">
+          <img th:src="${item.song.imgUrl}"/>
+        </div>
+        <div class="title" th:text="${item.song.name}"></div>
+      </div>
+      <div class="info-block">
+        <a th:href="${item.song.externalLink}" target="_blank">노래 링크</a>
+        <button class="details-btn" data-type="song" th:attr="data-id=${item.song.id}">Details
+        </button>
+        <button class="toggle-star-btn"
+                onclick="toggle(this)"
+                th:text="${item.song.status} ? 'ON' : 'OFF'"
+                th:style="${item.song.status} ? 'background-color:yellow;' : 'background-color:gray;'">
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 모달창 HTML -->
+<div id="detailModal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close-button" onclick="closeModal()">&times;</span>
+    <div id="modal-body"></div>
+  </div>
+</div>
 
 <script>
+  /// 토글 버튼 구현
   function toggle(btn) {
     if (btn.innerText === "OFF") {
       btn.innerText = "ON";
@@ -218,6 +262,64 @@
       btn.innerText = "OFF";
       btn.style.backgroundColor = "gray";
     }
+  }
+
+  /// 모달창
+  document.addEventListener("DOMContentLoaded", function () {
+    const buttons = document.querySelectorAll(".details-btn");
+
+    buttons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const type = btn.dataset.type; // book, movie, song
+        const id = btn.dataset.id;
+
+        fetch(`/api/details/${type}/${id}`)
+        .then(res => res.json())
+        .then(data => {
+          openModal(type, data);
+        });
+      });
+    });
+  });
+
+  function openModal(type, data) {
+    const modal = document.getElementById("detailModal");
+    const body = document.getElementById("modal-body");
+
+    let content = "";
+
+    if (type === "book") {
+      content = `
+        <h2>${data.name}</h2>
+        <img src="${data.bookImg}" alt="${data.name}" style="width: 100%; max-height: 200px; object-fit: contain; border-radius: 10px;" />
+        <p><strong>작가:</strong> ${data.author}</p>
+        <p><strong>출판일:</strong> ${data.publishedAt}</p>
+        <p>${data.description}</p>
+      `;
+    } else if (type === "movie") {
+      content = `
+        <h2>${data.name}</h2>
+        <img src="${data.movieImg}" alt="${data.name}" style="width: 100%; max-height: 200px; object-fit: contain; border-radius: 10px;" />
+        <p><strong>감독:</strong> ${data.director}</p>
+        <p><strong>장르:</strong> ${data.genre}</p>
+        <p>${data.description}</p>
+      `;
+    } else if (type === "song") {
+      content = `
+        <h2>${data.name}</h2>
+        <img src="${data.songImg}" alt="${data.name}" style="width: 100%; max-height: 200px; object-fit: contain; border-radius: 10px;" />
+        <p><strong>아티스트:</strong> ${data.artist}</p>
+        <p><strong>발매일:</strong> ${data.releasedAt}</p>
+        <p>${data.description}</p>
+      `;
+    }
+
+    body.innerHTML = content;
+    modal.classList.remove("hidden");
+  }
+
+  function closeModal() {
+    document.getElementById("detailModal").classList.add("hidden");
   }
 </script>
 
