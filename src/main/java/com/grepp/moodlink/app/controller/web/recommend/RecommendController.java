@@ -3,6 +3,7 @@ package com.grepp.moodlink.app.controller.web.recommend;
 import com.grepp.moodlink.app.model.auth.domain.Principal;
 import com.grepp.moodlink.app.model.embedding.EmbeddingService;
 import com.grepp.moodlink.app.model.keyword.KeywordService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,10 +29,12 @@ public class RecommendController {
     }
 
     @PostMapping("result")
-    public String selectKeyword(@RequestParam("keywords") String keywords, Model model){
+    public String selectKeyword(@RequestParam("keywords") String keywords, HttpSession session){
         String userId = getLoginUserId();
         keywordService.generateKeywordSelection(userId);
         embeddingService.generateEmbeddingKeyword(userId, keywords);
+        session.setAttribute("movies", embeddingService.cosineComputeMovie(userId));
+        
         return "home/mainPage";
     }
 

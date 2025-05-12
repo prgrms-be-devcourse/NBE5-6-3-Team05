@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -97,6 +97,34 @@ public class EmbeddingService {
         keywordSelection.setEmbedding(byteEmbedding);
 
         keywordRepository.save(keywordSelection);
+    }
+
+    public List<Movie> cosineComputeMovie(String userId) {
+        KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
+        byte[] byteEmbedding = keywordSelection.getEmbedding();
+        float[] floatEmbedding = toFloatArray(byteEmbedding);
+        List<Movie> movies = movieRepository.findAll();
+        PriorityQueue<Map.Entry<String, Float>> pq = new PriorityQueue<>((a, b) -> Float.compare(b.getValue(), a.getValue()));
+
+        for (Movie movie : movies) {
+            byte[] byteMovie = movie.getEmbedding();
+            float[] floatMovie = toFloatArray(byteMovie);
+            float cosingSimilarity = CosineSimilarity.compute(floatEmbedding, floatMovie);
+            Map.Entry<String, Float> entry = new AbstractMap.SimpleEntry<>(movie.getId(), cosingSimilarity);
+
+            pq.add(entry);
+        }
+
+        List<String> recommendedMovieIds = new ArrayList<>();
+        int count = 0;
+        while (!pq.isEmpty() && count < 5) {
+            Map.Entry<String, Float> entry = pq.poll();
+            recommendedMovieIds.add(entry.getKey());
+            count++;
+        }
+
+        recommendedMovieIds.forEach(System.out::println);
+        return movieRepository.findAllById(recommendedMovieIds);
     }
 }
 

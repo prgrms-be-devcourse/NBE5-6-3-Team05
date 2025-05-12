@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Genre {
     @Id
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
