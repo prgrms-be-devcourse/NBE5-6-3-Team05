@@ -34,7 +34,8 @@ public class RecommendController {
         keywordService.generateKeywordSelection(userId);
         embeddingService.generateEmbeddingKeyword(userId, keywords);
         session.setAttribute("movies", embeddingService.cosineComputeMovie(userId));
-        
+        session.setAttribute("books", embeddingService.cosineComputeBook(userId));
+        session.setAttribute("musics", embeddingService.cosineComputeMusic(userId));
         return "home/mainPage";
     }
 
