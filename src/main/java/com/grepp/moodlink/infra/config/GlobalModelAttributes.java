@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 @ControllerAdvice
 public class GlobalModelAttributes {
+
     @ModelAttribute
     public void globalAttributes(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

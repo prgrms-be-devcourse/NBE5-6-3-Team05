@@ -27,42 +27,41 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class SecurityConfig {
 
 
-    
-//    @Value("${remember-me.key}")
+    //    @Value("${remember-me.key}")
     private String rememberMeKey;
-    
+
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
-                   .build();
+            .build();
     }
-    
+
     @Bean
-    public AuthenticationSuccessHandler successHandler(){
+    public AuthenticationSuccessHandler successHandler() {
         return new AuthenticationSuccessHandler() {
             @Override
             public void onAuthenticationSuccess(HttpServletRequest request,
                 HttpServletResponse response, Authentication authentication)
                 throws IOException, ServletException {
-                
+
                 boolean isAdmin = authentication.getAuthorities()
-                                      .stream()
-                                      .anyMatch(authority ->
-                                                    authority.getAuthority().equals("ROLE_ADMIN"));
-                
-                if(isAdmin){
+                    .stream()
+                    .anyMatch(authority ->
+                        authority.getAuthority().equals("ROLE_ADMIN"));
+
+                if (isAdmin) {
                     response.sendRedirect("/admin");
                     return;
                 }
-                
+
                 response.sendRedirect("/");
             }
         };
     }
-    
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        
+
         // * : 1depth 아래 모든 경로
         // ** : 모든 depth 의 모든 경로
         // Security Config 에는 인증과 관련된 설정만 지정 (PermitAll or Authenticated)
@@ -70,19 +69,19 @@ public class SecurityConfig {
             .csrf().disable() // 추가
             .authorizeHttpRequests(
                 (requests) -> requests
-                                  .requestMatchers(GET, "/member/signup", "/member/signin").permitAll()
-                                  .requestMatchers(POST, "/member/signin", "/member/signup").permitAll()
-                                    .requestMatchers("/movies/**").permitAll()
-                                    .requestMatchers(GET, "/mypage").authenticated()
-                                  .anyRequest().permitAll()
+                    .requestMatchers(GET, "/member/signup", "/member/signin").permitAll()
+                    .requestMatchers(POST, "/member/signin", "/member/signup").permitAll()
+                    .requestMatchers("/movies/**").permitAll()
+                    .requestMatchers(GET, "/mypage").authenticated()
+                    .anyRequest().permitAll()
             )
             .formLogin((form) -> form
-                                     .loginPage("/signin")
-                                     .usernameParameter("userId")
-                                     .loginProcessingUrl("/signin")
+                    .loginPage("/signin")
+                    .usernameParameter("userId")
+                    .loginProcessingUrl("/signin")
 //                                     .defaultSuccessUrl("/")
-                                     .successHandler(successHandler())
-                                     .permitAll()
+                    .successHandler(successHandler())
+                    .permitAll()
             )
 //            .rememberMe(rememberMe -> rememberMe.key(rememberMeKey))
 //            .logout(LogoutConfigurer::permitAll);
@@ -94,9 +93,9 @@ public class SecurityConfig {
                 .permitAll());
         return http.build();
     }
-    
+
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
