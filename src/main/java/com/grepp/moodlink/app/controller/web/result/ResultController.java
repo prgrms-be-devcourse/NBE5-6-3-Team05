@@ -24,7 +24,11 @@ public class ResultController {
 
         List<CuratingDetailDto> tempList = resultService.curatingDetailDtoList();
 
-        model.addAttribute("curatingReason", "원시천존 원시천존.. 이것은 curatingReason출력문");
+        String msg1 ="curatingReason출력문 예시 <br>";
+        String msg2 ="오늘 해고당해서 우울한 당신! 고단한 하루를 달래줄 명작을 소개해드릴게요. <br>";
+        String msg3 ="다음 작품들은 위로가 될 거예요!";
+
+        model.addAttribute("curatingReason", msg1+msg2+msg3);
         model.addAttribute("items", tempList);
         return "result/result";
     }

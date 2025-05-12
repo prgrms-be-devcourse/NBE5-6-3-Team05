@@ -13,5 +13,6 @@ public class BookDetailsDto {
     private LocalDateTime publishedAt;
     private String description;
     private String bookImg;
+    private String externalLink;
     private boolean status;
 }

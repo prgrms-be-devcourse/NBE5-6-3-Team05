@@ -12,5 +12,6 @@ public class MovieDetailsDto {
     private String genre;
     private String description;
     private String movieUrl;
+    private String externalLink;
     private boolean status;
 }

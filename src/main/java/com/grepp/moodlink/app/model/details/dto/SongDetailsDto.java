@@ -13,5 +13,6 @@ public class SongDetailsDto {
     private LocalDateTime releasedAt;
     private String description;
     private String songImg;
+    private String externalLink;
     private boolean status;
 }

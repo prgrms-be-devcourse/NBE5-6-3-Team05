@@ -1,5 +1,6 @@
 package com.grepp.moodlink.app.model.like;
 
+import jakarta.annotation.PostConstruct;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class LikeService {
         boolean current;
         if (id.equals("s1111")){
             current = likeSongStatusMap.getOrDefault(id, true);
+            System.out.println(current);
         }
         else{
             current = likeSongStatusMap.getOrDefault(id, false);
@@ -73,4 +75,10 @@ public class LikeService {
     public boolean getMovieStatus(String id) {
         return likeMovieStatusMap.getOrDefault(id, false);
     }
+
+    @PostConstruct
+    public void initDefaultLikes(){
+        likeSongStatusMap.put("s1111",true);
+    }
+
 }

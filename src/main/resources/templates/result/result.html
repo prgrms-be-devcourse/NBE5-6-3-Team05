@@ -2,53 +2,140 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
   <style>
 
+    /* 전체 배경 및 기본 글자색 */
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      font-family: 'Pretendard', 'Spoqa Han Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+    }
+
+    .purple-header-btn {
+      width: 80px;
+      background-color: #a259ff;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 14px;
+      box-sizing: border-box;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background-color 0.2s ease;
+      text-align: center;
+      width: auto;
+    }
+
+    .header-left .logo {
+      font-size: 32px;
+      font-weight: bold;
+      color: #a259ff;
+      line-height: 1.2;
+    }
+
+    .header-left .subtitle {
+      font-size: 20px;
+      font-weight: 500;
+      color: white;
+    }
+
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+    }
+
+    .top-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .bottom-button {
+      margin-top: 10px;
+    }
+
+    .main-content {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .recommend-form {
+      margin-bottom: 20px;
+    }
+
+    .divider {
+      height: 8px;
+      width: 80%;
+      margin: 0 auto 20px;
+      background: linear-gradient(to right, #aaa, #eee, #aaa);
+      border-radius: 5px;
+    }
+
+    .guide-text {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+
+    /* 헤더 영역 */
     .curation-header {
       display: flex;
       justify-content: space-between;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 8px 0;
+      padding: 16px 0;
+      border-bottom: 1px solid #333;
     }
 
     .curation-label {
       flex: 1;
       max-width: 33.33%;
       text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      color: #a259ff;
     }
 
-    .image-and-info {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      justify-content: center;
-    }
-
+    /* 각 아이템 영역 */
     .curation-item {
       display: flex;
-      justify-content: space-between; /* 좌우 정렬 */
+      justify-content: space-between;
       max-width: 1200px;
       margin: 0 auto;
       gap: 20px;
-      padding-bottom: 40px; /* 또는 margin-bottom: 40px; */
-      border-bottom: 1px solid transparent; /* 시각적 분리도 가능 */
+      padding: 40px 0;
+      border-bottom: 1px solid #333;
     }
 
     .curation-item > div {
-      flex: 1; /* 3등분 */
-      max-width: 33.33%; /* 각 박스 최대 너비 제한 */
+      flex: 1;
+      max-width: 33.33%;
       display: flex;
       justify-content: center;
     }
 
-    .curation-item img {
-      max-width: 100%; /* 박스 안에 맞게 이미지 축소 */
-      height: auto;
-      object-fit: contain; /* 비율 유지 */
+    /* 이미지 및 정보 블록 */
+    .image-and-info {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      justify-content: center;
     }
 
+    /* 이미지 블록 */
     .image-block {
       width: 200px;
       display: flex;
@@ -57,113 +144,237 @@
     }
 
     .image-wrapper {
-      width: 240px; /* 원하는 표준 크기 */
+      width: 240px;
       height: 300px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #f4f4f4; /* 여백 채우기용 */
+      background-color: #1e1e1e;
       overflow: hidden;
+      border-radius: 0;
     }
 
     .image-wrapper img {
       max-width: 100%;
       max-height: 100%;
-      object-fit: contain; /*  비율 유지하면서 맞춤 */
+      object-fit: contain;
+      border-radius: 0;
     }
 
+    /* 제목 */
     .title {
       font-weight: bold;
       margin-top: 8px;
       text-align: left;
       width: 100%;
+      color: #ffffff;
     }
 
+    /* 정보 블록 */
     .info-block {
       width: 100px;
       display: flex;
-      flex-direction: column; /* 👈 이거 하나로 세로 정렬 */
-      gap: 8px; /* 버튼 간 간격 */
-      align-items: flex-start; /* 좌측 정렬 (원하면 center로 바꿔도 됨) */
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
     }
 
+    .purple-btn {
+      width: 80px;
+      background-color: #a259ff;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 14px;
+      box-sizing: border-box;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background-color 0.2s ease;
+      text-align: center;
+    }
 
+    .purple-btn:hover {
+      background-color: transparent;
+      color: white;
+      text-decoration: none;
+    }
+
+    /* 버튼 스타일 */
+    button {
+      width: 80px;
+      background-color: #a259ff;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      box-sizing: border-box;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #8e44ec;
+    }
+
+    /* 토글 버튼 스타일 */
+    /* 공통 버튼 hover 제거 */
+    button:hover {
+      background-color: inherit;
+    }
+
+    /* 별 버튼은 hover 배경 없음 */
+    .toggle-star-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 24px;
+      cursor: pointer;
+      color: black;
+      text-shadow: /* 🔥 노란 윤곽선 효과 */ 0.8px 0 #f4b464,
+      -0.8px 0 #f4b464,
+      0 0.8px #f4b464,
+      0 -0.8px #f4b464;
+    }
+
+    /* ON 상태 */
+    .toggle-star-btn.on {
+      color: #f4b464;
+      text-shadow: none;
+    }
+
+    /* OFF 상태에 hover 시 노란색으로 */
+    .toggle-star-btn:not(.on):hover {
+      color: #f4b464;
+      text-shadow: none;
+    }
+
+    /* 링크 스타일 */
+    a {
+      color: #a259ff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* 모달 스타일 */
     .modal {
       position: fixed;
       top: 0;
       left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0, 0, 0, 0.5);
+      width: 100vw;
+      height: 100vh;
+
+      background-color: rgba(0, 0, 0, 0.6); /* 살짝 투명한 배경 */
       display: flex;
-      align-items: center;
       justify-content: center;
-      z-index: 1000;
+      align-items: center;
+
+      z-index: 1000; /* 기본 창보다 위로 */
+    }
+
+    .modal-body-layout {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      margin-top: 1rem;
+    }
+
+    .modal-body-main img {
+      width: 200px;
+      max-height: 250px;
+      object-fit: contain;
+      border-radius: 0;
+    }
+
+    .modal-info {
+      flex: 1;
+    }
+
+    #modal-meta p {
+      margin: 0.5rem 0;
     }
 
     .modal.hidden {
       display: none;
     }
 
+
     .modal-content {
-      background: white;
-      padding: 30px;
-      border-radius: 16px;
-      width: 70vw; /* 화면 너비의 70% */
-      max-height: 90vh; /* 화면 높이의 80% */
-      overflow-y: auto; /* 내용이 넘치면 스크롤 */
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      background-color: #1a1a1a; /* 약간 밝은 검정 */
+      padding: 2rem;
+      border-radius: 0;
+      max-width: 800px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
     }
 
     .close-button {
       float: right;
       cursor: pointer;
       font-size: 20px;
+      color: white;
+    }
+
+    /* PICK 강조 태그 */
+    .pick-tag {
+      display: inline-block;
+      background-color: #a259ff;
+      color: white;
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 6px;
+      margin-top: 10px;
     }
   </style>
+
+  <title>Result Page</title>
+
 </head>
 <body>
+<header class="header">
+  <div class="header-left">
+    <div class="logo">
+      <a href="/">Moodlink</a>
+    </div>
+    <div class="subtitle">Result</div>
+  </div>
+  <div class="header-right">
+    <div class="top-buttons">
+      <form action="/users/mypage" method="get">
+        <button type="submit" class="purple-header-btn">My page</button>
+      </form>
+      <form action="/signin" method="get">
+        <button type="submit" class="purple-header-btn">Logout</button>
+        <!-- anonymous면 Login으로 바꾸기 -->
+      </form>
+    </div>
+      <div class="bottom-button">
+      <form action="/recommend" method="get" class="recommend-form">
+        <button type="submit" class="purple-header-btn">Recommend</button>
+      </form>
+    </div>
+  </div>
+</header>
 
+<main class="main-content">
 
-<main>
-  <h1>임시 result page</h1>
+  <div class="divider"></div>
+
+  <p class="guide-text" th:utext="${curatingReason}">
+    오늘 해고당해서 우울한 당신! 고단한 하루를 달래줄 명작을 소개해드릴게요.
+    다음 작품들은 위로가 될 거예요!
+  </p>
 </main>
 
-<hr>
-<form action="/signin" method="get">
-  <button type="submit">메인화면(헤더로 빼야됨, 모든 Role에 대해 적용)</button>
-</form>
-<br>
-<br>
-<form action="/signup" method="get">
-  <button type="submit">로그인화면으로 이동 및 로그아웃 (헤더로 빼야됨, User일 때 Logout, anonymous일 때 Login)</button>
-</form>
-<br>
-<br>
-<div>헤더 내용</div>
-<br>
-<hr>
-
-
-<form action="/users/mypage" method="get">
-  <button type="submit">마이페이지(User일 때 적용, anonymous의 경우 클릭 시 "회원만 가능한 기능입니다" 출력 후 disable)</button>
-</form>
-<br>
-<br>
-<form action="/recommend" method="get">
-  <button type="submit">키워드선택 및 추천페이지로 이동</button>
-</form>
-<br>
-<br>
-<div>페이지 이동 내용</div>
-<br>
-<hr>
-
-
-<h2 th:text="${curatingReason}"></h2>
-<div>curating reason 출력</div>
-<br>
-<hr>
 
 
 <div class="curation-header">
@@ -186,15 +397,15 @@
       </div>
 
       <div class="info-block">
-        <a th:href="${item.book.externalLink}" target="_blank">책 링크</a>
+        <a th:href="${item.book.externalLink}" target="_blank" class="purple-btn">Search</a>
         <button class="details-btn" data-type="book" th:attr="data-id=${item.book.id}">Details
         </button>
         <button class="toggle-star-btn"
+                th:classappend="${item.book.status} ? ' on' : ''"
                 th:id="'toggle-book-' + ${item.book.id}"
                 th:attr="data-type='book', data-id=${item.book.id}"
-                onclick="toggle(this)"
-                th:text="${item.book.status} ? 'ON' : 'OFF'"
-                th:style="${item.book.status} ? 'background-color:yellow;' : 'background-color:gray;'">
+                onclick="toggle(this)">
+          ★
         </button>
       </div>
     </div>
@@ -210,15 +421,15 @@
         <div class="title" th:text="${item.movie.name}"></div>
       </div>
       <div class="info-block">
-        <a th:href="${item.movie.externalLink}" target="_blank">영화 링크</a>
+        <a th:href="${item.movie.externalLink}" target="_blank" class="purple-btn">Search</a>
         <button class="details-btn" data-type="movie" th:attr="data-id=${item.movie.id}">Details
         </button>
         <button class="toggle-star-btn"
+                th:classappend="${item.movie.status} ? ' on' : ''"
                 th:id="'toggle-movie-' + ${item.movie.id}"
                 th:attr="data-type='movie', data-id=${item.movie.id}"
-                onclick="toggle(this)"
-                th:text="${item.movie.status} ? 'ON' : 'OFF'"
-                th:style="${item.movie.status} ? 'background-color:yellow;' : 'background-color:gray;'">
+                onclick="toggle(this)">
+          ★
         </button>
       </div>
     </div>
@@ -234,15 +445,15 @@
         <div class="title" th:text="${item.song.name}"></div>
       </div>
       <div class="info-block">
-        <a th:href="${item.song.externalLink}" target="_blank">노래 링크</a>
+        <a th:href="${item.song.externalLink}" target="_blank" class="purple-btn">Search</a>
         <button class="details-btn" data-type="song" th:attr="data-id=${item.song.id}">Details
         </button>
         <button class="toggle-star-btn"
+                th:classappend="${item.song.status} ? ' on' : ''"
                 th:id="'toggle-song-' + ${item.song.id}"
                 th:attr="data-type='song', data-id=${item.song.id}"
-                onclick="toggle(this)"
-                th:text="${item.song.status} ? 'ON' : 'OFF'"
-                th:style="${item.song.status} ? 'background-color:yellow;' : 'background-color:gray;'">
+                onclick="toggle(this)">
+          ★
         </button>
       </div>
     </div>
@@ -254,14 +465,28 @@
 <div id="detailModal" class="modal hidden">
   <div class="modal-content">
     <span class="close-button" onclick="closeModal()">&times;</span>
-    <div id="modal-body"></div>
+
+    <h2 id="modal-title"></h2>
+
+    <div class="modal-body-layout">
+
+      <div class="modal-body-main">
+        <img id="modal-img" class="modal-img" src="" alt="컨텐츠 이미지" />
+      </div>
+
+        <div class="modal-info">
+          <div id="modal-meta"></div> <!-- 타입별로 여기에 JS로 채워 넣기 -->
+        </div>
+      </div>
+
     <div id="modal-like-wrapper" style="margin-top: 1rem; text-align: right">
+      <a id="modal-search-link" class="purple-btn" href="#" target="_blank">Search</a>
       <button class="toggle-star-btn"
               id="modal-like-btn"
               data-type=""
               data-id=""
               onclick="toggle(this)">
-        ON
+        ★
       </button>
     </div>
   </div>
@@ -275,21 +500,29 @@
 
     fetch(`/api/like/${type}/toggle`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id })
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({id})
     })
     .then(res => res.json())
     .then(data => {
       const isOn = data.status;
-      btn.textContent = isOn ? 'ON' : 'OFF';
-      btn.style.backgroundColor = isOn ? 'yellow' : 'gray';
+
+      // 텍스트는 항상 별로 고정
+      btn.textContent = '★';
+      btn.classList.remove('on');
+      if (isOn) {
+        btn.classList.add('on');
+      }
 
       // 동일 type, id를 가진 다른 버튼들 동기화
       const selector = `.toggle-star-btn[data-type='${type}'][data-id='${id}']`;
       document.querySelectorAll(selector).forEach(otherBtn => {
         if (otherBtn !== btn) {
-          otherBtn.textContent = isOn ? 'ON' : 'OFF';
-          otherBtn.style.backgroundColor = isOn ? 'yellow' : 'gray';
+          otherBtn.textContent = '★';
+          otherBtn.classList.remove('on');
+          if (isOn) {
+            otherBtn.classList.add('on');
+          }
         }
       });
     });
@@ -318,36 +551,45 @@
   function openModal(type, data) {
     const modal = document.getElementById("detailModal");
     const body = document.getElementById("modal-body");
+    const meta = document.getElementById("modal-meta");
+    const likeBtn = document.getElementById("modal-like-btn");
+    const searchLink = document.getElementById("modal-search-link");
 
-    let content = `
-    <h2>${data.name}</h2>
-    <img src="${data[`${type}Img`]}" alt="${data.name}" style="width: 100%; max-height: 200px; object-fit: contain; border-radius: 10px;" />
-  `;
+    // 제목 + 이미지는 항상 고정 위치
+    document.getElementById("modal-title").textContent = data.name;
+    document.getElementById("modal-img").src = data[`${type}Img`];
+    document.getElementById("modal-img").alt = data.name;
+
+    // 링크 설정
+    searchLink.href = data.externalLink;
+
+    // 타입별 부가 정보 + description
+    let details = "";
 
     if (type === "book") {
-      content += `
-      <p><strong>작가:</strong> ${data.author}</p>
-      <p><strong>출판일:</strong> ${data.publishedAt}</p>
-    `;
+      details += `<p><strong>작가:</strong> ${data.author}</p>`;
+      details += `<p><strong>출판일:</strong> ${data.publishedAt}</p>`;
+      details += `<p><strong>설명:</strong> ${data.description}</p>`;
     } else if (type === "movie") {
-      content += `
-      <p><strong>감독:</strong> ${data.director}</p>
-      <p><strong>장르:</strong> ${data.genre}</p>
-    `;
+      details += `<p><strong>감독:</strong> ${data.director}</p>`;
+      details += `<p><strong>장르:</strong> ${data.genre}</p>`;
+      details += `<p><strong>설명:</strong> ${data.description}</p>`;
     } else if (type === "song") {
-      content += `
-      <p><strong>아티스트:</strong> ${data.artist}</p>
-      <p><strong>발매일:</strong> ${data.releasedAt}</p>
-    `;
+      details += `<p><strong>아티스트:</strong> ${data.artist}</p>`;
+      details += `<p><strong>발매일:</strong> ${data.releasedAt}</p>`;
+      details += `<p><strong>설명:</strong> ${data.description}</p>`;
     }
 
-    content += `<p>${data.description}</p>`;
-    body.innerHTML = content;
-    const likeBtn = document.getElementById("modal-like-btn");
+    meta.innerHTML = details;
+
+    // 별 버튼 설정
     likeBtn.dataset.type = type;
     likeBtn.dataset.id = data.id;
-    likeBtn.textContent = data.status ? 'ON' : 'OFF';
-    likeBtn.style.backgroundColor = data.status ? 'yellow' : 'gray';
+    likeBtn.textContent = '★';
+    likeBtn.classList.remove("on");
+    if (data.status) {
+      likeBtn.classList.add("on");
+    }
 
     modal.classList.remove("hidden");
   }
