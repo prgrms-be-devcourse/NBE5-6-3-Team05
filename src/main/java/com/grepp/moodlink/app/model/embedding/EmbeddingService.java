@@ -6,6 +6,8 @@ import com.grepp.moodlink.app.model.data.movie.MovieRepository;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import com.grepp.moodlink.app.model.data.music.MusicRepository;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
+import com.grepp.moodlink.app.model.keyword.KeywordRepository;
+import com.grepp.moodlink.app.model.keyword.entity.KeywordSelection;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,7 @@ public class EmbeddingService {
     private final BookRepository bookRepository;
     private final MusicRepository musicRepository;
     private final EmbeddingModel embeddingModel;
+    private final KeywordRepository keywordRepository;
 
     @Transactional
     @Async
@@ -85,6 +88,15 @@ public class EmbeddingService {
         float[] floats = new float[buffer.remaining()];
         buffer.get(floats);
         return floats;
+    }
+
+    public void generateEmbeddingKeyword(String userId, String keywords) {
+        KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
+        float[] floatEmbedding = embeddingModel.embed(keywords);
+        byte[] byteEmbedding = toByteArray(floatEmbedding);
+        keywordSelection.setEmbedding(byteEmbedding);
+
+        keywordRepository.save(keywordSelection);
     }
 }
 

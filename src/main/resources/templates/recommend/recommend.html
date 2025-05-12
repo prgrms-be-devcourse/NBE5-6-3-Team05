@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Index</title>
+  <style>
+    body{
+      background-attachment: fixed;
+      background-position: center;
+      margin: 0;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 15px;
+    }
+
+    .card {
+      background-color: #e0e0e0;
+      color: black;
+      border-radius: 8px;
+      padding: 18px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 2px solid transparent;
+    }
+
+    .card:hover {
+      background-color: #dadada;
+    }
+
+    .card.selected {
+      border-color: #a64dff;
+    }
+
+    .submit-button {
+      margin-top: 40px;
+      padding: 12px 32px;
+      border-radius: 20px;
+      border: none;
+      background: linear-gradient(to right, #a64dff, #7c4dff);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+<div layout:fragment="content">
+  <form method="post" action="recommend/result" id="recommendForm">
+    <input type="hidden" name="keywords" id="selectedKeywords"/>
+
+    <div class="select-group">
+      장르 <select>
+      <option>미스터리</option>
+    </select>
+      국가 <select>
+      <option>대한민국</option>
+    </select>
+    </div>
+
+    <div class="section">
+      <h3>오늘 기분은 어떠신가요?</h3>
+      <div class="card-grid" id="mood-cards">
+        <div class="card">기쁨</div>
+        <div class="card">슬픔</div>
+        <div class="card">화남</div>
+        <div class="card">즐거움</div>
+        <div class="card">지침</div>
+        <div class="card">설렘</div>
+        <div class="card">불안</div>
+        <div class="card">평온</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>오늘 날씨는 어떤가요?</h3>
+      <div class="card-grid">
+        <div class="card">맑음</div>
+        <div class="card">비</div>
+        <div class="card">흐림</div>
+        <div class="card">눈</div>
+        <div class="card">바람</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>어떤 시간대 이신가요?</h3>
+      <div class="card-grid">
+        <div class="card">아침</div>
+        <div class="card">점심</div>
+        <div class="card">저녁</div>
+        <div class="card">밤</div>
+        <div class="card">새벽</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>누군가와 같이 있나요?</h3>
+      <div class="card-grid">
+        <div class="card">혼자</div>
+        <div class="card">연인</div>
+        <div class="card">가족</div>
+        <div class="card">친구들</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>지금 무엇이 필요한가요?</h3>
+      <div class="card-grid">
+        <div class="card">행복</div>
+        <div class="card">위로</div>
+        <div class="card">휴식</div>
+        <div class="card">즐거움</div>
+        <div class="card">짜릿함</div>
+        <div class="card">아무생각 없이</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>지금 무엇이 필요한가요?</h3>
+      <div class="card-grid">
+        <div class="card">행복</div>
+        <div class="card">위로</div>
+        <div class="card">휴식</div>
+        <div class="card">즐거움</div>
+        <div class="card">짜릿함</div>
+        <div class="card">아무생각 없이</div>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-button">추천받기</button>
+  </form>
+
+  <script>
+    const selectedKeywords = new Set();
+
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', () => {
+        card.classList.toggle('selected');
+        const keyword = card.textContent.trim();
+
+        if(card.classList.contains('selected')) {
+          selectedKeywords.add(keyword);
+        } else {
+          selectedKeywords.delete(keyword);
+        }
+        document.getElementById('selectedKeywords').value =
+          Array.from(selectedKeywords).join(',');
+        console.log(selectedKeywords);
+      });
+    });
+  </script>
+</div>
+</body>
+</html>
