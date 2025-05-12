@@ -4,7 +4,7 @@ import com.grepp.moodlink.app.controller.api.member.payload.LikeGenreResponse;
 import com.grepp.moodlink.app.model.book.BookRepository;
 import com.grepp.moodlink.app.model.book.dto.BookDto;
 import com.grepp.moodlink.app.model.book.entity.Book;
-import com.grepp.moodlink.app.model.recomend.entity.Like;
+import com.grepp.moodlink.app.model.recomend.entity.Likes;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailBooks;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,14 +28,14 @@ public class LikeService {
     private final LikeDetailSongRepository likeDetailSongRepository;
     private final BookRepository bookRepository;
 
-    public List<Like> getLikeInfo(String userId) {
+    public List<Likes> getLikeInfo(String userId) {
         return likeRepository.findByUserId(userId);
     }
 
-    public List<LikeDetailBooks> getLikeDetailBook(List<Like> likes) {
+    public List<LikeDetailBooks> getLikeDetailBook(List<Likes> likes) {
         List<LikeDetailBooks> likeDetailBooks = new ArrayList<>();
 
-        for (Like like : likes) {
+        for (Likes like : likes) {
             LikeDetailBooks detailBook = likeDetailBooksRepository.findByLikeId(like.getId());
 
             if (detailBook != null) {
@@ -60,15 +60,15 @@ public class LikeService {
         return books;
     }
 
-    @Transactional
+
     public List<BookDto> getUserLikedBooks(String userId) {
-        List<Like> likes = getLikeInfo(userId);
+        List<Likes> likes = getLikeInfo(userId);
         List<LikeDetailBooks> likeDetailBooks = getLikeDetailBook(likes);
         return getBookList(likeDetailBooks);
     }
 
 
-    @Transactional
+
     public List<LikeGenreResponse> getPersonalLikeBookGenre(String userId) {
         List<BookDto> books = getUserLikedBooks(userId);
 

@@ -95,17 +95,25 @@
 <button class="mypage-btn" th:onclick="'location.href=\'' + @{/users/modify} + '\''">
   정보 수정하기
 </button>
-<div>이름</div>
-<div>가입일</div>
-<div>수정일</div>
-<div>국가</div>
+<div th:text="${userId}">이름</div>
+<div th:text="${username}"></div>
+<div th:text="${createdAt}">가입일</div>
+<div th:text="${updatedAt}">수정일</div>
+<div th:text="${countries}"> 국가</div>
 <button class="mypage-btn" th:onclick="'location.href=\'' + @{/users/like} + '\''">
   좋아요 목록조회
 </button>
 
-<h2>(아이디)님이 가장 선호하는 장르는</h2>
-
-
+<h2 th:text="${username}+'님이 가장 선호하는 장르는'">(아이디)님이 가장 선호하는 장르는</h2>
+<li th:each="books : ${LikeBookGenre}">
+  <div th:text="${books.genre}">장르 이름</div>
+  <div th:text="${books.count}">장르 설명</div>
+</li>
+<h2 > 전체 사용자가 가장 선호하는 장르는</h2>
+<li th:each="book : ${mostLikeBookGenre}">
+  <div th:text="${book.genre}">장르 이름</div>
+  <div th:text="${book.count}">장르 설명</div>
+</li>
 
 </body>
 

@@ -93,16 +93,20 @@
   </header>
 </th:block>
 
-<h2>아이디</h2>
-<h2>유저이름</h2>
-<h2>비밀번호</h2>
+<h2 th:text="'아이디:'+${userId}" >아이디</h2>
+<form th:action="@{/users/modify}" method="post">
+<h2 th:text="'유저이름:'+${username}">유저이름</h2>
+  <label>이름:</label><br/>
+  <input type="text" name="username" placeholder="변경할 유저 이름 입력"><br/><br/>
 
+  <label>비밀번호:</label><br/>
+  <input type="password" name="password" placeholder="변경할 비밀번호 입력"><br/><br/>
 
-<button class="mypage-btn" th:onclick="'location.href=\'' + @{/users} + '\''">
+<button type="submit" class="mypage-btn">
   제출
 </button>
 
-
+  </form>
 
 </body>
 

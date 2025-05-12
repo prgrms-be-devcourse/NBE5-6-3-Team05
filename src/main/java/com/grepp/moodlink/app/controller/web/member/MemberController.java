@@ -26,9 +26,10 @@ public class MemberController {
     private final LikeService likeService;
 
 
-    @GetMapping
+    @GetMapping()
     public String showMyPage(HttpSession session, Model model) {
         String userId = (String) session.getAttribute("userId");
+        userId = "user001";
         if (userId == null) {
             return "redirect:/";
         }
@@ -43,7 +44,6 @@ public class MemberController {
             model.addAttribute("createdAt", info.getCreatedAt());
             model.addAttribute("updatedAt", info.getUpdatedAt());
             model.addAttribute("countries", info.getCountries());
-
         }
 
         // 좋아하는 장르 보여주는 로직
@@ -60,19 +60,21 @@ public class MemberController {
 
     @GetMapping("/modify")
     public String showModifyMyPage(HttpSession session, Model model) {
-//        String userId = (String) session.getAttribute("userId");
-//        if(userId == null){
-//            return "redirect:/";
-//        }
-//        model.addAttribute("userId", userId);
-//        model.addAttribute("username", memberService.GetUsername(userId));
+        String userId = (String) session.getAttribute("userId");
+        userId = "user001";
+        if (userId == null) {
+            return "redirect:/";
+        }
+        model.addAttribute("userId", userId);
+        model.addAttribute("username", memberService.GetUsername(userId));
         return "/users/modify";
 
     }
 
     @PostMapping("/modify")
-    public String modifyProfile(ModifyRequest request, HttpSession session) {
+    public String modifyProfile(ModifyRequest request, HttpSession session, Model model) {
         String userId = (String) session.getAttribute("userId");
+        userId = "user001";
         if (userId == null) {
             return "redirect:/";
         }
