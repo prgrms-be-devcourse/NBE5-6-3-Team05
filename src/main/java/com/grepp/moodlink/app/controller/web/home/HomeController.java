@@ -1,6 +1,5 @@
 package com.grepp.moodlink.app.controller.web.home;
 import com.grepp.moodlink.app.model.home.HomeService;
-import java.security.Principal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

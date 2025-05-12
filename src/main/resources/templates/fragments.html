@@ -147,6 +147,52 @@
         z-index: 1;
         position: relative;
       }
+
+      .fancy-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 30px;
+        font-size: 18px;
+        font-weight: 600;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        color: white;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        background-size: 200% auto;
+        text-transform: uppercase;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .fancy-button i {
+        font-size: 20px;
+        transition: transform 0.3s ease;
+      }
+
+      .fancy-button:hover i {
+        transform: rotate(15deg) scale(1.2);
+      }
+
+      .fancy-button:hover {
+        background-position: right center;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+      }
+
+      .red-button {
+        background-image: linear-gradient(to right, #f12711, #f5af19);
+      }
+
+      .purple-button {
+        background-image: linear-gradient(to right, #7F00FF, #E100FF);
+      }
+
+      .buttons {
+        margin-bottom: 10px;
+      }
     </style>
 
   </th:block>

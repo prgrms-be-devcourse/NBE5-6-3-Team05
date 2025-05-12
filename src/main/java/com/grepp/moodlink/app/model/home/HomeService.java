@@ -3,7 +3,6 @@ package com.grepp.moodlink.app.model.home;
 import com.grepp.moodlink.app.model.data.book.BookRepositoryImpl;
 import com.grepp.moodlink.app.model.data.movie.MovieRepositoryImpl;
 import com.grepp.moodlink.app.model.data.music.MusicRepositoryImpl;
-import com.grepp.moodlink.app.model.member.MemberRepository;
 import com.grepp.moodlink.app.model.member.MemberRepositoryImpl;
 import java.util.ArrayList;
 import java.util.List;
