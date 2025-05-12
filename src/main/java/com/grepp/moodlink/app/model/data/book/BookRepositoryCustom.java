@@ -1,6 +1,8 @@
 package com.grepp.moodlink.app.model.data.book;
 
-public interface BookRepositoryCustom {
-    String findThumbnailById(String id);
+import org.springframework.stereotype.Repository;
 
+@Repository
+public interface BookRepositoryCustom {
+    String findTopThumbnail();
 }
