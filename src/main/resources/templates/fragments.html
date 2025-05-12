@@ -79,6 +79,74 @@
         text-align: center;
         margin-top: 40px;
       }
+
+      .category {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 30px;
+        margin-top: 60px;
+        flex-wrap: wrap;
+      }
+
+      .category-card {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        width: 220px;
+        text-align: center;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .category-card:hover {
+        transform: translateY(-10px) scale(1.05);
+        box-shadow: 0 20px 40px rgba(255, 99, 71, 0.4);
+      }
+
+      .category-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 99, 71, 0.3) 0%, transparent 70%);
+        transform: rotate(45deg);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: 0;
+      }
+
+      .category-card:hover::before {
+        opacity: 1;
+      }
+
+      .category-card img {
+        width: 160px;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 15px;
+        border: 2px solid #ff6347;
+        box-shadow: 0 5px 15px rgba(255, 99, 71, 0.2);
+        z-index: 1;
+        position: relative;
+      }
+
+      .category-card p {
+        margin-top: 15px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #fff;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        z-index: 1;
+        position: relative;
+      }
     </style>
 
   </th:block>
