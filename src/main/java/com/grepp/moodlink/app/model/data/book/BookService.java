@@ -15,7 +15,8 @@ public class BookService {
 
         for (BookDto dto : bookDtos) {
             Book book = new Book();
-            book.setIsbn(String.valueOf(dto.getIsbn()));
+            long count = bookRepository.count();
+            book.setIsbn("B" + count);
             book.setTitle(dto.getTitle());
             book.setImage(String.valueOf(dto.getImage()));
             book.setAuthor(dto.getAuthor());

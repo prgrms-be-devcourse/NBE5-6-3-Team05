@@ -32,5 +32,6 @@ public class HomeService {
         thumbnail.add(book);
 
         return thumbnail;
+
     }
 }

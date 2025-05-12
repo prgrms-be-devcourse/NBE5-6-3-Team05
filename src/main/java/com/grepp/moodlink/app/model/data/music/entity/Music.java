@@ -25,6 +25,9 @@ public class Music {
     private String description;
     @Column(columnDefinition = "TEXT")
     private String lyrics;
+
+    @Column(columnDefinition = "BLOB")
+    private byte[] embedding;
     private LocalDate releaseDate;
     private LocalDate createdAt;
     @Column(columnDefinition = "TEXT")
