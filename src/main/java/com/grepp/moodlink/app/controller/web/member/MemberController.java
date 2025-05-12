@@ -2,7 +2,6 @@ package com.grepp.moodlink.app.controller.web.member;
 
 import com.grepp.moodlink.app.controller.api.member.payload.LikeGenreResponse;
 import com.grepp.moodlink.app.controller.web.member.payload.ModifyRequest;
-import com.grepp.moodlink.app.model.member.MemberRepository;
 import com.grepp.moodlink.app.model.member.MemberService;
 import com.grepp.moodlink.app.model.member.dto.MemberInfoDto;
 import com.grepp.moodlink.app.model.recomend.LikeService;
@@ -11,40 +10,37 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class MemberController {
+
     private final MemberService memberService;
     private final LikeService likeService;
 
 
     @GetMapping
-    public String showMyPage(HttpSession session ,Model model){
+    public String showMyPage(HttpSession session, Model model) {
         String userId = (String) session.getAttribute("userId");
-        if(userId == null){
+        if (userId == null) {
             return "redirect:/";
         }
-
 
 // 개인 정보 보여주는 로직
         Optional<MemberInfoDto> memberInfo = memberService.GetMemberInfo(userId);
 
         if (memberInfo.isPresent()) {
             MemberInfoDto info = memberInfo.get();
-            model.addAttribute("userId" , info.getId());
+            model.addAttribute("userId", info.getId());
             model.addAttribute("username", info.getUsername());
-            model.addAttribute("createdAt",info.getCreatedAt());
+            model.addAttribute("createdAt", info.getCreatedAt());
             model.addAttribute("updatedAt", info.getUpdatedAt());
             model.addAttribute("countries", info.getCountries());
 
@@ -52,14 +48,18 @@ public class MemberController {
 
         // 좋아하는 장르 보여주는 로직
 
-       List<LikeGenreResponse> likeGenre=likeService.getLikeGenreCount(userId);
+        List<LikeGenreResponse> likeBookGenre = likeService.getPersonalLikeBookGenre(userId);
 
-        model.addAttribute("mostLikeGenre", likeGenre);
+        model.addAttribute("LikeBookGenre", likeBookGenre);
 
-        return "/users/mypage";}
+        List<LikeGenreResponse> mostLikeBookGenre = likeService.getMostLikeBookGenre();
+        model.addAttribute("mostLikeBookGenre", mostLikeBookGenre);
+
+        return "/users/mypage";
+    }
 
     @GetMapping("/modify")
-    public String showModifyMyPage(HttpSession session, Model model){
+    public String showModifyMyPage(HttpSession session, Model model) {
 //        String userId = (String) session.getAttribute("userId");
 //        if(userId == null){
 //            return "redirect:/";
@@ -71,9 +71,9 @@ public class MemberController {
     }
 
     @PostMapping("/modify")
-    public String modifyProfile(ModifyRequest request ,HttpSession session){
+    public String modifyProfile(ModifyRequest request, HttpSession session) {
         String userId = (String) session.getAttribute("userId");
-        if(userId == null) {
+        if (userId == null) {
             return "redirect:/";
         }
         memberService.modifyProfile(userId, request.toDto());
@@ -81,13 +81,10 @@ public class MemberController {
     }
 
 
-
     @GetMapping("/like")
-    public String showLikePage(){
+    public String showLikePage() {
         return "/users/like";
     }
-
-
 
 
 }

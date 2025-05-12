@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -59,6 +60,7 @@ public class LikeService {
         return books;
     }
 
+    @Transactional
     public List<BookDto> getUserLikedBooks(String userId) {
         List<Like> likes = getLikeInfo(userId);
         List<LikeDetailBooks> likeDetailBooks = getLikeDetailBook(likes);
@@ -66,27 +68,47 @@ public class LikeService {
     }
 
 
+    @Transactional
+    public List<LikeGenreResponse> getPersonalLikeBookGenre(String userId) {
+        List<BookDto> books = getUserLikedBooks(userId);
 
-    public List<LikeGenreResponse> getLikeGenreCount(String userId){
-        List<BookDto> books  = getUserLikedBooks(userId);
+        Map<String, Long> genreCount = new HashMap<>();
 
-        Map<String, Integer> genreCount = new HashMap<>();
-
-
-        for(BookDto book : books){
+        for (BookDto book : books) {
             String genre = book.getGenre();
             if (genre != null && !genre.isBlank()) {
-                genreCount.put(genre, genreCount.getOrDefault(genre, 0) + 1);
+                genreCount.put(genre, genreCount.getOrDefault(genre, 0L) + 1);
             }
         }
 
         return genreCount.entrySet().stream()
-            .sorted((e1, e2) -> Integer.compare(e2.getValue(), e1.getValue()))
+            .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
             .limit(6)
-            .map(entry -> new LikeGenreResponse(entry.getKey(), entry.getValue().intValue()))
+            .map(entry -> new LikeGenreResponse(entry.getKey(), entry.getValue()))
             .collect(Collectors.toList());
     }
+
+    @Transactional
+    public List<LikeGenreResponse> getMostLikeBookGenre() {
+
+        List<Book> books = bookRepository.findAll();
+        Map<String, Long> genreCount = new HashMap<>();
+
+        for (Book book : books) {
+            String genre = book.getGenre();
+            Long likeCount = book.getLikeCount();
+            if (genre != null && !genre.isBlank()) {
+                genreCount.put(genre, genreCount.getOrDefault(genre, 0L) + likeCount);
+            }
+        }
+
+        return genreCount.entrySet().stream()
+            .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+            .limit(6)
+            .map(entry -> new LikeGenreResponse(entry.getKey(), entry.getValue()))
+            .collect(Collectors.toList());
     }
+}
 
 
 

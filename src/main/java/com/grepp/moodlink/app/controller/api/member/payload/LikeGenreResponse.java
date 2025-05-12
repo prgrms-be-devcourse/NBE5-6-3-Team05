@@ -9,6 +9,6 @@ import lombok.RequiredArgsConstructor;
 public class LikeGenreResponse {
 
     private String genre;
-    private int count;
+    private Long count;
 
 }
