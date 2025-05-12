@@ -7,9 +7,11 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class BookDetailsDto {
+    private String id;
     private String name;
     private String author;
     private LocalDateTime publishedAt;
     private String description;
     private String bookImg;
+    private boolean status;
 }

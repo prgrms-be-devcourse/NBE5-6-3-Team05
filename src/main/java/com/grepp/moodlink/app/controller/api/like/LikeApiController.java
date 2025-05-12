@@ -19,22 +19,17 @@ public class LikeApiController {
 
     private final LikeService likeService;
 
-    //TODO: 각 컨텐츠의 상태에 따라 토글 형식으로 like_table에 추가/삭제 (PostMapping)
-
-
     @PostMapping("/book/toggle")
     public ResponseEntity<ToggleResponse> toggleBook(@RequestBody ToggleRequest request) {
         boolean updated = likeService.toggleBookStatus(request.getId());
         return ResponseEntity.ok(new ToggleResponse(updated));
     }
 
-
     @PostMapping("/song/toggle")
     public ResponseEntity<ToggleResponse> toggleSong(@RequestBody ToggleRequest request) {
         boolean updated = likeService.toggleSongStatus(request.getId());
         return ResponseEntity.ok(new ToggleResponse(updated));
     }
-
 
     @PostMapping("/movie/toggle")
     public ResponseEntity<ToggleResponse> toggleMovie(@RequestBody ToggleRequest request) {

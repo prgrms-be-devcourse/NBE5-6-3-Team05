@@ -135,7 +135,7 @@
 </form>
 <br>
 <br>
-<form action="/signin" method="get">
+<form action="/signup" method="get">
   <button type="submit">로그인화면으로 이동 및 로그아웃 (헤더로 빼야됨, User일 때 Logout, anonymous일 때 Login)</button>
 </form>
 <br>
@@ -145,7 +145,7 @@
 <hr>
 
 
-<form action="/signin" method="get">
+<form action="/users/mypage" method="get">
   <button type="submit">마이페이지(User일 때 적용, anonymous의 경우 클릭 시 "회원만 가능한 기능입니다" 출력 후 disable)</button>
 </form>
 <br>
@@ -255,6 +255,15 @@
   <div class="modal-content">
     <span class="close-button" onclick="closeModal()">&times;</span>
     <div id="modal-body"></div>
+    <div id="modal-like-wrapper" style="margin-top: 1rem; text-align: right">
+      <button class="toggle-star-btn"
+              id="modal-like-btn"
+              data-type=""
+              data-id=""
+              onclick="toggle(this)">
+        ON
+      </button>
+    </div>
   </div>
 </div>
 
@@ -274,11 +283,21 @@
       const isOn = data.status;
       btn.textContent = isOn ? 'ON' : 'OFF';
       btn.style.backgroundColor = isOn ? 'yellow' : 'gray';
+
+      // 동일 type, id를 가진 다른 버튼들 동기화
+      const selector = `.toggle-star-btn[data-type='${type}'][data-id='${id}']`;
+      document.querySelectorAll(selector).forEach(otherBtn => {
+        if (otherBtn !== btn) {
+          otherBtn.textContent = isOn ? 'ON' : 'OFF';
+          otherBtn.style.backgroundColor = isOn ? 'yellow' : 'gray';
+        }
+      });
     });
 
   }
 
   /// 모달창
+  // 모달 창 좋아요 버튼 연동 작성하기
   document.addEventListener("DOMContentLoaded", function () {
     const buttons = document.querySelectorAll(".details-btn");
 
@@ -300,35 +319,36 @@
     const modal = document.getElementById("detailModal");
     const body = document.getElementById("modal-body");
 
-    let content = "";
+    let content = `
+    <h2>${data.name}</h2>
+    <img src="${data[`${type}Img`]}" alt="${data.name}" style="width: 100%; max-height: 200px; object-fit: contain; border-radius: 10px;" />
+  `;
 
     if (type === "book") {
-      content = `
-        <h2>${data.name}</h2>
-        <img src="${data.bookImg}" alt="${data.name}" style="width: 100%; max-height: 200px; object-fit: contain; border-radius: 10px;" />
-        <p><strong>작가:</strong> ${data.author}</p>
-        <p><strong>출판일:</strong> ${data.publishedAt}</p>
-        <p>${data.description}</p>
-      `;
+      content += `
+      <p><strong>작가:</strong> ${data.author}</p>
+      <p><strong>출판일:</strong> ${data.publishedAt}</p>
+    `;
     } else if (type === "movie") {
-      content = `
-        <h2>${data.name}</h2>
-        <img src="${data.movieImg}" alt="${data.name}" style="width: 100%; max-height: 200px; object-fit: contain; border-radius: 10px;" />
-        <p><strong>감독:</strong> ${data.director}</p>
-        <p><strong>장르:</strong> ${data.genre}</p>
-        <p>${data.description}</p>
-      `;
+      content += `
+      <p><strong>감독:</strong> ${data.director}</p>
+      <p><strong>장르:</strong> ${data.genre}</p>
+    `;
     } else if (type === "song") {
-      content = `
-        <h2>${data.name}</h2>
-        <img src="${data.songImg}" alt="${data.name}" style="width: 100%; max-height: 200px; object-fit: contain; border-radius: 10px;" />
-        <p><strong>아티스트:</strong> ${data.artist}</p>
-        <p><strong>발매일:</strong> ${data.releasedAt}</p>
-        <p>${data.description}</p>
-      `;
+      content += `
+      <p><strong>아티스트:</strong> ${data.artist}</p>
+      <p><strong>발매일:</strong> ${data.releasedAt}</p>
+    `;
     }
 
+    content += `<p>${data.description}</p>`;
     body.innerHTML = content;
+    const likeBtn = document.getElementById("modal-like-btn");
+    likeBtn.dataset.type = type;
+    likeBtn.dataset.id = data.id;
+    likeBtn.textContent = data.status ? 'ON' : 'OFF';
+    likeBtn.style.backgroundColor = data.status ? 'yellow' : 'gray';
+
     modal.classList.remove("hidden");
   }
 
