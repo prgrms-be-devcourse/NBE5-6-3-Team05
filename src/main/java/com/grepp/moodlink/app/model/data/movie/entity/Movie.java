@@ -37,10 +37,6 @@ public class Movie extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-//    @Column(columnDefinition = "vector")
-//    @JdbcTypeCode(SqlTypes.VECTOR)
-//    @Array(length = 3)
-//    private float[] embedding;
     private LocalDate releaseDate;
     private LocalDate createdAt;
     @Column(columnDefinition = "TEXT")

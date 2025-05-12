@@ -10,6 +10,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class BookDto {
+
     @JsonProperty("ISBN")
     private Integer isbn;
     private String title;

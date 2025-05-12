@@ -4,5 +4,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BookRepositoryCustom {
+
     String findTopThumbnail();
 }
