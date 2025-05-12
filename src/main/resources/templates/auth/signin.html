@@ -10,8 +10,8 @@
   <div class="container">
     <h1>LOG IN</h1>
     <form th:action="@{/signin}" method="post" th:object="${signinRequest}">
-      <input type="text" th:field="*{userId}" placeholder="ID">
-      <input type="password" th:field="*{password}" placeholder="Password">
+      <input type="text" th:field="*{userId}" placeholder="ID" style="color: white;">
+      <input type="password" th:field="*{password}" placeholder="Password" style="color: white;">
       <button style="cursor: pointer" type="submit">Sign In</button>
     </form>
     <p>Don't have an account? <a th:href="@{/signup}">Sign Up</a></p>

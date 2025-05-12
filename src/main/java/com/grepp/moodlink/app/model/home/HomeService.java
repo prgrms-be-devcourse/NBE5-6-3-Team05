@@ -3,6 +3,8 @@ package com.grepp.moodlink.app.model.home;
 import com.grepp.moodlink.app.model.data.book.BookRepositoryImpl;
 import com.grepp.moodlink.app.model.data.movie.MovieRepositoryImpl;
 import com.grepp.moodlink.app.model.data.music.MusicRepositoryImpl;
+import com.grepp.moodlink.app.model.member.MemberRepository;
+import com.grepp.moodlink.app.model.member.MemberRepositoryImpl;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ public class HomeService {
     private final MovieRepositoryImpl movieRepositoryImpl;
     private final MusicRepositoryImpl musicRepositoryImpl;
     private final BookRepositoryImpl bookRepositoryImpl;
+    private final MemberRepositoryImpl memberRepositoryImpl;
 
 
     public List<String> showContent() {
@@ -30,5 +33,9 @@ public class HomeService {
 
         return thumbnail;
 
+    }
+
+    public String findUsername(String userId) {
+        return memberRepositoryImpl.findUsernameById(userId);
     }
 }

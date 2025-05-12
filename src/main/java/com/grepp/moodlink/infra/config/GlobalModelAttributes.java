@@ -1,5 +1,7 @@
 package com.grepp.moodlink.infra.config;
 
+import com.grepp.moodlink.app.model.home.HomeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,7 +10,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 @ControllerAdvice
+@RequiredArgsConstructor
 public class GlobalModelAttributes {
+
+    private final HomeService homeService;
 
     @ModelAttribute
     public void globalAttributes(Model model) {
@@ -19,7 +24,8 @@ public class GlobalModelAttributes {
 
         model.addAttribute("isAuthenticated", isAuthenticated);
         if (isAuthenticated) {
-            model.addAttribute("username", authentication.getName());
+            String username = homeService.findUsername(authentication.getName());
+            model.addAttribute("username", username);
         }
     }
 }
