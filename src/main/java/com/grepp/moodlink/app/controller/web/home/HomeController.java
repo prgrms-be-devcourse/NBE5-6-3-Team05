@@ -1,5 +1,6 @@
 package com.grepp.moodlink.app.controller.web.home;
 import com.grepp.moodlink.app.model.home.HomeService;
+import java.security.Principal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,7 +16,6 @@ public class HomeController {
     @GetMapping
     public String mainPage(Model model) {
         List<String> thumbnail = homeService.showContent();
-        model.addAttribute("thumbnail",thumbnail);
-        return "/home/mainPage";
+        model.addAttribute("thumbnail",thumbnail);return "/home/mainPage";
     }
 }
