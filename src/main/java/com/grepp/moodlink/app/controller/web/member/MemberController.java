@@ -2,13 +2,12 @@ package com.grepp.moodlink.app.controller.web.member;
 
 import com.grepp.moodlink.app.controller.web.member.payload.LikeGenreResponse;
 import com.grepp.moodlink.app.controller.web.member.payload.ModifyRequest;
-import com.grepp.moodlink.app.model.book.dto.BookDto;
+import com.grepp.moodlink.app.model.data.book.dto.BookDto;
+import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
+import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.member.MemberService;
 import com.grepp.moodlink.app.model.member.dto.MemberInfoDto;
-import com.grepp.moodlink.app.model.movie.dto.MovieDto;
-import com.grepp.moodlink.app.model.movie.entity.Movie;
 import com.grepp.moodlink.app.model.recomend.LikeService;
-import com.grepp.moodlink.app.model.song.dto.SongDto;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
@@ -53,20 +52,20 @@ public class MemberController {
         // 좋아하는 장르 보여주는 로직
 
         List<LikeGenreResponse> likeBookGenre = likeService.getPersonalLikeBookGenre(userId);
-        List<LikeGenreResponse> likeSongGenre = likeService.getPersonalLikeSongGenre(userId);
+        List<LikeGenreResponse> likeMusicGenre = likeService.getPersonalLikeMusicGenre(userId);
         List<LikeGenreResponse> likeMovieGenre = likeService.getPersonalLikeMovieGenre(userId);
 
         model.addAttribute("LikeBookGenre", likeBookGenre);
-        model.addAttribute("LikeSongGenre", likeSongGenre);
+        model.addAttribute("LikeMusicGenre", likeMusicGenre);
         model.addAttribute("LikeMovieGenre", likeMovieGenre);
 
         List<LikeGenreResponse> mostLikeBookGenre = likeService.getMostLikeBookGenre();
-        List<LikeGenreResponse> mostLikeSongGenre = likeService.getMostLikeSongGenre();
+        List<LikeGenreResponse> mostLikeMusicGenre = likeService.getMostLikeMusicGenre();
         List<LikeGenreResponse> mostLikeMovieGenre = likeService.getMostLikeMovieGenre();
 
         model.addAttribute("mostLikeBookGenre", mostLikeBookGenre);
-        model.addAttribute("mostLikeSongGenre", mostLikeSongGenre);
-        model.addAttribute("mostLikeSongGenre", mostLikeMovieGenre);
+        model.addAttribute("mostLikeMusicGenre", mostLikeMusicGenre);
+        model.addAttribute("mostLikeMovieGenre", mostLikeMovieGenre);
 
         return "/users/mypage";
     }
@@ -104,11 +103,11 @@ public class MemberController {
         }
 
         List<BookDto> likedBooks = likeService.getUserLikedBooks(userId);
-        List<SongDto> likedSong = likeService.getUserLikedSong(userId);
-        List<MovieDto> likedMovies = likeService.getUserLikedMovies(userId);
+        List<MusicDto> likedMusics = likeService.getUserLikedMusics(userId);
+        List<MovieInfoDto> likedMovies = likeService.getUserLikedMovies(userId);
 
         model.addAttribute("likedbooks", likedBooks);
-        model.addAttribute("likedsong", likedSong);
+        model.addAttribute("likedmusics", likedMusics);
         model.addAttribute("likedmovies", likedMovies);
         return "/users/like";
     }

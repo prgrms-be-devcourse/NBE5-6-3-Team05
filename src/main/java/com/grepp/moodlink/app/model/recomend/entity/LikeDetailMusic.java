@@ -7,11 +7,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "like_detail_song")
+@Table(name = "like_detail_musics")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LikeDetailSong extends LikeDetailBase{
+public class LikeDetailMusic extends LikeDetailBase{
 
-    private String songId;
+    private String musicId;
 }

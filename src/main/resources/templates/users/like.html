@@ -115,7 +115,7 @@
   <button class="like-btn" onclick="loadTab('movies')">
     영화
   </button>
-  <button class="like-btn" onclick="loadTab('song')">
+  <button class="like-btn" onclick="loadTab('musics')">
     음악
   </button>
 </div>
@@ -123,12 +123,13 @@
   <h2>도서</h2>
   <div th:each="book : ${likedbooks}">
     <h3 th:text="${book.title}"></h3>
-    <img th:src="${book.thumbnail}" class="musicimage">
+    <h3 th:text="${book.isbn}"></h3>
+    <img th:src="${book.image}" class="musicimage">
     <p th:text="${book.author}"></p>
+    <p th:text="${book.publisher}"></p>
+    <p th:text="${book.publishedDate}"></p>
     <p th:text="${book.genre}"></p>
     <p th:text="${book.description}"></p>
-    <p th:text="${book.publishDate}"></p>
-    <p th:text="${book.likeCount}"></p>
 
 
   </div>
@@ -146,16 +147,16 @@
 
   </div>
 </div>
-<div id="song" class="like-item">
+<div id="musics" class="like-item">
   <h2>음악</h2>
-  <div th:each="song : ${likedsong}">
-    <h3 th:text="${song.title}"></h3>
-    <img th:src="${song.thumbnail}" class="musicimage">
-    <p th:text="${song.singer}"></p>
-    <p th:text="${song.genre}"></p>
-    <p th:text="${song.description}"></p>
-    <p th:text="${song.releaseDate}"></p>
-    <p th:text="${song.likeCount}"></p>
+  <div th:each="music : ${likedmusic}">
+    <h3 th:text="${music.title}"></h3>
+    <img th:src="${music.thumbnail}" class="musicimage">
+    <p th:text="${music.singer}"></p>
+    <p th:text="${music.genre}"></p>
+    <p th:text="${music.description}"></p>
+    <p th:text="${music.releaseDate}"></p>
+    <p th:text="${music.likeCount}"></p>
 
   </div>
 </div>

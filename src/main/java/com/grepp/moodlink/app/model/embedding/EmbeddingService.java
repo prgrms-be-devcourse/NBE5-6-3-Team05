@@ -45,12 +45,12 @@ public class EmbeddingService {
     @Transactional
     @Async
     public void generateEmbeddingsBook() {
-        List<Book> books = bookRepository.findByEmbeddingIsNull();
+      List<Book> books = bookRepository.findByEmbeddingIsNull();
         for (Book book : books) {
             String text = book.getDescription();
             float[] floatEmbedding = embeddingModel.embed(text);
 
-            byte[] byteEmbedding = toByteArray(floatEmbedding);
+           byte[] byteEmbedding = toByteArray(floatEmbedding);
             book.setEmbedding(byteEmbedding);
 
             bookRepository.save(book);

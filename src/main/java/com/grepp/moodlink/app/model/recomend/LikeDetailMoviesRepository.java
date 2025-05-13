@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LikeDetailMoviesRepository extends JpaRepository<LikeDetailMovies,String> {
-    LikeDetailMovies findByLikeId(String likeId);
+    LikeDetailMovies findByLikesId(String likeId);
 }

@@ -1,18 +1,17 @@
-package com.grepp.moodlink.app.model.movie.dto;
+package com.grepp.moodlink.app.model.data.movie.dto;
 
 
-import com.grepp.moodlink.app.model.movie.entity.Genre;
-
-import com.grepp.moodlink.app.model.movie.entity.Movie;
+import com.grepp.moodlink.app.model.data.movie.entity.Genre;
+import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class MovieDto {
-
+@Getter
+@Setter
+public class MovieInfoDto {
 
     private String id;
     private String title;
@@ -22,12 +21,12 @@ public class MovieDto {
 
     private float[] embedding;
     private LocalDate releaseDate;
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
     private String thumbnail;
     private Long likeCount;
 
-    public static MovieDto toDto(Movie movie) {
-        MovieDto dto = new MovieDto();
+    public static MovieInfoDto toDto(Movie movie) {
+        MovieInfoDto dto = new MovieInfoDto();
         dto.setId(movie.getId());
         dto.setTitle(movie.getTitle());
         dto.setGenres(movie.getGenres());
@@ -41,4 +40,5 @@ public class MovieDto {
 
 
     }
+
 }

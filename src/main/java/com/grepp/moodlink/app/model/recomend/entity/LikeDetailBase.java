@@ -15,6 +15,6 @@ public abstract class LikeDetailBase {
 
     @Id
     private String id;
-    private String likeId;
+    private String likesId;
 
 }

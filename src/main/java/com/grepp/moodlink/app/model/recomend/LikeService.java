@@ -1,20 +1,20 @@
 package com.grepp.moodlink.app.model.recomend;
 
 import com.grepp.moodlink.app.controller.web.member.payload.LikeGenreResponse;
-import com.grepp.moodlink.app.model.book.BookRepository;
-import com.grepp.moodlink.app.model.book.dto.BookDto;
-import com.grepp.moodlink.app.model.book.entity.Book;
-import com.grepp.moodlink.app.model.movie.MovieRepository;
-import com.grepp.moodlink.app.model.movie.dto.MovieDto;
-import com.grepp.moodlink.app.model.movie.entity.Genre;
-import com.grepp.moodlink.app.model.movie.entity.Movie;
+import com.grepp.moodlink.app.model.data.book.BookRepository;
+import com.grepp.moodlink.app.model.data.book.dto.BookDto;
+import com.grepp.moodlink.app.model.data.book.entity.Book;
+import com.grepp.moodlink.app.model.data.movie.MovieRepository;
+import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
+import com.grepp.moodlink.app.model.data.movie.entity.Genre;
+import com.grepp.moodlink.app.model.data.movie.entity.Movie;
+import com.grepp.moodlink.app.model.data.music.MusicRepository;
+import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
+import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailBooks;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMovies;
-import com.grepp.moodlink.app.model.recomend.entity.LikeDetailSong;
+import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMusic;
 import com.grepp.moodlink.app.model.recomend.entity.Likes;
-import com.grepp.moodlink.app.model.song.SongRepository;
-import com.grepp.moodlink.app.model.song.dto.SongDto;
-import com.grepp.moodlink.app.model.song.entity.Song;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,9 +35,9 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final LikeDetailMoviesRepository likeDetailMoviesRepository;
     private final LikeDetailBooksRepository likeDetailBooksRepository;
-    private final LikeDetailSongRepository likeDetailSongRepository;
+    private final LikeDetailMusicRepository likeDetailMusicRepository;
     private final BookRepository bookRepository;
-    private final SongRepository songRepository;
+    private final MusicRepository musicRepository;
     private final MovieRepository movieRepository;
 
     public List<Likes> getLikeInfo(String userId) {
@@ -48,7 +48,7 @@ public class LikeService {
         List<LikeDetailBooks> likeDetailBooks = new ArrayList<>();
 
         for (Likes like : likes) {
-            LikeDetailBooks detailBook = likeDetailBooksRepository.findByLikeId(like.getId());
+            LikeDetailBooks detailBook = likeDetailBooksRepository.findByLikesId(like.getId());
 
             if (detailBook != null) {
                 likeDetailBooks.add(detailBook);
@@ -69,43 +69,46 @@ public class LikeService {
                 books.add(BookDto.toDto(book));
             }
         }
+
+        log.info("Books: {}", books);
+
         return books;
     }
 
 
-    public List<LikeDetailSong> getLikeDetailSong(List<Likes> likes) {
-        List<LikeDetailSong> likeDetailSong = new ArrayList<>();
+    public List<LikeDetailMusic> getLikeDetailMusic(List<Likes> likes) {
+        List<LikeDetailMusic> likeDetailMusics = new ArrayList<>();
 
         for (Likes like : likes) {
-            LikeDetailSong detailSong = likeDetailSongRepository.findByLikeId(like.getId());
+            LikeDetailMusic detailMusic = likeDetailMusicRepository.findByLikesId(like.getId());
 
-            if (detailSong != null) {
-                likeDetailSong.add(detailSong);
+            if (detailMusic != null) {
+                likeDetailMusics.add(detailMusic);
             }
         }
 
-        return likeDetailSong;
+        return likeDetailMusics;
 
     }
 
-    public List<SongDto> getSongList(List<LikeDetailSong> likeDetailSongs) {
-        List<SongDto> songs = new ArrayList<>();
+    public List<MusicDto> getMusicList(List<LikeDetailMusic> likeDetailMusics) {
+        List<MusicDto> musics = new ArrayList<>();
 
-        for (LikeDetailSong likeDetailsong : likeDetailSongs) {
-            Song song = songRepository.findById(likeDetailsong.getSongId()).orElse(null);
+        for (LikeDetailMusic likeDetailMusic : likeDetailMusics) {
+            Music music = musicRepository.findById(likeDetailMusic.getMusicId()).orElse(null);
 
-            if (song != null) {
-                songs.add(SongDto.toDto(song));
+            if (music != null) {
+                musics.add(MusicDto.toDto(music));
             }
         }
-        return songs;
+        return musics;
     }
 
     public List<LikeDetailMovies> getLikeDetailMovie(List<Likes> likes) {
         List<LikeDetailMovies> likeDetailMovies = new ArrayList<>();
 
         for (Likes like : likes) {
-            LikeDetailMovies detailMovies = likeDetailMoviesRepository.findByLikeId(like.getId());
+            LikeDetailMovies detailMovies = likeDetailMoviesRepository.findByLikesId(like.getId());
 
             if (detailMovies != null) {
                 likeDetailMovies.add(detailMovies);
@@ -116,14 +119,14 @@ public class LikeService {
 
     }
 
-    public List<MovieDto> getMovieList(List<LikeDetailMovies> likeDetailMovies) {
-        List<MovieDto> movies = new ArrayList<>();
+    public List<MovieInfoDto> getMovieList(List<LikeDetailMovies> likeDetailMovies) {
+        List<MovieInfoDto> movies = new ArrayList<>();
 
         for (LikeDetailMovies likeDetailMovie : likeDetailMovies) {
             Movie movie = movieRepository.findById(likeDetailMovie.getMovieId()).orElse(null);
 
             if (movie != null) {
-                movies.add(MovieDto.toDto(movie));
+                movies.add(MovieInfoDto.toDto(movie));
             }
         }
         return movies;
@@ -131,32 +134,35 @@ public class LikeService {
 
 
     @Transactional
-    public List<SongDto> getUserLikedSong(String userId) {
+    public List<MusicDto> getUserLikedMusics(String userId) {
         List<Likes> likes = getLikeInfo(userId);
-        List<LikeDetailSong> likeDetailSong = getLikeDetailSong(likes);
-        return getSongList(likeDetailSong);
+        List<LikeDetailMusic> likeDetailMusic = getLikeDetailMusic(likes);
+        return getMusicList(likeDetailMusic);
     }
 
     @Transactional
     public List<BookDto> getUserLikedBooks(String userId) {
         List<Likes> likes = getLikeInfo(userId);
+        log.info("likes: {}", likes);
         List<LikeDetailBooks> likeDetailBooks = getLikeDetailBook(likes);
+        log.info("likedetailBooks: {}", likeDetailBooks);
         return getBookList(likeDetailBooks);
     }
 
     @Transactional
-    public List<MovieDto> getUserLikedMovies(String userId) {
+    public List<MovieInfoDto> getUserLikedMovies(String userId) {
         List<Likes> likes = getLikeInfo(userId);
         List<LikeDetailMovies> likeDetailMovies = getLikeDetailMovie(likes);
         return getMovieList(likeDetailMovies);
     }
+
     @Transactional
     public List<LikeGenreResponse> getPersonalLikeMovieGenre(String userId) {
-        List<MovieDto> movies = getUserLikedMovies(userId);
+        List<MovieInfoDto> movies = getUserLikedMovies(userId);
 
         Map<String, Long> genreCount = new HashMap<>();
 
-        for (MovieDto movie : movies) {
+        for (MovieInfoDto movie : movies) {
             Set<Genre> genres = movie.getGenres();
             for (Genre genre : genres) {
                 String genreName = genre.getName();
@@ -166,12 +172,12 @@ public class LikeService {
             }
         }
 
-            return genreCount.entrySet().stream()
-                .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
-                .limit(6)
-                .map(entry -> new LikeGenreResponse(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
-        }
+        return genreCount.entrySet().stream()
+            .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+            .limit(6)
+            .map(entry -> new LikeGenreResponse(entry.getKey(), entry.getValue()))
+            .collect(Collectors.toList());
+    }
 
     @Transactional
     public List<LikeGenreResponse> getMostLikeMovieGenre() {
@@ -198,15 +204,14 @@ public class LikeService {
     }
 
 
-
     @Transactional
-    public List<LikeGenreResponse> getPersonalLikeSongGenre(String userId) {
-        List<SongDto> songs = getUserLikedSong(userId);
+    public List<LikeGenreResponse> getPersonalLikeMusicGenre(String userId) {
+        List<MusicDto> musics = getUserLikedMusics(userId);
 
         Map<String, Long> genreCount = new HashMap<>();
 
-        for (SongDto song : songs) {
-            String genre = song.getGenre();
+        for (MusicDto music : musics) {
+            String genre = music.getGenre();
             if (genre != null && !genre.isBlank()) {
                 genreCount.put(genre, genreCount.getOrDefault(genre, 0L) + 1);
             }
@@ -220,14 +225,14 @@ public class LikeService {
     }
 
     @Transactional
-    public List<LikeGenreResponse> getMostLikeSongGenre() {
+    public List<LikeGenreResponse> getMostLikeMusicGenre() {
 
-        List<Song> songs = songRepository.findAll();
+        List<Music> musics = musicRepository.findAll();
         Map<String, Long> genreCount = new HashMap<>();
 
-        for (Song song : songs) {
-            String genre = song.getGenre();
-            Long likeCount = song.getLikeCount();
+        for (Music music : musics) {
+            String genre = music.getGenre();
+            Long likeCount = music.getLikeCount();
             if (genre != null && !genre.isBlank()) {
                 genreCount.put(genre, genreCount.getOrDefault(genre, 0L) + likeCount);
             }
@@ -244,6 +249,7 @@ public class LikeService {
     @Transactional
     public List<LikeGenreResponse> getPersonalLikeBookGenre(String userId) {
         List<BookDto> books = getUserLikedBooks(userId);
+
 
         Map<String, Long> genreCount = new HashMap<>();
 
@@ -267,6 +273,9 @@ public class LikeService {
         List<Book> books = bookRepository.findAll();
         Map<String, Long> genreCount = new HashMap<>();
 
+
+
+
         for (Book book : books) {
             String genre = book.getGenre();
             Long likeCount = book.getLikeCount();
@@ -274,6 +283,7 @@ public class LikeService {
                 genreCount.put(genre, genreCount.getOrDefault(genre, 0L) + likeCount);
             }
         }
+
 
         return genreCount.entrySet().stream()
             .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))

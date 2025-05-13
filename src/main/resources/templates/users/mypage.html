@@ -101,7 +101,7 @@
   정보 수정하기
 </button>
 <div th:text="${userId}">이름</div>
-<div th:text="${username}"></div>
+<div th:text="${username}">유저이름</div>
 <div th:text="${createdAt}">가입일</div>
 <div th:text="${updatedAt}">수정일</div>
 <div th:text="${countries}"> 국가</div>
@@ -116,7 +116,7 @@
   <button class="like-btn" onclick="loadTab('movies')">
     영화
   </button>
-  <button class="like-btn" onclick="loadTab('song')">
+  <button class="like-btn" onclick="loadTab('musics')">
     음악
   </button>
 </div>
@@ -163,7 +163,7 @@
 </div>
 
 
-<div id="song" class="like-item">
+<div id="musics" class="like-item">
 
   <div th:if="${!#lists.isEmpty(LikeSongGenre)}">
   <h2 th:text="${username}+'님이 가장 선호하는 장르는'"> (유저이름)님이 가장 선호하는 장르는</h2>
@@ -172,14 +172,14 @@
     <p th:text="${username} + '님이 아직 추천받고 좋아한 음악이 없어요.'">아직 추천받은 음악이 없습니다.</p>
   </div>
 
-  <li th:each="songs : ${LikeSongGenre}">
-    <div th:text="${songs.genre}">장르 이름</div>
-    <div th:text="${songs.count}">장르 설명</div>
+  <li th:each="musics : ${LikeSongGenre}">
+    <div th:text="${musics.genre}">장르 이름</div>
+    <div th:text="${musics.count}">장르 설명</div>
   </li>
   <h2 > 전체 사용자가 가장 선호하는 장르는</h2>
-  <li th:each="song : ${mostLikeSongGenre}">
-    <div th:text="${song.genre}">장르 이름</div>
-    <div th:text="${song.count}">장르 설명</div>
+  <li th:each="music : ${mostLikeSongGenre}">
+    <div th:text="${music.genre}">장르 이름</div>
+    <div th:text="${music.count}">장르 설명</div>
   </li>
 
 </div>
