@@ -10,6 +10,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class MusicDto {
+
     private Integer id;
     private String title;
     private String genre;

@@ -6,12 +6,14 @@ import lombok.Data;
 
 @Data
 public class SigninRequest {
-    
+
     @NotBlank
     private String userId;
-    
+
     @NotBlank
     @Size(min = 4, max = 15)
     private String password;
-    
+
+    private String username;
+
 }

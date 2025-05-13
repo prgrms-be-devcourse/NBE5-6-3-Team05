@@ -7,19 +7,28 @@
 <body>
 <div layout:fragment="content">
   <div class="main-content">
-  <h2>오늘의 기분, 하나의 링크로 영화·도서·음악을 만나보세요.</h2>
-  <div class="category">
-    <div><img src="/img/music.jpg" alt="음악"><p>음악</p></div>
-    <div><img src="/img/movie.jpg" alt="영화"><p>영화</p></div>
-    <div><img src="/img/book.jpg" alt="도서"><p>도서</p></div>
-  </div>
-  <p><i>moodlink 이용자들의 추천 콘텐츠 입니다.</i></p>
-  <div class="buttons">
-    <button style="background-color: darkred; cursor: pointer" >월드컵</button>
-  </div>
-  <div class="buttons">
-    <button style="cursor: pointer" th:onclick="|location.href='@{/recommend}'|">추천받기</button>
-  </div>
+    <h2>오늘의 기분, 하나의 링크로 영화·도서·음악을 만나보세요.</h2>
+    <div class="category">
+      <div class="category-card">
+        <img th:src="@{${thumbnail[1]}}" alt="음악">
+        <p>음악</p>
+      </div>
+      <div class="category-card">
+        <img th:src="@{${thumbnail[0]}}" alt="영화">
+        <p>영화</p>
+      </div>
+      <div class="category-card">
+        <img th:src="@{${thumbnail[2]}}" alt="도서">
+        <p>도서</p>
+      </div>
+    </div>
+    <p><i>moodlink 이용자들의 추천 콘텐츠 입니다.</i></p>
+    <div class="buttons">
+      <button style="background-color: darkred; cursor: pointer" >월드컵</button>
+    </div>
+    <div class="buttons">
+      <button style="cursor: pointer" th:onclick="|location.href='@{/recommend}'|">추천받기</button>
+    </div>
   </div>
 </div>
 </body>

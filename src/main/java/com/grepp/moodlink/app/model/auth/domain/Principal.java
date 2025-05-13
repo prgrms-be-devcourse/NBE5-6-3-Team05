@@ -8,14 +8,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 public class Principal extends User {
-    
+
     public Principal(String username, String password,
         Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
     }
-    
+
     public static Principal createPrincipal(Member member,
-        List<SimpleGrantedAuthority> authorities){
+        List<SimpleGrantedAuthority> authorities) {
         return new Principal(member.getId(), member.getPassword(), authorities);
     }
 }

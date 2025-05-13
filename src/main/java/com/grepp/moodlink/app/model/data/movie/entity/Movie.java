@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Movie extends BaseEntity {
+
     @Id
     private String id;
     @Column(nullable = false)
@@ -35,9 +36,9 @@ public class Movie extends BaseEntity {
     private Set<Genre> genres = new HashSet<>();
     @Column(columnDefinition = "TEXT")
     private String description;
-
     @Column(columnDefinition = "BLOB")
     private byte[] embedding;
+
 
     private LocalDate releaseDate;
     private LocalDate createdAt;

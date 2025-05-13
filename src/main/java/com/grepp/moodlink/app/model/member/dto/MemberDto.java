@@ -6,8 +6,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter @Setter @ToString
+@Getter
+@Setter
+@ToString
 public class MemberDto {
+
     private String userId;
     private String password;
     private String username;
@@ -16,5 +19,4 @@ public class MemberDto {
     private String periods;
     private String countries;
     private LocalDate createdAt;
-//    private MemberInfoDto info;
 }
