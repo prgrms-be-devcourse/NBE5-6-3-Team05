@@ -1,0 +1,106 @@
+<!-- signup.html -->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>회원가입</title>
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      text-align: center;
+    }
+    input, select, button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+    }
+    input, select {
+      width: 250px;
+      background: #333;
+      color: white;
+    }
+    button {
+      width: 270px;
+      background: linear-gradient(to right, #8a2be2, #7f00ff);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    a {
+      color: #aaa;
+      font-size: 0.9em;
+    }
+    .logo {
+      color: #8a2be2;
+      font-weight: bold;
+      font-size: 1.5em;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="logo"><a th:href="@{/}">Moodlink</a></div>
+  <h1>SIGN UP</h1>
+  <form th:action="@{/signup}" method="post" th:object="${signupRequest}">
+    <input type="text" th:field="*{userId}" placeholder="ID">
+    <input type="password" th:field="*{password}" placeholder="Password">
+    <input type="text" th:field="*{username}" placeholder="Username">
+
+    <select th:field="*{genre}">
+      <option value="" disabled selected>선호하는 장르 선택</option>
+      <option value="action">액션</option>
+      <option value="adventure">모험</option>
+      <option value="animation">애니메이션</option>
+      <option value="comedy">코미디</option>
+      <option value="crime">범죄</option>
+      <option value="documentary">다큐멘터리</option>
+      <option value="drama">드라마</option>
+      <option value="family">가족</option>
+      <option value="fantasy">판타지</option>
+      <option value="history">역사</option>
+      <option value="horror">공포</option>
+      <option value="music">음악</option>
+      <option value="mystery">미스터리</option>
+      <option value="romance">로맨스</option>
+      <option value="science_fiction">SF</option>
+      <option value="tv_movie">TV 영화</option>
+      <option value="thriller">스릴러</option>
+      <option value="war">전쟁</option>
+      <option value="western">서부</option>
+    </select>
+
+    <select th:field="*{periods}">
+      <option value="" disabled selected>선호하는 시대 선택</option>
+      <option value="ancient">고대 / 중세</option>
+      <option value="empire_age">제국주의 시대 (~19세기)</option>
+      <option value="ww1">1차 세계대전 (1914–1918)</option>
+      <option value="ww2">2차 세계대전 (1939–1945)</option>
+      <option value="cold_war">냉전 시대 (1945–1990)</option>
+      <option value="modern">현대 사회 (1990년대~2010년대)</option>
+      <option value="contemporary">동시대 / 근미래 (2020년대~)</option>
+      <option value="fictional">가상 시대 / 판타지</option>
+    </select>
+
+    <select th:field="*{countries}">
+      <option value="" disabled selected>컨텐츠 제작 국가 선택</option>
+      <option value="korea">대한민국</option>
+    </select>
+
+    <button type="submit">Sign Up</button>
+  </form>
+  <p>Already have an account? <a th:href="@{/signin}">Log in</a></p>
+</div>
+</body>
+</html>
