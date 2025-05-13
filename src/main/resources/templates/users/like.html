@@ -13,10 +13,9 @@
         margin: 0;
         padding: 30px;
         font-family: 'Segoe UI', sans-serif;
-        background: linear-gradient( #000000, #545454);
+        background: linear-gradient(#000000, #545454);
         color: white;
       }
-
 
 
       header {
@@ -31,6 +30,7 @@
         font-size: 48px;
         font-weight: bold;
       }
+
       .logo span {
         background: linear-gradient(to bottom, #A64DFF, #6A00FF);
         -webkit-background-clip: text;
@@ -78,7 +78,7 @@
         color: white;
       }
 
-      .musicimage{
+      .musicimage {
         max-width: 20%;
         height: auto;
       }
@@ -109,15 +109,15 @@
   </header>
 </th:block>
 <div>
-<button class="like-btn" onclick="loadTab('books')">
-  도서
-</button>
-<button class="like-btn" onclick="loadTab('movies')">
-  영화
-</button>
-<button class="like-btn" onclick="loadTab('song')">
-  음악
-</button>
+  <button class="like-btn" onclick="loadTab('books')">
+    도서
+  </button>
+  <button class="like-btn" onclick="loadTab('movies')">
+    영화
+  </button>
+  <button class="like-btn" onclick="loadTab('song')">
+    음악
+  </button>
 </div>
 <div id="books" class="like-item">
   <h2>도서</h2>
@@ -161,8 +161,6 @@
 </div>
 
 
-
-
 <script>
 
   function loadTab(tabName) {
@@ -170,13 +168,11 @@
     const tabItems = document.querySelectorAll('.like-item');
     tabItems.forEach(item => item.style.display = 'none');
 
-
     const selectedTab = document.getElementById(tabName);
     selectedTab.style.display = 'block';
   }
 
-
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     loadTab('books');
   });
 </script>

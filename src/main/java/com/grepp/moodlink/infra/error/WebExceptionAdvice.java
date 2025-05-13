@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice(basePackages = "com.grepp.spring.app.controller.web")
 public class WebExceptionAdvice {
-    
+
     @ExceptionHandler(CommonException.class)
     public String webExceptionHandler(CommonException ex, Model model) {
         model.addAttribute("message", ex.code().message());
@@ -16,7 +16,7 @@ public class WebExceptionAdvice {
     }
 
     @ExceptionHandler(AuthorizationDeniedException.class)
-    public String authorizationDeniedHandler(AuthorizationDeniedException ex, Model model){
+    public String authorizationDeniedHandler(AuthorizationDeniedException ex, Model model) {
         model.addAttribute("message", "접근 권한이 없습니다.");
         return "error/redirect";
     }
