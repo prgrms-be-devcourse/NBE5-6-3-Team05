@@ -23,18 +23,6 @@ public class MemberApiController {
 
     private final LikeService likeService;
 
-    @GetMapping("/like/{Book}")
-    public ResponseEntity<List<BookDto>> getUserLikedBooks(@AuthenticationPrincipal UserDetails userDetails) {
-        String userId = userDetails.getUsername();
-
-        if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        List<BookDto> likedBooks = likeService.getUserLikedBooks(userId);
-        return ResponseEntity.ok(likedBooks);
-    }
-
 
 
 }

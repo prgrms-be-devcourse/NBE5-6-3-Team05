@@ -1,8 +1,7 @@
-package com.grepp.moodlink.app.controller.api.member.payload;
+package com.grepp.moodlink.app.controller.web.member.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @Data
 @AllArgsConstructor

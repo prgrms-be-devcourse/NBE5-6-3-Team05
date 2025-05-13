@@ -1,6 +1,6 @@
 package com.grepp.moodlink.app.model.recomend;
 
-import com.grepp.moodlink.app.controller.api.member.payload.LikeGenreResponse;
+import com.grepp.moodlink.app.controller.web.member.payload.LikeGenreResponse;
 import com.grepp.moodlink.app.model.book.BookRepository;
 import com.grepp.moodlink.app.model.book.dto.BookDto;
 import com.grepp.moodlink.app.model.book.entity.Book;

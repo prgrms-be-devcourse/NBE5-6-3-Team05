@@ -1,7 +1,8 @@
 package com.grepp.moodlink.app.controller.web.member;
 
-import com.grepp.moodlink.app.controller.api.member.payload.LikeGenreResponse;
+import com.grepp.moodlink.app.controller.web.member.payload.LikeGenreResponse;
 import com.grepp.moodlink.app.controller.web.member.payload.ModifyRequest;
+import com.grepp.moodlink.app.model.book.dto.BookDto;
 import com.grepp.moodlink.app.model.member.MemberService;
 import com.grepp.moodlink.app.model.member.dto.MemberInfoDto;
 import com.grepp.moodlink.app.model.recomend.LikeService;
@@ -84,7 +85,14 @@ public class MemberController {
 
 
     @GetMapping("/like")
-    public String showLikePage() {
+    public String showLikePage(Model model) {
+String userId = "user001";
+        if (userId == null) {
+            return "redirect:/";
+        }
+
+        List<BookDto> likedBooks = likeService.getUserLikedBooks(userId);
+        model.addAttribute("likedbooks" ,likedBooks);
         return "/users/like";
     }
 
