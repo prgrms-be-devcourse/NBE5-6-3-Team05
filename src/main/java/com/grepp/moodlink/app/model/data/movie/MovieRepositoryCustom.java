@@ -7,4 +7,7 @@ public interface MovieRepositoryCustom {
 
     String findTopThumbnail();
 
+    String findTitle();
+
+    String findDescription();
 }

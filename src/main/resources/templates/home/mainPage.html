@@ -8,20 +8,52 @@
 <div layout:fragment="content">
   <div class="main-content">
     <h2>오늘의 기분, 하나의 링크로 영화·도서·음악을 만나보세요.</h2>
+
     <div class="category">
-      <div class="category-card">
-        <img th:src="@{${thumbnail[1]}}" alt="음악">
+
+      <div class="category-card" onclick="showContentInfo('music')">
+        <img th:src="@{${thumbnail[0]}}" alt="음악">
         <p>음악</p>
+        <div class="content-info" id="music-info">
+          <h6 class="content-title" th:text="${people[0]}"></h6>
+          <ul>
+            <li th:text="${title[0]}"></li>
+<!--            <li th:text="${description[0]}"></li>-->
+            <br><br>
+          </ul>
+        </div>
       </div>
-      <div class="category-card">
-        <img th:src="@{${thumbnail[0]}}" alt="영화">
+
+
+
+
+      <div class="category-card" onclick="showContentInfo('movie')">
+        <img th:src="@{${thumbnail[1]}}" alt="영화">
         <p>영화</p>
+        <div class="content-info" id="movie-info">
+          <h6 class="content-title" th:text="${title[1]}"></h6>
+          <ul>
+<!--                        <li th:text="${description[1]}"></li>-->
+            <br>
+          </ul>
+        </div>
       </div>
-      <div class="category-card">
+
+
+      <div class="category-card" onclick="showContentInfo('book')">
         <img th:src="@{${thumbnail[2]}}" alt="도서">
         <p>도서</p>
+        <div class="content-info" id="book-info">
+          <h6 class="content-title" th:text="${people[1]}"></h6>
+          <ul>
+            <li th:text="${title[2]}"></li>
+<!--                        <li th:text="${description[2]}"></li>-->
+            <br><br>
+          </ul>
+        </div>
       </div>
     </div>
+
     <p><i>moodlink 이용자들의 추천 콘텐츠 입니다.</i></p>
 
     <div class="buttons">
@@ -29,6 +61,25 @@
         <i class="material-icons">sports_esports</i>
         월드컵
       </button>
+
+      <!-- 버튼: 클릭 시 모달 오픈 -->
+      <button class="fancy-button red-button" onclick="openFortuneModal()">
+        오늘의 운세
+      </button>
+
+      <!-- 버튼 외부에 모달 선언 -->
+      <div id="fortuneModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+
+        <!-- 제목 추가 -->
+        <h4 style="color: #fff; margin-bottom: 20px;">오늘의 운세</h4>
+
+        <!-- 컨트롤러로부터 받아온 내용을 표시할 부분 -->
+        <div id="fortuneText">
+          <p>운세를 불러오는 중...</p>
+        </div>
+      </div>
     </div>
 
 
@@ -42,3 +93,36 @@
 </div>
 </body>
 </html>
+
+<script>
+  function showContentInfo(id) {
+    const info = document.getElementById(id + '-info');
+    if (info.style.display === 'block') {
+      info.style.display = 'none';
+    } else {
+      // 모든 다른 정보 숨기기
+      document.querySelectorAll('.content-info').forEach(el => el.style.display = 'none');
+      info.style.display = 'block';
+    }
+  }
+
+  function openFortuneModal() {
+    document.getElementById("fortuneModal").style.display = "block";
+
+    // Ajax로 내용을 불러오고 싶을 경우 (예시)
+    fetch('/fortune')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("fortuneText").innerHTML = data;
+    })
+    .catch(() => {
+      document.getElementById("fortuneText").innerHTML = "운세를 불러오지 못했습니다.";
+    });
+  }
+
+  function closeModal() {
+    document.getElementById("fortuneModal").style.display = "none";
+  }
+
+
+</script>
