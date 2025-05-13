@@ -49,8 +49,8 @@ public class MovieService {
                 genreMap.put(genreIds.get(i), genreNames.get(i));
             }
             Set<Genre> genres = genreMap.entrySet().stream()
-                    .map(entry -> genreRepository.findById(Long.valueOf(entry.getKey()))
-                            .orElseGet(() -> genreRepository.save(new Genre(entry.getKey().longValue(), entry.getValue())))
+                    .map(entry -> genreRepository.findById(entry.getKey())
+                            .orElseGet(() -> genreRepository.save(new Genre(entry.getKey(), entry.getValue())))
                     )
                     .collect(Collectors.toSet());
             movie.setGenres(genres);

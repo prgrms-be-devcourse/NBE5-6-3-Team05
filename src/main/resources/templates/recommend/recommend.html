@@ -11,6 +11,13 @@
       background-position: center;
       margin: 0;
     }
+
+    select {
+      display: block !important;
+      max-width: 120px;
+      min-height: 32px;
+    }
+
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -56,17 +63,22 @@
 <div layout:fragment="content">
   <form method="post" action="recommend/result" id="recommendForm">
     <input type="hidden" name="keywords" id="selectedKeywords"/>
+    <input type="hidden" name="genre" id="selectedGenre"/>
 
     <div class="select-group">
-      장르 <select>
-      <option>미스터리</option>
-    </select>
-      국가 <select>
-      <option>대한민국</option>
-    </select>
+      장르
+      <label>
+        <select name="genre" >
+          <option value="">전체</option>
+          <option th:each="genre : ${genres}"
+                  th:value="${genre.name}"
+                  th:text="${genre.name}"></option>
+        </select>
+      </label>
+        국가 : 대한민국
     </div>
 
-    <div class="section">
+    <div class="section" data-question="오늘 기분은">
       <h3>오늘 기분은 어떠신가요?</h3>
       <div class="card-grid" id="mood-cards">
         <div class="card">기쁨</div>
@@ -80,7 +92,7 @@
       </div>
     </div>
 
-    <div class="section">
+    <div class="section" data-question="오늘 날씨는">
       <h3>오늘 날씨는 어떤가요?</h3>
       <div class="card-grid">
         <div class="card">맑음</div>
@@ -91,8 +103,8 @@
       </div>
     </div>
 
-    <div class="section">
-      <h3>어떤 시간대 이신가요?</h3>
+    <div class="section" data-question="어떤 시간대는">
+      <h3>어떤 시간대 인가요?</h3>
       <div class="card-grid">
         <div class="card">아침</div>
         <div class="card">점심</div>
@@ -102,7 +114,7 @@
       </div>
     </div>
 
-    <div class="section">
+    <div class="section" data-question="같이 있는 사람은">
       <h3>누군가와 같이 있나요?</h3>
       <div class="card-grid">
         <div class="card">혼자</div>
@@ -112,19 +124,7 @@
       </div>
     </div>
 
-    <div class="section">
-      <h3>지금 무엇이 필요한가요?</h3>
-      <div class="card-grid">
-        <div class="card">행복</div>
-        <div class="card">위로</div>
-        <div class="card">휴식</div>
-        <div class="card">즐거움</div>
-        <div class="card">짜릿함</div>
-        <div class="card">아무생각 없이</div>
-      </div>
-    </div>
-
-    <div class="section">
+    <div class="section" data-question="지금 필요한거는">
       <h3>지금 무엇이 필요한가요?</h3>
       <div class="card-grid">
         <div class="card">행복</div>
@@ -140,24 +140,40 @@
   </form>
 
   <script>
-    const selectedKeywords = new Set();
+    const questionToKeywords = {};
 
     document.querySelectorAll('.card').forEach(card => {
       card.addEventListener('click', () => {
-        card.classList.toggle('selected');
+        const section = card.closest('.section');
+        const question = section.getAttribute('data-question');
         const keyword = card.textContent.trim();
 
-        if(card.classList.contains('selected')) {
-          selectedKeywords.add(keyword);
-        } else {
-          selectedKeywords.delete(keyword);
+        if (!questionToKeywords[question]) {
+          questionToKeywords[question] = new Set();
         }
-        document.getElementById('selectedKeywords').value =
-          Array.from(selectedKeywords).join(',');
-        console.log(selectedKeywords);
+
+        card.classList.toggle('selected');
+
+        if (card.classList.contains('selected')) {
+          questionToKeywords[question].add(keyword);
+        } else {
+          questionToKeywords[question].delete(keyword);
+          if (questionToKeywords[question].size === 0) {
+            delete questionToKeywords[question];
+          }
+        }
+
+        const finalKeywords = Object.entries(questionToKeywords)
+          .map(([question, keywords]) => `${question}=${Array.from(keywords).join(',')}`)
+          .join('이야.');
+
+        document.getElementById('selectedKeywords').value = finalKeywords;
+
+        console.log(finalKeywords);
       });
     });
   </script>
+
 </div>
 </body>
 </html>

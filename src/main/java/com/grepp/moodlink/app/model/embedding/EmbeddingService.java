@@ -34,10 +34,10 @@ public class EmbeddingService {
     public void generateEmbeddingsMovie() {
         List<Movie> movies = movieRepository.findByEmbeddingIsNull();
         for (Movie movie : movies) {
-            String text = movie.getDescription();
+            String text = "영화 제목 : " + movie.getTitle()
+                    + "영화 설명" + movie.getDescription();
             float[] floatEmbedding = embeddingModel.embed(text);
 
-            // float[] → byte[] 변환
             byte[] byteEmbedding = toByteArray(floatEmbedding);
             movie.setEmbedding(byteEmbedding);
 
@@ -99,20 +99,18 @@ public class EmbeddingService {
         keywordRepository.save(keywordSelection);
     }
 
-    public List<Movie> cosineComputeMovie(String userId) {
+    public List<Movie> cosineComputeMovie(String genre, String userId) {
         KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
         byte[] byteEmbedding = keywordSelection.getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
-        List<Movie> movies = movieRepository.findAll();
-        PriorityQueue<Map.Entry<String, Float>> pq = new PriorityQueue<>((a, b) -> Float.compare(b.getValue(), a.getValue()));
+        List<Movie> movies = movieRepository.findByGenreName(genre);
 
+        PriorityQueue<Map.Entry<String, Float>> pq = new PriorityQueue<>((a, b) -> Float.compare(b.getValue(), a.getValue()));
         for (Movie movie : movies) {
             byte[] byteMovie = movie.getEmbedding();
             float[] floatMovie = toFloatArray(byteMovie);
-            float cosingSimilarity = CosineSimilarity.compute(floatEmbedding, floatMovie);
-            Map.Entry<String, Float> entry = new AbstractMap.SimpleEntry<>(movie.getId(), cosingSimilarity);
-
-            pq.add(entry);
+            float distance = CosineSimilarity.compute(floatEmbedding, floatMovie);
+            pq.add(new AbstractMap.SimpleEntry<>(movie.getId(), distance));
         }
 
         List<String> recommendedMovieIds = new ArrayList<>();
@@ -131,16 +129,14 @@ public class EmbeddingService {
         KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
         byte[] byteEmbedding = keywordSelection.getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
-        List<Book> books = (List<Book>) bookRepository.findAll();
+        List<Book> books = bookRepository.findAll();
         PriorityQueue<Map.Entry<String, Float>> pq = new PriorityQueue<>((a, b) -> Float.compare(b.getValue(), a.getValue()));
 
         for (Book book : books) {
-            byte[] byteMovie = book.getEmbedding();
-            float[] floatMovie = toFloatArray(byteMovie);
-            float cosingSimilarity = CosineSimilarity.compute(floatEmbedding, floatMovie);
-            Map.Entry<String, Float> entry = new AbstractMap.SimpleEntry<>(book.getIsbn(), cosingSimilarity);
-
-            pq.add(entry);
+            byte[] byteBook = book.getEmbedding();
+            float[] floatBook = toFloatArray(byteBook);
+            float distance = PearsonCorrelation.compute(floatEmbedding, floatBook);
+            pq.add(new AbstractMap.SimpleEntry<>(book.getIsbn(), distance));
         }
 
         List<String> recommendedBookIds = new ArrayList<>();
@@ -152,7 +148,7 @@ public class EmbeddingService {
         }
 
         recommendedBookIds.forEach(System.out::println);
-        return movieRepository.findAllById(recommendedBookIds);
+        return bookRepository.findAllById(recommendedBookIds);
     }
 
     public Object cosineComputeMusic(String userId) {
@@ -163,9 +159,9 @@ public class EmbeddingService {
         PriorityQueue<Map.Entry<String, Float>> pq = new PriorityQueue<>((a, b) -> Float.compare(b.getValue(), a.getValue()));
 
         for (Music music : musics) {
-            byte[] byteMovie = music.getEmbedding();
-            float[] floatMovie = toFloatArray(byteMovie);
-            float cosingSimilarity = CosineSimilarity.compute(floatEmbedding, floatMovie);
+            byte[] byteMusic = music.getEmbedding();
+            float[] floatMusic = toFloatArray(byteMusic);
+            float cosingSimilarity = CosineSimilarity.compute(floatEmbedding, floatMusic);
             Map.Entry<String, Float> entry = new AbstractMap.SimpleEntry<>(music.getId(), cosingSimilarity);
 
             pq.add(entry);
@@ -180,7 +176,17 @@ public class EmbeddingService {
         }
 
         recommendedMusicIds.forEach(System.out::println);
-        return movieRepository.findAllById(recommendedMusicIds);
+        return musicRepository.findAllById(recommendedMusicIds);
+    }
+
+    public static Set<Integer> toBinarySet(float[] vector) {
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < vector.length; i++) {
+            if (vector[i] > 0.5) { // 임계값 설정
+                set.add(i);
+            }
+        }
+        return set;
     }
 }
 
