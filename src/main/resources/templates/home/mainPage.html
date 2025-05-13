@@ -7,6 +7,11 @@
 <body>
 <div layout:fragment="content">
   <div class="main-content">
+    <div class="search-container">
+      <input type="text" id="search-input" placeholder="원하는 음악,영화,도서를 찾아보세요!" oninput="filterContent()">
+      <button onclick="filterContent()">검색</button>
+    </div>
+
     <h2>오늘의 기분, 하나의 링크로 영화·도서·음악을 만나보세요.</h2>
 
     <div class="category">
@@ -62,21 +67,18 @@
         월드컵
       </button>
 
-      <!-- 버튼: 클릭 시 모달 오픈 -->
       <button class="fancy-button blue-button" onclick="openFortuneModal()">
         <i class="material-icons">auto_awesome</i>
         오늘의 운세
       </button>
 
-      <!-- 버튼 외부에 모달 선언 -->
       <div id="fortuneModal" class="modal">
       <div class="modal-content">
         <span class="close-btn" onclick="closeModal()">&times;</span>
 
-        <!-- 제목 추가 -->
         <h4 style="color: #fff; margin-bottom: 20px;">오늘의 운세</h4>
 
-        <!-- 컨트롤러로부터 받아온 내용을 표시할 부분 -->
+        <!-- 컨트롤러로에서 받아온 내용 표시 -->
         <div id="fortuneText">
           <p>운세를 불러오는 중...</p>
         </div>
@@ -123,6 +125,20 @@
 
   function closeModal() {
     document.getElementById("fortuneModal").style.display = "none";
+  }
+
+  function filterContent() {
+    const searchInput = document.getElementById('search-input').value.toLowerCase();
+    const categories = document.querySelectorAll('.category-card');
+
+    categories.forEach(function(card) {
+      const category = card.getAttribute('data-category').toLowerCase();
+      if (category.includes(searchInput)) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
   }
 
 
