@@ -44,6 +44,7 @@ public class RecommendController {
         keywordService.generateKeywordSelection(userId);
         embeddingService.generateEmbeddingKeyword(userId, keywords);
         genre = genre.substring(1);
+        System.out.println(genre);
         session.setAttribute("movies", embeddingService.cosineComputeMovie(genre, userId));
         session.setAttribute("books", embeddingService.cosineComputeBook(userId));
         session.setAttribute("musics", embeddingService.cosineComputeMusic(userId));

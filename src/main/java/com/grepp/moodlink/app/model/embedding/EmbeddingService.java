@@ -50,7 +50,8 @@ public class EmbeddingService {
     public void generateEmbeddingsBook() {
         List<Book> books = bookRepository.findByEmbeddingIsNull();
         for (Book book : books) {
-            String text = book.getDescription();
+            String text = "도서 제목 : " + book.getTitle()
+                    + "도서 설명 :" + book.getDescription();
             float[] floatEmbedding = embeddingModel.embed(text);
 
             byte[] byteEmbedding = toByteArray(floatEmbedding);
@@ -65,7 +66,8 @@ public class EmbeddingService {
     public void generateEmbeddingsMusic() {
         List<Music> musics = musicRepository.findByEmbeddingIsNull();
         for (Music music : musics) {
-            String text = music.getLyrics();
+            String text = "노래 제목 : " + music.getTitle()
+                    + "노래 가사 : " + music.getLyrics();
             float[] floatEmbedding = embeddingModel.embed(text);
 
             byte[] byteEmbedding = toByteArray(floatEmbedding);
@@ -103,7 +105,12 @@ public class EmbeddingService {
         KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
         byte[] byteEmbedding = keywordSelection.getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
-        List<Movie> movies = movieRepository.findByGenreName(genre);
+        List<Movie> movies = null;
+        if (genre.isBlank()){
+             movies = movieRepository.findAll();
+        }else {
+            movies = movieRepository.findByGenreName(genre);
+        }
 
         PriorityQueue<Map.Entry<String, Float>> pq = new PriorityQueue<>((a, b) -> Float.compare(b.getValue(), a.getValue()));
         for (Movie movie : movies) {
