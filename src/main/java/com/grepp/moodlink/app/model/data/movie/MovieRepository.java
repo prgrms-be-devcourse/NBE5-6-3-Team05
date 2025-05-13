@@ -15,7 +15,7 @@ public interface MovieRepository extends JpaRepository<Movie, String> {
     List<Movie> findByEmbeddingIsNull();
 
     @Query("SELECT DISTINCT m FROM Movie m " +
-            "JOIN m.genres g " +
+            "JOIN FETCH m.genres g " +
             "WHERE g.name = :genreName")
     List<Movie> findByGenreName(@Param("genreName") String genreName);
 }
