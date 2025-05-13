@@ -165,19 +165,19 @@
 
 <div id="musics" class="like-item">
 
-  <div th:if="${!#lists.isEmpty(LikeSongGenre)}">
+  <div th:if="${!#lists.isEmpty(LikeMusicGenre)}">
   <h2 th:text="${username}+'님이 가장 선호하는 장르는'"> (유저이름)님이 가장 선호하는 장르는</h2>
   </div>
-  <div th:if="${#lists.isEmpty(LikeSongGenre)}">
+  <div th:if="${#lists.isEmpty(LikeMusicGenre)}">
     <p th:text="${username} + '님이 아직 추천받고 좋아한 음악이 없어요.'">아직 추천받은 음악이 없습니다.</p>
   </div>
 
-  <li th:each="musics : ${LikeSongGenre}">
+  <li th:each="musics : ${LikeMusicGenre}">
     <div th:text="${musics.genre}">장르 이름</div>
     <div th:text="${musics.count}">장르 설명</div>
   </li>
   <h2 > 전체 사용자가 가장 선호하는 장르는</h2>
-  <li th:each="music : ${mostLikeSongGenre}">
+  <li th:each="music : ${mostLikeMusicGenre}">
     <div th:text="${music.genre}">장르 이름</div>
     <div th:text="${music.count}">장르 설명</div>
   </li>

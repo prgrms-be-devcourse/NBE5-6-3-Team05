@@ -109,7 +109,7 @@ public class MemberController {
         model.addAttribute("likedbooks", likedBooks);
         model.addAttribute("likedmusics", likedMusics);
         model.addAttribute("likedmovies", likedMovies);
-        return "/users/like";
+        return "users/like";
     }
 
 

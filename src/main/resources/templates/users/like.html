@@ -138,25 +138,26 @@
   <h2>영화</h2>
   <div th:each="movie : ${likedmovies}">
     <h3 th:text="${movie.title}"></h3>
-    <img th:src="${movie.thumbnail}" class="musicimage">
-    <p th:text="${movie.author}"></p>
-    <p th:text="${movie.genre}"></p>
+
     <p th:text="${movie.description}"></p>
-    <p th:text="${movie.publishDate}"></p>
-    <p th:text="${movie.likeCount}"></p>
+    <ul>
+      <li th:each="genre : ${movie.genres}" th:text="${genre.name}"></li>
+    </ul>
+    <p th:text="${movie.releaseDate}"></p>
+    <img th:src="${movie.thumbnail}" class="musicimage">
 
   </div>
 </div>
 <div id="musics" class="like-item">
   <h2>음악</h2>
-  <div th:each="music : ${likedmusic}">
+  <div th:each="music : ${likedmusics}">
     <h3 th:text="${music.title}"></h3>
     <img th:src="${music.thumbnail}" class="musicimage">
     <p th:text="${music.singer}"></p>
     <p th:text="${music.genre}"></p>
     <p th:text="${music.description}"></p>
+    <p th:text="${music.lyrics}"></p>
     <p th:text="${music.releaseDate}"></p>
-    <p th:text="${music.likeCount}"></p>
 
   </div>
 </div>
