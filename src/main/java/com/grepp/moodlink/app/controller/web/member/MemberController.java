@@ -2,9 +2,11 @@ package com.grepp.moodlink.app.controller.web.member;
 
 import com.grepp.moodlink.app.controller.web.member.payload.LikeGenreResponse;
 import com.grepp.moodlink.app.controller.web.member.payload.ModifyRequest;
+import com.grepp.moodlink.app.model.auth.domain.Principal;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
+import com.grepp.moodlink.app.model.home.HomeService;
 import com.grepp.moodlink.app.model.member.MemberService;
 import com.grepp.moodlink.app.model.member.dto.MemberInfoDto;
 import com.grepp.moodlink.app.model.recomend.LikeService;
@@ -13,6 +15,9 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,15 +32,29 @@ public class MemberController {
 
     private final MemberService memberService;
     private final LikeService likeService;
+    private final HomeService homeService;
+
 
 
     @GetMapping()
-    public String showMyPage(HttpSession session, Model model) {
-        String userId = (String) session.getAttribute("userId");
-        userId = "user001";
-        if (userId == null) {
+    public String showMyPage( Model model) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAuthenticated = authentication != null &&
+            authentication.isAuthenticated() &&
+            !(authentication instanceof AnonymousAuthenticationToken);
+
+
+        if (!isAuthenticated) {
             return "redirect:/";
         }
+        Principal principal = (Principal) authentication.getPrincipal();
+
+        String userId = principal.getUsername();
+
+
+
+
 
 // 개인 정보 보여주는 로직
         Optional<MemberInfoDto> memberInfo = memberService.GetMemberInfo(userId);
@@ -71,12 +90,19 @@ public class MemberController {
     }
 
     @GetMapping("/modify")
-    public String showModifyMyPage(HttpSession session, Model model) {
-        String userId = (String) session.getAttribute("userId");
-        userId = "user001";
-        if (userId == null) {
+    public String showModifyMyPage(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAuthenticated = authentication != null &&
+            authentication.isAuthenticated() &&
+            !(authentication instanceof AnonymousAuthenticationToken);
+
+
+        if (!isAuthenticated) {
             return "redirect:/";
         }
+        Principal principal = (Principal) authentication.getPrincipal();
+
+        String userId = principal.getUsername();
         model.addAttribute("userId", userId);
         model.addAttribute("username", memberService.GetUsername(userId));
         return "/users/modify";
@@ -84,12 +110,19 @@ public class MemberController {
     }
 
     @PostMapping("/modify")
-    public String modifyProfile(ModifyRequest request, HttpSession session, Model model) {
-        String userId = (String) session.getAttribute("userId");
-        userId = "user001";
-        if (userId == null) {
+    public String modifyProfile(ModifyRequest request, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAuthenticated = authentication != null &&
+            authentication.isAuthenticated() &&
+            !(authentication instanceof AnonymousAuthenticationToken);
+
+
+        if (!isAuthenticated) {
             return "redirect:/";
         }
+        Principal principal = (Principal) authentication.getPrincipal();
+
+        String userId = principal.getUsername();
         memberService.modifyProfile(userId, request.toDto());
         return "redirect:/users";
     }
@@ -97,10 +130,18 @@ public class MemberController {
 
     @GetMapping("/like")
     public String showLikePage(Model model) {
-        String userId = "user001";
-        if (userId == null) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAuthenticated = authentication != null &&
+            authentication.isAuthenticated() &&
+            !(authentication instanceof AnonymousAuthenticationToken);
+
+
+        if (!isAuthenticated) {
             return "redirect:/";
         }
+        Principal principal = (Principal) authentication.getPrincipal();
+
+        String userId = principal.getUsername();
 
         List<BookDto> likedBooks = likeService.getUserLikedBooks(userId);
         List<MusicDto> likedMusics = likeService.getUserLikedMusics(userId);

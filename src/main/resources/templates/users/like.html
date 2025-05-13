@@ -1,183 +1,90 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <th:block th:fragment="frg_static">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <style>
-      body {
-        height: 100vh;
-        margin: 0;
-        padding: 30px;
-        font-family: 'Segoe UI', sans-serif;
-        background: linear-gradient(#000000, #545454);
-        color: white;
-      }
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 
 
-      header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: -16px;
-        margin-bottom: 40px;
-      }
-
-      .logo {
-        font-size: 48px;
-        font-weight: bold;
-      }
-
-      .logo span {
-        background: linear-gradient(to bottom, #A64DFF, #6A00FF);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-
-      .header-right {
-        display: flex;
-        margin-top: -8px;
-        align-items: center;
-        gap: 16px;
-      }
-
-      .welcome-text {
-        font-size: 20px;
-        margin-right: 10px;
-      }
-
-      .header-buttons {
-        display: flex;
-        font-size: 20px;
-        gap: 10px;
-      }
-
-      .header-buttons button {
-        padding: 8px 16px;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        font-weight: bold;
-      }
-
-      .mypage-btn {
-        background: linear-gradient(to right, #A64DFF, #6A00FF);
-        color: white;
-      }
-
-      .like-btn {
-        background: linear-gradient(to right, #A64DFF, #6A00FF);
-        color: white;
-      }
-
-      .logout-btn {
-        background: linear-gradient(to right, #A64DFF, #6A00FF);
-        color: white;
-      }
-
-      .musicimage {
-        max-width: 20%;
-        height: auto;
-      }
-
-
-    </style>
-
-  </th:block>
-</head>
 <body>
-<th:block th:fragment="frg_header">
-  <header>
-    <div class="logo"><span>Moodlink</span></div>
-    <h1 class="logo"><span> 좋아요목록</span></h1>
 
-    <div class="header-right">
-      <span class="welcome-text">안녕하세요 xx님!</span>
-      <div class="header-buttons">
-        <button class="mypage-btn" th:onclick="'location.href=\'' + @{/users} + '\''">
-          마이페이지
-        </button>
-        <button class="logout-btn" th:onclick="'location.href=\'' + @{/} + '\''">
-          로그아웃
-        </button>
 
-      </div>
+<div layout:fragment="content">
+  <h3>좋아요 목록</h3>
+
+  <div>
+    <button class="mypage-btn" onclick="loadTab('books')">
+      도서
+    </button>
+    <button class="mypage-btn" onclick="loadTab('movies')">
+      영화
+    </button>
+    <button class="mypage-btn" onclick="loadTab('musics')">
+      음악
+    </button>
+
+
+  </div>
+  <div id="books" class="like-item">
+    <h2>도서</h2>
+    <div th:each="book : ${likedbooks}">
+      <h3 th:text="${book.title}"></h3>
+      <h3 th:text="${book.isbn}"></h3>
+      <img th:src="${book.image}" class="image">
+      <p th:text="${book.author}"></p>
+      <p th:text="${book.publisher}"></p>
+      <p th:text="${book.publishedDate}"></p>
+      <p th:text="${book.genre}"></p>
+      <p th:text="${book.description}"></p>
+
+
     </div>
-  </header>
-</th:block>
-<div>
-  <button class="like-btn" onclick="loadTab('books')">
-    도서
-  </button>
-  <button class="like-btn" onclick="loadTab('movies')">
-    영화
-  </button>
-  <button class="like-btn" onclick="loadTab('musics')">
-    음악
-  </button>
-</div>
-<div id="books" class="like-item">
-  <h2>도서</h2>
-  <div th:each="book : ${likedbooks}">
-    <h3 th:text="${book.title}"></h3>
-    <h3 th:text="${book.isbn}"></h3>
-    <img th:src="${book.image}" class="musicimage">
-    <p th:text="${book.author}"></p>
-    <p th:text="${book.publisher}"></p>
-    <p th:text="${book.publishedDate}"></p>
-    <p th:text="${book.genre}"></p>
-    <p th:text="${book.description}"></p>
-
-
   </div>
-</div>
-<div id="movies" class="like-item">
-  <h2>영화</h2>
-  <div th:each="movie : ${likedmovies}">
-    <h3 th:text="${movie.title}"></h3>
+  <div id="movies" class="like-item">
+    <h2>영화</h2>
+    <div th:each="movie : ${likedmovies}">
+      <h3 th:text="${movie.title}"></h3>
 
-    <p th:text="${movie.description}"></p>
-    <ul>
-      <li th:each="genre : ${movie.genres}" th:text="${genre.name}"></li>
-    </ul>
-    <p th:text="${movie.releaseDate}"></p>
-    <img th:src="${movie.thumbnail}" class="musicimage">
+      <p th:text="${movie.description}"></p>
+      <ul>
+        <li th:each="genre : ${movie.genres}" th:text="${genre.name}"></li>
+      </ul>
+      <p th:text="${movie.releaseDate}"></p>
+      <img th:src="${movie.thumbnail}" class="image">
 
+    </div>
   </div>
-</div>
-<div id="musics" class="like-item">
-  <h2>음악</h2>
-  <div th:each="music : ${likedmusics}">
-    <h3 th:text="${music.title}"></h3>
-    <img th:src="${music.thumbnail}" class="musicimage">
-    <p th:text="${music.singer}"></p>
-    <p th:text="${music.genre}"></p>
-    <p th:text="${music.description}"></p>
-    <p th:text="${music.lyrics}"></p>
-    <p th:text="${music.releaseDate}"></p>
+  <div id="musics" class="like-item">
+    <h2>음악</h2>
+    <div th:each="music : ${likedmusics}">
+      <h3 th:text="${music.title}"></h3>
+      <img th:src="${music.thumbnail}" class="image">
+      <p th:text="${music.singer}"></p>
+      <p th:text="${music.genre}"></p>
+      <p th:text="${music.description}"></p>
+      <p th:text="${music.lyrics}"></p>
+      <p th:text="${music.releaseDate}"></p>
 
+    </div>
   </div>
+
+
+  <script>
+
+    function loadTab(tabName) {
+
+      const tabItems = document.querySelectorAll('.like-item');
+      tabItems.forEach(item => item.style.display = 'none');
+
+      const selectedTab = document.getElementById(tabName);
+      selectedTab.style.display = 'block';
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      loadTab('books');
+    });
+  </script>
+
+
 </div>
-
-
-<script>
-
-  function loadTab(tabName) {
-
-    const tabItems = document.querySelectorAll('.like-item');
-    tabItems.forEach(item => item.style.display = 'none');
-
-    const selectedTab = document.getElementById(tabName);
-    selectedTab.style.display = 'block';
-  }
-
-  document.addEventListener("DOMContentLoaded", function () {
-    loadTab('books');
-  });
-</script>
 
 </body>
 </html>
