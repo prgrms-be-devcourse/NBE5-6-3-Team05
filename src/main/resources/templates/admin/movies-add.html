@@ -29,7 +29,7 @@
             <span th:errors="*{title}" class="helper-text" ></span>
             <div class="form-row"><label>감독</label><input th:field="*{director}" class="input-line" type="text" /></div>
             <span th:errors="*{director}" class="helper-text" ></span>
-            <div class="form-row"><label>개봉일</label><input class="input-line" type="date" /></div>
+            <div class="form-row"><label>개봉일</label><input th:field="*{releaseDate}" class="input-line" type="date" /></div>
           </div>
         </div>
 
@@ -37,20 +37,22 @@
           <label style="margin-bottom: 0.3rem;">장르</label>
           <div class="selected-genres" id="selected-genres">선택된 장르 없음</div>
           <div class="genre-list">
+<!--            임시로 -->
             <button class="genre-btn" onclick="toggleGenre(this)">코미디</button>
             <button class="genre-btn" onclick="toggleGenre(this)">가족</button>
             <button class="genre-btn" onclick="toggleGenre(this)">스릴러</button>
             <button class="genre-btn" onclick="toggleGenre(this)">액션</button>
             <button class="genre-btn" onclick="toggleGenre(this)">드라마</button>
           </div>
+          <input th:field="*{genre}" type="hidden" id="genre-input" />
         </div>
 
         <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
           <label>설명</label>
-          <textarea class="textarea"></textarea>
+          <textarea th:field="*{description}" class="textarea"></textarea>
         </div>
 
-        <button class="submit-btn">등록</button>
+        <button class="submit-btn" type="submit">등록</button>
     </div>
       </form>
   </div>
@@ -69,11 +71,17 @@
     }
   });
 
-  // 장르 선택
   function toggleGenre(btn) {
     btn.classList.toggle("selected");
+
     const selected = [...document.querySelectorAll(".genre-btn.selected")].map(b => b.textContent);
-    document.getElementById("selected-genres").textContent = selected.length ? selected.join(", ") : "선택된 장르 없음";
+
+    document.getElementById("selected-genres").textContent = selected.length
+        ? selected.join(", ")
+        : "선택된 장르 없음";
+
+    // input에도 추가
+    document.getElementById("genre-input").value = selected.join(",");
   }
 </script>
 </html>

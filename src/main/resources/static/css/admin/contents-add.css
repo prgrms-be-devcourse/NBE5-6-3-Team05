@@ -51,15 +51,13 @@ main {
   width: 140px;
   height: 180px;
   background-color: #ccc;
-  margin-bottom: 0.7rem;
-  background-size: cover;
-  background-position: center;
+  object-fit: cover;
+  margin-bottom: 0.5rem;
 }
 
 .form-row {
   display: flex;
   align-items: center;
-  margin-bottom: 1.5rem;
   width: 100%;
   max-width: 750px;
 }
@@ -107,6 +105,28 @@ main {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
+
+select{
+  display: flex;
+}
+
+select.input-line {
+  width: 90%;
+  margin-left: 2rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  background-color: transparent;
+  color: #A64DFF;
+  border: none;
+  border-bottom: 1px solid #666;
+  appearance: none; /* 브라우저 기본 화살표 제거 (선택사항) */
+}
+
+select.input-line:focus {
+  border-bottom: 2px solid #A64DFF;
+  outline: none;
+}
+
 
 .textarea {
   width: 100%;
