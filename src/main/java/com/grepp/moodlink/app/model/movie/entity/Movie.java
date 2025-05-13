@@ -1,15 +1,23 @@
 package com.grepp.moodlink.app.model.movie.entity;
 
 import com.grepp.moodlink.infra.entity.BaseEntity;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Array;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
 
 @Entity
 @Table(name = "movie")
@@ -17,6 +25,7 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Movie extends BaseEntity {
+
     @Id
     private String id;
     @Column(nullable = false)

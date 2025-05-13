@@ -70,6 +70,11 @@
         background: linear-gradient(to right, #A64DFF, #6A00FF);
         color: white;
       }
+
+      .like-btn {
+        background: linear-gradient(to right, #A64DFF, #6A00FF);
+        color: white;
+      }
     </style>
 
   </th:block>
@@ -104,7 +109,27 @@
   좋아요 목록조회
 </button>
 
-<h2 th:text="${username}+'님이 가장 선호하는 장르는'">(아이디)님이 가장 선호하는 장르는</h2>
+<div>
+  <button class="like-btn" onclick="loadTab('books')">
+    도서
+  </button>
+  <button class="like-btn" onclick="loadTab('movies')">
+    영화
+  </button>
+  <button class="like-btn" onclick="loadTab('song')">
+    음악
+  </button>
+</div>
+
+<div id="books" class="like-item">
+
+  <div th:if="${!#lists.isEmpty(LikeBookGenre)}">
+<h2 th:text="${username}+'님이 가장 선호하는 장르는'">(유저이름)님이 가장 선호하는 장르는</h2>
+  </div>
+    <div th:if="${#lists.isEmpty(LikeBookGenre)}">
+    <p th:text="${username} + '님이 아직 추천받고 좋아한 책이 없어요.'">아직 추천받은 책이 없습니다.</p>
+  </div>
+
 <li th:each="books : ${LikeBookGenre}">
   <div th:text="${books.genre}">장르 이름</div>
   <div th:text="${books.count}">장르 설명</div>
@@ -114,6 +139,68 @@
   <div th:text="${book.genre}">장르 이름</div>
   <div th:text="${book.count}">장르 설명</div>
 </li>
+
+  </div>
+<div id="movies" class="like-item">
+
+  <div th:if="${!#lists.isEmpty(LikeMovieGenre)}">
+    <h2 th:text="${username}+'님이 가장 선호하는 장르는'">(유저이름)님이 가장 선호하는 장르는</h2>
+  </div>
+  <div th:if="${#lists.isEmpty(LikeMovieGenre)}">
+    <p th:text="${username} + '님이 아직 추천받고 좋아한 영화가 없어요.'">아직 추천받은 영화가 없습니다.</p>
+  </div>
+
+  <li th:each="movies : ${LikeMovieGenre}">
+    <div th:text="${movies.genre}">장르 이름</div>
+    <div th:text="${movies.count}">장르 설명</div>
+  </li>
+  <h2 > 전체 사용자가 가장 선호하는 장르는</h2>
+  <li th:each="movie : ${mostLikeMovieGenre}">
+    <div th:text="${movie.genre}">장르 이름</div>
+    <div th:text="${movie.count}">장르 설명</div>
+  </li>
+
+</div>
+
+
+<div id="song" class="like-item">
+
+  <div th:if="${!#lists.isEmpty(LikeSongGenre)}">
+  <h2 th:text="${username}+'님이 가장 선호하는 장르는'"> (유저이름)님이 가장 선호하는 장르는</h2>
+  </div>
+  <div th:if="${#lists.isEmpty(LikeSongGenre)}">
+    <p th:text="${username} + '님이 아직 추천받고 좋아한 음악이 없어요.'">아직 추천받은 음악이 없습니다.</p>
+  </div>
+
+  <li th:each="songs : ${LikeSongGenre}">
+    <div th:text="${songs.genre}">장르 이름</div>
+    <div th:text="${songs.count}">장르 설명</div>
+  </li>
+  <h2 > 전체 사용자가 가장 선호하는 장르는</h2>
+  <li th:each="song : ${mostLikeSongGenre}">
+    <div th:text="${song.genre}">장르 이름</div>
+    <div th:text="${song.count}">장르 설명</div>
+  </li>
+
+</div>
+
+<script>
+
+  function loadTab(tabName) {
+
+    const tabItems = document.querySelectorAll('.like-item');
+    tabItems.forEach(item => item.style.display = 'none');
+
+
+    const selectedTab = document.getElementById(tabName);
+    selectedTab.style.display = 'block';
+  }
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+    loadTab('books');
+  });
+</script>
 
 </body>
 

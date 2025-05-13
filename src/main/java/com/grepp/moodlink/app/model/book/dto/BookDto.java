@@ -1,12 +1,8 @@
 package com.grepp.moodlink.app.model.book.dto;
 
 import com.grepp.moodlink.app.model.book.entity.Book;
-import com.grepp.moodlink.app.model.member.dto.MemberInfoDto;
-import jakarta.persistence.Id;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data

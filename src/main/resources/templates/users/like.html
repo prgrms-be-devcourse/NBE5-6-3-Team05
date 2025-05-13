@@ -128,36 +128,38 @@
     <p th:text="${book.genre}"></p>
     <p th:text="${book.description}"></p>
     <p th:text="${book.publishDate}"></p>
-    <p th:text="${book.createdAt}"></p>
+    <p th:text="${book.likeCount}"></p>
+
 
   </div>
 </div>
 <div id="movies" class="like-item">
   <h2>영화</h2>
-  <div th:each="book : ${likedbooks}">
-    <h3 th:text="${book.title}"></h3>
-    <img th:src="${book.thumbnail}" class="musicimage">
-    <p th:text="${book.author}"></p>
-    <p th:text="${book.genre}"></p>
-    <p th:text="${book.description}"></p>
-    <p th:text="${book.publishDate}"></p>
-    <p th:text="${book.createdAt}"></p>
+  <div th:each="movie : ${likedmovies}">
+    <h3 th:text="${movie.title}"></h3>
+    <img th:src="${movie.thumbnail}" class="musicimage">
+    <p th:text="${movie.author}"></p>
+    <p th:text="${movie.genre}"></p>
+    <p th:text="${movie.description}"></p>
+    <p th:text="${movie.publishDate}"></p>
+    <p th:text="${movie.likeCount}"></p>
 
   </div>
 </div>
 <div id="song" class="like-item">
   <h2>음악</h2>
-  <div th:each="book : ${likedbooks}">
-    <h3 th:text="${book.title}"></h3>
-    <img th:src="${book.thumbnail}" class="musicimage">
-    <p th:text="${book.author}"></p>
-    <p th:text="${book.genre}"></p>
-    <p th:text="${book.description}"></p>
-    <p th:text="${book.publishDate}"></p>
-    <p th:text="${book.createdAt}"></p>
+  <div th:each="song : ${likedsong}">
+    <h3 th:text="${song.title}"></h3>
+    <img th:src="${song.thumbnail}" class="musicimage">
+    <p th:text="${song.singer}"></p>
+    <p th:text="${song.genre}"></p>
+    <p th:text="${song.description}"></p>
+    <p th:text="${song.releaseDate}"></p>
+    <p th:text="${song.likeCount}"></p>
 
   </div>
 </div>
+
 
 
 

@@ -31,6 +31,6 @@ public class Song
     private LocalDateTime createdAt;
 
     @Column(columnDefinition = "TEXT")
-    private String thumnail;
+    private String thumbnail;
     private Long likeCount;
 }
