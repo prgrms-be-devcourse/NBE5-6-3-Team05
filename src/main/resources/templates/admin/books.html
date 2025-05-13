@@ -17,18 +17,19 @@
     </div>
 
     <!-- 오른쪽 콘텐츠 -->
-    <div class="main-content">
-      <a class="add-btn" href="movies/add">+ 추가</a>
+    <div class="main-contents">
+      <a class="add-btn" href="books/add">+ 추가</a>
       <!-- 데이터 존재 시 -->
-      <div th:if="${items != null and #lists.size(items) > 0}">
-        <div th:each="item : ${items}" class="item-card">
-          <img th:src="@{/images/placeholder.png}" alt="썸네일">
+      <div th:if="${books != null and #lists.size(books) > 0}">
+        <div th:each="book : ${books}" class="item-card">
+          <img th:src="${book.image}" alt="썸네일">
           <div class="item-info">
-            <div><strong th:text="${item.title}">제목</strong> (발매일)</div>
-            <div>작가: <span th:text="${item.director}">작가</span></div>
-            <div>장르: <span th:text="${item.genre}">장르</span></div>
-            <div>설명: <span th:text="${item.description}">설명</span></div>
-            <div>──────────── 두줄까지</div>
+            <span style="font-weight: bold" th:text="${book.title + ' (' + #temporals.format(book.publishedDate, 'yyyy.MM.dd') + ')'}">
+            제목 (발매일)
+            </span>
+            <div>작가: <span th:text="${book.author}">작가</span></div>
+            <div>장르: <span th:text="${book.genre.getName()}">장르</span></div>
+            <div>설명: <span th:text="${book.description}">설명</span></div>
           </div>
           <div class="item-buttons">
             <button>수정</button>
@@ -38,7 +39,7 @@
       </div>
 
       <!-- 비어있을 때 -->
-      <div th:if="${items == null or #lists.isEmpty(items)}" class="empty-message">
+      <div th:if="${books == null or #lists.isEmpty(books)}" class="empty-message">
         등록된 항목이 없습니다.
       </div>
 
