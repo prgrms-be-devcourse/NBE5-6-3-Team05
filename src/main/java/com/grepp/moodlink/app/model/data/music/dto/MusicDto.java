@@ -21,5 +21,6 @@ public class MusicDto {
     private String lyrics;
     private String thumbnail;
     private Long likeCount;
+    private Boolean activated;
 
 }

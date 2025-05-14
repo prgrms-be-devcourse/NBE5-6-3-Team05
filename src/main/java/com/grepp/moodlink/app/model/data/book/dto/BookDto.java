@@ -21,4 +21,5 @@ public class BookDto {
     private LocalDate publishedDate;
     private String description;
     private String genre;
+    private Boolean activated;
 }
