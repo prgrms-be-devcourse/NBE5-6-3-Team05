@@ -9,11 +9,14 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
       body {
-        height: 100vh;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         margin: 0;
         padding: 30px;
         font-family: 'Segoe UI', sans-serif;
-        background: linear-gradient( #000000, #683997);
+        background: linear-gradient(#000000, #683997);
         color: white;
         background-attachment: fixed;
         background-position: center;
@@ -31,6 +34,7 @@
         font-size: 48px;
         font-weight: bold;
       }
+
       .logo span {
         background: linear-gradient(to bottom, #A64DFF, #6A00FF);
         -webkit-background-clip: text;
@@ -220,7 +224,7 @@
         width: 100%;
         height: 100vh;
         overflow: auto;
-        background-color: rgba(0,0,0,0.6);
+        background-color: rgba(0, 0, 0, 0.6);
       }
 
       .modal-content {
@@ -230,7 +234,7 @@
         border: 1px solid #888;
         width: 400px;
         border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         text-align: center;
       }
 
@@ -247,7 +251,7 @@
       }
 
       .fancy-button.blue-button {
-        background-color: #3f51b5;  /* 예: 인디고 계열 */
+        background-color: #3f51b5; /* 예: 인디고 계열 */
         color: white;
         border: none;
         padding: 10px 20px;
@@ -313,6 +317,11 @@
         font-weight: 600;
       }
 
+      .image {
+        width: 300px;
+        height: auto;
+      }
+
     </style>
 
   </th:block>
@@ -326,7 +335,9 @@
     <div class="header-right">
       <span th:if="${isAuthenticated}" th:text="'안녕하세요, ' + ${username} + '님!'"></span>
       <div class="header-buttons">
-        <button class="mypage-btn" th:if="${isAuthenticated}" th:onclick="|location.href='@{/mypage}'|">마이페이지</button>
+        <button class="mypage-btn" th:if="${isAuthenticated}"
+                th:onclick="|location.href='@{/users}'|">마이페이지
+        </button>
         <form th:action="@{/logout}" method="post">
           <button class="logout-btn" th:if="${isAuthenticated}">로그아웃</button>
         </form>

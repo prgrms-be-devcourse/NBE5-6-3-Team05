@@ -1,7 +1,6 @@
 package com.grepp.moodlink.app.model.member.entity;
 
 import com.grepp.moodlink.app.model.auth.code.Role;
-import com.grepp.moodlink.infra.entity.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -17,8 +16,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "user")
-public class Member extends BaseEntity {
-
+public class Member {
     @Id
     private String id;
     private String password;
