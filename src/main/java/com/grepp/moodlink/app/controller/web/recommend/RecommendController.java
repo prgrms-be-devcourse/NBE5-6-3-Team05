@@ -45,9 +45,9 @@ public class RecommendController {
         genre = genre.substring(1);
         System.out.println(genre);
         System.out.println(keywords);
-        session.setAttribute("movies", embeddingService.cosineComputeMovie(genre, userId));
-        session.setAttribute("books", embeddingService.cosineComputeBook(userId));
-        session.setAttribute("musics", embeddingService.cosineComputeMusic(userId));
+        String movieResult = embeddingService.cosineComputeMovie(genre, userId);
+        String bookResult = embeddingService.cosineComputeBook(userId);
+        String musicResult = embeddingService.cosineComputeMusic(userId);
         return "home/mainPage";
     }
 
