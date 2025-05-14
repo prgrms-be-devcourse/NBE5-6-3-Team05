@@ -120,4 +120,8 @@ public class BookService {
     public void deleteBook(String isbn) {
         bookRepository.findByIsbn(isbn).unActivated();
     }
+
+    public List<Book> parseRecommend(String bookResult) {
+        return null;
+    }
 }
