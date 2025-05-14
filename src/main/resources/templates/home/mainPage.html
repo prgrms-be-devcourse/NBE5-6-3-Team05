@@ -68,11 +68,13 @@
       <div id="fortuneModal" class="modal" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
           <span class="close-btn" onclick="closeModal()">&times;</span>
-          <h4 style="color: #fff; margin-bottom: 20px;">오늘의 운세</h4>
+          <h4 style="color: #814700 ; margin-bottom: 20px;">오늘의 운세</h4>
 
           <!-- 운세 텍스트 출력 부분 -->
           <div id="fortuneText">
-            <p>운세를 작성 중...</p>
+            <p id="fortuneMsg1" class="fortune-message" style="display: none;">당신의 오늘을 위한 짧은 안내서입니다.</p>
+            <p id="fortuneMsg2" class="fortune-message" style="display: none;">이 운세가 당신의 하루에 작은 방향이 되길 바랍니다.</p>
+            <p id="fortuneResult" class="fortune-result" style="display: none;"></p> <!-- 서버에서 받아올 운세 텍스트 -->
           </div>
 
           <div style="margin-top: 20px; text-align: center;">
@@ -113,15 +115,47 @@
   function openFortuneModal() {
     document.getElementById("fortuneModal").style.display = "block";
 
-    // Ajax로 내용을 불러오고 싶을 경우 (예시)
-    fetch('/fortune')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("fortuneText").innerHTML = data;
-    })
-    .catch(() => {
-      document.getElementById("fortuneText").innerHTML = "운세를 불러오지 못했습니다.";
-    });
+    const msg1 = document.getElementById("fortuneMsg1");
+    const msg2 = document.getElementById("fortuneMsg2");
+    const result = document.getElementById("fortuneResult");
+
+    // 초기화
+    msg1.style.display = "none";
+    msg2.style.display = "none";
+    result.style.display = "none";
+    result.textContent = "";
+
+    // 1단계: 첫 문장 표시
+    msg1.style.display = "block";
+
+    setTimeout(() => {
+      msg1.style.display = "none";
+      msg2.style.display = "block";
+
+      // 2단계: 두 번째 문장 표시 후
+      setTimeout(() => {
+        msg2.style.display = "none";
+
+        // 서버에서 운세 가져오기
+        fetch('/fortune')
+        .then(response => response.text())
+        .then(data => {
+          result.textContent = data;
+          result.style.display = "block";
+        })
+        .catch(() => {
+          result.textContent = "운세를 불러오지 못했습니다.";
+          result.style.display = "block";
+        });
+
+      }, 2000); // 두 번째 문장 보여주는 시간 (2초)
+
+    }, 2000); // 첫 번째 문장 보여주는 시간 (2초)
+  }
+
+  function openModal() {
+    document.getElementById('myModal').style.display = 'block';
+    document.body.style.overflow = 'hidden'; // 스크롤 방지
   }
 
   // 모달 닫기
@@ -130,21 +164,28 @@
       event.stopPropagation(); // 모달 외부 클릭 방지
     }
     document.getElementById("fortuneModal").style.display = "none";
+    document.body.style.overflow = 'auto';
   }
 
   // 다시 추천받기
   function retryFortune() {
-    const fortuneText = document.getElementById("fortuneText");
+    const result = document.getElementById("fortuneResult");
 
+    // 스타일 클래스 적용 후 운세 텍스트 업데이트
     fetch('/fortune/ai', {
       method: 'POST'
     })
     .then(res => res.text())
     .then(data => {
-      fortuneText.innerHTML = data;
+      result.textContent = data;  // 운세 텍스트를 fortuneResult에 업데이트
+      result.classList.add("fortune-result");  // 'fortune-result' 클래스 적용
+      result.style.display = "block";  // 결과를 보이도록 설정
     })
     .catch(() => {
-      fortuneText.innerHTML = "운세를 불러올 수 없습니다.";
+      result.textContent = "운세를 불러올 수 없습니다.";
+      result.classList.add("fortune-result");  // 'fortune-result' 클래스 적용
+      result.style.display = "block";
     });
   }
+
 </script>

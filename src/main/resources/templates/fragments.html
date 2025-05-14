@@ -216,33 +216,36 @@
       }
 
       .modal {
-        display: none;
+        display: none; /* 기본 숨김 */
         position: fixed;
         z-index: 9999;
         left: 0;
         top: 0;
-        width: 100%;
+        width: 100vw;
         height: 100vh;
         overflow: auto;
-        background-color: rgba(0, 0, 0, 0.6);
+        background-color: rgba(0, 0, 0, 0.8); /* 어두운 반투명 배경 */
       }
 
       .modal-content {
-        background-color: #7c7c7c;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 400px;
+        background-color: #222;
+        margin: 10% auto;
+        padding: 30px;
         border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        text-align: center;
+        height: 50%;
+        width: 80%;
+        color: white;
+        position: relative;
+        z-index: 10000;
       }
 
       .close-btn {
-        color: #aaa;
-        float: right;
+        position: absolute;
+        top: 15px;
+        right: 20px;
         font-size: 28px;
         font-weight: bold;
+        color: #fff;
         cursor: pointer;
       }
 
@@ -320,6 +323,42 @@
       .image {
         width: 300px;
         height: auto;
+      }
+
+      .fortune-message {
+        display: none;
+        font-size: 1.2rem;
+        color: #f0f0f0;
+        text-align: center;
+        font-style: italic;
+        animation: fadeIn 1.2s ease-in-out;
+        margin-bottom: 10px;
+      }
+
+      @keyframes fadeIn {
+        0% { opacity: 0; transform: translateY(10px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+
+      /* 타자기 효과 */
+      @keyframes typewriter {
+        0% { width: 0; }
+        100% { width: 100%; }
+      }
+
+      .fortune-result {
+        display: none;
+        font-size: 1.8rem; /* 큰 폰트 */
+        font-weight: bold;
+        color: #ff8c00; /* 화려한 색상 */
+        text-align: center;
+        font-family: 'Arial', sans-serif; /* 더 모던한 폰트 */
+        white-space: nowrap;
+        overflow: hidden;
+        border-right: .15em solid #ff8c00; /* 타자기 커서 효과 */
+        animation: typewriter 3s steps(30) 1s 1 normal both; /* 타자기 효과 애니메이션 */
+        letter-spacing: 0.1em;
+        text-shadow: 0 0 15px rgba(255, 140, 0, 0.7); /* 빛나는 효과 */
       }
 
     </style>
