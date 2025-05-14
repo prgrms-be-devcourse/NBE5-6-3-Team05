@@ -33,7 +33,7 @@
           </div>
           <div class="item-buttons">
             <a th:href="@{'/admin/books/modify/'+${book.isbn}}">수정</a>
-            <a>삭제</a>
+            <a class="delete-btn" th:attr="data-isbn=${book.isbn}">삭제</a>
           </div>
         </div>
       </div>
@@ -53,5 +53,32 @@
     </div>
   </div>
 </main>
+<div layout:fragment="scripts">
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".delete-btn")
+    .forEach((btn) => {
+      btn.addEventListener("click", async function (event) {
+        event.preventDefault();
+
+        const isbn = btn.dataset.isbn;
+        const url = `http://localhost:8080/api/admin/books/delete/${isbn}`;
+        const response = await fetch(
+            url, {
+              method: 'DELETE'
+            });
+
+        if (response) {
+          alert("정상적으로 삭제되었습니다.");
+          window.location.reload();
+        } else {
+          alert("문제가 발생하였습니다.")
+        }
+      });
+    });
+  });
+</script>
+</div>
 </body>
+
 </html>
