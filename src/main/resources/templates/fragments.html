@@ -16,8 +16,10 @@
         margin: 0;
         padding: 30px;
         font-family: 'Segoe UI', sans-serif;
-        background: linear-gradient( #000000, #545454);
+        background: linear-gradient(#000000, #683997);
         color: white;
+        background-attachment: fixed;
+        background-position: center;
       }
 
       header {
@@ -32,6 +34,7 @@
         font-size: 48px;
         font-weight: bold;
       }
+
       .logo span {
         background: linear-gradient(to bottom, #A64DFF, #6A00FF);
         -webkit-background-clip: text;
@@ -80,7 +83,7 @@
 
       .main-content {
         text-align: center;
-        margin-top: 40px;
+        margin-top: 50px;
       }
 
       .category {
@@ -150,10 +153,175 @@
         z-index: 1;
         position: relative;
       }
+
+      .fancy-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 30px;
+        font-size: 18px;
+        font-weight: 600;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        color: white;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        background-size: 200% auto;
+        text-transform: uppercase;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .fancy-button i {
+        font-size: 20px;
+        transition: transform 0.3s ease;
+      }
+
+      .fancy-button:hover i {
+        transform: rotate(15deg) scale(1.2);
+      }
+
+      .fancy-button:hover {
+        background-position: right center;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+      }
+
+      .red-button {
+        background-image: linear-gradient(to right, #f12711, #f5af19);
+      }
+
+      .purple-button {
+        background-image: linear-gradient(to right, #7F00FF, #E100FF);
+      }
+
+      .buttons {
+        margin: 20px;
+      }
+
+      .content-info {
+        display: none;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        margin-top: 10px;
+        padding-top: 10px;
+        font-size: 14px;
+        color: #fff;
+      }
+
+      .content-title {
+        color: #d4ff47;
+        font-weight: bold;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100vh;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.6);
+      }
+
+      .modal-content {
+        background-color: #7c7c7c;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 400px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        text-align: center;
+      }
+
+      .close-btn {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .close-btn:hover {
+        color: #000;
+      }
+
+      .fancy-button.blue-button {
+        background-color: #3f51b5; /* 예: 인디고 계열 */
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 12px;
+        font-size: 16px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .fancy-button.blue-button:hover {
+        background-color: #303f9f;
+      }
+
+      .search-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 30px;
+        gap: 35px;
+      }
+
+      #search-input {
+        padding: 10px;
+        width: 300px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+
+      #search-input:focus {
+        border-color: #794caf;
+        outline: none;
+        box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #794caf;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      .search-container button:hover {
+        background-color: #794caf;
+
+        button:hover {
+          background-color: #794caf;
+        }
+
+        button:active {
+          background-color: #794caf;
+        }
+      }
+
+      .content-description {
+        margin-top: 30px;
+        font-size: large;
+        font-weight: 600;
+      }
+
       .image {
         width: 300px;
         height: auto;
       }
+
     </style>
 
   </th:block>
@@ -167,7 +335,9 @@
     <div class="header-right">
       <span th:if="${isAuthenticated}" th:text="'안녕하세요, ' + ${username} + '님!'"></span>
       <div class="header-buttons">
-        <button class="mypage-btn" th:if="${isAuthenticated}" th:onclick="|location.href='@{/users}'|">마이페이지</button>
+        <button class="mypage-btn" th:if="${isAuthenticated}"
+                th:onclick="|location.href='@{/users}'|">마이페이지
+        </button>
         <form th:action="@{/logout}" method="post">
           <button class="logout-btn" th:if="${isAuthenticated}">로그아웃</button>
         </form>

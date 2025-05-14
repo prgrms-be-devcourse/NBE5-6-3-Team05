@@ -17,4 +17,29 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
             .setMaxResults(1)
             .getSingleResult();
     }
+
+    @Override
+    public String findPeople() {
+        return em.createQuery(
+                "SELECT b.author FROM Book b ORDER BY b.likeCount DESC", String.class)
+            .setMaxResults(1)
+            .getSingleResult();
+    }
+
+    @Override
+    public String findTitle() {
+        return em.createQuery(
+                "SELECT b.title FROM Book b ORDER BY b.likeCount DESC", String.class)
+            .setMaxResults(1)
+            .getSingleResult();
+    }
+
+    @Override
+    public String findDescription() {
+        return em.createQuery(
+                "SELECT b.description FROM Book b ORDER BY b.likeCount DESC", String.class)
+            .setMaxResults(1)
+            .getSingleResult();
+    }
+
 }

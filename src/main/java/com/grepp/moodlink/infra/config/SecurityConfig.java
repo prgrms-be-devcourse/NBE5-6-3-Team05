@@ -72,6 +72,7 @@ public class SecurityConfig {
                     .requestMatchers(GET, "/member/signup", "/member/signin").permitAll()
                     .requestMatchers(POST, "/member/signin", "/member/signup").permitAll()
                     .requestMatchers("/movies/**").permitAll()
+                    .requestMatchers("/worldcup").permitAll()
                     .requestMatchers(GET, "/mypage").authenticated()
                     .anyRequest().permitAll()
             )
