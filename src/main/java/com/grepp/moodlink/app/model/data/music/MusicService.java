@@ -1,10 +1,14 @@
 package com.grepp.moodlink.app.model.data.music;
 
+import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class MusicService {
 
     private final MusicRepository musicRepository;
+    private final ModelMapper mapper;
 
     public void saveMusic(List<MusicDto> musicDtos) {
 
@@ -33,4 +38,8 @@ public class MusicService {
         }
     }
 
+    public Page<MusicDto> findPaged(Pageable pageable) {
+        return musicRepository.findPaged(pageable)
+            .map(e -> mapper.map(e, MusicDto.class));
+    }
 }

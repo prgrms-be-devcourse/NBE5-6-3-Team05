@@ -11,6 +11,8 @@ import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.app.model.data.movie.MovieService;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
+import com.grepp.moodlink.app.model.data.music.MusicService;
+import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
 import com.grepp.moodlink.infra.payload.PageParam;
 import com.grepp.moodlink.infra.response.PageResponse;
@@ -40,6 +42,7 @@ public class AdminController {
 
     private final BookService bookService;
     private final MovieService movieService;
+    private final MusicService musicService;
 
     // 영화 리스트를 모두 보여주는 화면
     // 관리자 페이지의 기본화면
@@ -65,7 +68,21 @@ public class AdminController {
 
     // 음악 리스트를 보여주는 화면
     @GetMapping("music")
-    public String music(){
+    public String music(Model model, @Valid PageParam param, BindingResult bindingResult){
+
+        if (bindingResult.hasErrors()) {
+            throw new CommonException(ResponseCode.BAD_REQUEST);
+        }
+
+        Pageable pageable = PageRequest.of(param.getPage() - 1, param.getSize());
+        Page<MusicDto> page = musicService.findPaged(pageable);
+
+        if(param.getPage() != 1 && page.getContent().isEmpty()){
+            throw new CommonException(ResponseCode.BAD_REQUEST);
+        }
+
+        PageResponse<MusicDto> response = new PageResponse<>("/admin/music", page, 10);
+        model.addAttribute("page", response);
         return "admin/music";
     }
 
