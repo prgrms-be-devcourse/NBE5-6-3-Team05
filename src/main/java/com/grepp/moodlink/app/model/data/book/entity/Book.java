@@ -26,7 +26,8 @@ public class Book {
     private LocalDate publishedDate;
     @Column(columnDefinition = "TEXT")
     private String description;
-
+    @Column(columnDefinition = "TEXT")
+    private String summary;
     @Column(columnDefinition = "BLOB")
     private byte[] embedding;
     private String genre;

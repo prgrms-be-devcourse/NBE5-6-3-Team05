@@ -38,7 +38,8 @@ public class Movie extends BaseEntity {
     private String description;
     @Column(columnDefinition = "BLOB")
     private byte[] embedding;
-
+    @Column(columnDefinition = "TEXT")
+    private String summary;
 
     private LocalDate releaseDate;
     private LocalDate createdAt;
