@@ -74,8 +74,8 @@ public class BookService {
     }
 
 
-    public List<BookDto> findAll() {
-        return bookRepository.findAll()
+    public List<BookDto> findByActivated() {
+        return bookRepository.findByActivated(true)
             .stream().map(e -> mapper.map(e, BookDto.class))
             .toList();
     }
@@ -106,5 +106,10 @@ public class BookService {
         } catch (IOException e) {
             throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR, e);
         }
+    }
+
+    @Transactional
+    public void deleteBook(String isbn) {
+        bookRepository.findByIsbn(isbn).unActivated();
     }
 }

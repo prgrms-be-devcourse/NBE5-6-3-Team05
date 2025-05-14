@@ -46,7 +46,7 @@ public class AdminController {
     // 도서 리스트를 모두 보여주는 화면
     @GetMapping("books")
     public String books(Model model){
-        List<BookDto> books = bookService.findAll();
+        List<BookDto> books = bookService.findByActivated();
 
         model.addAttribute("books",books);
 
