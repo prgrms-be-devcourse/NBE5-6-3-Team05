@@ -16,13 +16,16 @@ public class GeminiConfig {
     @Value("${openrouter.model}")
     private String model;
 
+    @Value("${openrouter.base-url}")
+    private String url;
+
     @Bean
     public GeminiFortuneAiService geminiService() {
         return AiServices.builder(GeminiFortuneAiService.class)
             .chatLanguageModel(OpenAiChatModel.builder()
                 .apiKey(apiKey)
-                .baseUrl("https://openrouter.ai/api/v1")
                 .modelName(model)
+                .baseUrl(url)
                 .build())
             .build();
     }
