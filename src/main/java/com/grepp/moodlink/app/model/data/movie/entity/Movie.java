@@ -45,4 +45,10 @@ public class Movie extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String thumbnail;
     private Long likeCount;
+
+    private Boolean activated = true;
+
+    public void unActivated() {
+        this.activated = false;
+    }
 }
