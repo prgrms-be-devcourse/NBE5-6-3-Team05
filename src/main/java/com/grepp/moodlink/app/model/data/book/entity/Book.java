@@ -32,4 +32,9 @@ public class Book {
     private String genre;
     private Long likeCount;
 
+    private Boolean activated = true;
+
+    public void unActivated() {
+        this.activated = false;
+    }
 }
