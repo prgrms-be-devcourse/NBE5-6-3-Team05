@@ -12,12 +12,16 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
+import javax.naming.ServiceUnavailableException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +32,7 @@ public class EmbeddingService {
     private final MusicRepository musicRepository;
     private final EmbeddingModel embeddingModel;
     private final KeywordRepository keywordRepository;
+    private final OllamaChatModel ollamaChatModel;
 
     @Transactional
     @Async
@@ -97,99 +102,152 @@ public class EmbeddingService {
         float[] floatEmbedding = embeddingModel.embed(keywords);
         byte[] byteEmbedding = toByteArray(floatEmbedding);
         keywordSelection.setEmbedding(byteEmbedding);
-
+        keywordSelection.setKeywords(keywords);
         keywordRepository.save(keywordSelection);
     }
 
+    @Transactional
     public List<Movie> cosineComputeMovie(String genre, String userId) {
         KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
         byte[] byteEmbedding = keywordSelection.getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
-        List<Movie> movies = null;
-        if (genre.isBlank()){
-             movies = movieRepository.findAll();
-        }else {
-            movies = movieRepository.findByGenreName(genre);
-        }
 
-        PriorityQueue<Map.Entry<String, Float>> pq = new PriorityQueue<>((a, b) -> Float.compare(b.getValue(), a.getValue()));
-        for (Movie movie : movies) {
-            byte[] byteMovie = movie.getEmbedding();
-            float[] floatMovie = toFloatArray(byteMovie);
-            float distance = CosineSimilarity.compute(floatEmbedding, floatMovie);
-            pq.add(new AbstractMap.SimpleEntry<>(movie.getId(), distance));
-        }
+        List<Movie> rawMovies = movieRepository.findByGenreName(genre);
 
-        List<String> recommendedMovieIds = new ArrayList<>();
-        int count = 0;
-        while (!pq.isEmpty() && count < 5) {
-            Map.Entry<String, Float> entry = pq.poll();
-            recommendedMovieIds.add(entry.getKey());
-            count++;
-        }
+        List<Movie> movies = rawMovies.stream()
+                .peek(m -> {
+                })
+                .map(movie -> {
+                    float similarity = CosineSimilarity.compute(
+                            floatEmbedding,
+                            toFloatArray(movie.getEmbedding())
+                    );
+                    return new AbstractMap.SimpleEntry<>(movie, similarity);
+                })
+                .sorted((a, b) -> Float.compare(b.getValue(), a.getValue()))
+                .limit(8)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
 
-        recommendedMovieIds.forEach(System.out::println);
-        return movieRepository.findAllById(recommendedMovieIds);
+        String context = movies.stream()
+                .map(m -> String.format("제목: %s\n줄거리: %s", m.getTitle(), m.getDescription()))
+                .collect(Collectors.joining("\n\n"));
+//        System.out.println("[DEBUG] 컨텍스트:\n" + context);
+
+        String prompt = String.format("""
+        [시스템]
+        - 당신은 한국어 영화 추천 전문가입니다.
+        - 반드시 제공된 영화 목록에서만 추천하세요.
+        - 한국어로 답변하고, 4개를 추천하세요.
+        - 출력 형식:
+            1. 제목: [이유]
+        
+        [키워드]: %s
+        
+        [영화 목록]:
+        %s
+        """,
+                keywordSelection.getKeywords(),
+                context
+        );
+
+        try {
+            String recommendation = ollamaChatModel.call(prompt);
+            System.out.println("[추천 결과]\n" + recommendation);
+        } catch (ResourceAccessException e) {
+            try {
+                throw new ServiceUnavailableException("서비스에 접근할 수 없습니다.");
+            } catch (ServiceUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        return movies;
     }
 
+    @Transactional
     public Object cosineComputeBook(String userId) {
         KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
         byte[] byteEmbedding = keywordSelection.getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
-        List<Book> books = bookRepository.findAll();
-        PriorityQueue<Map.Entry<String, Float>> pq = new PriorityQueue<>((a, b) -> Float.compare(b.getValue(), a.getValue()));
+        List<Book> books = bookRepository.findAll().stream().map(book -> {
+                    float similarity = CosineSimilarity.compute(
+                            floatEmbedding,
+                            toFloatArray(book.getEmbedding())
+                    );
+                    return new AbstractMap.SimpleEntry<>(book, similarity);
+                }).sorted((a, b) -> Float.compare(b.getValue(), a.getValue()))
+                .limit(8)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
 
-        for (Book book : books) {
-            byte[] byteBook = book.getEmbedding();
-            float[] floatBook = toFloatArray(byteBook);
-            float distance = PearsonCorrelation.compute(floatEmbedding, floatBook);
-            pq.add(new AbstractMap.SimpleEntry<>(book.getIsbn(), distance));
+        String context = books.stream()
+                .map(b -> String.format("제목: %s\n책소개: %s", b.getTitle(), b.getDescription()))
+                .collect(Collectors.joining("\n\n"));
+        System.out.println("[DEBUG] 컨텍스트:\n" + context);
+
+        String prompt = String.format("""
+                사용자 키워드: %s
+                다음 도서 8권 중에서 가장 적합한 4개를 추천해주세요:
+                %s
+                """, keywordSelection.getKeywords(), context);
+
+        try {
+            String recommendation = ollamaChatModel.call(prompt);
+            System.out.println("[추천 결과]\n" + recommendation);
+        } catch (ResourceAccessException e) {
+            try {
+                throw new ServiceUnavailableException("서비스에 접근할 수 없습니다.");
+            } catch (ServiceUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
         }
-
-        List<String> recommendedBookIds = new ArrayList<>();
-        int count = 0;
-        while (!pq.isEmpty() && count < 5) {
-            Map.Entry<String, Float> entry = pq.poll();
-            recommendedBookIds.add(entry.getKey());
-            count++;
-        }
-
-        recommendedBookIds.forEach(System.out::println);
-        return bookRepository.findAllById(recommendedBookIds);
+        return books;
     }
 
+    @Transactional
     public Object cosineComputeMusic(String userId) {
         KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
         byte[] byteEmbedding = keywordSelection.getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
-        List<Music> musics = musicRepository.findAll();
-        PriorityQueue<Map.Entry<String, Float>> pq = new PriorityQueue<>((a, b) -> Float.compare(b.getValue(), a.getValue()));
+        List<Music> musics = musicRepository.findAll().stream().map(music -> {
+                    float similarity = CosineSimilarity.compute(
+                            floatEmbedding,
+                            toFloatArray(music.getEmbedding())
+                    );
+                    return new AbstractMap.SimpleEntry<>(music, similarity);
+                }).sorted((a, b) -> Float.compare(b.getValue(), a.getValue()))
+                .limit(8)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
 
-        for (Music music : musics) {
-            byte[] byteMusic = music.getEmbedding();
-            float[] floatMusic = toFloatArray(byteMusic);
-            float cosingSimilarity = CosineSimilarity.compute(floatEmbedding, floatMusic);
-            Map.Entry<String, Float> entry = new AbstractMap.SimpleEntry<>(music.getId(), cosingSimilarity);
+        String context = musics.stream()
+                .map(m -> String.format("제목: %s\n가사: %s", m.getTitle(), m.getLyrics()))
+                .collect(Collectors.joining("\n\n"));
+        System.out.println("[DEBUG] 컨텍스트:\n" + context);
 
-            pq.add(entry);
+        String prompt = String.format("""
+                사용자 키워드: %s
+                다음 노래 중 가장 적합한 4개를 추천해주세요:
+                %s
+                """, keywordSelection.getKeywords(), context);
+
+        try {
+            String recommendation = ollamaChatModel.call(prompt);
+            System.out.println("[추천 결과]\n" + recommendation);
+        } catch (ResourceAccessException e) {
+            try {
+                throw new ServiceUnavailableException("서비스에 접근할 수 없습니다.");
+            } catch (ServiceUnavailableException ex) {
+                throw new RuntimeException(ex);
+            }
         }
-
-        List<String> recommendedMusicIds = new ArrayList<>();
-        int count = 0;
-        while (!pq.isEmpty() && count < 5) {
-            Map.Entry<String, Float> entry = pq.poll();
-            recommendedMusicIds.add(entry.getKey());
-            count++;
-        }
-
-        recommendedMusicIds.forEach(System.out::println);
-        return musicRepository.findAllById(recommendedMusicIds);
+        return musics;
     }
 
     public static Set<Integer> toBinarySet(float[] vector) {
         Set<Integer> set = new HashSet<>();
         for (int i = 0; i < vector.length; i++) {
-            if (vector[i] > 0.5) { // 임계값 설정
+            if (vector[i] > 0.5) {
                 set.add(i);
             }
         }

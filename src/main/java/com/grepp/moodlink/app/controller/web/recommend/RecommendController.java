@@ -11,7 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.ui.Model;
 
 import java.util.List;
 
@@ -45,6 +44,7 @@ public class RecommendController {
         embeddingService.generateEmbeddingKeyword(userId, keywords);
         genre = genre.substring(1);
         System.out.println(genre);
+        System.out.println(keywords);
         session.setAttribute("movies", embeddingService.cosineComputeMovie(genre, userId));
         session.setAttribute("books", embeddingService.cosineComputeBook(userId));
         session.setAttribute("musics", embeddingService.cosineComputeMusic(userId));
