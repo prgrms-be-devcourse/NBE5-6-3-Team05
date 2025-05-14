@@ -7,4 +7,9 @@ public interface MusicRepositoryCustom {
 
     String findTopThumbnail();
 
+    String findPeople();
+
+    String findTitle();
+
+    String findDescription();
 }

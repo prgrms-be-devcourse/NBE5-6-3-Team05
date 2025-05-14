@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>관리자 페이지 - 도서 수정</title>
+  <link rel="stylesheet" th:href="@{/css/admin/contents-add.css}">
+
+</head>
+<main layout:fragment="content">
+  <!-- 돌아가기 버튼 -->
+  <a class="back-btn" th:href="@{/admin/books}">← 돌아가기</a>
+
+  <!-- 중앙 배치 form -->
+  <div class="main-area">
+      <form th:action="@{'/admin/books/modify/'+${book.isbn}}" th:object="${bookModifyRequest}" method="post" enctype="multipart/form-data">
+    <div class="form-section">
+      <h3>도서 정보를 입력해주세요.</h3>
+
+        <div class="info-group">
+
+          <div class="file-field input-field">
+            <div class="btn">
+              <span>File</span>
+              <input type="file" name="image">
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text">
+            </div>
+          </div>
+
+
+          <div>
+            <div class="form-row"><label>제목</label><div th:text="${book.title}"></div></div>
+            <div class="form-row"><label>작가</label><div th:text="${book.author}"></div></div>
+            <div class="form-row"><label>발행일</label><input th:field="*{publishedDate}" th:value="${#temporals.format(publishedDate, 'yyyy-MM-dd')}"  class="input-line" type="date"/></div>
+            <div class="form-row"><label>출판사</label><input th:field="*{publisher}" class="input-line" type="text" /></div>
+          </div>
+        </div>
+
+        <div class="form-row" style="flex-direction: column; align-items: flex-start;">
+          <label>장르</label>
+          <select th:field="*{genre}" class="input-line">
+            <option disabled selected value="">장르 선택</option>
+            <option th:each="gen : ${genres}"
+                    th:value="${gen.name}"
+                    th:text="${gen.name}">
+            </option>
+          </select>
+        </div>
+
+        <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
+          <label>설명</label>
+          <textarea th:field="*{description}" class="textarea"></textarea>
+        </div>
+
+        <button class="submit-btn" type="submit" name="action">등록</button>
+    </div>
+      </form>
+  </div>
+</main>
+</html>

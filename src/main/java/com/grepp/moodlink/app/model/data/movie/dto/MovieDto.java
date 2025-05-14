@@ -28,4 +28,5 @@ public class MovieDto {
     private int voteCount;
     @JsonProperty("genre_names")
     private List<String> genreNames;
+    private Boolean activated;
 }
