@@ -100,7 +100,18 @@ public class MemberController {
 
         String userId = principal.getUsername();
         model.addAttribute("userId", userId);
-        model.addAttribute("username", memberService.GetUsername(userId));
+        Optional<MemberInfoDto> memberInfo = memberService.GetMemberInfo(userId);
+
+        if (memberInfo.isPresent()) {
+            MemberInfoDto info = memberInfo.get();
+            model.addAttribute("userId", info.getId());
+            model.addAttribute("username", info.getUsername());
+            model.addAttribute("countries", info.getCountries());
+            model.addAttribute("periods", info.getPeriods());
+            model.addAttribute("genre", info.getGenre());
+
+        }
+
         return "/users/modify";
 
     }
@@ -122,7 +133,6 @@ public class MemberController {
         try {
             memberService.modifyProfile(userId, request.toDto());
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
             model.addAttribute("error", e.getMessage());
             model.addAttribute("userId", userId);
             return "users/modify";
