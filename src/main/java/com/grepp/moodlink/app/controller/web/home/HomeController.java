@@ -1,4 +1,5 @@
 package com.grepp.moodlink.app.controller.web.home;
+import com.grepp.moodlink.app.model.home.FortuneAiService;
 import com.grepp.moodlink.app.model.home.HomeService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HomeController {
 
     private final HomeService homeService;
+    private final FortuneAiService fortuneAiService;
 
     @GetMapping
     public String mainPage(Model model) {
@@ -36,7 +38,6 @@ public class HomeController {
     @GetMapping("/fortune")
     @ResponseBody
     public String getFortune() {
-        // 간단한 예시. 실제로는 랜덤 운세 등을 줄 수 있음
-        return "오늘은 좋은 일이 생길 거예요! 😊";
+        return fortuneAiService.generateFortune();
     }
 }

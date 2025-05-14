@@ -72,15 +72,19 @@
         오늘의 운세
       </button>
 
-      <div id="fortuneModal" class="modal">
+    <div id="fortuneModal" class="modal">
       <div class="modal-content">
         <span class="close-btn" onclick="closeModal()">&times;</span>
-
         <h4 style="color: #fff; margin-bottom: 20px;">오늘의 운세</h4>
 
-        <!-- 컨트롤러로에서 받아온 내용 표시 -->
         <div id="fortuneText">
           <p>운세를 불러오는 중...</p>
+        </div>
+
+        <div style="margin-top: 20px; text-align: center;">
+          <button id="retryFortuneBtn" class="fancy-button blue-button" onclick="retryFortune()">
+            다시 추천받기
+          </button>
         </div>
       </div>
     </div>
@@ -92,8 +96,9 @@
         추천받기
       </button>
     </div>
-  </div>
+    </div>
 </div>
+
 </body>
 </html>
 
@@ -138,6 +143,26 @@
       } else {
         card.style.display = 'none';
       }
+    });
+  }
+
+  let retryCount = 0;
+  const maxRetry = 2;
+
+  function retryFortune() {
+    if (retryCount >= maxRetry) {
+      document.getElementById("fortuneText").innerHTML = "더 이상 추천받을 수 없습니다.";
+      return;
+    }
+
+    fetch('/fortune/ai') // 이 경로는 백엔드에서 LLM 호출하는 API로 연결해야 해요
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("fortuneText").innerHTML = data;
+      retryCount++;
+    })
+    .catch(() => {
+      document.getElementById("fortuneText").innerHTML = "AI 운세를 불러오지 못했습니다.";
     });
   }
 
