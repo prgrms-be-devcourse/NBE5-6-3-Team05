@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+<div layout:fragment="content">
+  <h1>User List Page</h1>
+
+  <div>아이디</div>
+  <button class="mypage-btn" th:onclick="'location.href=\'' + @{/users/modify} + '\''">
+    정보 수정하기
+  </button>
+  <div th:text="${userId}">이름</div>
+  <div th:text="${username}">유저이름</div>
+  <div th:text="${createdAt}">가입일</div>
+  <div th:text="${updatedAt}">수정일</div>
+  <div th:text="${countries}"> 국가</div>
+  <button class="mypage-btn" th:onclick="'location.href=\'' + @{/users/like} + '\''">
+    좋아요 목록조회
+  </button>
+
+  <div>
+    <button class="mypage-btn" onclick="loadTab('books')">도서</button>
+    <button class="mypage-btn" onclick="loadTab('movies')">영화</button>
+    <button class="mypage-btn" onclick="loadTab('musics')">음악</button>
+  </div>
+
+  <!-- 도서 -->
+  <div id="books" class="like-item" style="display: none;">
+    <h2 th:if="${!#lists.isEmpty(LikeBookGenre)}" th:text="${username}+'님이 가장 선호하는 장르는'"></h2>
+    <h2 th:if="${#lists.isEmpty(LikeBookGenre)}" th:text="${username} + '님이 아직 추천받고 좋아한 책이 없어요.'"></h2>
+    <canvas id="bookChart" width="300" height="300"></canvas>
+
+    <h2>전체 사용자가 가장 선호하는 장르는</h2>
+    <canvas id="popularBookChart" width="300" height="300"></canvas>
+  </div>
+
+  <!-- 영화 -->
+  <div id="movies" class="like-item" style="display: none;">
+    <h2 th:if="${!#lists.isEmpty(LikeMovieGenre)}" th:text="${username}+'님이 가장 선호하는 장르는'"></h2>
+    <h2 th:if="${#lists.isEmpty(LikeMovieGenre)}" th:text="${username} + '님이 아직 추천받고 좋아한 영화가 없어요.'"></h2>
+    <canvas id="movieChart" width="300" height="300"></canvas>
+
+    <h2>전체 사용자가 가장 선호하는 장르는</h2>
+    <canvas id="popularMovieChart" width="300" height="300"></canvas>
+  </div>
+
+  <!-- 음악 -->
+  <div id="musics" class="like-item" style="display: none;">
+    <h2 th:if="${!#lists.isEmpty(LikeMusicGenre)}" th:text="${username}+'님이 가장 선호하는 장르는'"></h2>
+    <h2 th:if="${#lists.isEmpty(LikeMusicGenre)}" th:text="${username} + '님이 아직 추천받고 좋아한 음악이 없어요.'"></h2>
+    <canvas id="musicChart" width="300" height="300"></canvas>
+
+    <h2>전체 사용자가 가장 선호하는 장르는</h2>
+    <canvas id="popularMusicChart" width="300" height="300"></canvas>
+  </div>
+
+  <!-- 탭 & 차트 JS -->
+  <script th:inline="javascript">
+    const likeMusicGenre = /*[[${LikeMusicGenre}]]*/ [];
+    const mostLikeMusicGenre = /*[[${mostLikeMusicGenre}]]*/ [];
+    const likeMovieGenre = /*[[${LikeMovieGenre}]]*/ [];
+    const mostLikeMovieGenre = /*[[${mostLikeMovieGenre}]]*/ [];
+    const likeBookGenre = /*[[${LikeBookGenre}]]*/ [];
+    const mostLikeBookGenre = /*[[${mostLikeBookGenre}]]*/ [];
+
+    function extractData(list) {
+      if (!Array.isArray(list)) return { labels: [], values: [] };
+      return {
+        labels: list.map(item => item.genre),
+        values: list.map(item => item.count)
+      };
+    }
+
+    const musicData = extractData(likeMusicGenre);
+    const popularMusicData = extractData(mostLikeMusicGenre);
+    const movieData = extractData(likeMovieGenre);
+    const popularMovieData = extractData(mostLikeMovieGenre);
+    const bookData = extractData(likeBookGenre);
+    const popularBookData = extractData(mostLikeBookGenre);
+
+
+
+    const colors = {
+      blue: { bg: 'rgba(54, 162, 235, 0.2)', border: 'rgba(54, 162, 235, 1)' },
+      red: { bg: 'rgba(255, 99, 132, 0.2)', border: 'rgba(255, 99, 132, 1)' },
+      green: { bg: 'rgba(75, 192, 192, 0.2)', border: 'rgba(75, 192, 192, 1)' },
+      orange: { bg: 'rgba(255, 159, 64, 0.2)', border: 'rgba(255, 159, 64, 1)' },
+      purple: { bg: 'rgba(153, 102, 255, 0.2)', border: 'rgba(153, 102, 255, 1)' },
+      yellow: { bg: 'rgba(255, 206, 86, 0.2)', border: 'rgba(255, 206, 86, 1)' }
+    };
+
+    function makeRadarChart(canvasId, label, data, color) {
+      const ctx = document.getElementById(canvasId)?.getContext('2d');
+      if (!ctx || data.labels.length === 0) return;
+      return new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: data.labels,
+          datasets: [{
+            label: label,
+            data: data.values,
+            fill: true,
+            backgroundColor: color.bg,
+            borderColor: color.border,
+            pointBackgroundColor: '#000000',
+            pointBorderColor: '#FFFFFF',
+            pointHoverBackgroundColor: '#FFFFFF',
+            pointHoverBorderColor: color.border
+          }]
+        },
+        options: {
+          responsive: false,
+          scales: {
+            r: {
+              angleLines: { display: true },
+              suggestedMin: 0,
+              suggestedMax: data.values/2,
+              ticks:{color : 'rgba(255, 255, 255, 0.7)', backdropColor : 'rgba(255, 255, 255, 0)'},
+              pointLabels: {
+                font: { size: 14 },
+                color: '#FFFFFF',
+
+              },
+
+            }
+
+          },
+          plugins: {
+            legend: { display: false },
+            title: { display: false }
+
+
+          }
+        }
+      });
+    }
+
+    let isChartInitialized = {
+      books: false,
+      movies: false,
+      musics: false
+    };
+
+    function loadTab(tabName) {
+      const tabs = document.querySelectorAll('.like-item');
+      tabs.forEach(tab => tab.style.display = 'none');
+      document.getElementById(tabName).style.display = 'block';
+
+      if (!isChartInitialized[tabName]) {
+        if (tabName === 'books') {
+          makeRadarChart("bookChart", "내 책 선호", bookData, colors.purple);
+          makeRadarChart("popularBookChart", "인기 책 장르", popularBookData, colors.yellow);
+        }
+        if (tabName === 'movies') {
+          makeRadarChart("movieChart", "내 영화 선호", movieData, colors.green);
+          makeRadarChart("popularMovieChart", "인기 영화 장르", popularMovieData, colors.orange);
+        }
+        if (tabName === 'musics') {
+          makeRadarChart("musicChart", "내 음악 선호", musicData, colors.blue);
+          makeRadarChart("popularMusicChart", "인기 음악 장르", popularMusicData, colors.red);
+        }
+        isChartInitialized[tabName] = true;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      loadTab('books'); // 기본 탭 오픈
+    });
+  </script>
+</div>
+</body>
+</html>
