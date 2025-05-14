@@ -5,6 +5,7 @@ import com.grepp.moodlink.app.model.data.book.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BookRepository extends JpaRepository<Book, Long>, BookRepositoryCustom {
 

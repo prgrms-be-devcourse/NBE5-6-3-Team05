@@ -12,6 +12,12 @@ public interface BookRepositoryCustom {
 
     String findTopThumbnail();
 
+    String findPeople();
+
+    String findTitle();
+
+    String findDescription();
+
     void updateBook(BookDto book);
 
     Page<Book> findPaged(Pageable pageable);
