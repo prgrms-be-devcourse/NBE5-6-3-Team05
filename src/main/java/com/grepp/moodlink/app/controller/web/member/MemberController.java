@@ -60,6 +60,9 @@ public class MemberController {
             model.addAttribute("createdAt", info.getCreatedAt());
             model.addAttribute("updatedAt", info.getUpdatedAt());
             model.addAttribute("countries", info.getCountries());
+            model.addAttribute("periods", info.getPeriods());
+            model.addAttribute("genre", info.getGenre());
+
         }
 
         // 좋아하는 장르 보여주는 로직

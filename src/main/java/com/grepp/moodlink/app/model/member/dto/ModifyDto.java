@@ -11,7 +11,9 @@ public class ModifyDto {
     private String username;
     private String currentPassword;
     private String newPassword;
-
+    private String genre;
+    private String periods;
+    private String countries;
 
 
 

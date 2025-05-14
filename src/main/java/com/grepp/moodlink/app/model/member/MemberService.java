@@ -58,6 +58,14 @@ public class MemberService {
             member.setUsername(dto.getUsername());
         }
 
+        if (dto.getGenre() != null && !dto.getGenre().isBlank()) {
+            member.setGenre(dto.getGenre());
+        }
+
+        if (dto.getPeriods() != null && !dto.getPeriods().isBlank()) {
+            member.setPeriods(dto.getPeriods());
+        }
+
         member.setUpdatedAt(LocalDate.now());
 
         memberRepository.save(member);
