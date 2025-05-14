@@ -1,9 +1,16 @@
 package com.grepp.moodlink.app.model.data.music;
 
+import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +24,8 @@ public class MusicService {
 
         for (MusicDto dto : musicDtos) {
             Music music = new Music();
-            music.setId(String.valueOf(dto.getId()));
+            long count = musicRepository.count();
+            music.setId("S" + count);
             music.setTitle(dto.getTitle());
             music.setGenre(dto.getGenre());
             music.setSinger(dto.getSinger());
@@ -32,4 +40,19 @@ public class MusicService {
         }
     }
 
+    public List<Music> parseRecommend(String musicResult) {
+        Pattern pattern = Pattern.compile("\"([^\"]+)\"");
+        Matcher matcher = pattern.matcher(musicResult);
+
+        List<String> recommendedTitles = new ArrayList<>();
+        while (matcher.find()) {
+            recommendedTitles.add(matcher.group(1).trim());
+        }
+        return recommendedTitles.stream()
+                .map(title -> musicRepository.findByTitleIgnoreCaseContaining(title.replaceAll("\\s+", " ").trim()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .distinct()
+                .collect(Collectors.toList());
+    }
 }

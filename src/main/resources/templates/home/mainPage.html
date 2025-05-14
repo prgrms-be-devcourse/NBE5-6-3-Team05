@@ -7,20 +7,138 @@
 <body>
 <div layout:fragment="content">
   <div class="main-content">
-  <h2>오늘의 기분, 하나의 링크로 영화·도서·음악을 만나보세요.</h2>
-  <div class="category">
-    <div><img src="/img/music.jpg" alt="음악"><p>음악</p></div>
-    <div><img src="/img/movie.jpg" alt="영화"><p>영화</p></div>
-    <div><img src="/img/book.jpg" alt="도서"><p>도서</p></div>
-  </div>
-  <p><i>moodlink 이용자들의 추천 콘텐츠 입니다.</i></p>
-  <div class="buttons">
-    <button style="background-color: darkred; cursor: pointer" >월드컵</button>
-  </div>
-  <div class="buttons">
-    <button style="cursor: pointer" th:onclick="|location.href='@{/recommend}'|">추천받기</button>
-  </div>
+    <div class="search-container">
+      <input type="text" id="search-input" placeholder="원하는 음악,영화,도서를 찾아보세요!" oninput="filterContent()">
+      <button onclick="filterContent()">검색</button>
+    </div>
+
+    <h2>오늘의 기분, 하나의 링크로 영화·도서·음악을 만나보세요.</h2>
+
+    <div class="category">
+
+      <div class="category-card" onclick="showContentInfo('music')">
+        <img th:src="@{${thumbnail[0]}}" alt="음악">
+        <p>음악</p>
+        <div class="content-info" id="music-info">
+          <h6 class="content-title" th:text="${people[0]}"></h6>
+          <ul>
+            <li th:text="${title[0]}"></li>
+<!--            <li th:text="${description[0]}"></li>-->
+            <br><br>
+          </ul>
+        </div>
+      </div>
+
+
+
+
+      <div class="category-card" onclick="showContentInfo('movie')">
+        <img th:src="@{${thumbnail[1]}}" alt="영화">
+        <p>영화</p>
+        <div class="content-info" id="movie-info">
+          <h6 class="content-title" th:text="${title[1]}"></h6>
+          <ul>
+<!--                        <li th:text="${description[1]}"></li>-->
+            <br>
+          </ul>
+        </div>
+      </div>
+
+
+      <div class="category-card" onclick="showContentInfo('book')">
+        <img th:src="@{${thumbnail[2]}}" alt="도서">
+        <p>도서</p>
+        <div class="content-info" id="book-info">
+          <h6 class="content-title" th:text="${people[1]}"></h6>
+          <ul>
+            <li th:text="${title[2]}"></li>
+<!--                        <li th:text="${description[2]}"></li>-->
+            <br><br>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <p class="content-description"><i>moodlink 이용자들의 추천 콘텐츠 입니다.</i></p>
+
+    <div class="buttons">
+      <button style="margin-right: 15px" class="fancy-button red-button" th:onclick="|location.href='@{/worldcup}'|">
+        <i class="material-icons">sports_esports</i>
+        월드컵
+      </button>
+
+      <button class="fancy-button blue-button" onclick="openFortuneModal()">
+        <i class="material-icons">auto_awesome</i>
+        오늘의 운세
+      </button>
+
+      <div id="fortuneModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+
+        <h4 style="color: #fff; margin-bottom: 20px;">오늘의 운세</h4>
+
+        <!-- 컨트롤러로에서 받아온 내용 표시 -->
+        <div id="fortuneText">
+          <p>운세를 불러오는 중...</p>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="buttons">
+      <button class="fancy-button purple-button" th:onclick="|location.href='@{/recommend}'|">
+        <i class="material-icons">stars</i>
+        추천받기
+      </button>
+    </div>
   </div>
 </div>
 </body>
 </html>
+
+<script>
+  function showContentInfo(id) {
+    const info = document.getElementById(id + '-info');
+    if (info.style.display === 'block') {
+      info.style.display = 'none';
+    } else {
+      // 모든 다른 정보 숨기기
+      document.querySelectorAll('.content-info').forEach(el => el.style.display = 'none');
+      info.style.display = 'block';
+    }
+  }
+
+  function openFortuneModal() {
+    document.getElementById("fortuneModal").style.display = "block";
+
+    // Ajax로 내용을 불러오고 싶을 경우 (예시)
+    fetch('/fortune')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("fortuneText").innerHTML = data;
+    })
+    .catch(() => {
+      document.getElementById("fortuneText").innerHTML = "운세를 불러오지 못했습니다.";
+    });
+  }
+
+  function closeModal() {
+    document.getElementById("fortuneModal").style.display = "none";
+  }
+
+  function filterContent() {
+    const searchInput = document.getElementById('search-input').value.toLowerCase();
+    const categories = document.querySelectorAll('.category-card');
+
+    categories.forEach(function(card) {
+      const category = card.getAttribute('data-category').toLowerCase();
+      if (category.includes(searchInput)) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+</script>

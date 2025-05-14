@@ -36,14 +36,19 @@ public class Movie extends BaseEntity {
     private Set<Genre> genres = new HashSet<>();
     @Column(columnDefinition = "TEXT")
     private String description;
+    @Column(columnDefinition = "BLOB")
+    private byte[] embedding;
 
-//    @Column(columnDefinition = "vector")
-//    @JdbcTypeCode(SqlTypes.VECTOR)
-//    @Array(length = 3)
-//    private float[] embedding;
+
     private LocalDate releaseDate;
     private LocalDate createdAt;
     @Column(columnDefinition = "TEXT")
     private String thumbnail;
     private Long likeCount;
+
+    private Boolean activated = true;
+
+    public void unActivated() {
+        this.activated = false;
+    }
 }

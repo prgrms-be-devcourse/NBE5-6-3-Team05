@@ -1,6 +1,15 @@
 package com.grepp.moodlink.app.model.data.music;
 
-public interface MusicRepositoryCustom {
-    String findThumbnailById(String id);
+import org.springframework.stereotype.Repository;
 
+@Repository
+public interface MusicRepositoryCustom {
+
+    String findTopThumbnail();
+
+    String findPeople();
+
+    String findTitle();
+
+    String findDescription();
 }
