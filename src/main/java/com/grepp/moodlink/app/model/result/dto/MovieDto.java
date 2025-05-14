@@ -12,4 +12,9 @@ public class MovieDto {
     private String externalLink;
     private boolean status;
 
+    public MovieDto(String id, String name, String imgUrl) {
+        this.id = id;
+        this.name = name;
+        this.imgUrl = imgUrl;
+    }
 }

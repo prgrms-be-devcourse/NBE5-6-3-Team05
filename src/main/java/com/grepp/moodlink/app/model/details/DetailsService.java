@@ -4,7 +4,7 @@ package com.grepp.moodlink.app.model.details;
 import com.grepp.moodlink.app.model.details.dto.BookDetailsDto;
 import com.grepp.moodlink.app.model.details.dto.MovieDetailsDto;
 import com.grepp.moodlink.app.model.details.dto.SongDetailsDto;
-import com.grepp.moodlink.app.model.like.LikeService;
+import com.grepp.moodlink.app.model.like.LikesService;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ public class DetailsService {
 
 
     // db에서 가져오자. 현재는 likeService 내부의 like상태를 가져와 쓰는중
-    private final LikeService likeService;
+    private final LikesService likeService;
 
     public BookDetailsDto getBookDetails(String id) {
         // db에서 가져오기

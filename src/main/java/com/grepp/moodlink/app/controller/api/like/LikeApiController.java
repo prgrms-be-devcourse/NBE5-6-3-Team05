@@ -2,7 +2,7 @@ package com.grepp.moodlink.app.controller.api.like;
 
 import com.grepp.moodlink.app.controller.api.like.payload.ToggleRequest;
 import com.grepp.moodlink.app.controller.api.like.payload.ToggleResponse;
-import com.grepp.moodlink.app.model.like.LikeService;
+import com.grepp.moodlink.app.model.like.LikesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/like")
 public class LikeApiController {
 
-    private final LikeService likeService;
+    private final LikesService likeService;
 
     @PostMapping("/book/toggle")
     public ResponseEntity<ToggleResponse> toggleBook(@RequestBody ToggleRequest request) {

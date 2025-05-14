@@ -12,4 +12,9 @@ public class SongDto {
     private String externalLink;
     private boolean status;
 
+    public SongDto(String id, String name, String imgUrl) {
+        this.id = id;
+        this.name = name;
+        this.imgUrl = imgUrl;
+    }
 }

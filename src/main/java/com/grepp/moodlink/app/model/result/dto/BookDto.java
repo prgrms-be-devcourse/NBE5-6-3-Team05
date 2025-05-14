@@ -12,4 +12,9 @@ public class BookDto {
     private String externalLink;
     private boolean status;
 
+    public BookDto(String id, String name, String imgUrl) {
+        this.id = id;
+        this.name = name;
+        this.imgUrl = imgUrl;
+    }
 }

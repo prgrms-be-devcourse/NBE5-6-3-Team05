@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LikeService {
+public class LikesService {
 
     // db에서 상태를 가져오자. 현재는 map을 통해 확인중
     private final Map<String, Boolean> likeMovieStatusMap = new ConcurrentHashMap<>();
