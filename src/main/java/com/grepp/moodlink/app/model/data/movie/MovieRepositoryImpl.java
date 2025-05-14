@@ -17,4 +17,20 @@ public class MovieRepositoryImpl implements MovieRepositoryCustom {
             .setMaxResults(1)
             .getSingleResult();
     }
+
+    @Override
+    public String findTitle() {
+        return em.createQuery(
+                "SELECT m.title FROM Movie m ORDER BY m.likeCount DESC", String.class)
+            .setMaxResults(1)
+            .getSingleResult();
+    }
+
+    @Override
+    public String findDescription() {
+        return em.createQuery(
+                "SELECT m.description FROM Movie m ORDER BY m.likeCount DESC", String.class)
+            .setMaxResults(1)
+            .getSingleResult();
+    }
 }

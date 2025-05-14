@@ -17,4 +17,25 @@ public class MusicRepositoryImpl implements MusicRepositoryCustom {
             .setMaxResults(1)
             .getSingleResult();
     }
+
+    @Override
+    public String findPeople() {
+        return em.createQuery("select s.singer from Music s ORDER BY s.likeCount DESC", String.class)
+            .setMaxResults(1)
+            .getSingleResult();
+    }
+
+    @Override
+    public String findTitle() {
+        return em.createQuery("select s.title from Music s ORDER BY s.likeCount DESC", String.class)
+            .setMaxResults(1)
+            .getSingleResult();
+    }
+
+    @Override
+    public String findDescription() {
+        return em.createQuery("select s.lyrics from Music s ORDER BY s.likeCount DESC", String.class)
+            .setMaxResults(1)
+            .getSingleResult();
+    }
 }
