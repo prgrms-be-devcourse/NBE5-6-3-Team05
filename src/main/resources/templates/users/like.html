@@ -23,47 +23,92 @@
 
 
   </div>
-  <table id="books" class="like-item">
+  <div id="books" class="like-item">
     <h2>도서</h2>
-    <div th:each="book : ${likedbooks}">
-      <h3 th:text="${book.title}"></h3>
-      <h3 th:text="${book.isbn}"></h3>
-      <img th:src="${book.image}" class="image">
-      <p th:text="${book.author}"></p>
-      <p th:text="${book.publisher}"></p>
-      <p th:text="${book.publishedDate}"></p>
-      <p th:text="${book.genre}"></p>
-      <p th:text="${book.description}"></p>
+    <table>
+      <thead>
+      <tr>
+        <th>제목</th>
+        <th>ISBN</th>
+        <th>이미지</th>
+        <th>저자</th>
+        <th>출판사</th>
+        <th>출판일</th>
+        <th>장르</th>
+        <th>설명</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="book : ${likedbooks}">
+        <td th:text="${book.title}"></td>
+        <td th:text="${book.isbn}"></td>
+        <td><img th:src="${book.image}" class="image" width="100"></td>
+        <td th:text="${book.author}"></td>
+        <td th:text="${book.publisher}"></td>
+        <td th:text="${book.publishedDate}"></td>
+        <td th:text="${book.genre}"></td>
+        <td th:text="${book.description}"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 
 
-    </div>
-  </table>
   <div id="movies" class="like-item">
     <h2>영화</h2>
-    <div th:each="movie : ${likedmovies}">
-      <h3 th:text="${movie.title}"></h3>
+    <table>
+      <thead>
+      <tr>
+        <th>제목</th>
+        <th>썸네일</th>
+        <th>설명</th>
+        <th>장르</th>
+        <th>개봉일</th>
 
-      <p th:text="${movie.description}"></p>
-      <ul>
-        <li th:each="genre : ${movie.genres}" th:text="${genre.name}"></li>
-      </ul>
-      <p th:text="${movie.releaseDate}"></p>
-      <img th:src="${movie.thumbnail}" class="image">
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="movie : ${likedmovies}">
+        <td th:text="${movie.title}"></td>
+        <td><img th:src="${movie.thumbnail}" class="image" width="100"></td>
+        <td th:text="${movie.description}"></td>
+        <td>
+          <ul>
+            <li th:each="genre : ${movie.genres}" th:text="${genre.name}"></li>
+          </ul>
+        </td>
+        <td th:text="${movie.releaseDate}"></td>
 
-    </div>
+      </tr>
+      </tbody>
+    </table>
   </div>
   <div id="musics" class="like-item">
     <h2>음악</h2>
-    <div th:each="music : ${likedmusics}">
-      <h3 th:text="${music.title}"></h3>
-      <img th:src="${music.thumbnail}" class="image">
-      <p th:text="${music.singer}"></p>
-      <p th:text="${music.genre}"></p>
-      <p th:text="${music.description}"></p>
-      <p th:text="${music.lyrics}"></p>
-      <p th:text="${music.releaseDate}"></p>
-
-    </div>
+    <table>
+      <thead>
+      <tr>
+        <th>제목</th>
+        <th>썸네일</th>
+        <th>가수</th>
+        <th>장르</th>
+        <th>설명</th>
+        <th>가사</th>
+        <th>발매일</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="music : ${likedmusics}">
+        <td th:text="${music.title}"></td>
+        <td><img th:src="${music.thumbnail}" class="image" width="100"></td>
+        <td th:text="${music.singer}"></td>
+        <td th:text="${music.genre}"></td>
+        <td th:text="${music.description}"></td>
+        <td th:text="${music.lyrics}"></td>
+        <td th:text="${music.releaseDate}"></td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 
 
@@ -83,8 +128,6 @@
     });
   </script>
 
-
-</div>
 
 </body>
 </html>

@@ -190,7 +190,7 @@ public class LikeService {
             Long likeCount = movie.getLikeCount();
             for (Genre genre : genres) {
                 String genreName = genre.getName();
-                if (genreName != null && !genreName.isBlank()) {
+                if (genreName != null && !genreName.isBlank() && likeCount != null) {
                     genreCount.put(genreName, genreCount.getOrDefault(genreName, 0L) + likeCount);
                 }
             }
@@ -233,7 +233,7 @@ public class LikeService {
         for (Music music : musics) {
             String genre = music.getGenre();
             Long likeCount = music.getLikeCount();
-            if (genre != null && !genre.isBlank()) {
+            if (genre != null && !genre.isBlank() && likeCount != null) {
                 genreCount.put(genre, genreCount.getOrDefault(genre, 0L) + likeCount);
             }
         }
@@ -249,6 +249,7 @@ public class LikeService {
     @Transactional
     public List<LikeGenreResponse> getPersonalLikeBookGenre(String userId) {
         List<BookDto> books = getUserLikedBooks(userId);
+        log.info("bookDto:{}", books);
 
         Map<String, Long> genreCount = new HashMap<>();
 
@@ -275,7 +276,7 @@ public class LikeService {
         for (Book book : books) {
             String genre = book.getGenre();
             Long likeCount = book.getLikeCount();
-            if (genre != null && !genre.isBlank()) {
+            if (genre != null && !genre.isBlank() && likeCount != null) {
                 genreCount.put(genre, genreCount.getOrDefault(genre, 0L) + likeCount);
             }
         }

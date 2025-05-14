@@ -22,6 +22,7 @@ public class BookDto {
     private LocalDate publishedDate;
     private String description;
     private String genre;
+    private Long LikeCount;
 
     public static BookDto toDto(Book book) {
         BookDto dto = new BookDto();
@@ -33,6 +34,7 @@ public class BookDto {
         dto.setPublishedDate(book.getPublishedDate());
         dto.setDescription(book.getDescription());
         dto.setGenre(book.getGenre());
+        dto.setLikeCount(book.getLikeCount());
 
         return dto;
     }
