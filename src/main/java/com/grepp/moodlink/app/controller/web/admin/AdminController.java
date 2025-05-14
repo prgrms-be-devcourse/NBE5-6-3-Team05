@@ -7,10 +7,16 @@ import com.grepp.moodlink.app.model.data.book.BookService;
 import com.grepp.moodlink.app.model.data.book.code.Genre;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
+import com.grepp.moodlink.infra.payload.PageParam;
+import com.grepp.moodlink.infra.response.PageResponse;
+import com.grepp.moodlink.infra.response.ResponseCode;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,19 +43,29 @@ public class AdminController {
         return "admin/movies";
     }
 
-    // 음악 리스트를 모두 보여주는 화면
+    // 음악 리스트를 보여주는 화면
     @GetMapping("music")
     public String music(){
         return "admin/music";
     }
 
-    // 도서 리스트를 모두 보여주는 화면
+    // 도서 리스트를 보여주는 화면
     @GetMapping("books")
-    public String books(Model model){
-        List<BookDto> books = bookService.findByActivated();
+    public String books(Model model, @Valid PageParam param, BindingResult bindingResult){
 
-        model.addAttribute("books",books);
+        if (bindingResult.hasErrors()) {
+            throw new CommonException(ResponseCode.BAD_REQUEST);
+        }
 
+        Pageable pageable = PageRequest.of(param.getPage() - 1, param.getSize());
+        Page<BookDto> page = bookService.findPaged(pageable);
+
+        if(param.getPage() != 1 && page.getContent().isEmpty()){
+            throw new CommonException(ResponseCode.BAD_REQUEST);
+        }
+
+        PageResponse<BookDto> response = new PageResponse<>("/admin/books", page, 10);
+        model.addAttribute("page", response);
         return "admin/books";
     }
 

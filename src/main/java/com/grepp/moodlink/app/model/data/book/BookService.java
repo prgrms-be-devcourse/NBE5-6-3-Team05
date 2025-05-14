@@ -11,6 +11,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -80,6 +82,12 @@ public class BookService {
             .toList();
     }
 
+    public Page<BookDto> findPaged(Pageable pageable) {
+        return bookRepository.findPaged(pageable)
+            .map(e -> mapper.map(e, BookDto.class));
+    }
+
+
     public BookDto findByIsbn(String isbn) {
         return mapper.map(bookRepository.findByIsbn(isbn), BookDto.class);
     }
@@ -98,7 +106,7 @@ public class BookService {
             }
 
             // 업데이트
-            bookRepositoryImpl.updateBook(dto);
+            bookRepository.updateBook(dto);
 
             log.info("{}",dto);
 

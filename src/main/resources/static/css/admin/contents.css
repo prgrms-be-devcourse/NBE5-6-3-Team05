@@ -87,6 +87,16 @@ body {
   color: white;
 }
 
+.description-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;   /* ⬅ 2줄까지만 표시 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4em;
+  max-height: 2.8em;       /* line-height × 줄 수 */
+}
+
 .pagination {
   text-align: center;
   margin-top: 2rem;
@@ -101,10 +111,18 @@ body {
   text-decoration: none;
 }
 
-.pagination .active {
-  background: linear-gradient(to right, #A64DFF, #6A00FF);
+.pagination li.active {
+   background-color: transparent;
 }
 
+.active a {
+  margin: 0 5px;
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
+  background: linear-gradient(to right, #A64DFF, #6A00FF);
+  color: white;
+  text-decoration: none;
+}
 .empty-message {
   text-align: center;
   padding: 3rem;
