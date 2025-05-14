@@ -45,7 +45,12 @@ public class EmbeddingService {
 
             byte[] byteEmbedding = toByteArray(floatEmbedding);
             movie.setEmbedding(byteEmbedding);
-
+            String prompt = String.format(
+                    "영화줄거리를 보고 한두 문장으로 요약해줘. 핵심 주제, 분위기, 특징을 중심으로 간결하게 써줘.\n\n[설명]: %s",
+                    movie.getDescription()
+            );
+            String summary = ollamaChatModel.call(prompt);
+            movie.setSummary(summary);
             movieRepository.save(movie);
         }
     }
@@ -61,7 +66,13 @@ public class EmbeddingService {
 
            byte[] byteEmbedding = toByteArray(floatEmbedding);
             book.setEmbedding(byteEmbedding);
+            String prompt = String.format(
+                    "책소개를 보고 한두 문장으로 요약해줘. 핵심 주제, 분위기, 특징을 중심으로 간결하게 써줘.\n\n[설명]: %s",
+                    book.getDescription()
+            );
+            String summary = ollamaChatModel.call(prompt);
 
+            book.setSummary(summary);
             bookRepository.save(book);
         }
     }
@@ -77,6 +88,13 @@ public class EmbeddingService {
 
             byte[] byteEmbedding = toByteArray(floatEmbedding);
             music.setEmbedding(byteEmbedding);
+            String prompt = String.format(
+                    "가사를 보고 한두 문장으로 요약해줘. 핵심 주제, 분위기, 특징을 중심으로 간결하게 써줘.\n\n[설명]: %s",
+                    music.getLyrics()
+            );
+            String summary = ollamaChatModel.call(prompt);
+
+            music.setSummary(summary);
 
             musicRepository.save(music);
         }
@@ -130,16 +148,15 @@ public class EmbeddingService {
                 .collect(Collectors.toList());
 
         String context = movies.stream()
-                .map(m -> String.format("제목: %s\n줄거리: %s", m.getTitle(), m.getDescription()))
+                .map(m -> String.format("제목: %s\n영화소개: %s", m.getTitle(), m.getSummary()))
                 .collect(Collectors.joining("\n\n"));
-        System.out.println(context);
+//        System.out.println(context);
 
-//        return "[ 추천 결과 ]\n" +
-//                "1. \"봄 여름 가을 겨울 그리고 봄\" : 이 영화는 사랑과 죄책감, 복수와 사회적 배려에 대한 심각하고 진정한 의미를 담은 작품으로, 나의 지금 상황인 '혼자'와 '밤' 때문에 더욱 감동적이라고 생각됩니다.\n" +
-//                "2. \"소원\" : 이 영화는 어린 아이의 상처를 받은 일에 대한 희망을 찾으려는 모습에, '지칫' 때문에 더욱 감동적이라고 생각됩니다.\n" +
-//                "3. \"복수는 나의 것\" : 이 영화는 혼자서 지내는 상황에서, '위로'가 필요한 상황이라면 좋은 선택이 될 것입니다. 숙희의 강인함과 결단력을 보며, 나의 겁을 덜어주는 영화가 되었습니다.\n" +
-//                "4. \"암살\" : 이 영화는 '비'가 오는 날씨에서, '같이 있는 사람'이 없는 상황인데도 불구하고 강인함과 용기를 느껴보고자 하시면 좋은 선택입니다. 안옥윤, 속사포, 황덕삼의 용기와 강인함을 감상할 수 있습니다.\n";
-        return llmRecommend("영화", keywordSelection.getKeywords(), context);
+        String result = llmRecommend("영화", keywordSelection.getKeywords(), context);
+
+        System.out.println(result);
+//        return llmRecommend("영화", keywordSelection.getKeywords(), context);
+        return "범죄도시 4";
     }
 
     @Transactional
@@ -159,11 +176,15 @@ public class EmbeddingService {
                 .collect(Collectors.toList());
 
         String context = books.stream()
-                .map(b -> String.format("제목: %s\n책소개: %s", b.getTitle(), b.getDescription()))
+                .map(b -> String.format("제목: %s\n책소개: %s", b.getTitle(), b.getSummary()))
                 .collect(Collectors.joining("\n\n"));
+//        System.out.println(context);
 
-//        return llmRecommend("도서", keywordSelection.getKeywords(), context);
-        return "";
+        String result = llmRecommend("도서", keywordSelection.getKeywords(), context);
+
+        System.out.println(result);
+
+        return "ㅁㄴㄹㄴㅁㄹㅇ";
     }
 
     @Transactional
@@ -183,12 +204,16 @@ public class EmbeddingService {
                 .collect(Collectors.toList());
 
         String context = musics.stream()
-                .map(m -> String.format("제목: %s\n가사: %s", m.getTitle(), m.getLyrics()))
+                .map(m -> String.format("제목: %s\n노래소개: %s", m.getTitle(), m.getSummary()))
                 .collect(Collectors.joining("\n\n"));
 
+//        System.out.println(context);
 
-//        return llmRecommend("노래", keywordSelection.getKeywords(), context);
-        return "";
+        String result = llmRecommend("노래", keywordSelection.getKeywords(), context);
+
+        System.out.println(result);
+
+        return "result";
     }
 
     private String llmRecommend(String category, String keywords, String context) {
@@ -205,7 +230,7 @@ public class EmbeddingService {
                 [%s 목록]:
                 %s
                 """, category, category, category, keywords, category, context);
-        String recommendation = null;
+        String recommendation;
         try {
             recommendation = ollamaChatModel.call(prompt);
         } catch (ResourceAccessException e) {

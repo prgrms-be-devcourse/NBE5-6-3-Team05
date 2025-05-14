@@ -15,4 +15,5 @@ public interface MusicRepository extends JpaRepository<Music, String> {
 
     @Query("SELECT m FROM Music m WHERE LOWER(REPLACE(m.title, ' ', '')) = LOWER(REPLACE(m.title, ' ', ''))")
     Optional<Music> findByTitleIgnoreCaseContaining(String trim);
+
 }
