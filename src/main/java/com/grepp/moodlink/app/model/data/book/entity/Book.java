@@ -33,4 +33,9 @@ public class Book {
     @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
     private Long likeCount;
 
+    private Boolean activated = true;
+
+    public void unActivated() {
+        this.activated = false;
+    }
 }

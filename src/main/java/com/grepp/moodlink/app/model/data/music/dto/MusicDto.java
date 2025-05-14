@@ -22,6 +22,7 @@ public class MusicDto {
     private String lyrics;
     private String thumbnail;
     private Long likeCount;
+    private Boolean activated;
 
     public static MusicDto toDto(Music music) {
         MusicDto dto = new MusicDto();

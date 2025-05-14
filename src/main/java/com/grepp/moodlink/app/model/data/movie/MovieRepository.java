@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, String> {
@@ -18,4 +19,8 @@ public interface MovieRepository extends JpaRepository<Movie, String> {
             "JOIN FETCH m.genres g " +
             "WHERE g.name = :genreName")
     List<Movie> findByGenreName(@Param("genreName") String genreName);
+
+    Optional<Movie> findByTitleContainingIgnoreCase(String title);
+
+    Movie findByTitle(String title);
 }
