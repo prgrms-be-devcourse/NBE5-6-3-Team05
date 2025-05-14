@@ -1,6 +1,7 @@
 package com.grepp.moodlink.app.controller.web.admin;
 
 import com.grepp.moodlink.app.controller.web.admin.payload.BookAddRequest;
+import com.grepp.moodlink.app.controller.web.admin.payload.BookModifyRequest;
 import com.grepp.moodlink.app.controller.web.admin.payload.MovieAddRequest;
 import com.grepp.moodlink.app.model.data.book.BookService;
 import com.grepp.moodlink.app.model.data.book.code.Genre;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -68,7 +70,8 @@ public class AdminController {
     @PostMapping("books/add")
     public String addBooks(@Valid BookAddRequest bookAddRequest, BindingResult bindingResult, RedirectAttributes redirectAttributes){
         if(bindingResult.hasErrors()){
-            return "admin/books-add";
+            redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());
+            return "redirect:/admin/books/add";
         }
 
         try{
@@ -78,6 +81,52 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("errorMessage", e.code().message());
             return "redirect:/admin/books/add";
         }
+
+        return "redirect:/admin/books";
+    }
+
+    // 도서 수정 화면
+    @GetMapping("books/modify/{isbn}")
+    public String modifyBooks(BookModifyRequest bookModifyRequest, @PathVariable String isbn, Model model){
+
+        // title author 기록 가져오기
+        BookDto book = bookService.findByIsbn(isbn);
+        log.info("{}", book);
+        model.addAttribute("book",book);
+
+        // bookModifyRequest에 기존에 저장된 데이터 값 넣어두기
+        bookModifyRequest.setDescription(book.getDescription());
+        bookModifyRequest.setPublisher(book.getPublisher());
+        bookModifyRequest.setGenre(book.getGenre());
+        bookModifyRequest.setPublishedDate(book.getPublishedDate());
+        // 이미지는 파일 형식이 달라서 더 고민해보기
+
+
+        // 미리 값을 저장해둔 request 넘기기
+        model.addAttribute("bookModifyRequest",bookModifyRequest);
+        // 장르 데이터 넘기기
+        model.addAttribute("genres", Genre.values());
+        return "admin/books-modify";
+    }
+
+    // 도서 수정 화면
+    @PostMapping("books/modify/{isbn}")
+    public String modifyBooks(
+        @PathVariable String isbn,
+        @Valid BookModifyRequest bookModifyRequest,
+        BindingResult bindingResult, RedirectAttributes redirectAttributes){
+
+        if(bindingResult.hasErrors()){
+            redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());
+            return "redirect:/admin/books/modify/{isbn}";
+        }
+
+        // Service로 넘길 dto 만들기
+        BookDto dto = bookModifyRequest.toDto();
+        dto.setIsbn(isbn);
+        log.info("{}", dto);
+
+        bookService.updateBook(bookModifyRequest.getImage(), dto);
 
         return "redirect:/admin/books";
     }

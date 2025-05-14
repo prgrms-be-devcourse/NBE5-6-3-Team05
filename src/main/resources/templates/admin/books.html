@@ -22,7 +22,7 @@
       <!-- 데이터 존재 시 -->
       <div th:if="${books != null and #lists.size(books) > 0}">
         <div th:each="book : ${books}" class="item-card">
-          <img th:src="${book.image}" alt="썸네일">
+          <img th:src="@{${book.image}}" alt="썸네일">
           <div class="item-info">
             <span style="font-weight: bold" th:text="${book.title + ' (' + #temporals.format(book.publishedDate, 'yyyy.MM.dd') + ')'}">
             제목 (발매일)
@@ -32,8 +32,8 @@
             <div>설명: <span th:text="${book.description}">설명</span></div>
           </div>
           <div class="item-buttons">
-            <button>수정</button>
-            <button>삭제</button>
+            <a th:href="@{'/admin/books/modify/'+${book.isbn}}">수정</a>
+            <a>삭제</a>
           </div>
         </div>
       </div>

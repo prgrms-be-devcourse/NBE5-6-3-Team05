@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final BookRepositoryImpl bookRepositoryImpl;
     private final FileUtil fileUtil;
     private final ModelMapper mapper;
 
@@ -79,4 +80,31 @@ public class BookService {
             .toList();
     }
 
+    public BookDto findByIsbn(String isbn) {
+        return mapper.map(bookRepository.findByIsbn(isbn), BookDto.class);
+    }
+
+    public void updateBook(List<MultipartFile> image, BookDto dto) {
+
+        try {
+            List<FileDto> fileDtos = fileUtil.upload(image, "book");
+
+            if(!fileDtos.isEmpty()){
+                FileDto fileDto = fileDtos.getFirst();
+                String renameFileName = fileDto.renameFileName();
+                String savePath = fileDto.savePath();
+
+                dto.setImage("/download/" + savePath + renameFileName);
+            }
+
+            // 업데이트
+            bookRepositoryImpl.updateBook(dto);
+
+            log.info("{}",dto);
+
+
+        } catch (IOException e) {
+            throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR, e);
+        }
+    }
 }

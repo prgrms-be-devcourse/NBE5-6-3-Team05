@@ -1,4 +1,6 @@
 body {
+  background-attachment: fixed;
+  background-position: center;
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
   background-color: #1e1e1e;
@@ -71,13 +73,14 @@ body {
   gap: 0.5rem;
 }
 
-.item-buttons button {
+.item-buttons a {
   background: linear-gradient(to right, #A64DFF, #6A00FF);
   border: none;
   color: white;
   padding: 0.4rem 1rem;
   border-radius: 10px;
   cursor: pointer;
+  align-items: center;
 }
 
 .helper-text{
