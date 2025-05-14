@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
@@ -18,6 +19,7 @@ public class BookModifyRequest {
     private String description;
 
     //front에서 LocalDate로 넘어옴
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate publishedDate;
 
     public BookDto toDto(){

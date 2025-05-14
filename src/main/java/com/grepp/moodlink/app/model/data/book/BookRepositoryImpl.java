@@ -71,7 +71,9 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
         }
 
         entity.setGenre(book.getGenre());
-        entity.setImage(book.getImage());
+        if(book.getImage()!=null){
+            entity.setImage(book.getImage());
+        }
         entity.setPublisher(book.getPublisher());
         entity.setPublishedDate(book.getPublishedDate());
         entity.setDescription(book.getDescription());
