@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -111,10 +112,18 @@ public class MemberController {
         if (!isAuthenticated) {
             return "redirect:/";
         }
-        Principal principal = (Principal) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
 
-        String userId = principal.getUsername();
-        memberService.modifyProfile(userId, request.toDto());
+
+        try {
+            memberService.modifyProfile(userId, request.toDto());
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("userId", userId);
+            return "users/modify";
+        }
         return "redirect:/users";
     }
 

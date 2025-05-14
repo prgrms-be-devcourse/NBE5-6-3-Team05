@@ -9,13 +9,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ModifyRequest {
 
-
-    private String password;
     private String username;
+    private String currentPassword;
+    private String newPassword;
+
 
 
     public ModifyDto toDto() {
-        return new ModifyDto(username, password);
+        return new ModifyDto(username, currentPassword, newPassword );
     }
 
 }

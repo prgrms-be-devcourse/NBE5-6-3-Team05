@@ -23,7 +23,7 @@
 
 
   </div>
-  <div id="books" class="like-item">
+  <table id="books" class="like-item">
     <h2>도서</h2>
     <div th:each="book : ${likedbooks}">
       <h3 th:text="${book.title}"></h3>
@@ -37,7 +37,7 @@
 
 
     </div>
-  </div>
+  </table>
   <div id="movies" class="like-item">
     <h2>영화</h2>
     <div th:each="movie : ${likedmovies}">
