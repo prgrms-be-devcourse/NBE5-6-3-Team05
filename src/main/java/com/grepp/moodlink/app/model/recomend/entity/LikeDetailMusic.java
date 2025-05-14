@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LikeDetailMusic extends LikeDetailBase{
+public class LikeDetailMusic extends LikeDetailBase {
 
     private String musicId;
 }

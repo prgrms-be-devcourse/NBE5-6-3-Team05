@@ -10,7 +10,6 @@ import com.grepp.moodlink.app.model.home.HomeService;
 import com.grepp.moodlink.app.model.member.MemberService;
 import com.grepp.moodlink.app.model.member.dto.MemberInfoDto;
 import com.grepp.moodlink.app.model.recomend.LikeService;
-import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -35,15 +34,13 @@ public class MemberController {
     private final HomeService homeService;
 
 
-
     @GetMapping()
-    public String showMyPage( Model model) {
+    public String showMyPage(Model model) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isAuthenticated = authentication != null &&
             authentication.isAuthenticated() &&
             !(authentication instanceof AnonymousAuthenticationToken);
-
 
         if (!isAuthenticated) {
             return "redirect:/";
@@ -51,10 +48,6 @@ public class MemberController {
         Principal principal = (Principal) authentication.getPrincipal();
 
         String userId = principal.getUsername();
-
-
-
-
 
 // 개인 정보 보여주는 로직
         Optional<MemberInfoDto> memberInfo = memberService.GetMemberInfo(userId);
@@ -96,7 +89,6 @@ public class MemberController {
             authentication.isAuthenticated() &&
             !(authentication instanceof AnonymousAuthenticationToken);
 
-
         if (!isAuthenticated) {
             return "redirect:/";
         }
@@ -116,7 +108,6 @@ public class MemberController {
             authentication.isAuthenticated() &&
             !(authentication instanceof AnonymousAuthenticationToken);
 
-
         if (!isAuthenticated) {
             return "redirect:/";
         }
@@ -134,7 +125,6 @@ public class MemberController {
         boolean isAuthenticated = authentication != null &&
             authentication.isAuthenticated() &&
             !(authentication instanceof AnonymousAuthenticationToken);
-
 
         if (!isAuthenticated) {
             return "redirect:/";

@@ -1,7 +1,6 @@
 package com.grepp.moodlink.app.model.recomend.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LikeDetailMovies extends LikeDetailBase{
+public class LikeDetailMovies extends LikeDetailBase {
+
     private String movieId;
 }

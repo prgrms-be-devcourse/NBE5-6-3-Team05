@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LikeDetailMoviesRepository extends JpaRepository<LikeDetailMovies,String> {
+public interface LikeDetailMoviesRepository extends JpaRepository<LikeDetailMovies, String> {
+
     LikeDetailMovies findByLikesId(String likeId);
 }

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LikeDetailMusicRepository extends JpaRepository<LikeDetailMusic,String>{
+public interface LikeDetailMusicRepository extends JpaRepository<LikeDetailMusic, String> {
+
     LikeDetailMusic findByLikesId(String likeId);
 }

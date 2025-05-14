@@ -16,5 +16,4 @@ public class MemberApiController {
     private final LikeService likeService;
 
 
-
 }

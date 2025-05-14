@@ -250,7 +250,6 @@ public class LikeService {
     public List<LikeGenreResponse> getPersonalLikeBookGenre(String userId) {
         List<BookDto> books = getUserLikedBooks(userId);
 
-
         Map<String, Long> genreCount = new HashMap<>();
 
         for (BookDto book : books) {
@@ -273,9 +272,6 @@ public class LikeService {
         List<Book> books = bookRepository.findAll();
         Map<String, Long> genreCount = new HashMap<>();
 
-
-
-
         for (Book book : books) {
             String genre = book.getGenre();
             Long likeCount = book.getLikeCount();
@@ -283,7 +279,6 @@ public class LikeService {
                 genreCount.put(genre, genreCount.getOrDefault(genre, 0L) + likeCount);
             }
         }
-
 
         return genreCount.entrySet().stream()
             .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
