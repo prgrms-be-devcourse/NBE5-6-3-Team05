@@ -56,9 +56,11 @@ public class ResultService {
             tempBookId = curatingDetail.getBookId();
             tempSongId = curatingDetail.getSongId();
             tempMovieId = curatingDetail.getMovieId();
-            BookDto bookDto = bookRepository.findSimpleByIsbn(tempBookId).get();
-            SongDto songDto = musicRepository.findSimpleById(tempSongId).get();
-            MovieDto movieDto = movieRepository.findSimpleById(tempMovieId).get();
+
+            BookDto bookDto = BookDto.from(bookRepository.findByIsbn(tempBookId));
+            MovieDto movieDto = MovieDto.from(movieRepository.findById(tempMovieId).get());
+            SongDto songDto = SongDto.from(musicRepository.findById(tempSongId).get());
+
             // 구글 검색으로 외부 검색포탈 주소 set
             bookDto.setExternalLink(googleStr+bookDto.getName());
             songDto.setExternalLink(googleStr+songDto.getName());
