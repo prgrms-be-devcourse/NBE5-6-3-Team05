@@ -22,31 +22,50 @@ public class LikeApiController {
 
     @PostMapping("/book/toggle")
     public ResponseEntity<ToggleResponse> toggleBook(@RequestBody ToggleRequest request, Authentication authentication) {
+
         //TODO: 비회원 시 바로 return
-        if (authentication.getName().equals("anonoymous")){
+        String userId;
+        userId = "anonymous";
+        if (authentication != null){
+            userId = authentication.getName();
+        }
+        if (userId.equals("anonoymous")){
             return ResponseEntity.ok(new ToggleResponse(false));
         }
-        boolean updated = likeService.toggleLikeBook(authentication.getName(), request.getId());
+
+        boolean updated = likeService.toggleLikeBook(userId, request.getId());
         return ResponseEntity.ok(new ToggleResponse(updated));
     }
 
     @PostMapping("/song/toggle")
     public ResponseEntity<ToggleResponse> toggleSong(@RequestBody ToggleRequest request, Authentication authentication) {
         //TODO: 비회원 시 바로 return
-        if (authentication.getName().equals("anonoymous")){
+        String userId;
+        userId = "anonymous";
+        if (authentication != null){
+            userId = authentication.getName();
+        }
+        if (userId.equals("anonoymous")){
             return ResponseEntity.ok(new ToggleResponse(false));
         }
-        boolean updated = likeService.toggleLikeMusic(authentication.getName(), request.getId());
+
+        boolean updated = likeService.toggleLikeMusic(userId, request.getId());
         return ResponseEntity.ok(new ToggleResponse(updated));
     }
 
     @PostMapping("/movie/toggle")
     public ResponseEntity<ToggleResponse> toggleMovie(@RequestBody ToggleRequest request, Authentication authentication) {
         //TODO: 비회원 시 바로 return
-        if (authentication.getName().equals("anonoymous")){
+        String userId;
+        userId = "anonymous";
+        if (authentication != null){
+            userId = authentication.getName();
+        }
+        if (userId.equals("anonoymous")){
             return ResponseEntity.ok(new ToggleResponse(false));
         }
-        boolean updated = likeService.toggleLikeMovie(authentication.getName(),request.getId());
+
+        boolean updated = likeService.toggleLikeMovie(userId,request.getId());
         return ResponseEntity.ok(new ToggleResponse(updated));
     }
 }
