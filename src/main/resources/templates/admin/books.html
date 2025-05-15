@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Moodlink 관리자 페이지</title>
+  <link rel="stylesheet" th:href="@{/css/admin/contents.css}">
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="layout">
+    <!-- 왼쪽 메뉴 -->
+    <div class="menu">
+      <a href="movies">영화</a>
+      <a href="music">음악</a>
+      <a class="active" href="books">도서</a>
+    </div>
+
+    <!-- 오른쪽 콘텐츠 -->
+    <div class="main-contents">
+      <a class="add-btn" href="books/add">+ 추가</a>
+      <!-- 데이터 존재 시 -->
+      <div th:if="${page.content() != null}">
+        <div th:each="book : ${page.content()}" class="item-card">
+          <img th:src="@{${book.image}}" alt="썸네일">
+          <div class="item-info">
+            <span style="font-weight: bold" th:text="${book.title + ' (' + #temporals.format(book.publishedDate, 'yyyy.MM.dd') + ')'}">
+            제목 (발매일)
+            </span>
+            <div>작가: <span th:text="${book.author}">작가</span></div>
+            <div>장르: <span th:text="${book.genre}">장르</span></div>
+            <div>설명: <span class="description-text" th:text="${book.description}">설명</span></div>
+          </div>
+          <div class="item-buttons">
+            <a th:href="@{'/admin/books/modify/'+${book.isbn}}">수정</a>
+            <a class="delete-btn" th:attr="data-isbn=${book.isbn}">삭제</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 비어있을 때 -->
+      <div th:if="${page.content() == null}" class="empty-message">
+        등록된 항목이 없습니다.
+      </div>
+
+      <div class="pagination" th:insert="~{fragments :: frg_pagination}"></div>
+  </div>
+  </div>
+</main>
+<div layout:fragment="scripts">
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".delete-btn")
+    .forEach((btn) => {
+      btn.addEventListener("click", async function (event) {
+        event.preventDefault();
+
+        const isbn = btn.dataset.isbn;
+        const url = `http://localhost:8080/api/admin/books/delete/${isbn}`;
+        const response = await fetch(
+            url, {
+              method: 'DELETE'
+            });
+
+        if (response) {
+          alert("정상적으로 삭제되었습니다.");
+          window.location.reload();
+        } else {
+          alert("문제가 발생하였습니다.")
+        }
+      });
+    });
+  });
+</script>
+</div>
+</body>
+
+</html>

@@ -1,5 +1,6 @@
 package com.grepp.moodlink.infra.util.file;
 
+import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -13,8 +14,17 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class FileUtil {
     
-//    @Value("${upload.path}")
+    @Value("${upload.path}")
     private String filePath;
+
+    private String absoluteUploadPath;
+
+    @PostConstruct
+    public void init() {
+        File file = new File(filePath);
+        absoluteUploadPath = file.getAbsolutePath();
+        new File(absoluteUploadPath).mkdirs();
+    }
     
     public List<FileDto> upload(List<MultipartFile> files, String depth) throws IOException {
         List<FileDto> fileDtos = new ArrayList<>();
@@ -36,12 +46,12 @@ public class FileUtil {
     }
     
     private void uploadFile(MultipartFile file, FileDto fileDto) throws IOException {
-        File path = new File(filePath + fileDto.savePath());
+        File path = new File(absoluteUploadPath + fileDto.savePath());
         if (!path.exists()) {
             path.mkdirs();
         }
         
-        File target = new File(filePath + fileDto.savePath() + fileDto.renameFileName());
+        File target = new File(absoluteUploadPath + fileDto.savePath() + fileDto.renameFileName());
         file.transferTo(target);
     }
     

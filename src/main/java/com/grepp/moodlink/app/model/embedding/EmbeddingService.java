@@ -45,7 +45,12 @@ public class EmbeddingService {
 
             byte[] byteEmbedding = toByteArray(floatEmbedding);
             movie.setEmbedding(byteEmbedding);
-
+            String prompt = String.format(
+                    "영화줄거리를 보고 한두 문장으로 요약해줘. 핵심 주제, 분위기, 특징을 중심으로 간결하게 써줘.\n\n[설명]: %s",
+                    movie.getDescription()
+            );
+            String summary = ollamaChatModel.call(prompt);
+            movie.setSummary(summary);
             movieRepository.save(movie);
         }
     }
@@ -61,7 +66,13 @@ public class EmbeddingService {
 
            byte[] byteEmbedding = toByteArray(floatEmbedding);
             book.setEmbedding(byteEmbedding);
+            String prompt = String.format(
+                    "책소개를 보고 한두 문장으로 요약해줘. 핵심 주제, 분위기, 특징을 중심으로 간결하게 써줘.\n\n[설명]: %s",
+                    book.getDescription()
+            );
+            String summary = ollamaChatModel.call(prompt);
 
+            book.setSummary(summary);
             bookRepository.save(book);
         }
     }
@@ -77,6 +88,13 @@ public class EmbeddingService {
 
             byte[] byteEmbedding = toByteArray(floatEmbedding);
             music.setEmbedding(byteEmbedding);
+            String prompt = String.format(
+                    "가사를 보고 한두 문장으로 요약해줘. 핵심 주제, 분위기, 특징을 중심으로 간결하게 써줘.\n\n[설명]: %s",
+                    music.getLyrics()
+            );
+            String summary = ollamaChatModel.call(prompt);
+
+            music.setSummary(summary);
 
             musicRepository.save(music);
         }
@@ -107,7 +125,7 @@ public class EmbeddingService {
     }
 
     @Transactional
-    public List<Movie> cosineComputeMovie(String genre, String userId) {
+    public String recommendMovie(String genre, String userId) {
         KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
         byte[] byteEmbedding = keywordSelection.getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
@@ -130,42 +148,19 @@ public class EmbeddingService {
                 .collect(Collectors.toList());
 
         String context = movies.stream()
-                .map(m -> String.format("제목: %s\n줄거리: %s", m.getTitle(), m.getDescription()))
+                .map(m -> String.format("제목: %s\n영화소개: %s", m.getTitle(), m.getSummary()))
                 .collect(Collectors.joining("\n\n"));
-//        System.out.println("[DEBUG] 컨텍스트:\n" + context);
+//        System.out.println(context);
 
-        String prompt = String.format("""
-        [시스템]
-        - 당신은 한국어 영화 추천 전문가입니다.
-        - 반드시 제공된 영화 목록에서만 추천하세요.
-        - 한국어로 답변하고, 4개를 추천하세요.
-        - 출력 형식:
-            1. 제목: [이유]
-        
-        [키워드]: %s
-        
-        [영화 목록]:
-        %s
-        """,
-                keywordSelection.getKeywords(),
-                context
-        );
+        String result = llmRecommend("영화", keywordSelection.getKeywords(), context);
 
-        try {
-            String recommendation = ollamaChatModel.call(prompt);
-            System.out.println("[추천 결과]\n" + recommendation);
-        } catch (ResourceAccessException e) {
-            try {
-                throw new ServiceUnavailableException("서비스에 접근할 수 없습니다.");
-            } catch (ServiceUnavailableException ex) {
-                throw new RuntimeException(ex);
-            }
-        }
-        return movies;
+        System.out.println(result);
+//        return llmRecommend("영화", keywordSelection.getKeywords(), context);
+        return "범죄도시 4";
     }
 
     @Transactional
-    public Object cosineComputeBook(String userId) {
+    public String recommendBook(String userId) {
         KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
         byte[] byteEmbedding = keywordSelection.getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
@@ -181,31 +176,19 @@ public class EmbeddingService {
                 .collect(Collectors.toList());
 
         String context = books.stream()
-                .map(b -> String.format("제목: %s\n책소개: %s", b.getTitle(), b.getDescription()))
+                .map(b -> String.format("제목: %s\n책소개: %s", b.getTitle(), b.getSummary()))
                 .collect(Collectors.joining("\n\n"));
-        System.out.println("[DEBUG] 컨텍스트:\n" + context);
+//        System.out.println(context);
 
-        String prompt = String.format("""
-                사용자 키워드: %s
-                다음 도서 8권 중에서 가장 적합한 4개를 추천해주세요:
-                %s
-                """, keywordSelection.getKeywords(), context);
+        String result = llmRecommend("도서", keywordSelection.getKeywords(), context);
 
-        try {
-            String recommendation = ollamaChatModel.call(prompt);
-            System.out.println("[추천 결과]\n" + recommendation);
-        } catch (ResourceAccessException e) {
-            try {
-                throw new ServiceUnavailableException("서비스에 접근할 수 없습니다.");
-            } catch (ServiceUnavailableException ex) {
-                throw new RuntimeException(ex);
-            }
-        }
-        return books;
+        System.out.println(result);
+
+        return "ㅁㄴㄹㄴㅁㄹㅇ";
     }
 
     @Transactional
-    public Object cosineComputeMusic(String userId) {
+    public String recommendMusic(String userId) {
         KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
         byte[] byteEmbedding = keywordSelection.getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
@@ -221,19 +204,35 @@ public class EmbeddingService {
                 .collect(Collectors.toList());
 
         String context = musics.stream()
-                .map(m -> String.format("제목: %s\n가사: %s", m.getTitle(), m.getLyrics()))
+                .map(m -> String.format("제목: %s\n노래소개: %s", m.getTitle(), m.getSummary()))
                 .collect(Collectors.joining("\n\n"));
-        System.out.println("[DEBUG] 컨텍스트:\n" + context);
 
+//        System.out.println(context);
+
+        String result = llmRecommend("노래", keywordSelection.getKeywords(), context);
+
+        System.out.println(result);
+
+        return "result";
+    }
+
+    private String llmRecommend(String category, String keywords, String context) {
         String prompt = String.format("""
-                사용자 키워드: %s
-                다음 노래 중 가장 적합한 4개를 추천해주세요:
+                [시스템]
+                - 당신은 %s 추천 전문가입니다.
+                - 반드시 제공된 %s 목록에서만 추천하세요.
+                - 한국어로만 답변하고, 4개를 추천하세요.
+                - 출력 형식:
+                    1. [%s 제목] : [추천 이유]
+                
+                [키워드]: %s
+                
+                [%s 목록]:
                 %s
-                """, keywordSelection.getKeywords(), context);
-
+                """, category, category, category, keywords, category, context);
+        String recommendation;
         try {
-            String recommendation = ollamaChatModel.call(prompt);
-            System.out.println("[추천 결과]\n" + recommendation);
+            recommendation = ollamaChatModel.call(prompt);
         } catch (ResourceAccessException e) {
             try {
                 throw new ServiceUnavailableException("서비스에 접근할 수 없습니다.");
@@ -241,17 +240,7 @@ public class EmbeddingService {
                 throw new RuntimeException(ex);
             }
         }
-        return musics;
-    }
-
-    public static Set<Integer> toBinarySet(float[] vector) {
-        Set<Integer> set = new HashSet<>();
-        for (int i = 0; i < vector.length; i++) {
-            if (vector[i] > 0.5) {
-                set.add(i);
-            }
-        }
-        return set;
+        return recommendation;
     }
 }
 

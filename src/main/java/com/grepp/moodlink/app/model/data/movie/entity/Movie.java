@@ -38,11 +38,21 @@ public class Movie extends BaseEntity {
     private String description;
     @Column(columnDefinition = "BLOB")
     private byte[] embedding;
-
+    @Column(columnDefinition = "TEXT")
+    private String summary;
 
     private LocalDate releaseDate;
     private LocalDate createdAt;
     @Column(columnDefinition = "TEXT")
     private String thumbnail;
     private Long likeCount;
+
+    private Boolean activated = true;
+
+    @Column(columnDefinition = "TEXT")
+    private String descriptionSummary;
+
+    public void unActivated() {
+        this.activated = false;
+    }
 }

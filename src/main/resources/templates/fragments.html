@@ -394,6 +394,19 @@
       </div>
     </div>
   </header>
+
+
 </th:block>
+<!-- pagination -->
+  <ul class="pagination" th:fragment="frg_pagination">
+    <li class="waves-effect">
+      <a th:href="@{${page.url()}(page=${page.prevPage()})}"><i class="material-icons">chevron_left</i></a></li>
+    <li th:each="num : ${#numbers.sequence(page.startNumber(), page.endNumber())}"
+        th:classappend="${num == page.currentNumber()} ? 'active white-text' : 'waves-effect'">
+    <a th:href="@{${page.url()}(page=${num})}" th:text="${num}">1</a>
+    </li>
+    <li class="waves-effect">
+      <a th:href="@{${page.url()}(page=${page.nextPage()})}"><i class="material-icons">chevron_right</i></a></li>
+  </ul>
 </body>
 </html>

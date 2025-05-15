@@ -25,7 +25,8 @@ public class Music {
     private String description;
     @Column(columnDefinition = "TEXT")
     private String lyrics;
-
+    @Column(columnDefinition = "TEXT")
+    private String summary;
     @Column(columnDefinition = "BLOB")
     private byte[] embedding;
     private LocalDate releaseDate;
@@ -34,4 +35,8 @@ public class Music {
     private String thumbnail;
     private Long likeCount;
 
+    private Boolean activated = true;
+    public void unActivated() {
+        this.activated = false;
+    }
 }
