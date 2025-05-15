@@ -22,4 +22,5 @@ public interface MusicRepository extends JpaRepository<Music, String> {
     @Query("SELECT new com.grepp.moodlink.app.model.result.dto.SongDto(m.id, m.title, m.thumbnail) " +
         "FROM Music m WHERE m.id = :id")
     Optional<SongDto> findSimpleById(@Param("id") String id);
+
 }

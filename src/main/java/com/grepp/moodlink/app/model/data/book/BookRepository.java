@@ -22,4 +22,5 @@ public interface BookRepository extends JpaRepository<Book, String>, BookReposit
     @Query("SELECT new com.grepp.moodlink.app.model.result.dto.BookDto(b.isbn,b.title, b.image) " +
         "FROM Book b WHERE b.isbn = :isbn")
     Optional<BookDto> findSimpleByIsbn(@Param("isbn") String isbn);
+
 }
