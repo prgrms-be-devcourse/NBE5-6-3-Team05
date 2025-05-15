@@ -1,8 +1,6 @@
 package com.grepp.moodlink.app.model.recomend;
 
-import com.grepp.moodlink.app.model.recomend.entity.LikeDetailBooks;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMovies;
-import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMusic;
 import feign.Param;
 import java.util.Collection;
 import java.util.List;
@@ -20,4 +18,7 @@ public interface LikeDetailMoviesRepository extends JpaRepository<LikeDetailMovi
     @Query("SELECT l FROM LikeDetailMovies l WHERE l.likesId IN :likesIds")
     Page<LikeDetailMovies> findAllByLikesIdInPagination(@Param("likesIds") Collection<String> likesIds, Pageable pageable);
 
+    LikeDetailMovies findByLikesId(Long likeId);
+
+    void deleteById(String id);
 }

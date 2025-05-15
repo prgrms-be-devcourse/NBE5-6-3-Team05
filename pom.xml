@@ -46,6 +46,14 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+
+      <dependency>
+        <groupId>dev.langchain4j</groupId>
+        <artifactId>langchain4j-bom</artifactId>
+        <version>1.0.0-beta3</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
@@ -126,6 +134,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.dataformat</groupId>
       <artifactId>jackson-dataformat-xml</artifactId>
+      <version>2.15.3</version>
     </dependency>
 
     <dependency>
@@ -150,6 +159,28 @@
       <artifactId>spring-ai-starter-model-ollama</artifactId>
       <version>1.0.0-M8</version>
     </dependency>
+
+<!--&lt;!&ndash;    langchain4j&ndash;&gt;-->
+<!--    <dependency>-->
+<!--      <groupId>dev.langchain4j</groupId>-->
+<!--      <artifactId>langchain4j-bom</artifactId>-->
+<!--      <version>1.0.0-beta3</version>-->
+<!--      <type>pom</type>-->
+<!--      <scope>import</scope>-->
+<!--    </dependency>-->
+
+    <dependency>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j</artifactId>
+    </dependency>
+
+    <!-- HTTP 기반 API 호출 -->
+    <dependency>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j-open-ai</artifactId> <!-- OpenAI 호환 API용 -->
+    </dependency>
+
+
   </dependencies>
 
 

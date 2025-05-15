@@ -15,7 +15,6 @@ import com.grepp.moodlink.app.model.recomend.entity.LikeDetailBooks;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMovies;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMusic;
 import com.grepp.moodlink.app.model.recomend.entity.Likes;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,13 +50,17 @@ public class LikeService {
 
     public List<LikeDetailBooks> getLikeDetailBook(List<Likes> likes) {
 
-        List<String> likeIds = likes.stream().map(Likes::getId).collect(Collectors.toList());
+        List<String> likeIds = likes.stream()
+            .map(like -> String.valueOf(like.getId()))
+            .collect(Collectors.toList());
         return likeDetailBooksRepository.findAllByLikesIdIn(likeIds);
 
     }
     public Page<LikeDetailBooks> getLikeDetailBookPaged(List<Likes> likes,Pageable pageable) {
 
-        List<String> likeIds = likes.stream().map(Likes::getId).collect(Collectors.toList());
+        List<String> likeIds = likes.stream()
+            .map(like -> String.valueOf(like.getId()))
+            .collect(Collectors.toList());
         return likeDetailBooksRepository.findAllByLikesIdInPagination(likeIds,pageable);
 
     }
@@ -80,13 +83,17 @@ public class LikeService {
 
     public List<LikeDetailMusic> getLikeDetailMusic(List<Likes> likes) {
 
-        List<String> likeIds = likes.stream().map(Likes::getId).collect(Collectors.toList());
+        List<String> likeIds = likes.stream()
+            .map(like -> String.valueOf(like.getId()))
+            .collect(Collectors.toList());
         return likeDetailMusicRepository.findAllByLikesIdIn(likeIds);
 
     }
     public Page<LikeDetailMusic> getLikeDetailMusicPaged(List<Likes> likes,Pageable pageable) {
 
-        List<String> likeIds = likes.stream().map(Likes::getId).collect(Collectors.toList());
+        List<String> likeIds = likes.stream()
+            .map(like -> String.valueOf(like.getId()))
+            .collect(Collectors.toList());
         return likeDetailMusicRepository.findAllByLikesIdInPagination(likeIds,pageable);
 
     }
@@ -105,14 +112,18 @@ public class LikeService {
     }
 
     public List<LikeDetailMovies> getLikeDetailMovie(List<Likes> likes) {
-        List<String> likeIds = likes.stream().map(Likes::getId).collect(Collectors.toList());
+        List<String> likeIds = likes.stream()
+            .map(like -> String.valueOf(like.getId()))
+            .collect(Collectors.toList());
 
         return likeDetailMoviesRepository.findAllByLikesIdIn(likeIds);
 
     }
 
     public Page<LikeDetailMovies> getLikeDetailMoviePaged(List<Likes> likes,Pageable pageable) {
-        List<String> likeIds = likes.stream().map(Likes::getId).collect(Collectors.toList());
+        List<String> likeIds = likes.stream()
+            .map(like -> String.valueOf(like.getId()))
+            .collect(Collectors.toList());
 
         return likeDetailMoviesRepository.findAllByLikesIdInPagination(likeIds,pageable);
 
@@ -247,7 +258,6 @@ public class LikeService {
     @Transactional
     public List<LikeGenreResponse> getPersonalLikeBookGenre(String userId) {
         List<BookDto> books = getUserLikedBooks(userId);
-        log.info("bookDto:{}", books);
 
         Map<String, Long> genreCount = new HashMap<>();
 
@@ -311,6 +321,39 @@ public class LikeService {
         return new PageImpl<>(Movies, pageable, likeDetailMovies.getTotalElements());
     }
 
+
+    @Transactional
+    public boolean toggleLikeMusic(String userId, String id){
+        List<Likes> likes = getLikeInfo(userId);
+        List<LikeDetailMusic> likeDetailMusic = getLikeDetailMusic(likes);
+        boolean exists = true;
+        for(LikeDetailMusic music : likeDetailMusic){
+            if(music.getMusicId().equals(id)){
+                exists = false;
+                // likes 테이블에 요소 삭제
+                likeRepository.deleteById(music.getLikesId());
+                // like_detail_musics 테이블에 요소 삭제
+                likeDetailMusicRepository.deleteByMusicId(id);
+                // 삭제
+                break;
+            }
+        }
+        if (exists){
+            // 삽입하기
+            // likes테이블에 요소 추가
+            Likes newLike = new Likes();
+            newLike.setUserId(userId);
+            likeRepository.save(newLike);
+
+            // like_detail_musics 테이블에 요소 추가
+            LikeDetailMusic newLikeMusic = new LikeDetailMusic();
+            newLikeMusic.setMusicId(id);
+            newLikeMusic.setLikesId(newLike.getId());
+            likeDetailMusicRepository.save(newLikeMusic);
+        }
+        System.out.println(exists);
+        return exists;
+    }
 }
 
 
