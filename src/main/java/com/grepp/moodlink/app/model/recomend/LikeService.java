@@ -286,6 +286,39 @@ public class LikeService {
             .map(entry -> new LikeGenreResponse(entry.getKey(), entry.getValue()))
             .collect(Collectors.toList());
     }
+
+    @Transactional
+    public boolean toggleLikeMusic(String userId, String id){
+        List<Likes> likes = getLikeInfo(userId);
+        List<LikeDetailMusic> likeDetailMusic = getLikeDetailMusic(likes);
+        boolean exists = true;
+        for(LikeDetailMusic music : likeDetailMusic){
+            if(music.getMusicId().equals(id)){
+                exists = false;
+                // likes 테이블에 요소 삭제
+                likeRepository.deleteById(music.getLikesId());
+                // like_detail_musics 테이블에 요소 삭제
+                likeDetailMusicRepository.deleteByMusicId(id);
+                // 삭제
+                break;
+            }
+        }
+        if (exists){
+            // 삽입하기
+            // likes테이블에 요소 추가
+            Likes newLike = new Likes();
+            newLike.setUserId(userId);
+            likeRepository.save(newLike);
+
+            // like_detail_musics 테이블에 요소 추가
+            LikeDetailMusic newLikeMusic = new LikeDetailMusic();
+            newLikeMusic.setMusicId(id);
+            newLikeMusic.setLikesId(newLike.getId());
+            likeDetailMusicRepository.save(newLikeMusic);
+        }
+        System.out.println(exists);
+        return exists;
+    }
 }
 
 

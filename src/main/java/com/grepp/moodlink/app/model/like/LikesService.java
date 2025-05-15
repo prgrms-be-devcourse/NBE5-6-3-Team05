@@ -34,7 +34,6 @@ public class LikesService {
         boolean current;
         if (id.equals("s1111")){
             current = likeSongStatusMap.getOrDefault(id, true);
-            System.out.println(current);
         }
         else{
             current = likeSongStatusMap.getOrDefault(id, false);

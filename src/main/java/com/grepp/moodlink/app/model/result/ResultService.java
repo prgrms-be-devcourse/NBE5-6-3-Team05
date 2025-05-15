@@ -37,6 +37,8 @@ public class ResultService {
     private final LikeDetailBooksRepository likeDetailBooksRepository;
     private final LikeDetailMoviesRepository likeDetailMoviesRepository;
 
+    private final String googleStr="https://www.google.com/search?q=";
+
     public List<CuratingDetailDto> curatingDetailDtoList(String userId){
 
         // db에서 curating 값 가져오기
@@ -46,10 +48,9 @@ public class ResultService {
         String tempBookId;
         String tempSongId;
         String tempMovieId;
-
         List<CuratingDetailDto> items = new ArrayList<>();
 
-        // db에서 각 컨텐츠들 가져오기
+        // db에서 curating의 각 컨텐츠(책, 노래, 영화)들 가져오기
         for(CuratingDetail curatingDetail: curatingDetails) {
             tempBookId = curatingDetail.getBookId();
             tempSongId = curatingDetail.getSongId();
@@ -57,23 +58,33 @@ public class ResultService {
             BookDto bookDto = bookRepository.findSimpleByIsbn(tempBookId).get();
             SongDto songDto = musicRepository.findSimpleById(tempSongId).get();
             MovieDto movieDto = movieRepository.findSimpleById(tempMovieId).get();
+            // 구글 검색으로 외부 검색포탈 주소 set
+            bookDto.setExternalLink(googleStr+bookDto.getName());
+            songDto.setExternalLink(googleStr+songDto.getName());
+            movieDto.setExternalLink(googleStr+movieDto.getName());
 
             CuratingDetailDto temp1 = new CuratingDetailDto(bookDto, songDto, movieDto);
             items.add(temp1);
         }
 
-        // Like한 목록이 없다면 각 컨텐츠의 상태를 false로 return
+        // User가 비회원이면 각 컨텐츠의 상태를 false로 return
+        // TODO: 비회원으로 수정해야 함.
+        if (userId.equals("anonymous")){
+            return items;
+        }
+
+
+        // User의 Like한 목록이 없다면 각 컨텐츠의 상태를 false로 return
         List<Likes> likes = likeRepository.findByUserId(userId);
         if (likes.isEmpty()){
             return items;
         }
 
-        String likeId;
+        Long likeId;
         LikeDetailMovies likeDetailMovies;
         LikeDetailBooks likeDetailBooks;
         LikeDetailMusic likeDetailMusic;
         for (Likes likes1: likes){
-            System.out.println(likes1.getId());
             likeId = likes1.getId();
             likeDetailBooks = likeDetailBooksRepository.findByLikesId(likeId);
             likeDetailMovies = likeDetailMoviesRepository.findByLikesId(likeId);
