@@ -63,6 +63,7 @@ public class MovieRepositoryImpl implements MovieRepositoryCustom {
             .from(movie)
             .leftJoin(movie.genres).fetchJoin()
             .where(movie.activated)
+            .orderBy(movie.modifiedAt.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();

@@ -64,6 +64,7 @@ public class MusicRepositoryImpl implements MusicRepositoryCustom {
             .select(music)
             .from(music)
             .where(music.activated)
+            .orderBy(music.modifiedAt.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
