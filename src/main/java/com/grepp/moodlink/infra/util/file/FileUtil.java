@@ -29,7 +29,7 @@ public class FileUtil {
     public List<FileDto> upload(List<MultipartFile> files, String depth) throws IOException {
         List<FileDto> fileDtos = new ArrayList<>();
         
-        if (files.isEmpty() || files.getFirst().isEmpty()) {
+        if (files == null || files.isEmpty() || files.getFirst().isEmpty()) {
             return fileDtos;
         }
         String savePath = createSavePath(depth);

@@ -13,4 +13,6 @@ import java.util.List;
 public interface MusicRepository extends JpaRepository<Music, String>, MusicRepositoryCustom {
 
     List<Music> findByEmbeddingIsNull();
+
+    boolean existsByTitleAndSinger(String title, String singer);
 }

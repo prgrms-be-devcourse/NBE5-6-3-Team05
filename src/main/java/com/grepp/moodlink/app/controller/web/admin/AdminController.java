@@ -4,21 +4,20 @@ import com.grepp.moodlink.app.controller.web.admin.payload.BookAddRequest;
 import com.grepp.moodlink.app.controller.web.admin.payload.BookModifyRequest;
 import com.grepp.moodlink.app.controller.web.admin.payload.MovieAddRequest;
 import com.grepp.moodlink.app.controller.web.admin.payload.MovieModifyRequest;
+import com.grepp.moodlink.app.controller.web.admin.payload.MusicAddRequest;
 import com.grepp.moodlink.app.model.data.book.BookService;
-import com.grepp.moodlink.app.model.data.book.code.Genre;
+import com.grepp.moodlink.app.model.data.book.code.BookGenre;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
-import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.app.model.data.movie.MovieService;
-import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.music.MusicService;
+import com.grepp.moodlink.app.model.data.music.code.MusicGenre;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
 import com.grepp.moodlink.infra.payload.PageParam;
 import com.grepp.moodlink.infra.response.PageResponse;
 import com.grepp.moodlink.infra.response.ResponseCode;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -115,10 +114,10 @@ public class AdminController {
 
     // 영화 추가 화면
     @PostMapping("movies/add")
-    public String addBooks(@Valid MovieAddRequest movieAddRequest, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+    public String addMovie(@Valid MovieAddRequest movieAddRequest, BindingResult bindingResult, RedirectAttributes redirectAttributes){
         if(bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());
-            return "redirect:/admin/books/add";
+            return "redirect:/admin/movies/add";
         }
 
         try{
@@ -126,16 +125,42 @@ public class AdminController {
         }catch(CommonException e){
             log.info(e.code().message());
             redirectAttributes.addFlashAttribute("errorMessage", e.code().message());
-            return "redirect:/admin/books/add";
+            return "redirect:/admin/movies/add";
         }
 
-        return "redirect:/admin/books";
+        return "redirect:/admin/movies";
+    }
+
+    // 음악 추가 화면
+    @GetMapping("music/add")
+    public String addMusic(MusicAddRequest musicAddRequest, Model model){
+        model.addAttribute("genres", MusicGenre.values());
+        return "admin/music-add";
+    }
+
+    // 음악 추가 화면
+    @PostMapping("music/add")
+    public String addMusic(@Valid MusicAddRequest musicAddRequest, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+        if(bindingResult.hasErrors()){
+            redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());
+            return "redirect:/admin/music/add";
+        }
+
+        try{
+            musicService.addMusic(musicAddRequest.getThumbnail(), musicAddRequest.toDto());
+        }catch(CommonException e){
+            log.info(e.code().message());
+            redirectAttributes.addFlashAttribute("errorMessage", e.code().message());
+            return "redirect:/admin/music/add";
+        }
+
+        return "redirect:/admin/music";
     }
 
     // 도서 추가 화면
     @GetMapping("books/add")
     public String addBooks(BookAddRequest bookAddRequest, Model model){
-        model.addAttribute("genres", Genre.values());
+        model.addAttribute("genres", BookGenre.values());
         return "admin/books-add";
     }
 
@@ -230,7 +255,7 @@ public class AdminController {
         // 미리 값을 저장해둔 request 넘기기
         model.addAttribute("bookModifyRequest",bookModifyRequest);
         // 장르 데이터 넘기기
-        model.addAttribute("genres", Genre.values());
+        model.addAttribute("genres", BookGenre.values());
         return "admin/books-modify";
     }
 

@@ -1,22 +1,33 @@
 package com.grepp.moodlink.app.model.data.music;
 
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
+import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
+import com.grepp.moodlink.infra.error.exceptions.CommonException;
+import com.grepp.moodlink.infra.response.ResponseCode;
+import com.grepp.moodlink.infra.util.file.FileDto;
+import com.grepp.moodlink.infra.util.file.FileUtil;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MusicService {
 
     private final MusicRepository musicRepository;
     private final ModelMapper mapper;
+    private final FileUtil fileUtil;
 
     public void saveMusic(List<MusicDto> musicDtos) {
 
@@ -41,5 +52,34 @@ public class MusicService {
     public Page<MusicDto> findPaged(Pageable pageable) {
         return musicRepository.findPaged(pageable)
             .map(e -> mapper.map(e, MusicDto.class));
+    }
+
+    @Transactional
+    public void addMusic(List<MultipartFile> thumbnail, MusicDto dto) {
+
+        if(musicRepository.existsByTitleAndSinger(dto.getTitle(),dto.getSinger()))
+            throw new CommonException(ResponseCode.DUPLICATED_DATA);
+
+        try {
+            List<FileDto> fileDtos = fileUtil.upload(thumbnail, "music");
+            Music music = mapper.map(dto, Music.class);
+
+            if(!fileDtos.isEmpty()){
+                FileDto fileDto = fileDtos.getFirst();
+                String renameFileName = fileDto.renameFileName();
+                String savePath = fileDto.savePath();
+
+                music.setThumbnail("/download/" + savePath + renameFileName);
+            }
+
+            long count = musicRepository.count();
+            music.setId("S"+count);
+
+            log.info("{}",music);
+
+            musicRepository.save(music);
+        } catch (IOException e) {
+            throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR, e);
+        }
     }
 }
