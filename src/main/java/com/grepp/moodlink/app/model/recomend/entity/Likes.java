@@ -20,9 +20,5 @@ public class Likes {
 
     @Id
     private String id;
-
-
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private Member member;
+    private String userId;
 }

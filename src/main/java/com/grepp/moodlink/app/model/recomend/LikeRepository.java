@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LikeRepository extends JpaRepository<Likes, String> {
 
-    List<Likes> findByMemberId(String userId);
+    List<Likes> findByUserId(String userId);
 
 }

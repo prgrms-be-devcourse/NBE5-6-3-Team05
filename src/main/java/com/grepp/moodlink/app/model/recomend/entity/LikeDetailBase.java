@@ -17,9 +17,5 @@ public abstract class LikeDetailBase {
 
     @Id
     private String id;
-
-    @ManyToOne
-    @JoinColumn(name = "likes_id")
-    private Likes likes;
-
+    private Long likesId;
 }

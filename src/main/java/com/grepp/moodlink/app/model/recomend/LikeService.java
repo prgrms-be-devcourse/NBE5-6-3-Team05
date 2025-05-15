@@ -46,7 +46,7 @@ public class LikeService {
     private final ModelMapper mapper;
 
     public List<Likes> getLikeInfo(String userId) {
-        return likeRepository.findByMemberId(userId);
+        return likeRepository.findByUserId(userId);
     }
 
     public List<LikeDetailBooks> getLikeDetailBook(List<Likes> likes) {
