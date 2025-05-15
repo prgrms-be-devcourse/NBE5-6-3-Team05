@@ -22,5 +22,5 @@ public interface MovieRepository extends JpaRepository<Movie, String> {
 
     Optional<Movie> findByTitleContainingIgnoreCase(String title);
 
-    Movie findByTitle(String title);
+    Optional<Movie> findByTitle(String title);
 }

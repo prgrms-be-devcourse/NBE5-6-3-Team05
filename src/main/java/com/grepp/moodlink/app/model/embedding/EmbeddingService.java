@@ -150,13 +150,8 @@ public class EmbeddingService {
         String context = movies.stream()
                 .map(m -> String.format("제목: %s\n영화소개: %s", m.getTitle(), m.getSummary()))
                 .collect(Collectors.joining("\n\n"));
-//        System.out.println(context);
 
-        String result = llmRecommend("영화", keywordSelection.getKeywords(), context);
-
-        System.out.println(result);
-//        return llmRecommend("영화", keywordSelection.getKeywords(), context);
-        return "범죄도시 4";
+        return llmRecommend("영화", keywordSelection.getKeywords(), context);
     }
 
     @Transactional
@@ -178,13 +173,8 @@ public class EmbeddingService {
         String context = books.stream()
                 .map(b -> String.format("제목: %s\n책소개: %s", b.getTitle(), b.getSummary()))
                 .collect(Collectors.joining("\n\n"));
-//        System.out.println(context);
 
-        String result = llmRecommend("도서", keywordSelection.getKeywords(), context);
-
-        System.out.println(result);
-
-        return "ㅁㄴㄹㄴㅁㄹㅇ";
+        return llmRecommend("도서", keywordSelection.getKeywords(), context);
     }
 
     @Transactional
@@ -207,13 +197,7 @@ public class EmbeddingService {
                 .map(m -> String.format("제목: %s\n노래소개: %s", m.getTitle(), m.getSummary()))
                 .collect(Collectors.joining("\n\n"));
 
-//        System.out.println(context);
-
-        String result = llmRecommend("노래", keywordSelection.getKeywords(), context);
-
-        System.out.println(result);
-
-        return "result";
+        return llmRecommend("노래", keywordSelection.getKeywords(), context);
     }
 
     private String llmRecommend(String category, String keywords, String context) {

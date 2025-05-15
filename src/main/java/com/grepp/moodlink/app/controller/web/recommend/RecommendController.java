@@ -91,8 +91,11 @@ public class RecommendController {
 
     private void setSessionAttributes(HttpSession session, RecommendationDto dto) {
         session.setAttribute("movies", dto.getMovies());
+        System.out.println(dto.getMovies().getFirst().getTitle());
         session.setAttribute("books", dto.getBooks());
+        System.out.println(dto.getBooks().getFirst().getTitle());
         session.setAttribute("musics", dto.getMusics());
+        System.out.println(dto.getMusics().getFirst().getTitle());
     }
 
 

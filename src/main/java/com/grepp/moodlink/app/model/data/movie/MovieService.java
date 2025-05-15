@@ -62,18 +62,36 @@ public class MovieService {
     @Transactional
     public List<Movie> parseRecommend(String movieResult) {
         List<String> titles = new ArrayList<>();
-        Pattern pattern = Pattern.compile("\\d+\\.\\s*(.+?)\\s*:");
-        Matcher matcher = pattern.matcher(movieResult);
+        Pattern pattern = Pattern.compile("^\\d+\\.\\s*(.*?)\\s*(?=:)", Pattern.MULTILINE);
+        String[] lines = movieResult.split("\\r?\\n");
 
-        while (matcher.find()) {
-            titles.add(matcher.group(1).trim());
+        for (String line : lines) {
+            line = line.trim();
+            if (line.isEmpty()) continue;
+
+            Matcher matcher = pattern.matcher(line);
+            if (matcher.find()) {
+                String title = processEnclosures(matcher.group(1).trim());
+                titles.add(title);
+            }
         }
-        List<Movie> movies = new ArrayList<>();
-        titles.forEach(title -> {
-            System.out.println(movieRepository.findByTitle(title));
-            movies.add(movieRepository.findByTitle(title));
-        });
+        return titles.stream()
+                .map(movieRepository::findByTitle)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .distinct()
+                .collect(Collectors.toList());
+    }
 
-        return movies;
+    public static String processEnclosures(String title) {
+        String[][] enclosures = {{"\"", "\""}, {"[", "]"}};
+        for (String[] enc : enclosures) {
+            String start = enc[0];
+            String end = enc[1];
+            if (title.startsWith(start) && title.endsWith(end)) {
+                title = title.substring(start.length(), title.length() - end.length()).trim();
+            }
+        }
+        return title.replace("\"", "");
     }
 }

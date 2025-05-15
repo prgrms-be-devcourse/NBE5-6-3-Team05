@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static com.grepp.moodlink.app.model.data.movie.MovieService.processEnclosures;
+
 @Service
 @RequiredArgsConstructor
 public class MusicService {
@@ -41,18 +43,26 @@ public class MusicService {
     }
 
     public List<Music> parseRecommend(String musicResult) {
-        Pattern pattern = Pattern.compile("\"([^\"]+)\"");
-        Matcher matcher = pattern.matcher(musicResult);
+        List<String> titles = new ArrayList<>();
+        Pattern pattern = Pattern.compile("^\\d+\\.\\s*(.*?)\\s*(?=:)", Pattern.MULTILINE);
+        String[] lines = musicResult.split("\\r?\\n");
 
-        List<String> recommendedTitles = new ArrayList<>();
-        while (matcher.find()) {
-            recommendedTitles.add(matcher.group(1).trim());
+        for (String line : lines) {
+            line = line.trim();
+            if (line.isEmpty()) continue;
+
+            Matcher matcher = pattern.matcher(line);
+            if (matcher.find()) {
+                String title = processEnclosures(matcher.group(1).trim());
+                titles.add(title);
+            }
         }
-        return recommendedTitles.stream()
-                .map(title -> musicRepository.findByTitleIgnoreCaseContaining(title.replaceAll("\\s+", " ").trim()))
+        return titles.stream()
+                .map(musicRepository::findByTitle)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .distinct()
                 .collect(Collectors.toList());
     }
+
 }

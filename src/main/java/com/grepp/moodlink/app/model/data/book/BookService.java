@@ -2,12 +2,19 @@ package com.grepp.moodlink.app.model.data.book;
 
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
+import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
 import com.grepp.moodlink.infra.response.ResponseCode;
 import com.grepp.moodlink.infra.util.file.FileDto;
 import com.grepp.moodlink.infra.util.file.FileUtil;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -16,6 +23,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import static com.grepp.moodlink.app.model.data.movie.MovieService.processEnclosures;
 
 @Slf4j
 @Service
@@ -122,6 +131,27 @@ public class BookService {
     }
 
     public List<Book> parseRecommend(String bookResult) {
-        return null;
+        List<String> titles = new ArrayList<>();
+        Pattern pattern = Pattern.compile("^\\d+\\.\\s*(.*?)\\s*(?=:)", Pattern.MULTILINE);
+        String[] lines = bookResult.split("\\r?\\n");
+
+        for (String line : lines) {
+            line = line.trim();
+            if (line.isEmpty()) continue;
+
+            Matcher matcher = pattern.matcher(line);
+            if (matcher.find()) {
+                String title = processEnclosures(matcher.group(1).trim());
+                titles.add(title);
+            }
+        }
+
+        return titles.stream()
+                .map(bookRepository::findByTitle)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .distinct()
+                .collect(Collectors.toList());
     }
+
 }
