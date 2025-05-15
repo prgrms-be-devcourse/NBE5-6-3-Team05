@@ -17,40 +17,63 @@
     </div>
 
     <!-- 오른쪽 콘텐츠 -->
-    <div class="main-content">
-      <a class="add-btn" href="movies/add">+ 추가</a>
+    <div class="main-contents">
+      <a class="add-btn" href="music/add">+ 추가</a>
       <!-- 데이터 존재 시 -->
-      <div th:if="${items != null and #lists.size(items) > 0}">
-        <div th:each="item : ${items}" class="item-card">
-          <img th:src="@{/images/placeholder.png}" alt="썸네일">
+      <div th:if="${page.content() != null}">
+        <div th:each="music : ${page.content()}" class="item-card">
+          <img th:src="@{${music.thumbnail}}" alt="썸네일">
           <div class="item-info">
-            <div><strong th:text="${item.title}">제목</strong> (발매일)</div>
-            <div>가수: <span th:text="${item.director}">가수</span></div>
-            <div>장르: <span th:text="${item.genre}">장르</span></div>
-            <div>설명: <span th:text="${item.description}">설명</span></div>
-            <div>──────────── 두줄까지</div>
+            <span style="font-weight: bold" th:text="${music.title + ' (' + #temporals.format(music.releaseDate, 'yyyy.MM.dd') + ')'}">
+            제목 (발매일)
+            </span>
+            <div>작가: <span th:text="${music.singer}">가수</span></div>
+            <div>장르: <span th:text="${music.genre}">장르</span></div>
+            <div th:if="${music.description != null}">설명: <span class="description-text" th:text="${music.description}">설명</span></div>
+            <div th:if="${music.description == null}">가사: <span class="description-text" th:text="${music.lyrics}">가사</span></div>
           </div>
           <div class="item-buttons">
-            <button>수정</button>
-            <button>삭제</button>
+            <a th:href="@{'/admin/music/modify/'+${music.id}}">수정</a>
+            <a class="delete-btn" th:attr="data-id=${music.id}">삭제</a>
           </div>
         </div>
       </div>
 
       <!-- 비어있을 때 -->
-      <div th:if="${items == null or #lists.isEmpty(items)}" class="empty-message">
+      <div th:if="${page.content() == null}" class="empty-message">
         등록된 항목이 없습니다.
       </div>
 
-      <div class="pagination" th:if="${totalPages > 1}">
-        <span class="active">1</span>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <span>…</span>
-        <a href="#" th:text="${totalPages}">68</a>
-      </div>
+      <div class="pagination" th:insert="~{fragments :: frg_pagination}"></div>
     </div>
   </div>
 </main>
+<div layout:fragment="scripts">
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll(".delete-btn")
+      .forEach((btn) => {
+        btn.addEventListener("click", async function (event) {
+          event.preventDefault();
+
+          const id = btn.dataset.id;
+          const url = `http://localhost:8080/api/admin/music/delete/${id}`;
+          const response = await fetch(
+              url, {
+                method: 'DELETE'
+              });
+
+          if (response) {
+            alert("정상적으로 삭제되었습니다.");
+            window.location.reload();
+          } else {
+            alert("문제가 발생하였습니다.")
+          }
+        });
+      });
+    });
+  </script>
+</div>
 </body>
+
 </html>

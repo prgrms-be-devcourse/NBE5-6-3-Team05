@@ -60,6 +60,7 @@ main {
   align-items: center;
   width: 100%;
   max-width: 750px;
+  margin-top: 1rem;
 }
 
 .form-row label {
