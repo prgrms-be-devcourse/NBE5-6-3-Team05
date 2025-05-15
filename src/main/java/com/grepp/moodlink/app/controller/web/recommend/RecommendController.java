@@ -58,7 +58,7 @@ public class RecommendController {
         RecommendationDto recommendations = generateRecommendations(userId, genre);
         setSessionAttributes(session, recommendations);
 
-        return "home/mainPage";
+        return "redirect:/result";
     }
 
     private void processUserKeywords(String userId, String keywords) {
