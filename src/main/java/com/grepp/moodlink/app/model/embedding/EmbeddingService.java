@@ -8,11 +8,10 @@ import com.grepp.moodlink.app.model.data.music.MusicRepository;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.keyword.KeywordRepository;
 import com.grepp.moodlink.app.model.keyword.entity.KeywordSelection;
+import dev.langchain4j.model.embedding.EmbeddingModel;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.embedding.EmbeddingModel;
-import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -32,7 +31,6 @@ public class EmbeddingService {
     private final MusicRepository musicRepository;
     private final EmbeddingModel embeddingModel;
     private final KeywordRepository keywordRepository;
-    private final OllamaChatModel ollamaChatModel;
 
     @Transactional
     @Async
@@ -41,7 +39,7 @@ public class EmbeddingService {
         for (Movie movie : movies) {
             String text = "영화 제목 : " + movie.getTitle()
                     + "영화 설명" + movie.getDescription();
-            float[] floatEmbedding = embeddingModel.embed(text);
+            float[] floatEmbedding = embeddingModel.embed(text).content().vector();
 
             byte[] byteEmbedding = toByteArray(floatEmbedding);
             movie.setEmbedding(byteEmbedding);
@@ -62,7 +60,7 @@ public class EmbeddingService {
         for (Book book : books) {
             String text = "도서 제목 : " + book.getTitle()
                     + "도서 설명 :" + book.getDescription();
-            float[] floatEmbedding = embeddingModel.embed(text);
+            float[] floatEmbedding = embeddingModel.embed(text).content().vector();
 
            byte[] byteEmbedding = toByteArray(floatEmbedding);
             book.setEmbedding(byteEmbedding);
@@ -84,7 +82,7 @@ public class EmbeddingService {
         for (Music music : musics) {
             String text = "노래 제목 : " + music.getTitle()
                     + "노래 가사 : " + music.getLyrics();
-            float[] floatEmbedding = embeddingModel.embed(text);
+            float[] floatEmbedding = embeddingModel.embed(text).content().vector();
 
             byte[] byteEmbedding = toByteArray(floatEmbedding);
             music.setEmbedding(byteEmbedding);
@@ -117,7 +115,7 @@ public class EmbeddingService {
 
     public void generateEmbeddingKeyword(String userId, String keywords) {
         KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
-        float[] floatEmbedding = embeddingModel.embed(keywords);
+        float[] floatEmbedding = embeddingModel.embed(keywords).content().vector();
         byte[] byteEmbedding = toByteArray(floatEmbedding);
         keywordSelection.setEmbedding(byteEmbedding);
         keywordSelection.setKeywords(keywords);
