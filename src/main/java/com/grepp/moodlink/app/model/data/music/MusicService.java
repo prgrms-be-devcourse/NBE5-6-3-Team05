@@ -82,4 +82,32 @@ public class MusicService {
             throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR, e);
         }
     }
+
+    public MusicDto findById(String id) {
+        return musicRepository.findById(id).map(e -> mapper.map(e, MusicDto.class)).orElse(null);
+    }
+
+    public void updateMusic(List<MultipartFile> thumbnail, MusicDto dto) {
+
+        try {
+            List<FileDto> fileDtos = fileUtil.upload(thumbnail, "music");
+
+            if(!fileDtos.isEmpty()){
+                FileDto fileDto = fileDtos.getFirst();
+                String renameFileName = fileDto.renameFileName();
+                String savePath = fileDto.savePath();
+
+                dto.setThumbnail("/download/" + savePath + renameFileName);
+            }
+
+            // 업데이트
+            musicRepository.updateBook(dto);
+
+            log.info("{}",dto);
+
+
+        } catch (IOException e) {
+            throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR, e);
+        }
+    }
 }

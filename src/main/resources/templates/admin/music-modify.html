@@ -3,7 +3,7 @@
       layout:decorate="~{layout}">
 <head>
   <meta charset="UTF-8">
-  <title>관리자 페이지 - 음악 추가</title>
+  <title>관리자 페이지 - 도서 수정</title>
   <link rel="stylesheet" th:href="@{/css/admin/contents-add.css}">
 
 </head>
@@ -13,7 +13,7 @@
 
   <!-- 중앙 배치 form -->
   <div class="main-area">
-      <form th:action="@{/admin/music/add}" th:object="${musicAddRequest}" method="post" enctype="multipart/form-data">
+      <form th:action="@{'/admin/music/modify/'+${music.id}}" th:object="${musicModifyRequest}" method="post" enctype="multipart/form-data">
     <div class="form-section">
       <h3>음악 정보를 입력해주세요.</h3>
 
@@ -31,13 +31,9 @@
 
 
           <div>
-            <div class="form-row"><label>제목</label><input th:field="*{title}" class="input-line"/></div>
-            <span th:errors="*{title}" class="form-row" style="margin-left: 1.5rem" ></span>
-            <span th:if="${errorMessage}" class="form-row" style="margin-left: 1.5rem" th:text="${errorMessage}"></span>
-            <div class="form-row"><label>가수</label><input th:field="*{singer}" class="input-line" type="text" /></div>
-            <span th:errors="*{singer}" class="form-row" style="margin-left: 1.5rem"></span>
-            <span th:if="${errorMessage}" class="form-row" style="margin-left: 1.5rem" th:text="${errorMessage}"></span>
-              <div class="form-row"><label>발매일</label><input th:field="*{releaseDate}" class="input-line" type="date"/></div>
+            <div class="form-row"><label>제목</label><div th:text="${music.title}"></div></div>
+            <div class="form-row"><label>가사</label><div th:text="${music.singer}"></div></div>
+            <div class="form-row"><label>발행일</label><input th:field="*{releaseDate}" th:value="${#temporals.format(releaseDate, 'yyyy-MM-dd')}"  class="input-line" type="date"/></div>
           </div>
         </div>
 
@@ -60,7 +56,6 @@
           <label>가사</label>
           <textarea th:field="*{lyrics}" class="textarea"></textarea>
         </div>
-
 
         <button class="submit-btn" type="submit" name="action">등록</button>
     </div>

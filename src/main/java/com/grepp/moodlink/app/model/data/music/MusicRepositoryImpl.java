@@ -1,6 +1,7 @@
 package com.grepp.moodlink.app.model.data.music;
 
 import com.grepp.moodlink.app.model.data.book.entity.Book;
+import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.data.music.entity.QMusic;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Repository
@@ -72,5 +74,19 @@ public class MusicRepositoryImpl implements MusicRepositoryCustom {
             .where(music.activated);
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    @Transactional
+    public void updateBook(MusicDto music) {
+        Music entity = em.find(Music.class, music.getId());
+
+        entity.setGenre(music.getGenre());
+        if(music.getThumbnail()!=null){
+            entity.setThumbnail(music.getThumbnail());
+        }
+        entity.setGenre(music.getGenre());
+        entity.setDescription(music.getDescription());
+        entity.setLyrics(music.getLyrics());
     }
 }

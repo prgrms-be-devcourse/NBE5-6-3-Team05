@@ -1,5 +1,6 @@
 package com.grepp.moodlink.app.model.data.music;
 
+import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import java.nio.channels.FileChannel;
 import org.springframework.data.domain.Page;
@@ -18,4 +19,6 @@ public interface MusicRepositoryCustom {
     String findDescription();
 
     Page<Music> findPaged(Pageable pageable);
+
+    void updateBook(MusicDto dto);
 }

@@ -5,6 +5,7 @@ import com.grepp.moodlink.app.controller.web.admin.payload.BookModifyRequest;
 import com.grepp.moodlink.app.controller.web.admin.payload.MovieAddRequest;
 import com.grepp.moodlink.app.controller.web.admin.payload.MovieModifyRequest;
 import com.grepp.moodlink.app.controller.web.admin.payload.MusicAddRequest;
+import com.grepp.moodlink.app.controller.web.admin.payload.MusicModifyRequest;
 import com.grepp.moodlink.app.model.data.book.BookService;
 import com.grepp.moodlink.app.model.data.book.code.BookGenre;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
@@ -235,6 +236,7 @@ public class AdminController {
         return "redirect:/admin/movies";
     }
 
+
     // 도서 수정 화면
     @GetMapping("books/modify/{isbn}")
     public String modifyBooks(BookModifyRequest bookModifyRequest, @PathVariable String isbn, Model model){
@@ -279,5 +281,51 @@ public class AdminController {
         bookService.updateBook(bookModifyRequest.getImage(), dto);
 
         return "redirect:/admin/books";
+    }
+
+    // 음악 수정 화면
+    @GetMapping("music/modify/{id}")
+    public String modifyBooks(MusicModifyRequest musicModifyRequest, @PathVariable String id, Model model){
+
+        // title author 기록 가져오기
+        MusicDto music = musicService.findById(id);
+
+        model.addAttribute("music",music);
+
+        // bookModifyRequest에 기존에 저장된 데이터 값 넣어두기
+        musicModifyRequest.setReleaseDate(music.getReleaseDate());
+        musicModifyRequest.setGenre(music.getGenre());
+        musicModifyRequest.setDescription(music.getDescription());
+        musicModifyRequest.setLyrics(music.getLyrics());
+        // 이미지는 파일 형식이 달라서 더 고민해보기
+
+
+        // 미리 값을 저장해둔 request 넘기기
+        model.addAttribute("musicModifyRequest",musicModifyRequest);
+        // 장르 데이터 넘기기
+        model.addAttribute("genres", MusicGenre.values());
+        return "admin/music-modify";
+    }
+
+    // 음악 수정 화면
+    @PostMapping("music/modify/{id}")
+    public String modifyBooks(
+        @PathVariable String id,
+        @Valid MusicModifyRequest musicModifyRequest,
+        BindingResult bindingResult, RedirectAttributes redirectAttributes){
+
+        if(bindingResult.hasErrors()){
+            redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());
+            return "redirect:/admin/music/modify/{id}";
+        }
+
+        // Service로 넘길 dto 만들기
+        MusicDto dto = musicModifyRequest.toDto();
+        dto.setId(id);
+        log.info("{}", dto);
+
+        musicService.updateMusic(musicModifyRequest.getThumbnail(), dto);
+
+        return "redirect:/admin/music";
     }
 }
