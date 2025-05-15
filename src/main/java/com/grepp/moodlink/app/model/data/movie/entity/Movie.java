@@ -48,7 +48,17 @@ public class Movie extends BaseEntity {
     private String thumbnail;
     private Long likeCount;
 
+    private Boolean activated = true;
+
+    @Column(columnDefinition = "TEXT")
+    private String descriptionSummary;
+
+    public void unActivated() {
+        this.activated = false;
+    }
+
     // 정렬을 위해 일단 임시로...
     @LastModifiedDate
-    protected LocalDate modifiedAt=LocalDate.now();
+    protected LocalDate modifiedAt = LocalDate.now();
+
 }
