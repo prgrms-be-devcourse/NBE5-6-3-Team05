@@ -1,5 +1,6 @@
 package com.grepp.moodlink.app.model.data.book.entity;
 
+import com.grepp.moodlink.infra.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -8,13 +9,14 @@ import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Table(name = "book")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Book {
+public class Book extends BaseEntity {
 
     @Id
     private String isbn;
@@ -32,10 +34,7 @@ public class Book {
     private byte[] embedding;
     private String genre;
     private Long likeCount;
-
-    private Boolean activated = true;
-
-    public void unActivated() {
-        this.activated = false;
-    }
+    // 정렬을 위해 일단 임시로...
+    @LastModifiedDate
+    protected LocalDate modifiedAt=LocalDate.now();
 }

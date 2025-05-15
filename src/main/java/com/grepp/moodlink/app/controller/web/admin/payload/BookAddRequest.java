@@ -1,8 +1,5 @@
 package com.grepp.moodlink.app.controller.web.admin.payload;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.grepp.moodlink.app.model.data.book.code.Genre;
-
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
