@@ -216,7 +216,7 @@
       }
 
       .modal {
-        display: none; /* 기본 숨김 */
+        display: none;
         position: fixed;
         z-index: 9999;
         left: 0;
@@ -224,7 +224,7 @@
         width: 100vw;
         height: 100vh;
         overflow: auto;
-        background-color: rgba(0, 0, 0, 0.8); /* 어두운 반투명 배경 */
+        background-color: rgba(0, 0, 0, 0.8);
       }
 
       .modal-content {
@@ -233,7 +233,7 @@
         padding: 30px;
         border-radius: 8px;
         height: 50%;
-        width: 80%;
+        width: auto;
         color: white;
         position: relative;
         z-index: 10000;
@@ -254,7 +254,7 @@
       }
 
       .fancy-button.blue-button {
-        background-color: #3f51b5; /* 예: 인디고 계열 */
+        background-color: #3f51b5;
         color: white;
         border: none;
         padding: 10px 20px;
@@ -340,7 +340,6 @@
         100% { opacity: 1; transform: translateY(0); }
       }
 
-      /* 타자기 효과 */
       @keyframes typewriter {
         0% { width: 0; }
         100% { width: 100%; }
@@ -348,17 +347,26 @@
 
       .fortune-result {
         display: none;
-        font-size: 1.8rem; /* 큰 폰트 */
+        font-size: 1.8rem;
         font-weight: bold;
-        color: #ff8c00; /* 화려한 색상 */
+        color: #ff8c00;
         text-align: center;
-        font-family: 'Arial', sans-serif; /* 더 모던한 폰트 */
+        font-family: 'Arial', sans-serif;
         white-space: nowrap;
         overflow: hidden;
-        border-right: .15em solid #ff8c00; /* 타자기 커서 효과 */
-        animation: typewriter 3s steps(30) 1s 1 normal both; /* 타자기 효과 애니메이션 */
+        border-right: .15em solid #ff8c00;
+        animation: typewriter 3s steps(30) 1s 1 normal both, blink-caret 0.75s step-end infinite; /* 타자기 효과 애니메이션 */
         letter-spacing: 0.1em;
-        text-shadow: 0 0 15px rgba(255, 140, 0, 0.7); /* 빛나는 효과 */
+        text-shadow: 0 0 15px rgba(255, 140, 0, 0.7);
+      }
+
+      @keyframes blink-caret {
+        0%, 100% { border-right-color: transparent; }
+        50% { border-right-color: #ff8c00; }
+      }
+
+      .fortune-result.done {
+        border-right: none;
       }
 
     </style>

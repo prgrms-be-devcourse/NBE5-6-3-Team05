@@ -64,17 +64,15 @@
         오늘의 운세
       </button>
 
-      <!-- 운세 모달 -->
       <div id="fortuneModal" class="modal" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
           <span class="close-btn" onclick="closeModal()">&times;</span>
           <h4 style="color: #814700 ; margin-bottom: 20px;">오늘의 운세</h4>
 
-          <!-- 운세 텍스트 출력 부분 -->
           <div id="fortuneText">
             <p id="fortuneMsg1" class="fortune-message" style="display: none;">당신의 오늘을 위한 짧은 안내서입니다.</p>
             <p id="fortuneMsg2" class="fortune-message" style="display: none;">이 운세가 당신의 하루에 작은 방향이 되길 바랍니다.</p>
-            <p id="fortuneResult" class="fortune-result" style="display: none;"></p> <!-- 서버에서 받아올 운세 텍스트 -->
+            <p id="fortuneResult" class="fortune-result" style="display: none;"></p>
           </div>
 
           <div style="margin-top: 20px; text-align: center;">
@@ -105,13 +103,11 @@
     if (info.style.display === 'block') {
       info.style.display = 'none';
     } else {
-      // 모든 다른 정보 숨기기
       document.querySelectorAll('.content-info').forEach(el => el.style.display = 'none');
       info.style.display = 'block';
     }
   }
 
-  // 운세 버튼 클릭 시 모달을 띄우고 운세를 받아옵니다.
   function openFortuneModal() {
     document.getElementById("fortuneModal").style.display = "block";
 
@@ -125,18 +121,15 @@
     result.style.display = "none";
     result.textContent = "";
 
-    // 1단계: 첫 문장 표시
     msg1.style.display = "block";
 
     setTimeout(() => {
       msg1.style.display = "none";
       msg2.style.display = "block";
 
-      // 2단계: 두 번째 문장 표시 후
       setTimeout(() => {
         msg2.style.display = "none";
 
-        // 서버에서 운세 가져오기
         fetch('/fortune')
         .then(response => response.text())
         .then(data => {
@@ -148,9 +141,9 @@
           result.style.display = "block";
         });
 
-      }, 2000); // 두 번째 문장 보여주는 시간 (2초)
+      }, 2000);
 
-    }, 2000); // 첫 번째 문장 보여주는 시간 (2초)
+    }, 2000);
   }
 
   function openModal() {
@@ -158,34 +151,42 @@
     document.body.style.overflow = 'hidden'; // 스크롤 방지
   }
 
-  // 모달 닫기
   function closeModal(event) {
     if (event) {
-      event.stopPropagation(); // 모달 외부 클릭 방지
+      event.stopPropagation();
     }
     document.getElementById("fortuneModal").style.display = "none";
     document.body.style.overflow = 'auto';
   }
 
-  // 다시 추천받기
   function retryFortune() {
     const result = document.getElementById("fortuneResult");
 
-    // 스타일 클래스 적용 후 운세 텍스트 업데이트
     fetch('/fortune/ai', {
       method: 'POST'
     })
     .then(res => res.text())
     .then(data => {
-      result.textContent = data;  // 운세 텍스트를 fortuneResult에 업데이트
-      result.classList.add("fortune-result");  // 'fortune-result' 클래스 적용
-      result.style.display = "block";  // 결과를 보이도록 설정
+      result.textContent = data;
+      result.classList.add("fortune-result");
+      result.style.display = "block";
     })
     .catch(() => {
       result.textContent = "운세를 불러올 수 없습니다.";
-      result.classList.add("fortune-result");  // 'fortune-result' 클래스 적용
+      result.classList.add("fortune-result");
       result.style.display = "block";
     });
   }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const result = document.querySelector('.fortune-result');
+    if (result) {
+      result.style.display = 'block';
+
+      setTimeout(() => {
+        result.classList.add('done');
+      }, 15000);
+    }
+  });
 
 </script>
