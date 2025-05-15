@@ -1,6 +1,6 @@
 package com.grepp.moodlink.app.model.data.book.code;
 
-public enum Genre {
+public enum BookGenre {
 
     FAIRY_TALE("동화"),
     LIGHT_NOVEL("라이트노벨"),
@@ -24,7 +24,7 @@ public enum Genre {
 
     private final String name;
 
-    Genre(String name) {
+    BookGenre(String name) {
         this.name = name;
     }
 

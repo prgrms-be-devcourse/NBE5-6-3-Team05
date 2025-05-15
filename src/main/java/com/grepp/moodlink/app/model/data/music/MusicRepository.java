@@ -1,7 +1,10 @@
 package com.grepp.moodlink.app.model.data.music;
 
+import com.grepp.moodlink.app.model.data.book.BookRepositoryCustom;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
+import org.springframework.data.domain.Pageable;
 import com.grepp.moodlink.app.model.result.dto.SongDto;
+import java.nio.channels.FileChannel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,9 +14,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface MusicRepository extends JpaRepository<Music, String> {
+public interface MusicRepository extends JpaRepository<Music, String>, MusicRepositoryCustom {
 
     List<Music> findByEmbeddingIsNull();
+
+    boolean existsByTitleAndSinger(String title, String singer);
 
     @Query("SELECT m FROM Music m WHERE LOWER(REPLACE(m.title, ' ', '')) = LOWER(REPLACE(m.title, ' ', ''))")
     Optional<Music> findByTitleIgnoreCaseContaining(String trim);

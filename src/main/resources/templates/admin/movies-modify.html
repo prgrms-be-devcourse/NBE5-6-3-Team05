@@ -3,7 +3,7 @@
       layout:decorate="~{layout}">
 <head>
   <meta charset="UTF-8">
-  <title>관리자 페이지 - 영화 추가</title>
+  <title>관리자 페이지 - 영화 수정</title>
   <link rel="stylesheet" th:href="@{/css/admin/contents-add.css}">
 
 </head>
@@ -13,7 +13,7 @@
 
   <!-- 중앙 배치 form -->
   <div class="main-area">
-      <form th:action="@{/admin/movies/add}" th:object="${movieAddRequest}" method="post" enctype="multipart/form-data">
+      <form th:action="@{'/admin/movies/modify/'+${movie.getId()}}" th:object="${movieModifyRequest}" method="post" enctype="multipart/form-data">
     <div class="form-section">
       <h3>영화 정보를 입력해주세요.</h3>
 
@@ -25,17 +25,17 @@
           </div>
 
           <div>
-            <div class="form-row"><label>제목</label><input th:field="*{title}" class="input-line"/></div>
-            <span th:errors="*{title}" class="helper-text" ></span>
-            <div class="form-row"><label>개봉일</label><input th:field="*{releaseDate}" class="input-line" type="date" /></div>
+            <div class="form-row"><label>제목</label><div th:text="${movie.getTitle()}"></div></div>
+            <div class="form-row"><label>개봉일</label><div th:text="${movie.getReleaseDate()}"></div></div>
           </div>
         </div>
 
         <div class="form-row" style="flex-direction: column; align-items: flex-start;">
           <label style="margin-bottom: 0.3rem;">장르</label>
           <div class="selected-genres" id="selected-genres">선택된 장르 없음</div>
-          <div class="genre-list">
-<!--            임시로 -->
+          <div class="genre-list" th:attr="data-selected-genre=${selectedGenre}">
+
+            <!--            임시로 -->
             <div th:each="gen : ${genreList}">
               <a class="genre-btn" type="button" th:attr="data-genre-id=${gen.getId()}" th:text="${gen.getName()}">코미디</a>
             </div>
@@ -67,26 +67,45 @@
     }
   });
 
-  document.addEventListener("DOMContentLoaded", function (){
-    document.querySelectorAll(".genre-btn")
-    .forEach((btn) => {
-      btn.addEventListener("click", async function () {
-        btn.classList.toggle("selected");
+  document.addEventListener("DOMContentLoaded", function () {
+    // ✅ 초기 선택된 ID 세팅
+    const selectedRaw = document.querySelector(".genre-list").dataset.selectedGenre;
+    const selectedIds = selectedRaw ? selectedRaw.split(",").map(id => id.trim()) : [];
+    console.log(selectedRaw);
+    console.log(selectedIds);
 
-        const selectedId = [...document.querySelectorAll(".genre-btn.selected")].map(b => b.dataset.genreId);
-        const selectedName = [...document.querySelectorAll(".genre-btn.selected")].map(b => b.textContent);
-
-
-        document.getElementById("selected-genres").textContent = selectedName.length
-            ? selectedName.join(", ")
-            : "선택된 장르 없음";
-
-        // input에도 추가
-        document.getElementById("genre-input").value = selectedId.map((id, i) => `${id}:${selectedName[i]}`).join(",");
-
-        console.log(document.getElementById("genre-input").value);
-        });
+    // ✅ .selected 클래스 추가
+    document.querySelectorAll(".genre-btn").forEach(btn => {
+      if (selectedIds.includes(btn.dataset.genreId)) {
+        btn.classList.add("selected");
+      }
     });
+
+    // ✅ 초기 UI 업데이트
+    updateGenreSelection();
+
+    // ✅ 클릭 이벤트 등록
+    document.querySelectorAll(".genre-btn").forEach(btn => {
+      btn.addEventListener("click", function () {
+        btn.classList.toggle("selected");
+        updateGenreSelection();
+      });
+    });
+
+    // ✅ 선택된 장르 UI + input 동기화
+    function updateGenreSelection() {
+      const selectedButtons = [...document.querySelectorAll(".genre-btn.selected")];
+      const selectedId = selectedButtons.map(b => b.dataset.genreId);
+      const selectedName = selectedButtons.map(b => b.textContent.trim());
+
+      document.getElementById("selected-genres").textContent = selectedName.length
+          ? selectedName.join(", ")
+          : "선택된 장르 없음";
+
+      document.getElementById("genre-input").value =
+          selectedId.map((id, i) => `${id}:${selectedName[i]}`).join(",");
+      console.log(document.getElementById("genre-input").value);
+    }
   });
 </script>
 </div>

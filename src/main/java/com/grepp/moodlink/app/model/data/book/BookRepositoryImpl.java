@@ -86,6 +86,7 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
             .select(book)
             .from(book)
             .where(book.activated)
+            .orderBy(book.modifiedAt.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
