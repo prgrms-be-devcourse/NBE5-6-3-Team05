@@ -17,46 +17,6 @@ public class LikesService {
     private final Map<String, Boolean> likeSongStatusMap = new ConcurrentHashMap<>();
     private final Map<String, Boolean> likeBookStatusMap = new ConcurrentHashMap<>();
 
-    public boolean toggleMovieStatus(String id) {
-
-        // db에서 가져오기 (임의로 false로 초기화)
-        boolean current = likeMovieStatusMap.getOrDefault(id, false);
-        //
-        boolean updated = !current;
-        likeMovieStatusMap.put(id,updated);
-        System.out.println("movie: "+id+" ,current status = "+updated);
-
-        return updated;
-    }
-
-    public boolean toggleSongStatus(String id) {
-        // db에서 가져오기 (임의로 false로 초기화)
-        boolean current;
-        if (id.equals("s1111")){
-            current = likeSongStatusMap.getOrDefault(id, true);
-        }
-        else{
-            current = likeSongStatusMap.getOrDefault(id, false);
-        }
-        //
-        boolean updated = !current;
-        likeSongStatusMap.put(id,updated);
-        System.out.println("song: "+id+" ,current status = "+updated);
-
-        return updated;
-    }
-
-    public boolean toggleBookStatus(String id) {
-        // db에서 가져오기 (임의로 false로 초기화)
-        boolean current = likeBookStatusMap.getOrDefault(id, false);
-        //
-        boolean updated = !current;
-        likeBookStatusMap.put(id,updated);
-        System.out.println("book : "+id+" ,current status = "+updated);
-
-        return updated;
-    }
-
     public boolean getBookStatus(String id) {
         return likeBookStatusMap.getOrDefault(id,false);
     }

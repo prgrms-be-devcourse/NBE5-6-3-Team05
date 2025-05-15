@@ -28,7 +28,6 @@ public class ResultController {
             userId = authentication.getName();
         }
 
-        userId = "qwer";
         List<CuratingDetailDto> tempList = resultService.curatingDetailDtoList(userId);
 
         String msg1 ="curatingReason출력문 예시 <br>";

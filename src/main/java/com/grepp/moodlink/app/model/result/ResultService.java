@@ -37,12 +37,13 @@ public class ResultService {
     private final LikeDetailBooksRepository likeDetailBooksRepository;
     private final LikeDetailMoviesRepository likeDetailMoviesRepository;
 
-    private final String googleStr="https://www.google.com/search?q=";
 
     public List<CuratingDetailDto> curatingDetailDtoList(String userId){
 
+        String googleStr="https://www.google.com/search?q=";
+
         // db에서 curating 값 가져오기
-        String curatingId = curatingRepository.findByUserId(userId).getFirst().getId();
+        Long curatingId = curatingRepository.findByUserId(userId).getFirst().getId();
         List<CuratingDetail> curatingDetails = curatingDetailRepository.findByCuratingId(curatingId);
 
         String tempBookId;
