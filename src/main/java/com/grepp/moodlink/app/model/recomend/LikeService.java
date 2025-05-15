@@ -287,6 +287,8 @@ public class LikeService {
             .collect(Collectors.toList());
     }
 
+
+    //TODO: like테이블 수정 및 각 컨텐츠의 like_count증감 적용
     @Transactional
     public boolean toggleLikeMusic(String userId, String id){
         List<Likes> likes = getLikeInfo(userId);
@@ -316,7 +318,6 @@ public class LikeService {
             newLikeMusic.setLikesId(newLike.getId());
             likeDetailMusicRepository.save(newLikeMusic);
         }
-        System.out.println(exists);
         return exists;
     }
 
@@ -349,7 +350,6 @@ public class LikeService {
             newLikeMovies.setLikesId(newLike.getId());
             likeDetailMoviesRepository.save(newLikeMovies);
         }
-        System.out.println(exists);
         return exists;
     }
 
@@ -382,7 +382,6 @@ public class LikeService {
             newLikeBooks.setLikesId(newLike.getId());
             likeDetailBooksRepository.save(newLikeBooks);
         }
-        System.out.println(exists);
         return exists;
     }
 }
