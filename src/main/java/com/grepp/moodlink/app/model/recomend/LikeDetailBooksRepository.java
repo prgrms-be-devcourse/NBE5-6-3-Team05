@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LikeDetailBooksRepository extends JpaRepository<LikeDetailBooks, String> {
 
-    LikeDetailBooks findByLikesId(String likeId);
+    LikeDetailBooks findByLikesId(Long likeId);
 
+    void deleteById(Long id);
 }

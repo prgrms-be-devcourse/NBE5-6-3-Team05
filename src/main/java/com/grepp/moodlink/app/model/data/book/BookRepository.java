@@ -1,14 +1,13 @@
 package com.grepp.moodlink.app.model.data.book;
 
-import com.grepp.moodlink.app.model.data.book.dto.BookDto;
+import com.grepp.moodlink.app.model.result.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface BookRepository extends JpaRepository<Book, String>, BookRepositoryCustom {
 
@@ -20,5 +19,8 @@ public interface BookRepository extends JpaRepository<Book, String>, BookReposit
 
     List<Book> findByActivated(Boolean activated);
 
-    Optional<Book> findByTitle(String title);
+    @Query("SELECT new com.grepp.moodlink.app.model.result.dto.BookDto(b.isbn,b.title, b.image) " +
+        "FROM Book b WHERE b.isbn = :isbn")
+    Optional<BookDto> findSimpleByIsbn(@Param("isbn") String isbn);
+
 }
