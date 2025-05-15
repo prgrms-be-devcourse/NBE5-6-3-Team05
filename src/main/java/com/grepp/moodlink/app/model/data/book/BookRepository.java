@@ -16,4 +16,6 @@ public interface BookRepository extends JpaRepository<Book, String>, BookReposit
     Book findByIsbn(String isbn);
 
     List<Book> findByActivated(Boolean activated);
+
+    List<Book> findAllByIsbnIn(List<String> isbn);
 }

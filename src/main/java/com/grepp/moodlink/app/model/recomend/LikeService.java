@@ -23,6 +23,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,97 +43,91 @@ public class LikeService {
     private final BookRepository bookRepository;
     private final MusicRepository musicRepository;
     private final MovieRepository movieRepository;
+    private final ModelMapper mapper;
 
     public List<Likes> getLikeInfo(String userId) {
         return likeRepository.findByUserId(userId);
     }
 
     public List<LikeDetailBooks> getLikeDetailBook(List<Likes> likes) {
-        List<LikeDetailBooks> likeDetailBooks = new ArrayList<>();
 
-        for (Likes like : likes) {
-            LikeDetailBooks detailBook = likeDetailBooksRepository.findByLikesId(like.getId());
+        List<String> likeIds = likes.stream().map(Likes::getId).collect(Collectors.toList());
+        return likeDetailBooksRepository.findAllByLikesIdIn(likeIds);
 
-            if (detailBook != null) {
-                likeDetailBooks.add(detailBook);
-            }
-        }
+    }
+    public Page<LikeDetailBooks> getLikeDetailBookPaged(List<Likes> likes,Pageable pageable) {
 
-        return likeDetailBooks;
+        List<String> likeIds = likes.stream().map(Likes::getId).collect(Collectors.toList());
+        return likeDetailBooksRepository.findAllByLikesIdInPagination(likeIds,pageable);
 
     }
 
     public List<BookDto> getBookList(List<LikeDetailBooks> likeDetailBooks) {
-        List<BookDto> books = new ArrayList<>();
 
-        for (LikeDetailBooks likeDetailBook : likeDetailBooks) {
-            Book book = bookRepository.findById(likeDetailBook.getBookId()).orElse(null);
+        List<String> bookIds = likeDetailBooks.stream()
+            .map(LikeDetailBooks::getBookId)
+            .collect(Collectors.toList());
 
-            if (book != null) {
-                books.add(BookDto.toDto(book));
-            }
-        }
+        List<Book> books = bookRepository.findAllByIsbnIn(bookIds);
 
         log.info("Books: {}", books);
 
-        return books;
+        return books.stream()
+            .map(BookDto::toDto)
+            .collect(Collectors.toList());
     }
 
 
     public List<LikeDetailMusic> getLikeDetailMusic(List<Likes> likes) {
-        List<LikeDetailMusic> likeDetailMusics = new ArrayList<>();
 
-        for (Likes like : likes) {
-            LikeDetailMusic detailMusic = likeDetailMusicRepository.findByLikesId(like.getId());
+        List<String> likeIds = likes.stream().map(Likes::getId).collect(Collectors.toList());
+        return likeDetailMusicRepository.findAllByLikesIdIn(likeIds);
 
-            if (detailMusic != null) {
-                likeDetailMusics.add(detailMusic);
-            }
-        }
+    }
+    public Page<LikeDetailMusic> getLikeDetailMusicPaged(List<Likes> likes,Pageable pageable) {
 
-        return likeDetailMusics;
+        List<String> likeIds = likes.stream().map(Likes::getId).collect(Collectors.toList());
+        return likeDetailMusicRepository.findAllByLikesIdInPagination(likeIds,pageable);
 
     }
 
     public List<MusicDto> getMusicList(List<LikeDetailMusic> likeDetailMusics) {
-        List<MusicDto> musics = new ArrayList<>();
 
-        for (LikeDetailMusic likeDetailMusic : likeDetailMusics) {
-            Music music = musicRepository.findById(likeDetailMusic.getMusicId()).orElse(null);
+        List<String> MusicIds = likeDetailMusics.stream()
+            .map(LikeDetailMusic::getMusicId)
+            .collect(Collectors.toList());
 
-            if (music != null) {
-                musics.add(MusicDto.toDto(music));
-            }
-        }
-        return musics;
+        List<Music> musics = musicRepository.findAllByIdIn(MusicIds);
+
+        return musics.stream()
+            .map(MusicDto::toDto)
+            .collect(Collectors.toList());
     }
 
     public List<LikeDetailMovies> getLikeDetailMovie(List<Likes> likes) {
-        List<LikeDetailMovies> likeDetailMovies = new ArrayList<>();
+        List<String> likeIds = likes.stream().map(Likes::getId).collect(Collectors.toList());
 
-        for (Likes like : likes) {
-            LikeDetailMovies detailMovies = likeDetailMoviesRepository.findByLikesId(like.getId());
+        return likeDetailMoviesRepository.findAllByLikesIdIn(likeIds);
 
-            if (detailMovies != null) {
-                likeDetailMovies.add(detailMovies);
-            }
-        }
+    }
 
-        return likeDetailMovies;
+    public Page<LikeDetailMovies> getLikeDetailMoviePaged(List<Likes> likes,Pageable pageable) {
+        List<String> likeIds = likes.stream().map(Likes::getId).collect(Collectors.toList());
+
+        return likeDetailMoviesRepository.findAllByLikesIdInPagination(likeIds,pageable);
 
     }
 
     public List<MovieInfoDto> getMovieList(List<LikeDetailMovies> likeDetailMovies) {
-        List<MovieInfoDto> movies = new ArrayList<>();
+        List<String> MovieIds = likeDetailMovies.stream()
+            .map(LikeDetailMovies::getMovieId)
+            .collect(Collectors.toList());
 
-        for (LikeDetailMovies likeDetailMovie : likeDetailMovies) {
-            Movie movie = movieRepository.findById(likeDetailMovie.getMovieId()).orElse(null);
+        List<Movie> movies = movieRepository.findAllByIdIn(MovieIds);
 
-            if (movie != null) {
-                movies.add(MovieInfoDto.toDto(movie));
-            }
-        }
-        return movies;
+        return movies.stream()
+            .map(MovieInfoDto::toDto)
+            .collect(Collectors.toList());
     }
 
 
@@ -287,6 +285,32 @@ public class LikeService {
             .map(entry -> new LikeGenreResponse(entry.getKey(), entry.getValue()))
             .collect(Collectors.toList());
     }
+
+    @Transactional
+    public Page<BookDto> getUserLikedBooksPaged(String userId, Pageable pageable) {
+        List<Likes> likes = getLikeInfo(userId);
+        Page<LikeDetailBooks> likeDetailBooks = getLikeDetailBookPaged(likes,pageable);
+        List<BookDto> Books = getBookList(likeDetailBooks.getContent());
+
+        return new PageImpl<>(Books, pageable, likeDetailBooks.getTotalElements());
+    }
+
+    @Transactional
+    public Page<MusicDto> getUserLikedMusicsPaged(String userId, Pageable pageable) {
+        List<Likes> likes = getLikeInfo(userId);
+        Page<LikeDetailMusic> likeDetailMusics = getLikeDetailMusicPaged(likes,pageable);
+        List<MusicDto> Musics = getMusicList(likeDetailMusics.getContent());
+
+        return new PageImpl<>(Musics, pageable, likeDetailMusics.getTotalElements());
+    }@Transactional
+    public Page<MovieInfoDto> getUserLikedMoviesPaged(String userId, Pageable pageable) {
+        List<Likes> likes = getLikeInfo(userId);
+        Page<LikeDetailMovies> likeDetailMovies = getLikeDetailMoviePaged(likes,pageable);
+        List<MovieInfoDto> Movies = getMovieList(likeDetailMovies.getContent());
+
+        return new PageImpl<>(Movies, pageable, likeDetailMovies.getTotalElements());
+    }
+
 }
 
 

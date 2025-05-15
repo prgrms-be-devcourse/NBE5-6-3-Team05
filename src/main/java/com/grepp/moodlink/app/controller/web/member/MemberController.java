@@ -10,10 +10,14 @@ import com.grepp.moodlink.app.model.home.HomeService;
 import com.grepp.moodlink.app.model.member.MemberService;
 import com.grepp.moodlink.app.model.member.dto.MemberInfoDto;
 import com.grepp.moodlink.app.model.recomend.LikeService;
+import com.grepp.moodlink.infra.response.PageResponse;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +27,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @Slf4j
@@ -129,7 +134,6 @@ public class MemberController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String userId = userDetails.getUsername();
 
-
         try {
             memberService.modifyProfile(userId, request.toDto());
         } catch (IllegalArgumentException e) {
@@ -142,7 +146,12 @@ public class MemberController {
 
 
     @GetMapping("/like")
-    public String showLikePage(Model model) {
+    public String showLikePage(Model model,
+        @RequestParam(value = "book_page", defaultValue = "0") int bookPage,
+        @RequestParam(value = "music_page", defaultValue = "0") int musicPage,
+        @RequestParam(value = "movie_page", defaultValue = "0") int moviePage,
+        @RequestParam(value = "size", defaultValue = "3") int size,
+        @RequestParam(value = "tab", defaultValue = "books") String tab) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isAuthenticated = authentication != null &&
             authentication.isAuthenticated() &&
@@ -155,13 +164,26 @@ public class MemberController {
 
         String userId = principal.getUsername();
 
-        List<BookDto> likedBooks = likeService.getUserLikedBooks(userId);
-        List<MusicDto> likedMusics = likeService.getUserLikedMusics(userId);
-        List<MovieInfoDto> likedMovies = likeService.getUserLikedMovies(userId);
+        Pageable bookPageable = PageRequest.of(bookPage, size);
+        Pageable musicPageable = PageRequest.of(musicPage, size);
+        Pageable moviePageable = PageRequest.of(moviePage, size);
 
-        model.addAttribute("likedbooks", likedBooks);
-        model.addAttribute("likedmusics", likedMusics);
-        model.addAttribute("likedmovies", likedMovies);
+        System.out.println("Book Page: " + bookPage);
+        System.out.println("Music Page: " + musicPage);
+        System.out.println("Movie Page: " + moviePage);
+
+        Page<BookDto> likedBooksPage = likeService.getUserLikedBooksPaged(userId, bookPageable);
+        Page<MusicDto> likedMusicsPage = likeService.getUserLikedMusicsPaged(userId, musicPageable);
+        Page<MovieInfoDto> likedMoviesPage = likeService.getUserLikedMoviesPaged(userId, moviePageable);
+
+        PageResponse<BookDto> bookResponse = new PageResponse<>("users/like", likedBooksPage, 3);
+        PageResponse<MusicDto> musicResponse = new PageResponse<>("users/like", likedMusicsPage, 3);
+        PageResponse<MovieInfoDto> movieResponse = new PageResponse<>("users/like", likedMoviesPage, 3);
+
+        model.addAttribute("likedbooks", bookResponse);
+        model.addAttribute("likedmusics", musicResponse);
+        model.addAttribute("likedmovies", movieResponse);
+        model.addAttribute("activeTab", tab);
         return "users/like";
     }
 

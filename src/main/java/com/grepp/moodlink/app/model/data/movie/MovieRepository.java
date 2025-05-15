@@ -1,6 +1,7 @@
 package com.grepp.moodlink.app.model.data.movie;
 
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
+import com.grepp.moodlink.app.model.data.music.entity.Music;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -23,4 +24,6 @@ public interface MovieRepository extends JpaRepository<Movie, String> {
     Optional<Movie> findByTitleContainingIgnoreCase(String title);
 
     Movie findByTitle(String title);
+
+    List<Movie> findAllByIdIn(List<String> id);
 }

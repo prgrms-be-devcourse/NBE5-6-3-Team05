@@ -2,47 +2,65 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
+<style>
+  .pagination ul {
+    list-style: none;
+    display: flex;
+    gap: 5px;
+    padding-left: 0;
+  }
+
+  .pagination li {
+    display: inline;
+  }
+
+  .pagination a {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    color: black;
+    text-decoration: none;
+    border-radius: 4px;
+  }
+
+  .pagination li.active a {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+  }
+
+  .like-item {
+    display: none;
+    margin-top: 20px;
+  }
 
 
+</style>
 <body>
-
-
 <div layout:fragment="content">
   <h3>좋아요 목록</h3>
 
+  <!-- 탭 버튼 -->
+  <div class="header-buttons">
   <div>
-    <button class="mypage-btn" onclick="loadTab('books')">
-      도서
-    </button>
-    <button class="mypage-btn" onclick="loadTab('movies')">
-      영화
-    </button>
-    <button class="mypage-btn" onclick="loadTab('musics')">
-      음악
-    </button>
-
-
+    <button class="mypage-btn" onclick="location.href='/users/like?tab=books'">도서</button>
+    <button class="mypage-btn" onclick="location.href='/users/like?tab=movies'">영화</button>
+    <button class="mypage-btn" onclick="location.href='/users/like?tab=musics'">음악</button>
   </div>
-  <div id="books" class="like-item">
+</div>
+  <!-- 도서 탭 -->
+  <div id="books" class="like-item" th:if="${activeTab == 'books'}">
     <h2>도서</h2>
     <table>
       <thead>
       <tr>
-        <th>제목</th>
-        <th>ISBN</th>
-        <th>이미지</th>
-        <th>저자</th>
-        <th>출판사</th>
-        <th>출판일</th>
-        <th>장르</th>
-        <th>설명</th>
+        <th>제목</th><th>ISBN</th><th>이미지</th><th>저자</th><th>출판사</th><th>출판일</th><th>장르</th><th>설명</th>
       </tr>
       </thead>
       <tbody>
-      <tr th:each="book : ${likedbooks}">
+      <tr th:each="book : ${likedbooks.content()}">
         <td th:text="${book.title}"></td>
         <td th:text="${book.isbn}"></td>
-        <td><img th:src="${book.image}" class="image" width="100"></td>
+        <td><img th:src="${book.image}" width="100"></td>
         <td th:text="${book.author}"></td>
         <td th:text="${book.publisher}"></td>
         <td th:text="${book.publishedDate}"></td>
@@ -51,26 +69,40 @@
       </tr>
       </tbody>
     </table>
+
+    <!-- 도서 페이지네이션 -->
+    <div class="pagination" th:if="${likedbooks.page.totalPages > 1}">
+      <ul>
+        <li th:if="${likedbooks.currentNumber > 1}">
+          <a href="#" th:attr="data-page=${likedbooks.prevPage - 1}, data-tab='books'">&laquo;</a>
+        </li>
+        <li th:each="i : ${#numbers.sequence(likedbooks.startNumber, likedbooks.endNumber)}"
+            th:classappend="${i == likedbooks.currentNumber} ? 'active'">
+          <a href="#"
+             th:attr="data-page=${i - 1}, data-tab='books'"
+             th:text="${i}"></a>
+        </li>
+        <li th:if="${likedbooks.currentNumber < likedbooks.page.totalPages}">
+          <a href="#" th:attr="data-page=${likedbooks.nextPage - 1}, data-tab='books'">&raquo;</a>
+        </li>
+      </ul>
+    </div>
+
   </div>
 
-
-  <div id="movies" class="like-item">
+  <!-- 영화 탭 -->
+  <div id="movies" class="like-item" th:if="${activeTab == 'movies'}">
     <h2>영화</h2>
     <table>
       <thead>
       <tr>
-        <th>제목</th>
-        <th>썸네일</th>
-        <th>설명</th>
-        <th>장르</th>
-        <th>개봉일</th>
-
+        <th>제목</th><th>썸네일</th><th>설명</th><th>장르</th><th>개봉일</th>
       </tr>
       </thead>
       <tbody>
-      <tr th:each="movie : ${likedmovies}">
+      <tr th:each="movie : ${likedmovies.content()}">
         <td th:text="${movie.title}"></td>
-        <td><img th:src="${movie.thumbnail}" class="image" width="100"></td>
+        <td><img th:src="${movie.thumbnail}" width="100"></td>
         <td th:text="${movie.description}"></td>
         <td>
           <ul>
@@ -78,29 +110,42 @@
           </ul>
         </td>
         <td th:text="${movie.releaseDate}"></td>
-
       </tr>
       </tbody>
     </table>
+
+    <!-- 영화 페이지네이션 -->
+    <div id="movies-pagination" class="pagination" th:if="${likedmovies.page.totalPages > 1}">
+      <ul>
+        <li th:if="${likedmovies.currentNumber > 1}">
+          <a href="#" th:attr="data-page=${likedmovies.prevPage - 1}, data-tab='movies'">&laquo;</a>
+        </li>
+        <li th:each="i : ${#numbers.sequence(likedmovies.startNumber, likedmovies.endNumber)}"
+            th:classappend="${i == likedmovies.currentNumber} ? 'active'">
+          <a href="#"
+             th:attr="data-page=${i - 1}, data-tab='movies'"
+             th:text="${i}"></a>
+        </li>
+        <li th:if="${likedmovies.currentNumber < likedmovies.page.totalPages}">
+          <a href="#" th:attr="data-page=${likedmovies.nextPage - 1}, data-tab='movies'">&raquo;</a>
+        </li>
+      </ul>
+    </div>
   </div>
-  <div id="musics" class="like-item">
+
+  <!-- 음악 탭 -->
+  <div id="musics" class="like-item" th:if="${activeTab == 'musics'}">
     <h2>음악</h2>
     <table>
       <thead>
       <tr>
-        <th>제목</th>
-        <th>썸네일</th>
-        <th>가수</th>
-        <th>장르</th>
-        <th>설명</th>
-        <th>가사</th>
-        <th>발매일</th>
+        <th>제목</th><th>썸네일</th><th>가수</th><th>장르</th><th>설명</th><th>가사</th><th>발매일</th>
       </tr>
       </thead>
       <tbody>
-      <tr th:each="music : ${likedmusics}">
+      <tr th:each="music : ${likedmusics.content()}">
         <td th:text="${music.title}"></td>
-        <td><img th:src="${music.thumbnail}" class="image" width="100"></td>
+        <td><img th:src="${music.thumbnail}" width="100"></td>
         <td th:text="${music.singer}"></td>
         <td th:text="${music.genre}"></td>
         <td th:text="${music.description}"></td>
@@ -109,25 +154,67 @@
       </tr>
       </tbody>
     </table>
+
+    <!-- 음악 페이지네이션 -->
+    <div id="musics-pagination" class="pagination" th:if="${likedmusics.page.totalPages > 1}">
+      <ul>
+        <li th:if="${likedmusics.currentNumber > 1}">
+          <a href="#" th:attr="data-page=${likedmusics.prevPage - 1}, data-tab='musics'">&laquo;</a>
+        </li>
+        <li th:each="i : ${#numbers.sequence(likedmusics.startNumber, likedmusics.endNumber)}"
+            th:classappend="${i == likedmusics.currentNumber} ? 'active'">
+          <a href="#"
+             th:attr="data-page=${i - 1}, data-tab='musics'"
+             th:text="${i}"></a>
+        </li>
+        <li th:if="${likedmusics.currentNumber < likedmusics.page.totalPages}">
+          <a href="#" th:attr="data-page=${likedmusics.nextPage - 1}, data-tab='musics'">&raquo;</a>
+        </li>
+      </ul>
+    </div>
+
   </div>
 
-
-  <script>
+  <!-- 탭 스크립트 -->
+  <script th:inline="javascript">
+    let currentPage = {
+      books: /*[[${likedbooks.page.number}]]*/ 0,
+      movies: /*[[${likedmovies.page.number}]]*/ 0,
+      musics: /*[[${likedmusics.page.number}]]*/ 0
+    };
+    const pageSize = /*[[${likedbooks.page.size}]]*/ 3;
 
     function loadTab(tabName) {
-
       const tabItems = document.querySelectorAll('.like-item');
       tabItems.forEach(item => item.style.display = 'none');
+      document.getElementById(tabName).style.display = 'block';
+      updatePaginationLinks(tabName);
+    }
 
-      const selectedTab = document.getElementById(tabName);
-      selectedTab.style.display = 'block';
+    function updatePaginationLinks(tabName) {
+      const paginationLinks = document.querySelectorAll(`#${tabName}-pagination a`);
+      paginationLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+          event.preventDefault();
+          const page = this.dataset.page;
+          window.location.href = `/users/like?${tabName.slice(0, -1)}_page=${page}&size=${pageSize}&tab=${tabName}`;
+        });
+      });
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-      loadTab('books');
+      const activeTab = /*[[${activeTab}]]*/ 'books';
+      loadTab(activeTab);
+
+      // 탭 버튼 이벤트 리스너
+      document.querySelectorAll('.mypage-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const tab = this.textContent.toLowerCase();
+          loadTab(tab);
+        });
+      });
     });
   </script>
-
-
+</div>
 </body>
 </html>
