@@ -12,12 +12,12 @@ import com.grepp.moodlink.infra.util.file.FileUtil;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -145,5 +145,22 @@ public class MovieService {
     @Transactional
     public void deleteMovie(String id) {
         movieRepository.findById(id).ifPresent(Movie::unActivated);
+    }
+    @Transactional
+    public List<Movie> parseRecommend(String movieResult) {
+        List<String> titles = new ArrayList<>();
+        Pattern pattern = Pattern.compile("\\d+\\.\\s*(.+?)\\s*:");
+        Matcher matcher = pattern.matcher(movieResult);
+
+        while (matcher.find()) {
+            titles.add(matcher.group(1).trim());
+        }
+        List<Movie> movies = new ArrayList<>();
+        titles.forEach(title -> {
+            System.out.println(movieRepository.findByTitle(title));
+            movies.add(movieRepository.findByTitle(title));
+        });
+
+        return movies;
     }
 }

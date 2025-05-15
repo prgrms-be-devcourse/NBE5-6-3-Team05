@@ -7,5 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LikeDetailMusicRepository extends JpaRepository<LikeDetailMusic, String> {
 
-    LikeDetailMusic findByLikesId(String likeId);
+    LikeDetailMusic findByLikesId(Long likeId);
+
+    void deleteByMusicId(String id);
 }

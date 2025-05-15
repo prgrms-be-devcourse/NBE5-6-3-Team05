@@ -3,6 +3,7 @@ package com.grepp.moodlink.app.model.data.music;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
+import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
@@ -11,7 +12,13 @@ import com.grepp.moodlink.infra.util.file.FileDto;
 import com.grepp.moodlink.infra.util.file.FileUtil;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -115,5 +122,20 @@ public class MusicService {
     @Transactional
     public void deleteMusic(String id) {
         musicRepository.findById(id).ifPresent(Music::unActivated);
+    }
+    public List<Music> parseRecommend(String musicResult) {
+        Pattern pattern = Pattern.compile("\"([^\"]+)\"");
+        Matcher matcher = pattern.matcher(musicResult);
+
+        List<String> recommendedTitles = new ArrayList<>();
+        while (matcher.find()) {
+            recommendedTitles.add(matcher.group(1).trim());
+        }
+        return recommendedTitles.stream()
+                .map(title -> musicRepository.findByTitleIgnoreCaseContaining(title.replaceAll("\\s+", " ").trim()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

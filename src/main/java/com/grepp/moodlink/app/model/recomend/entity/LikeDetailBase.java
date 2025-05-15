@@ -13,8 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public abstract class LikeDetailBase {
 
-    @Id
-    private String id;
-    private String likesId;
+
+    private Long likesId;
 
 }

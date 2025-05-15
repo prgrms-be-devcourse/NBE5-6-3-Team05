@@ -1,25 +1,23 @@
-package com.grepp.moodlink.app.model.recomend.entity;
+package com.grepp.moodlink.app.model.result.entity;
 
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "likes")
+@Table(name = "curating")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Likes {
-
+public class Curating {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private String id;
     private String userId;
+    private LocalDate curatingDate;
+
 }
