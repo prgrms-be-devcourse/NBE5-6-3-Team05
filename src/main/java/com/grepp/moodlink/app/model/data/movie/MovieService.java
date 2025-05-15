@@ -1,6 +1,5 @@
 package com.grepp.moodlink.app.model.data.movie;
 
-import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.app.model.data.movie.dto.GenreDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
@@ -123,18 +122,14 @@ public class MovieService {
     public void updateMovie(List<MultipartFile> image, MovieInfoDto dto) {
 
         try {
-            if(image!=null){
+            List<FileDto> fileDtos = fileUtil.upload(image, "movie");
 
-                List<FileDto> fileDtos = fileUtil.upload(image, "movie");
+            if(!fileDtos.isEmpty()){
+                FileDto fileDto = fileDtos.getFirst();
+                String renameFileName = fileDto.renameFileName();
+                String savePath = fileDto.savePath();
 
-                if(!fileDtos.isEmpty()){
-                    FileDto fileDto = fileDtos.getFirst();
-                    String renameFileName = fileDto.renameFileName();
-                    String savePath = fileDto.savePath();
-
-                    dto.setThumbnail("/download/" + savePath + renameFileName);
-                }
-
+                dto.setThumbnail("/download/" + savePath + renameFileName);
             }
             // 업데이트
             movieRepository.updateBook(dto);
