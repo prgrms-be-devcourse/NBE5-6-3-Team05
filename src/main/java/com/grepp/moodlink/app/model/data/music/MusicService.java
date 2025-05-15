@@ -2,6 +2,7 @@ package com.grepp.moodlink.app.model.data.music;
 
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
+import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
@@ -109,5 +110,10 @@ public class MusicService {
         } catch (IOException e) {
             throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR, e);
         }
+    }
+
+    @Transactional
+    public void deleteMusic(String id) {
+        musicRepository.findById(id).ifPresent(Music::unActivated);
     }
 }

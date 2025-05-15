@@ -34,7 +34,7 @@
           </div>
           <div class="item-buttons">
             <a th:href="@{'/admin/music/modify/'+${music.id}}">수정</a>
-            <a class="delete-btn" th:attr="data-isbn=${music.id}">삭제</a>
+            <a class="delete-btn" th:attr="data-id=${music.id}">삭제</a>
           </div>
         </div>
       </div>
@@ -56,8 +56,8 @@
         btn.addEventListener("click", async function (event) {
           event.preventDefault();
 
-          const isbn = btn.dataset.isbn;
-          const url = `http://localhost:8080/api/admin/music/delete/${isbn}`;
+          const id = btn.dataset.id;
+          const url = `http://localhost:8080/api/admin/music/delete/${id}`;
           const response = await fetch(
               url, {
                 method: 'DELETE'
