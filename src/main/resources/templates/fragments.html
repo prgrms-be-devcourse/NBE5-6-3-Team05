@@ -380,12 +380,6 @@
         }
       }
 
-      .content-description {
-        margin-top: 30px;
-        font-size: large;
-        font-weight: 600;
-      }
-
       .image {
         width: 300px;
         height: auto;
@@ -433,6 +427,78 @@
 
       .fortune-result.done {
         border-right: none;
+      }
+
+      .search-result-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem;
+        font-family: 'Noto Sans KR', sans-serif;
+      }
+
+      .content-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .content-item {
+        display: flex;
+        gap: 1.5rem;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 1.5rem;
+      }
+
+      .content-thumbnail {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+
+      .content-info {
+        flex: 1;
+      }
+
+      .content-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin: 0 0 0.3rem;
+      }
+
+      .content-description {
+        font-size: 0.95rem;
+        margin: 0.3rem 0;
+        color: #ffffff;
+        line-height: 1.4;
+
+      }
+
+      .content-subtext {
+        font-size: 0.85rem;
+        color: #ffffff;
+      }
+
+      .genre-list {
+        list-style: none;
+        padding: 0;
+        margin: 0.5rem 0 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .genre-tag {
+        background-color: #f0f0f0;
+        padding: 0.3rem 0.6rem;
+        border-radius: 6px;
+        font-size: 0.8rem;
+      }
+
+      .no-result {
+        text-align: center;
+        color: #ffffff;
+        font-size: 1rem;
       }
 
     </style>

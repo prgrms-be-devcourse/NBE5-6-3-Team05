@@ -3,43 +3,45 @@
       layout:decorate="~{layout}">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>검색 결과</title>
 </head>
 <body>
-<main layout:fragment="content">
+<main layout:fragment="content" class="search-result-container">
 
-  <div th:switch="${contentType}">
-    <div th:case="'music'" th:each="music : ${contentDetails}" class="content-item"
+  <div class="content-grid" th:switch="${contentType}">
+    <div th:case="'music'" th:each="music : ${contentDetails}" class="content-item music-item"
          th:attr="data-title=${music.title}, data-description=${music.lyrics}">
-      <img th:src="${music.thumbnail}" />
-      <p th:text="${music.title}" />
-      <p th:text="${music.singer}" />
-      <p th:text="${music.releaseDate}" />
-      <p th:text="${music.lyrics}" />
+      <img th:src="${music.thumbnail}" alt="음악 썸네일" class="content-thumbnail" />
+      <p class="content-title"><strong th:text="${music.title}"></strong></p>
+      <p class="content-subtext" th:text="${music.singer}"></p>
+      <p class="content-subtext" th:text="${music.releaseDate}"></p>
+      <p class="content-description" th:text="${music.lyrics}"></p>
     </div>
 
-    <div th:case="'movie'" th:each="movie : ${contentDetails}" class="content-item"
+    <div th:case="'movie'" th:each="movie : ${contentDetails}" class="content-item movie-item"
          th:attr="data-title=${movie.title}, data-description=${movie.summary}">
-      <img th:src="${movie.thumbnail}" />
-      <p th:text="${movie.title}" />
-      <p th:text="${movie.summary}" />
-      <p th:text="${movie.releaseDate}" />
-      <ul>
-        <li th:each="genre : ${movie.genres}" th:text="${genre}"></li>
+      <img th:src="${movie.thumbnail}" alt="영화 썸네일" class="content-thumbnail" />
+      <p class="content-title"><strong th:text="${movie.title}"></strong></p>
+      <p class="content-description" th:text="${movie.summary}"></p>
+      <p class="content-subtext" th:text="${movie.releaseDate}"></p>
+      <ul class="genre-list">
+        <li class="genre-tag" th:each="genre : ${movie.genres}" th:text="${genre}"></li>
       </ul>
     </div>
 
-    <div th:case="'book'" th:each="book : ${contentDetails}" class="content-item"
+    <div th:case="'book'" th:each="book : ${contentDetails}" class="content-item book-item"
          th:attr="data-title=${book.title}, data-description=${book.description}">
-      <img th:src="${book.image}" />
-      <p th:text="${book.title}" />
-      <p th:text="${book.description}" />
-      <p th:text="${book.publishedDate}" />
-      <p th:text="${book.publisher}" />
-<!--      <p th:text="${book.genre}" />-->
+      <img th:src="${book.image}" alt="책 표지" class="content-thumbnail" />
+      <p class="content-title"><strong th:text="${book.title}"></strong></p>
+      <p class="content-description" th:text="${book.description}"></p>
+      <p class="content-subtext" th:text="${book.publishedDate}"></p>
+      <p class="content-subtext" th:text="${book.publisher}"></p>
     </div>
+
     <div th:case="*">
-      <p>검색 결과가 없습니다.</p>
+      <div class="no-result">
+        <p>검색 결과가 없습니다.</p>
+      </div>
     </div>
   </div>
 
