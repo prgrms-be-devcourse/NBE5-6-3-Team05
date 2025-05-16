@@ -40,8 +40,8 @@ public class DetailsService {
         bookDetailsDto.setExternalLink(googleStr+bookDetailsDto.getName());
         bookDetailsDto.setStatus(false);
 
-        // TODO: 비회원으로 수정해야 함.
-        if (userId.equals("anonymous")){
+        // 비회원 시 Like테이블 조회 없이 바로 반환
+        if (userId.isEmpty()){
             return bookDetailsDto;
         }
 
@@ -51,17 +51,6 @@ public class DetailsService {
             return bookDetailsDto;
         }
 
-        /*Long likeId;
-        LikeDetailBooks likeDetailBooks;
-        for(Likes likes1: likes){
-            likeId = likes1.getId();
-            likeDetailBooks = likeDetailBooksRepository.findByLikesId(likeId);
-            if (likeDetailBooks != null){
-                if (id.equals(likeDetailBooksRepository.findByLikesId(likeId).getBookId())){
-                    bookDetailsDto.setStatus(true);
-                }
-            }
-        }*/
         return bookDetailsDto;
     }
 
@@ -72,8 +61,8 @@ public class DetailsService {
         songDetailsDto.setExternalLink(googleStr+songDetailsDto.getName());
         songDetailsDto.setStatus(false);
 
-        // TODO: 비회원으로 수정해야 함.
-        if (userId.equals("anonymous")){
+        // 비회원 시 Like테이블 조회 없이 바로 반환
+        if (userId.isEmpty()){
             return songDetailsDto;
         }
 
@@ -83,17 +72,6 @@ public class DetailsService {
             return songDetailsDto;
         }
 
-        /*Long likeId;
-        LikeDetailMusic likeDetailMusic;
-        for(Likes likes1: likes){
-            likeId = likes1.getId();
-            likeDetailMusic = likeDetailMusicRepository.findByLikesId(likeId);
-            if (likeDetailMusic != null){
-                if (id.equals(likeDetailMusicRepository.findByLikesId(likeId).getMusicId())){
-                    songDetailsDto.setStatus(true);
-                }
-            }
-        }*/
         return songDetailsDto;
     }
 
@@ -105,8 +83,8 @@ public class DetailsService {
         movieDetailsDto.setExternalLink(googleStr+movieDetailsDto.getName());
         movieDetailsDto.setStatus(false);
 
-        // TODO: 비회원으로 수정해야 함.
-        if (userId.equals("anonymous")){
+        // 비회원 시 Like테이블 조회 없이 바로 반환
+        if (userId.isEmpty()){
             return movieDetailsDto;
         }
 
@@ -116,17 +94,6 @@ public class DetailsService {
             return movieDetailsDto;
         }
 
-        /*Long likeId;
-        LikeDetailMovies likeDetailMovies;
-        for(Likes likes1: likes){
-            likeId = likes1.getId();
-            likeDetailMovies = likeDetailMoviesRepository.findByLikesId(likeId);
-            if (likeDetailMovies != null){
-                if (id.equals(likeDetailMoviesRepository.findByLikesId(likeId).getMovieId())){
-                    movieDetailsDto.setStatus(true);
-                }
-            }
-        }*/
         return movieDetailsDto;
     }
 }

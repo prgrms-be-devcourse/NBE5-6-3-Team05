@@ -23,7 +23,7 @@ public class DetailsApiController {
     @GetMapping("/book/{id}")
     public ResponseEntity<BookDetailsDto> getBookDetails(@PathVariable String id, Authentication authentication) {
         String userId;
-        userId = "anonymous";
+        userId = "";
         if (authentication != null){
             userId = authentication.getName();
         }
@@ -35,7 +35,7 @@ public class DetailsApiController {
     @GetMapping("/song/{id}")
     public ResponseEntity<SongDetailsDto> getSongDetails(@PathVariable String id, Authentication authentication) {
         String userId;
-        userId = "anonymous";
+        userId = "";
         if (authentication != null){
             userId = authentication.getName();
         }
@@ -47,7 +47,7 @@ public class DetailsApiController {
     @GetMapping("/movie/{id}")
     public ResponseEntity<MovieDetailsDto> getMovieDetails(@PathVariable String id, Authentication authentication) {
         String userId;
-        userId = "anonymous";
+        userId = "";
         if (authentication != null){
             userId = authentication.getName();
         }

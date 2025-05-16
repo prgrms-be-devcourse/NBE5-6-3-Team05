@@ -14,4 +14,5 @@ public class CuratingDetailDto {
         this.movie = movie;
         this.song = song;
     }
+
 }

@@ -6,7 +6,8 @@
 
     /* 전체 배경 및 기본 글자색 */
     body {
-      background: linear-gradient( #000000, #683997);
+      background: linear-gradient(#000000, #683997);
+      background-attachment: fixed; /* 배경 고정 */
       color: #ffffff;
       font-family: 'Pretendard', 'Spoqa Han Sans', sans-serif;
       margin: 0;
@@ -179,6 +180,44 @@
       align-items: flex-start;
     }
 
+    /*추가 */
+    .empty-song {
+      min-height: 100%;
+    }
+
+    .no-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .no-song-msg {
+      color: #ccc;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .no-song-wrapper {
+      background-color: #1e1e1e;
+      color: #bbb;
+      font-size: 14px;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .no-song-msg {
+      margin: 0;
+      line-height: 1.4;
+    }
+
+
     .purple-btn {
       width: 80px;
       background-color: #a259ff;
@@ -259,6 +298,20 @@
     .toggle-star-btn:not(.on):hover {
       color: #f4b464;
       text-shadow: none;
+    }
+
+    .like-msg {
+      display: block;
+      font-size: 0.8rem;
+      color: #f4b464;
+      height: 1em;           /* 문구 크기만큼 공간 확보 */
+      line-height: 1em;
+      margin-top: 4px;
+      visibility: hidden;    /* 처음에는 숨김 */
+      text-align: center;
+    }
+    .like-msg.show {
+      visibility: visible;
     }
 
     /* 링크 스타일 */
@@ -375,7 +428,7 @@
   </div>
   <div class="header-right">
     <div class="top-buttons">
-      <form action="/users/mypage" method="get">
+      <form action="/users" method="get">
         <button type="submit" class="purple-header-btn">My page</button>
       </form>
       <form action="/signin" method="get">
@@ -383,7 +436,7 @@
         <!-- anonymous면 Login으로 바꾸기 -->
       </form>
     </div>
-      <div class="bottom-button">
+    <div class="bottom-button">
       <form action="/recommend" method="get" class="recommend-form">
         <button type="submit" class="purple-header-btn">Recommend</button>
       </form>
@@ -402,7 +455,6 @@
 </main>
 
 
-
 <div class="curation-header">
   <div class="curation-label">BOOK</div>
   <div class="curation-label">MOVIE</div>
@@ -414,7 +466,7 @@
 
   <!-- Book 영역 -->
   <div class="book">
-    <div class="image-and-info">
+    <div th:if="${item.book.id != null}" class="image-and-info">
       <div class="image-block">
         <div class="image-wrapper">
           <img th:src="${item.book.imgUrl}" alt="임의의 책 이미지"/>
@@ -433,13 +485,27 @@
                 onclick="toggle(this)">
           ★
         </button>
+        <span class="like-msg">로그인 후, 좋아요!</span>
+      </div>
+    </div>
+    <!-- book가 null일 때 -->
+    <div th:if="${item.book.id == null}" class="image-and-info">
+      <div class="image-block">
+        <div class="image-wrapper no-song-wrapper">
+          <p class="no-song-msg">적절한 영화를 찾지 못했습니다.</p>
+        </div>
+        <div class="title" style="visibility: hidden;">빈 제목</div>
+      </div>
+      <div class="info-block">
+        <span style="visibility: hidden;">버튼 자리</span>
       </div>
     </div>
   </div>
 
   <!-- Movie 영역 -->
   <div class="movie">
-    <div class="image-and-info">
+    <!-- movie가 누락되지 않은 경우-->
+    <div th:if="${item.movie.id != null}" class="image-and-info">
       <div class="image-block">
         <div class="image-wrapper">
           <img th:src="${item.movie.imgUrl}" alt="임의의 영화이미지"/>
@@ -457,13 +523,27 @@
                 onclick="toggle(this)">
           ★
         </button>
+        <span class="like-msg">로그인 후, 좋아요!</span>
+      </div>
+    </div>
+    <!-- movie가 null일 때 -->
+    <div th:if="${item.movie.id == null}" class="image-and-info">
+      <div class="image-block">
+        <div class="image-wrapper no-song-wrapper">
+          <p class="no-song-msg">적절한 영화를 찾지 못했습니다.</p>
+        </div>
+        <div class="title" style="visibility: hidden;">빈 제목</div>
+      </div>
+      <div class="info-block">
+        <span style="visibility: hidden;">버튼 자리</span>
       </div>
     </div>
   </div>
 
   <!-- Song 영역 -->
   <div class="song">
-    <div class="image-and-info">
+    <!-- song이 누락되지 않은 경우-->
+    <div th:if="${item.song.id != null}" class="image-and-info">
       <div class="image-block">
         <div class="image-wrapper">
           <img th:src="${item.song.imgUrl}" alt="임의의 노래이미지"/>
@@ -481,6 +561,19 @@
                 onclick="toggle(this)">
           ★
         </button>
+        <span class="like-msg">로그인 후, 좋아요!</span>
+      </div>
+    </div>
+    <!-- song이 null일 때 -->
+    <div th:if="${item.song.id == null}" class="image-and-info">
+      <div class="image-block">
+        <div class="image-wrapper no-song-wrapper">
+          <p class="no-song-msg">적절한 노래를 찾지 못했습니다.</p>
+        </div>
+        <div class="title" style="visibility: hidden;">빈 제목</div>
+      </div>
+      <div class="info-block">
+        <span style="visibility: hidden;">버튼 자리</span>
       </div>
     </div>
   </div>
@@ -497,13 +590,13 @@
     <div class="modal-body-layout">
 
       <div class="modal-body-main">
-        <img id="modal-img" class="modal-img" src="" alt="컨텐츠 이미지" />
+        <img id="modal-img" class="modal-img" src="" alt="컨텐츠 이미지"/>
       </div>
 
-        <div class="modal-info">
-          <div id="modal-meta"></div> <!-- 타입별로 여기에 JS로 채워 넣기 -->
-        </div>
+      <div class="modal-info">
+        <div id="modal-meta"></div> <!-- 타입별로 여기에 JS로 채워 넣기 -->
       </div>
+    </div>
 
     <div id="modal-like-wrapper" style="margin-top: 1rem; text-align: right">
       <a id="modal-search-link" class="purple-btn" href="#" target="_blank">Search</a>
@@ -514,6 +607,7 @@
               onclick="toggle(this)">
         ★
       </button>
+      <span class="like-msg">로그인 후, 좋아요!</span>
     </div>
   </div>
 </div>
@@ -531,7 +625,7 @@
     })
     .then(res => res.json())
     .then(data => {
-      console.log("서버 응답",data);
+      console.log("서버 응답", data);
       const isOn = data.status;
 
       // 텍스트는 항상 별로 고정
@@ -539,12 +633,23 @@
       btn.classList.toggle('on', isOn);
 
 
+      const msg = btn.nextElementSibling; // <span class="like-msg"> 태그
+
+      if (msg && !isOn) {
+        msg.classList.add('show');
+
+        // 2초 뒤에 문구 숨기기
+        setTimeout(() => {
+          msg.classList.remove('show');
+        }, 2000);
+      }
+
       // 동일 type, id를 가진 다른 버튼들 동기화
       const selector = `.toggle-star-btn[data-type='${type}'][data-id='${id}']`;
       document.querySelectorAll(selector).forEach(otherBtn => {
         if (otherBtn !== btn) {
           otherBtn.textContent = '★';
-          otherBtn.classList.toggle('on',isOn);
+          otherBtn.classList.toggle('on', isOn);
         }
       });
     });
