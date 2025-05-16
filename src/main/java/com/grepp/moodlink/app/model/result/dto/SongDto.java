@@ -1,5 +1,6 @@
 package com.grepp.moodlink.app.model.result.dto;
 
+import com.grepp.moodlink.app.model.data.music.entity.Music;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -16,5 +17,10 @@ public class SongDto {
         this.id = id;
         this.name = name;
         this.imgUrl = imgUrl;
+    }
+
+
+    public static SongDto from(Music music){
+        return new SongDto(music.getId(), music.getTitle(), music.getThumbnail());
     }
 }

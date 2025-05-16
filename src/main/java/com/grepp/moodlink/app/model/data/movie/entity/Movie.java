@@ -14,6 +14,7 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Table(name = "movie")
@@ -45,11 +46,20 @@ public class Movie extends BaseEntity {
     private LocalDate createdAt;
     @Column(columnDefinition = "TEXT")
     private String thumbnail;
+    @Column(nullable = false,columnDefinition = "BIGINT DEFAULT 0" )
     private Long likeCount;
 
     private Boolean activated = true;
 
+    @Column(columnDefinition = "TEXT")
+    private String descriptionSummary;
+
     public void unActivated() {
         this.activated = false;
     }
+
+    // 정렬을 위해 일단 임시로...
+    @LastModifiedDate
+    protected LocalDate modifiedAt = LocalDate.now();
+
 }

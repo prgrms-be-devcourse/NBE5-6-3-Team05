@@ -70,7 +70,7 @@ public class RecommendController {
         session.setAttribute("items", items);
 
 
-        return "home/mainPage";
+        return "redirect:/result";
     }
 
     private List<CuratingDetailIdDto> curatingContents(String genre, String userId) {

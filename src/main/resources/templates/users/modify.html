@@ -2,23 +2,83 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
+<head>
+<style>
 
+input, select, button {
+display: block;
+margin: 10px auto;
+padding: 10px;
+border: none;
+border-radius: 5px;
+}
+</style>
+</head>
 <body>
 <div layout:fragment="content">
+  <script th:inline="javascript" th:if="${error}">
+    /*<![CDATA[*/
+    if ([[${error != null}]]) {
+      alert(/*[[${error}]]*/);
+    }
+    /*]]>*/
+  </script>
 <h2 th:text="'아이디:'+${userId}" >아이디</h2>
 <form th:action="@{/users/modify}" method="post">
 <h2 th:text="'유저이름:'+${username}">유저이름</h2>
   <label>이름:</label><br/>
   <input type="text" name="username" placeholder="변경할 유저 이름 입력"><br/><br/>
 
+  <select id="genre" name="genre">
+    <option value="" disabled selected>선호하는 장르 선택</option>
+    <option value="action">액션</option>
+    <option value="adventure">모험</option>
+    <option value="animation">애니메이션</option>
+    <option value="comedy">코미디</option>
+    <option value="crime">범죄</option>
+    <option value="documentary">다큐멘터리</option>
+    <option value="drama">드라마</option>
+    <option value="family">가족</option>
+    <option value="fantasy">판타지</option>
+    <option value="history">역사</option>
+    <option value="horror">공포</option>
+    <option value="music">음악</option>
+    <option value="mystery">미스터리</option>
+    <option value="romance">로맨스</option>
+    <option value="science_fiction">SF</option>
+    <option value="tv_movie">TV 영화</option>
+    <option value="thriller">스릴러</option>
+    <option value="war">전쟁</option>
+    <option value="western">서부</option>
+  </select>
+
+  <select name="periods" id="periods">
+    <option value="" disabled selected>선호하는 시대 선택</option>
+    <option value="ancient">고대 / 중세</option>
+    <option value="empire_age">제국주의 시대 (~19세기)</option>
+    <option value="ww1">1차 세계대전 (1914–1918)</option>
+    <option value="ww2">2차 세계대전 (1939–1945)</option>
+    <option value="cold_war">냉전 시대 (1945–1990)</option>
+    <option value="modern">현대 사회 (1990년대~2010년대)</option>
+    <option value="contemporary">동시대 / 근미래 (2020년대~)</option>
+    <option value="fictional">가상 시대 / 판타지</option>
+  </select>
+
+  <select name="countries" id="countries">
+    <option value="" disabled selected>컨텐츠 제작 국가 선택</option>
+    <option value="korea">대한민국</option>
+  </select>
   <label>비밀번호:</label><br/>
-  <input type="password" name="password" placeholder="변경할 비밀번호 입력"><br/><br/>
+  <input type="password" name="currentPassword" placeholder="현재 비밀번호" required />
+  <input type="password" name="newPassword" placeholder="변경할 비밀번호 입력"><br/><br/>
 
 <button type="submit" class="mypage-btn">
   제출
 </button>
 
   </form>
+
+
 </div>
 </body>
 

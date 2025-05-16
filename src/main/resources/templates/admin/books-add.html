@@ -18,17 +18,12 @@
       <h3>도서 정보를 입력해주세요.</h3>
 
         <div class="info-group">
-
-          <div class="file-field input-field">
-            <div class="btn">
-              <span>File</span>
-              <input type="file" name="image">
-            </div>
-            <div class="file-path-wrapper">
-              <input class="file-path validate" type="text">
-            </div>
+          <div class="image-upload">
+            <div id="preview" class="image-preview"></div>
+            <input type="file" id="image-input" name="image" style="display:none"/>
+            <div id="sizeInfo"></div>
+            <button class="img-btn" type="button" onclick="document.getElementById('image-input').click()">이미지 추가</button>
           </div>
-
 
           <div>
             <div class="form-row"><label>제목</label><input th:field="*{title}" class="input-line"/></div>
@@ -63,4 +58,30 @@
       </form>
   </div>
 </main>
+<div layout:fragment="scripts">
+  <script>
+    // 이미지 미리보기
+    const input = document.getElementById('image-input');
+    const preview = document.getElementById('preview');
+    input.addEventListener('change', function () {
+      let totalSize = 0;
+      const file = this.files[0];
+      if (file) {
+        totalSize += file.size;
+
+        const sizeInMB = (totalSize / (1024 * 1024)).toFixed(2);
+        document.getElementById("sizeInfo").innerText = `총 파일 용량: ${sizeInMB} MB`;
+
+        if (totalSize > 32 * 1024 * 1024) {
+          alert("이미지 총 용량은 32MB를 초과할 수 없습니다.");
+          this.value = ""; // 파일 초기화
+        }
+
+        const reader = new FileReader();
+        reader.onload = e => preview.style.backgroundImage = `url(${e.target.result})`;
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</div>
 </html>

@@ -48,10 +48,11 @@ main {
 }
 
 .image-preview {
-  width: 140px;
-  height: 180px;
+  width: 160px;
+  height: 200px;
   background-color: #ccc;
-  object-fit: cover;
+  background-size: cover;
+  background-position: center;
   margin-bottom: 0.5rem;
 }
 
@@ -60,6 +61,7 @@ main {
   align-items: center;
   width: 100%;
   max-width: 750px;
+  margin-top: 1rem;
 }
 
 .form-row label {
@@ -86,7 +88,7 @@ main {
   justify-content: center;
 }
 
-.genre-btn {
+.genre-btn, .img-btn {
   background: linear-gradient(to right, #A64DFF, #6A00FF);
   border: none;
   color: white;

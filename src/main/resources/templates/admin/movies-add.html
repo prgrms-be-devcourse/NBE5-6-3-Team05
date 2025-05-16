@@ -9,7 +9,7 @@
 </head>
 <main layout:fragment="content">
   <!-- 돌아가기 버튼 -->
-  <button class="back-btn" onclick="window.history.back()">← 돌아가기</button>
+  <a class="back-btn" th:href="@{/admin/movies}">← 돌아가기</a>
 
   <!-- 중앙 배치 form -->
   <div class="main-area">
@@ -21,14 +21,13 @@
           <div class="image-upload">
             <div id="preview" class="image-preview"></div>
             <input type="file" id="image-input" name="thumbnail" style="display:none"/>
-            <button class="genre-btn" onclick="document.getElementById('image-input').click()">이미지 추가</button>
+            <div id="sizeInfo"></div>
+            <button class="img-btn" type="button" onclick="document.getElementById('image-input').click()">이미지 추가</button>
           </div>
 
           <div>
             <div class="form-row"><label>제목</label><input th:field="*{title}" class="input-line"/></div>
             <span th:errors="*{title}" class="helper-text" ></span>
-            <div class="form-row"><label>감독</label><input th:field="*{director}" class="input-line" type="text" /></div>
-            <span th:errors="*{director}" class="helper-text" ></span>
             <div class="form-row"><label>개봉일</label><input th:field="*{releaseDate}" class="input-line" type="date" /></div>
           </div>
         </div>
@@ -38,13 +37,11 @@
           <div class="selected-genres" id="selected-genres">선택된 장르 없음</div>
           <div class="genre-list">
 <!--            임시로 -->
-            <button class="genre-btn" onclick="toggleGenre(this)">코미디</button>
-            <button class="genre-btn" onclick="toggleGenre(this)">가족</button>
-            <button class="genre-btn" onclick="toggleGenre(this)">스릴러</button>
-            <button class="genre-btn" onclick="toggleGenre(this)">액션</button>
-            <button class="genre-btn" onclick="toggleGenre(this)">드라마</button>
+            <div th:each="gen : ${genreList}">
+              <a class="genre-btn" type="button" th:attr="data-genre-id=${gen.getId()}" th:text="${gen.getName()}">코미디</a>
+            </div>
           </div>
-          <input th:field="*{genre}" type="hidden" id="genre-input" />
+          <input th:field="*{genres}" type="hidden" id="genre-input" />
         </div>
 
         <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
@@ -57,31 +54,52 @@
       </form>
   </div>
 </main>
-
+<div layout:fragment="scripts">
 <script>
   // 이미지 미리보기
   const input = document.getElementById('image-input');
   const preview = document.getElementById('preview');
   input.addEventListener('change', function () {
+    let totalSize = 0;
     const file = this.files[0];
     if (file) {
+      totalSize += file.size;
+
+      const sizeInMB = (totalSize / (1024 * 1024)).toFixed(2);
+      document.getElementById("sizeInfo").innerText = `총 파일 용량: ${sizeInMB} MB`;
+
+      if (totalSize > 32 * 1024 * 1024) {
+        alert("이미지 총 용량은 32MB를 초과할 수 없습니다.");
+        this.value = ""; // 파일 초기화
+      }
+
       const reader = new FileReader();
       reader.onload = e => preview.style.backgroundImage = `url(${e.target.result})`;
       reader.readAsDataURL(file);
     }
   });
 
-  function toggleGenre(btn) {
-    btn.classList.toggle("selected");
+  document.addEventListener("DOMContentLoaded", function (){
+    document.querySelectorAll(".genre-btn")
+    .forEach((btn) => {
+      btn.addEventListener("click", async function () {
+        btn.classList.toggle("selected");
 
-    const selected = [...document.querySelectorAll(".genre-btn.selected")].map(b => b.textContent);
+        const selectedId = [...document.querySelectorAll(".genre-btn.selected")].map(b => b.dataset.genreId);
+        const selectedName = [...document.querySelectorAll(".genre-btn.selected")].map(b => b.textContent);
 
-    document.getElementById("selected-genres").textContent = selected.length
-        ? selected.join(", ")
-        : "선택된 장르 없음";
 
-    // input에도 추가
-    document.getElementById("genre-input").value = selected.join(",");
-  }
+        document.getElementById("selected-genres").textContent = selectedName.length
+            ? selectedName.join(", ")
+            : "선택된 장르 없음";
+
+        // input에도 추가
+        document.getElementById("genre-input").value = selectedId.map((id, i) => `${id}:${selectedName[i]}`).join(",");
+
+        console.log(document.getElementById("genre-input").value);
+        });
+    });
+  });
 </script>
+</div>
 </html>

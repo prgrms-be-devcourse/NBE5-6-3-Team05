@@ -11,14 +11,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface MusicRepository extends JpaRepository<Music, String> {
+public interface MusicRepository extends JpaRepository<Music, String>, MusicRepositoryCustom {
 
     List<Music> findByEmbeddingIsNull();
 
-    @Query("SELECT new com.grepp.moodlink.app.model.result.dto.SongDto(m.id, m.title, m.thumbnail) " +
-        "FROM Music m WHERE m.id = :id")
-    Optional<SongDto> findSimpleById(@Param("id") String id);
-
     @Query("SELECT m.id FROM Music m where m.title = :title")
     Optional<String> findIdByTitle(@Param("title")String s);
+    boolean existsByTitleAndSinger(String title, String singer);
+
+    List<Music> findAllByIdIn(List<String> id);
 }

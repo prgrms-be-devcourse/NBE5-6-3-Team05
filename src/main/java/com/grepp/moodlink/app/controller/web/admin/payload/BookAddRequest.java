@@ -1,8 +1,5 @@
 package com.grepp.moodlink.app.controller.web.admin.payload;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.grepp.moodlink.app.model.data.book.code.Genre;
-
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
@@ -12,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class BookAddRequest {
+
     private List<MultipartFile> image;
     @NotBlank
     private String title;

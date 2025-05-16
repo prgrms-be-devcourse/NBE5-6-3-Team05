@@ -42,12 +42,28 @@ public class MemberService {
         Member member = memberRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다"));
 
-        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
-            String encodedPassword = passwordEncoder.encode(dto.getPassword());
+        if (!passwordEncoder.matches(dto.getCurrentPassword(), member.getPassword())) {
+            throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
+        }
+
+        if ( passwordEncoder.matches(dto.getNewPassword() ,member.getPassword())) {
+            throw new IllegalArgumentException("비밀번호는 현재 비밀번호와 같을 수 없습니다.");
+        }
+
+        if (dto.getNewPassword() != null && !dto.getNewPassword().isBlank()) {
+            String encodedPassword = passwordEncoder.encode(dto.getNewPassword());
             member.setPassword(encodedPassword);
         }
         if (dto.getUsername() != null && !dto.getUsername().isBlank()) {
             member.setUsername(dto.getUsername());
+        }
+
+        if (dto.getGenre() != null && !dto.getGenre().isBlank()) {
+            member.setGenre(dto.getGenre());
+        }
+
+        if (dto.getPeriods() != null && !dto.getPeriods().isBlank()) {
+            member.setPeriods(dto.getPeriods());
         }
 
         member.setUpdatedAt(LocalDate.now());
