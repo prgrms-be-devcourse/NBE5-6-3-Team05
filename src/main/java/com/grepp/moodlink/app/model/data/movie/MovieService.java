@@ -6,9 +6,8 @@ import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.movie.entity.Genre;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
+import com.grepp.moodlink.infra.imgbb.ImgUploadTemplate;
 import com.grepp.moodlink.infra.response.ResponseCode;
-import com.grepp.moodlink.infra.util.file.FileDto;
-import com.grepp.moodlink.infra.util.file.FileUtil;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -35,7 +34,8 @@ public class MovieService {
     private final MovieRepository movieRepository;
     private final GenreRepository genreRepository;
     private final ModelMapper mapper;
-    private final FileUtil fileUtil;
+    private final ImgUploadTemplate imgUploadTemplate;
+
 
     public void saveMovies(List<MovieDto> movieDtos) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -90,15 +90,16 @@ public class MovieService {
             throw new CommonException(ResponseCode.DUPLICATED_DATA);
 
         try {
-            List<FileDto> fileDtos = fileUtil.upload(thumbnail, "movie");
             Movie movie = mapper.map(dto, Movie.class);
 
-            if(!fileDtos.isEmpty()){
-                FileDto fileDto = fileDtos.getFirst();
-                String renameFileName = fileDto.renameFileName();
-                String savePath = fileDto.savePath();
+            if(thumbnail != null){
+                MultipartFile file =  thumbnail.getFirst();
+                String originFileName = file.getOriginalFilename();
+                String ext = originFileName.substring(originFileName.lastIndexOf("."));
+                String renameFileName = UUID.randomUUID().toString() + ext;
 
-                movie.setThumbnail("/download/" + savePath + renameFileName);
+                String thumbnailUrl = imgUploadTemplate.uploadImage(thumbnail.getFirst(), renameFileName);
+                movie.setThumbnail(thumbnailUrl);
             }
 
             long count = movieRepository.count();
@@ -119,18 +120,20 @@ public class MovieService {
         return movieRepository.findByIdWithGenre(id).map(MovieInfoDto::toDto).orElse(null);
     }
 
-    public void updateMovie(List<MultipartFile> image, MovieInfoDto dto) {
+    public void updateMovie(List<MultipartFile> thumbnail, MovieInfoDto dto) {
 
         try {
-            List<FileDto> fileDtos = fileUtil.upload(image, "movie");
 
-            if(!fileDtos.isEmpty()){
-                FileDto fileDto = fileDtos.getFirst();
-                String renameFileName = fileDto.renameFileName();
-                String savePath = fileDto.savePath();
+            if(thumbnail != null){
+                MultipartFile file =  thumbnail.getFirst();
+                String originFileName = file.getOriginalFilename();
+                String ext = originFileName.substring(originFileName.lastIndexOf("."));
+                String renameFileName = UUID.randomUUID().toString() + ext;
 
-                dto.setThumbnail("/download/" + savePath + renameFileName);
+                String thumbnailUrl = imgUploadTemplate.uploadImage(thumbnail.getFirst(), renameFileName);
+                dto.setThumbnail(thumbnailUrl);
             }
+
             // 업데이트
             movieRepository.updateBook(dto);
 
