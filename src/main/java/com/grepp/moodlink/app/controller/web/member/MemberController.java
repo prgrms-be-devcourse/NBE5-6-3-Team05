@@ -176,6 +176,17 @@ public class MemberController {
         Page<MusicDto> likedMusicsPage = likeService.getUserLikedMusicsPaged(userId, musicPageable);
         Page<MovieInfoDto> likedMoviesPage = likeService.getUserLikedMoviesPaged(userId, moviePageable);
 
+
+        System.out.println("총 도서 좋아요 수: " + likedBooksPage.getTotalElements());
+        System.out.println("총 페이지 수: " + likedBooksPage.getTotalPages());
+        System.out.println("총 영화 좋아요 수: " + likedMoviesPage.getTotalElements());
+        System.out.println("총 페이지 수: " + likedMoviesPage.getTotalPages());
+
+        System.out.println("총 음악 좋아요 수: " + likedMusicsPage.getTotalElements());
+        System.out.println("총 페이지 수: " + likedMusicsPage.getTotalPages());
+
+
+
         PageResponse<BookDto> bookResponse = new PageResponse<>("users/like", likedBooksPage, 3);
         PageResponse<MusicDto> musicResponse = new PageResponse<>("users/like", likedMusicsPage, 3);
         PageResponse<MovieInfoDto> movieResponse = new PageResponse<>("users/like", likedMoviesPage, 3);

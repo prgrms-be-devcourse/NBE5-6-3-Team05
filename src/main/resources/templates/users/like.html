@@ -53,11 +53,17 @@
     <table>
       <thead>
       <tr>
-        <th>제목</th><th>ISBN</th><th>이미지</th><th>저자</th><th>출판사</th><th>출판일</th><th>장르</th><th>설명</th>
+        <th>좋아요</th>><th>제목</th><th>ISBN</th><th>이미지</th><th>저자</th><th>출판사</th><th>출판일</th><th>장르</th><th>설명</th>
       </tr>
       </thead>
       <tbody>
       <tr th:each="book : ${likedbooks.content()}">
+       <td> <button class="toggle-star-btn"
+                th:id="'toggle-book-' + ${book.title}"
+                th:attr="data-type='book', data-id=${book.isbn}"
+                onclick="toggle(this)">
+          ★
+        </button> </td>
         <td th:text="${book.title}"></td>
         <td th:text="${book.isbn}"></td>
         <td><img th:src="${book.image}" width="100"></td>
@@ -71,19 +77,24 @@
     </table>
 
     <!-- 도서 페이지네이션 -->
-    <div class="pagination" th:if="${likedbooks.page.totalPages > 1}">
+    <div id="books-pagination" class="pagination" th:if="${likedbooks.page.totalPages > 1}">
       <ul>
-        <li th:if="${likedbooks.currentNumber > 1}">
-          <a href="#" th:attr="data-page=${likedbooks.prevPage - 1}, data-tab='books'">&laquo;</a>
+        <!-- 이전 페이지 링크: 1보다 클 때만 표시 -->
+        <li th:if="${likedbooks.currentNumber() > 1}">
+          <a href="#" th:attr="data-page=${likedbooks.currentNumber() - 2}, data-tab='books'">«</a>
         </li>
-        <li th:each="i : ${#numbers.sequence(likedbooks.startNumber, likedbooks.endNumber)}"
+
+        <!-- 페이지 번호 렌더링 -->
+        <li th:each="i : ${#numbers.sequence(likedbooks.startNumber(), likedbooks.endNumber())}"
             th:classappend="${i == likedbooks.currentNumber} ? 'active'">
           <a href="#"
              th:attr="data-page=${i - 1}, data-tab='books'"
              th:text="${i}"></a>
         </li>
+
+        <!-- 다음 페이지 링크: 현재 페이지가 마지막 페이지보다 작을 때만 표시 -->
         <li th:if="${likedbooks.currentNumber < likedbooks.page.totalPages}">
-          <a href="#" th:attr="data-page=${likedbooks.nextPage - 1}, data-tab='books'">&raquo;</a>
+          <a href="#" th:attr="data-page=${likedbooks.currentNumber}, data-tab='books'">»</a>
         </li>
       </ul>
     </div>
@@ -96,11 +107,17 @@
     <table>
       <thead>
       <tr>
-        <th>제목</th><th>썸네일</th><th>설명</th><th>장르</th><th>개봉일</th>
+        <th>좋아요</th>><th>제목</th><th>썸네일</th><th>설명</th><th>장르</th><th>개봉일</th>
       </tr>
       </thead>
       <tbody>
       <tr th:each="movie : ${likedmovies.content()}">
+        <td> <button class="toggle-star-btn"
+                     th:id="'toggle-movie-' + ${movie.title}"
+                     th:attr="data-type='movie', data-id=${movie.id}"
+                     onclick="toggle(this)">
+          ★
+        </button> </td>
         <td th:text="${movie.title}"></td>
         <td><img th:src="${movie.thumbnail}" width="100"></td>
         <td th:text="${movie.description}"></td>
@@ -117,17 +134,22 @@
     <!-- 영화 페이지네이션 -->
     <div id="movies-pagination" class="pagination" th:if="${likedmovies.page.totalPages > 1}">
       <ul>
-        <li th:if="${likedmovies.currentNumber > 1}">
-          <a href="#" th:attr="data-page=${likedmovies.prevPage - 1}, data-tab='movies'">&laquo;</a>
+        <!-- 이전 페이지 링크: 1보다 클 때만 표시 -->
+        <li th:if="${likedmovies.currentNumber() > 1}">
+          <a href="#" th:attr="data-page=${likedmovies.currentNumber() - 2}, data-tab='movies'">«</a>
         </li>
-        <li th:each="i : ${#numbers.sequence(likedmovies.startNumber, likedmovies.endNumber)}"
+
+        <!-- 페이지 번호 렌더링 -->
+        <li th:each="i : ${#numbers.sequence(likedmovies.startNumber(), likedmovies.endNumber())}"
             th:classappend="${i == likedmovies.currentNumber} ? 'active'">
           <a href="#"
              th:attr="data-page=${i - 1}, data-tab='movies'"
              th:text="${i}"></a>
         </li>
+
+        <!-- 다음 페이지 링크: 현재 페이지가 마지막 페이지보다 작을 때만 표시 -->
         <li th:if="${likedmovies.currentNumber < likedmovies.page.totalPages}">
-          <a href="#" th:attr="data-page=${likedmovies.nextPage - 1}, data-tab='movies'">&raquo;</a>
+          <a href="#" th:attr="data-page=${likedmovies.currentNumber}, data-tab='movies'">»</a>
         </li>
       </ul>
     </div>
@@ -139,11 +161,17 @@
     <table>
       <thead>
       <tr>
-        <th>제목</th><th>썸네일</th><th>가수</th><th>장르</th><th>설명</th><th>가사</th><th>발매일</th>
+       <th>좋아요</th> <th>제목</th><th>썸네일</th><th>가수</th><th>장르</th><th>설명</th><th>가사</th><th>발매일</th>
       </tr>
       </thead>
       <tbody>
       <tr th:each="music : ${likedmusics.content()}">
+        <td> <button class="toggle-star-btn"
+                     th:id="'toggle-music-' + ${music.title}"
+                     th:attr="data-type='music', data-id=${music.id}"
+                     onclick="toggle(this)">
+          ★
+        </button> </td>
         <td th:text="${music.title}"></td>
         <td><img th:src="${music.thumbnail}" width="100"></td>
         <td th:text="${music.singer}"></td>
@@ -158,17 +186,22 @@
     <!-- 음악 페이지네이션 -->
     <div id="musics-pagination" class="pagination" th:if="${likedmusics.page.totalPages > 1}">
       <ul>
-        <li th:if="${likedmusics.currentNumber > 1}">
-          <a href="#" th:attr="data-page=${likedmusics.prevPage - 1}, data-tab='musics'">&laquo;</a>
+        <!-- 이전 페이지 링크: 1보다 클 때만 표시 -->
+        <li th:if="${likedmusics.currentNumber() > 1}">
+          <a href="#" th:attr="data-page=${likedmusics.currentNumber() - 2}, data-tab='musics'">«</a>
         </li>
-        <li th:each="i : ${#numbers.sequence(likedmusics.startNumber, likedmusics.endNumber)}"
+
+        <!-- 페이지 번호 렌더링 -->
+        <li th:each="i : ${#numbers.sequence(likedmusics.startNumber(), likedmusics.endNumber())}"
             th:classappend="${i == likedmusics.currentNumber} ? 'active'">
           <a href="#"
              th:attr="data-page=${i - 1}, data-tab='musics'"
              th:text="${i}"></a>
         </li>
+
+        <!-- 다음 페이지 링크: 현재 페이지가 마지막 페이지보다 작을 때만 표시 -->
         <li th:if="${likedmusics.currentNumber < likedmusics.page.totalPages}">
-          <a href="#" th:attr="data-page=${likedmusics.nextPage - 1}, data-tab='musics'">&raquo;</a>
+          <a href="#" th:attr="data-page=${likedmusics.currentNumber}, data-tab='musics'">»</a>
         </li>
       </ul>
     </div>
@@ -177,6 +210,38 @@
 
   <!-- 탭 스크립트 -->
   <script th:inline="javascript">
+    /// 토글 버튼 구현
+    function toggle(btn) {
+    const type = btn.dataset.type;
+    const id = btn.dataset.id;
+
+    fetch(`/api/users/like/${type}`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({id})
+  })
+    .then(res => res.json())
+    .then(data => {
+    console.log("서버 응답",data);
+    const isOn = data.status;
+
+    // 텍스트는 항상 별로 고정
+      btn.textContent = isOn ? '★' : '☆';
+    btn.classList.toggle('on', isOn);
+
+
+    // 동일 type, id를 가진 다른 버튼들 동기화
+    const selector = `.toggle-star-btn[data-type='${type}'][data-id='${id}']`;
+    document.querySelectorAll(selector).forEach(otherBtn => {
+    if (otherBtn !== btn) {
+      otherBtn.textContent = isOn ? '★' : '☆';
+    otherBtn.classList.toggle('on',isOn);
+  }
+  });
+  });
+
+  }
+
     let currentPage = {
       books: /*[[${likedbooks.page.number}]]*/ 0,
       movies: /*[[${likedmovies.page.number}]]*/ 0,

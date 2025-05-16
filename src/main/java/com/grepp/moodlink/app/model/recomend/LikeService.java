@@ -332,10 +332,12 @@ public class LikeService {
         for(LikeDetailMusic music : likeDetailMusic){
             if(music.getMusicId().equals(id)){
                 exists = false;
+
+                likeDetailMusicRepository.deleteByMusicId(id);
+
                 // likes 테이블에 요소 삭제
                 likeRepository.deleteById(music.getLikesId());
                 // like_detail_musics 테이블에 요소 삭제
-                likeDetailMusicRepository.deleteByMusicId(id);
                 // 삭제
                 break;
             }
@@ -364,11 +366,13 @@ public class LikeService {
         for(LikeDetailMovies movie : likeDetailMovies){
             if(movie.getMovieId().equals(id)){
                 exists = false;
-                // likes 테이블에 요소 삭제
-                likeRepository.deleteById(movie.getLikesId());
                 // like_detail_movie 테이블에 요소 삭제
                 likeDetailMoviesRepository.deleteByMovieId(id);
                 // 삭제
+
+                // likes 테이블에 요소 삭제
+                likeRepository.deleteById(movie.getLikesId());
+
                 break;
             }
         }
@@ -396,11 +400,12 @@ public class LikeService {
         for(LikeDetailBooks book : likeDetailBooks){
             if(book.getBookId().equals(id)){
                 exists = false;
-                // likes 테이블에 요소 삭제
-                likeRepository.deleteById(book.getLikesId());
                 // like_detail_book 테이블에 요소 삭제
                 likeDetailBooksRepository.deleteByBookId(id);
                 // 삭제
+                // likes 테이블에 요소 삭제
+                likeRepository.deleteById(book.getLikesId());
+
                 break;
             }
         }
