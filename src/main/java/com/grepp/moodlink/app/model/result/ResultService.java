@@ -72,10 +72,9 @@ public class ResultService {
 
         // User가 비회원이면 각 컨텐츠의 상태를 false로 return
         // TODO: 비회원으로 수정해야 함.
-        if (userId.equals("anonymous")){
+        if (userId.isEmpty()){
             return items;
         }
-
 
         // User의 Like한 목록이 없다면 각 컨텐츠의 상태를 false로 return
         List<Likes> likes = likeRepository.findByUserId(userId);
@@ -83,38 +82,40 @@ public class ResultService {
             return items;
         }
 
-        Long likeId;
-        LikeDetailMovies likeDetailMovies;
-        LikeDetailBooks likeDetailBooks;
-        LikeDetailMusic likeDetailMusic;
-        for (Likes likes1: likes){
-            likeId = likes1.getId();
-            likeDetailBooks = likeDetailBooksRepository.findByLikesId(likeId);
-            likeDetailMovies = likeDetailMoviesRepository.findByLikesId(likeId);
-            likeDetailMusic = likeDetailMusicRepository.findByLikesId(likeId);
-            if (likeDetailBooks != null){
-                for(CuratingDetailDto item : items){
-                    if (item.getBook().getId().equals(likeDetailBooks.getBookId())){
-                        item.getBook().setStatus(true);
-                    }
-                }
-            }
-            if (likeDetailMovies != null){
-                for(CuratingDetailDto item : items){
-                    if (item.getMovie().getId().equals(likeDetailMovies.getMovieId())){
-                        item.getMovie().setStatus(true);
-                    }
-                }
-            }
-            if (likeDetailMusic != null){
-                for(CuratingDetailDto item : items){
-                    if (item.getSong().getId().equals(likeDetailMusic.getMusicId())){
-                        item.getSong().setStatus(true);
-                    }
+        // user가 좋아요를 누른 컨텐츠가 하나 이상일 경우 curating결과와 교집합이 있는지 확인
+        Likes likes1 = likes.getFirst();
+
+        // user가 좋아요를 누른 music, song, movie들을 전부 조회
+        List<LikeDetailMusic> likeDetailMusic = likeDetailMusicRepository.findByLikesId(likes1.getId());
+        List<LikeDetailMovies> likeDetailMovies = likeDetailMoviesRepository.findByLikesId(likes1.getId());
+        List<LikeDetailBooks> likeDetailBooks = likeDetailBooksRepository.findByLikesId(likes1.getId());
+
+        // 좋아요 누른 music에 대해 true로 상태변경
+        for(LikeDetailMusic tempMusic: likeDetailMusic){
+            for(CuratingDetailDto item :items){
+                if(item.getSong().getId().equals(tempMusic.getMusicId())){
+                    item.getSong().setStatus(true);
                 }
             }
         }
 
+        // 좋아요 누른 movie에 대해 true로 상태변경
+        for(LikeDetailMovies tempMovies: likeDetailMovies){
+            for(CuratingDetailDto item :items){
+                if(item.getMovie().getId().equals(tempMovies.getMovieId())){
+                    item.getMovie().setStatus(true);
+                }
+            }
+        }
+
+        // 좋아요 누른 book에 대해 true로 상태변경
+        for(LikeDetailBooks tempBook: likeDetailBooks){
+            for(CuratingDetailDto item :items){
+                if(item.getBook().getId().equals(tempBook.getBookId())){
+                    item.getBook().setStatus(true);
+                }
+            }
+        }
 
         return items;
     }
