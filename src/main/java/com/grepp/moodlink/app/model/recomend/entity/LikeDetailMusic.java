@@ -16,8 +16,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LikeDetailMusic extends LikeDetailBase {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
     private String musicId;
 }
