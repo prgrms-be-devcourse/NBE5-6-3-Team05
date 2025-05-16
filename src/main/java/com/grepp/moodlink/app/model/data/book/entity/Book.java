@@ -33,6 +33,7 @@ public class Book extends BaseEntity {
     @Column(columnDefinition = "BLOB")
     private byte[] embedding;
     private String genre;
+    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
     private Long likeCount;
     // 정렬을 위해 일단 임시로...
     @LastModifiedDate

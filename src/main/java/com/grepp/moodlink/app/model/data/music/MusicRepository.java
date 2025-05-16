@@ -1,10 +1,6 @@
 package com.grepp.moodlink.app.model.data.music;
 
-import com.grepp.moodlink.app.model.data.book.BookRepositoryCustom;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
-import org.springframework.data.domain.Pageable;
-import com.grepp.moodlink.app.model.result.dto.SongDto;
-import java.nio.channels.FileChannel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -22,4 +18,6 @@ public interface MusicRepository extends JpaRepository<Music, String>, MusicRepo
     @Query("SELECT m FROM Music m WHERE LOWER(REPLACE(m.title, ' ', '')) = LOWER(REPLACE(m.title, ' ', ''))")
     Optional<Music> findByTitleIgnoreCaseContaining(String trim);
 
+
+    List<Music> findAllByIdIn(List<String> id);
 }

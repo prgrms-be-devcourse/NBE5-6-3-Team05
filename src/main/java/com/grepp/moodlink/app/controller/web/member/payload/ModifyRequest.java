@@ -9,13 +9,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ModifyRequest {
 
-
-    private String password;
     private String username;
+    private String currentPassword;
+    private String newPassword;
+    private String genre;
+    private String periods;
+    private String countries;
+
 
 
     public ModifyDto toDto() {
-        return new ModifyDto(username, password);
+        return new ModifyDto(username, currentPassword, newPassword,genre,periods,countries );
     }
 
 }
