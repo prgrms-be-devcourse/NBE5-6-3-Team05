@@ -19,10 +19,10 @@
     </div>
 
     <div th:case="'movie'" th:each="movie : ${contentDetails}" class="content-item"
-         th:attr="data-title=${movie.title}, data-description=${movie.description}">
+         th:attr="data-title=${movie.title}, data-description=${movie.summary}">
       <img th:src="${movie.thumbnail}" />
       <p th:text="${movie.title}" />
-      <p th:text="${movie.description}" />
+      <p th:text="${movie.summary}" />
       <p th:text="${movie.releaseDate}" />
       <ul>
         <li th:each="genre : ${movie.genres}" th:text="${genre}"></li>
@@ -31,11 +31,11 @@
 
     <div th:case="'book'" th:each="book : ${contentDetails}" class="content-item"
          th:attr="data-title=${book.title}, data-description=${book.description}">
-      <img th:src="${book.thumbnail}" />
+      <img th:src="${book.image}" />
       <p th:text="${book.title}" />
       <p th:text="${book.description}" />
       <p th:text="${book.publishedDate}" />
-      <p th:text="${book.author}" />
+      <p th:text="${book.publisher}" />
 <!--      <p th:text="${book.genre}" />-->
     </div>
     <div th:case="*">

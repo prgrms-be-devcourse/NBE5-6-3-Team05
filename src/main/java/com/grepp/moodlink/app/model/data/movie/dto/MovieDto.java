@@ -36,12 +36,13 @@ public class MovieDto implements ContentDto {
     @JsonProperty("genre_names")
     private List<String> genreNames;
     private Boolean activated;
+    private String summary;
+    private String thumbnail;
 
-    public MovieDto(String title, String overview, LocalDate releaseDate, String backdropPath) {
+    public MovieDto(String title, String summary, LocalDate releaseDate, String thumbnail) {
         this.title = title;
-//        this.genreNames = genreNames;
-        this.overview = overview;
+        this.summary = summary;
         this.releaseDate = releaseDate;
-        this.backdropPath = backdropPath;
+        this.thumbnail = thumbnail;
     }
 }

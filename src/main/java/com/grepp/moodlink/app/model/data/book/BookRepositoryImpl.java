@@ -99,6 +99,6 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
                 book.publisher,
                 book.image))
             .from(book)
-            .where(book.title.eq(contentName)).fetch();
+            .where(book.title.lower().like("%" + contentName.toLowerCase() + "%")).fetch();
     }
 }

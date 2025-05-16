@@ -94,6 +94,6 @@ public class MusicRepositoryImpl implements MusicRepositoryCustom {
                 music.releaseDate,
                 music.lyrics))
             .from(music)
-            .where(music.title.eq(contentName)).fetch();
+            .where(music.title.lower().like("%" + contentName.toLowerCase() + "%")).fetch();
     }
 }

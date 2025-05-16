@@ -103,11 +103,10 @@ public class MovieRepositoryImpl implements MovieRepositoryCustom {
     public List<MovieDto> searchContent(String contentName) {
         return queryFactory.select(Projections.constructor(MovieDto.class,
                 movie.title,
-//                movie.genres,
-                movie.description,
+                movie.summary,
                 movie.releaseDate,
                 movie.thumbnail))
             .from(movie)
-            .where(movie.title.eq(contentName)).fetch();
+            .where(movie.title.lower().like("%" + contentName.toLowerCase() + "%")).fetch();
     }
 }
