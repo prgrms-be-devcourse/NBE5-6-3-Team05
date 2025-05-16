@@ -39,7 +39,6 @@ public class DetailsApiController {
         if (authentication != null){
             userId = authentication.getName();
         }
-
         SongDetailsDto dto = detailsService.getSongDetails(userId, id);
         return ResponseEntity.ok(dto);
     }

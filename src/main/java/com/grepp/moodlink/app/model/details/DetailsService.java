@@ -11,6 +11,9 @@ import com.grepp.moodlink.app.model.recomend.LikeDetailBooksRepository;
 import com.grepp.moodlink.app.model.recomend.LikeDetailMoviesRepository;
 import com.grepp.moodlink.app.model.recomend.LikeDetailMusicRepository;
 import com.grepp.moodlink.app.model.recomend.LikeRepository;
+import com.grepp.moodlink.app.model.recomend.entity.LikeDetailBooks;
+import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMovies;
+import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMusic;
 import com.grepp.moodlink.app.model.recomend.entity.Likes;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -51,6 +54,16 @@ public class DetailsService {
             return bookDetailsDto;
         }
 
+        // Like테이블 조회 후 현재 상세정보를 확인하는 컨텐츠와 같은 id의 컨텐츠가 있으면 status를 true로 변환
+        Long likeId = likes.getFirst().getId();
+        List<LikeDetailBooks> likeDetailBooks = likeDetailBooksRepository.findByLikesId(likeId);
+        for(LikeDetailBooks tempBook: likeDetailBooks){
+            if(tempBook.getBookId().equals(bookDetailsDto.getId())){
+                bookDetailsDto.setStatus(true);
+                break;
+            }
+        }
+
         return bookDetailsDto;
     }
 
@@ -72,6 +85,15 @@ public class DetailsService {
             return songDetailsDto;
         }
 
+        // Like테이블 조회 후 현재 상세정보를 확인하는 컨텐츠와 같은 id의 컨텐츠가 있으면 status를 true로 변환
+        Long likeId = likes.getFirst().getId();
+        List<LikeDetailMusic> likeDetailMusics = likeDetailMusicRepository.findByLikesId(likeId);
+        for(LikeDetailMusic tempMusic: likeDetailMusics){
+            if(tempMusic.getMusicId().equals(songDetailsDto.getId())){
+                songDetailsDto.setStatus(true);
+                break;
+            }
+        }
         return songDetailsDto;
     }
 
@@ -92,6 +114,16 @@ public class DetailsService {
         List<Likes> likes = likeRepository.findByUserId(userId);
         if (likes.isEmpty()){
             return movieDetailsDto;
+        }
+
+        // Like테이블 조회 후 현재 상세정보를 확인하는 컨텐츠와 같은 id의 컨텐츠가 있으면 status를 true로 변환
+        Long likeId = likes.getFirst().getId();
+        List<LikeDetailMovies> likeDetailMovies = likeDetailMoviesRepository.findByLikesId(likeId);
+        for(LikeDetailMovies tempMovie: likeDetailMovies){
+            if(tempMovie.getMovieId().equals(movieDetailsDto.getId())){
+                movieDetailsDto.setStatus(true);
+                break;
+            }
         }
 
         return movieDetailsDto;
