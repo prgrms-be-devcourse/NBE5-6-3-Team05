@@ -11,15 +11,20 @@
 <div layout:fragment="content">
   <h1>User List Page</h1>
 
-  <div>아이디</div>
+
   <button class="mypage-btn" th:onclick="'location.href=\'' + @{/users/modify} + '\''">
     정보 수정하기
   </button>
-  <div th:text="${userId}">이름</div>
-  <div th:text="${username}">유저이름</div>
-  <div th:text="${createdAt}">가입일</div>
-  <div th:text="${updatedAt}">수정일</div>
-  <div th:text="${countries}"> 국가</div>
+  <div th:text="'아이디 : '+${userId}">아이디</div>
+  <div th:text="'유저이름 : '+${username}">유저이름</div>
+  <div th:text="'가입일 : '+${createdAt}">가입일</div>
+  <div th:text="'수정일 : '+${updatedAt}">수정일</div>
+  <div th:text="'장르 : '+${genre}"> 장르</div>
+  <div th:text="'시대 : '+${periods}"> 시대</div>
+  <div th:text="'국가 : '+${countries}"> 국가</div>
+
+
+
   <button class="mypage-btn" th:onclick="'location.href=\'' + @{/users/like} + '\''">
     좋아요 목록조회
   </button>

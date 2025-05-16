@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class MovieModifyRequest {
-    private List<MultipartFile> image;
+    private List<MultipartFile> thumbnail;
     @NotBlank
     private String genres;
 

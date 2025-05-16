@@ -22,15 +22,13 @@ public class ResultController {
 
     @GetMapping
     public String result(Model model, Authentication authentication) {
-        String userId;
-        userId = "anonymous";
+        String userId ="";
         if (authentication != null){
             userId = authentication.getName();
         }
 
-        System.out.println(userId);
         List<CuratingDetailDto> tempList = resultService.curatingDetailDtoList(userId);
-
+        System.out.println(userId);
         String msg1 ="curatingReason출력문 예시 <br>";
         String msg2 ="오늘 해고당해서 우울한 당신! 고단한 하루를 달래줄 명작을 소개해드릴게요. <br>";
         String msg3 ="다음 작품들은 위로가 될 거예요!";

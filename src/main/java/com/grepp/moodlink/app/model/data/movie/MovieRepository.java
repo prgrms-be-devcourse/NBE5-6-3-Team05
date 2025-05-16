@@ -2,7 +2,6 @@ package com.grepp.moodlink.app.model.data.movie;
 
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import java.time.LocalDate;
-import com.grepp.moodlink.app.model.result.dto.MovieDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -22,13 +21,9 @@ public interface MovieRepository extends JpaRepository<Movie, String>, MovieRepo
             "WHERE g.name = :genreName")
     List<Movie> findByGenreName(@Param("genreName") String genreName);
 
+    @Query("SELECT m.id FROM Movie m where m.title = :title")
+    Optional<String> findIdByTitle(@Param("title") String title);
     boolean existsByTitleAndReleaseDate(String title, LocalDate releaseDate);
 
-    Optional<Movie> findByTitleContainingIgnoreCase(String title);
-
-    Movie findByTitle(String title);
-
-    @Query("SELECT new com.grepp.moodlink.app.model.result.dto.MovieDto(m.id, m.title, m.thumbnail) " +
-        "FROM Movie m WHERE m.id = :id")
-    Optional<MovieDto> findSimpleById(@Param("id") String id);
+    List<Movie> findAllByIdIn(List<String> id);
 }

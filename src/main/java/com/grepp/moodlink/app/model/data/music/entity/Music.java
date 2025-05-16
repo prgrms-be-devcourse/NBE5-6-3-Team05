@@ -35,6 +35,7 @@ public class Music extends BaseEntity {
     private LocalDate createdAt;
     @Column(columnDefinition = "TEXT")
     private String thumbnail;
+    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
     private Long likeCount;
     // 정렬을 위해 일단 임시로...
     @LastModifiedDate
