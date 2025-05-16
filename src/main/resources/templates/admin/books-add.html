@@ -18,17 +18,11 @@
       <h3>도서 정보를 입력해주세요.</h3>
 
         <div class="info-group">
-
-          <div class="file-field input-field">
-            <div class="btn">
-              <span>File</span>
-              <input type="file" name="image">
-            </div>
-            <div class="file-path-wrapper">
-              <input class="file-path validate" type="text">
-            </div>
+          <div class="image-upload">
+            <div id="preview" class="image-preview"></div>
+            <input type="file" id="image-input" name="image" style="display:none"/>
+            <button class="img-btn" type="button" onclick="document.getElementById('image-input').click()">이미지 추가</button>
           </div>
-
 
           <div>
             <div class="form-row"><label>제목</label><input th:field="*{title}" class="input-line"/></div>
@@ -63,4 +57,19 @@
       </form>
   </div>
 </main>
+<div layout:fragment="scripts">
+  <script>
+    // 이미지 미리보기
+    const input = document.getElementById('image-input');
+    const preview = document.getElementById('preview');
+    input.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = e => preview.style.backgroundImage = `url(${e.target.result})`;
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</div>
 </html>
