@@ -21,11 +21,10 @@ public interface MovieRepository extends JpaRepository<Movie, String> {
             "WHERE g.name = :genreName")
     List<Movie> findByGenreName(@Param("genreName") String genreName);
 
-    Optional<Movie> findByTitleContainingIgnoreCase(String title);
-
-    Movie findByTitle(String title);
-
     @Query("SELECT new com.grepp.moodlink.app.model.result.dto.MovieDto(m.id, m.title, m.thumbnail) " +
         "FROM Movie m WHERE m.id = :id")
     Optional<MovieDto> findSimpleById(@Param("id") String id);
+
+    @Query("SELECT m.id FROM Movie m where m.title = :title")
+    Optional<String> findIdByTitle(@Param("title") String title);
 }

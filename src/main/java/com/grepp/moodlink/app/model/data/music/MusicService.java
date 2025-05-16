@@ -14,8 +14,6 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.grepp.moodlink.app.model.data.movie.MovieService.processEnclosures;
-
 @Service
 @RequiredArgsConstructor
 public class MusicService {
@@ -42,23 +40,22 @@ public class MusicService {
         }
     }
 
-    public List<Music> parseRecommend(String musicResult) {
-        List<String> titles = new ArrayList<>();
-        Pattern pattern = Pattern.compile("^\\d+\\.\\s*(.*?)\\s*(?=:)", Pattern.MULTILINE);
-        String[] lines = musicResult.split("\\r?\\n");
+    public List<String> parseRecommend(String musicResult) {
+        List<String> result = new ArrayList<>();
+        if (musicResult == null || musicResult.isBlank()) return result;
 
-        for (String line : lines) {
-            line = line.trim();
-            if (line.isEmpty()) continue;
+        String line = musicResult.trim().replaceFirst("^[가-힣a-zA-Z0-9\\s:]+", "");
 
-            Matcher matcher = pattern.matcher(line);
-            if (matcher.find()) {
-                String title = processEnclosures(matcher.group(1).trim());
-                titles.add(title);
+        Matcher m = Pattern.compile("\"([^\"]+)\"").matcher(line);
+        while (m.find()) {
+            String title = m.group(1).trim();
+            if (title.startsWith("[") && title.endsWith("]")) {
+                title = title.substring(1, title.length()-1).trim();
             }
+            result.add(title);
         }
-        return titles.stream()
-                .map(musicRepository::findByTitle)
+        return result.stream()
+                .map(musicRepository::findIdByTitle)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .distinct()

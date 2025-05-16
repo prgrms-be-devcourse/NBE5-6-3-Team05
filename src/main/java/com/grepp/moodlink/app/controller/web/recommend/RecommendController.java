@@ -9,17 +9,21 @@ import com.grepp.moodlink.app.model.data.movie.entity.Genre;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import com.grepp.moodlink.app.model.data.music.MusicService;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
-import com.grepp.moodlink.app.model.embedding.EmbeddingService;
+import com.grepp.moodlink.app.model.llm.EmbeddingService;
 import com.grepp.moodlink.app.model.keyword.KeywordService;
+import com.grepp.moodlink.app.model.llm.LlmService;
+import com.grepp.moodlink.app.model.result.CuratingDetailRepository;
+import com.grepp.moodlink.app.model.result.dto.CuratingDetailDto;
+import com.grepp.moodlink.app.model.result.dto.CuratingDetailIdDto;
+import com.grepp.moodlink.app.model.result.entity.CuratingDetail;
 import jakarta.servlet.http.HttpSession;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -34,6 +38,8 @@ public class RecommendController {
     private final MovieService movieService;
     private final BookService bookService;
     private final MusicService musicService;
+    private final LlmService llmService;
+    private final CuratingDetailRepository curatingDetailRepository;
 
     @GetMapping
     public String selectKeyword(){
@@ -55,10 +61,31 @@ public class RecommendController {
         String userId = getLoginUserId();
         processUserKeywords(userId, keywords);
 
-        RecommendationDto recommendations = generateRecommendations(userId, genre);
-        setSessionAttributes(session, recommendations);
+        String reason = llmService.generateReason(userId);
+        System.out.println(reason);
+        session.setAttribute("reason", reason);
+
+        List<CuratingDetailIdDto> items = curatingContents(genre, userId);
+        System.out.println(items);
+        session.setAttribute("items", items);
+
 
         return "home/mainPage";
+    }
+
+    private List<CuratingDetailIdDto> curatingContents(String genre, String userId) {
+        List<CuratingDetailIdDto> details = new ArrayList<>();
+        List<String> movieIds = getMovieRecommendations(genre, userId);
+        List<String> bookIds = getBookRecommendations(userId);
+        List<String> musicIds = getMusicRecommendations(userId);
+        for(int i = 0; i < musicIds.size(); i++){
+            CuratingDetailIdDto detail = new CuratingDetailIdDto();
+            detail.setMovieId(movieIds.get(i));
+            detail.setBookId(bookIds.get(i));
+            detail.setSongId(musicIds.get(i));
+            details.add(detail);
+        }
+        return details;
     }
 
     private void processUserKeywords(String userId, String keywords) {
@@ -66,36 +93,20 @@ public class RecommendController {
         embeddingService.generateEmbeddingKeyword(userId, keywords);
     }
 
-    private RecommendationDto generateRecommendations(String userId, String genre) {
-        return RecommendationDto.builder()
-                .movies(getMovieRecommendations(genre, userId))
-                .books(getBookRecommendations(userId))
-                .musics(getMusicRecommendations(userId))
-                .build();
-    }
 
-    private List<Movie> getMovieRecommendations(String genre, String userId) {
-        String movieResult = embeddingService.recommendMovie(genre, userId);
+    private List<String> getMovieRecommendations(String genre, String userId) {
+        String movieResult = llmService.recommendMovie(genre, userId);
         return movieService.parseRecommend(movieResult);
     }
 
-    private List<Book> getBookRecommendations(String userId) {
-        String bookResult = embeddingService.recommendBook(userId);
+    private List<String> getBookRecommendations(String userId) {
+        String bookResult = llmService.recommendBook(userId);
         return bookService.parseRecommend(bookResult);
     }
 
-    private List<Music> getMusicRecommendations(String userId) {
-        String musicResult = embeddingService.recommendMusic(userId);
+    private List<String> getMusicRecommendations(String userId) {
+        String musicResult = llmService.recommendMusic(userId);
         return musicService.parseRecommend(musicResult);
-    }
-
-    private void setSessionAttributes(HttpSession session, RecommendationDto dto) {
-        session.setAttribute("movies", dto.getMovies());
-        System.out.println(dto.getMovies().getFirst().getTitle());
-        session.setAttribute("books", dto.getBooks());
-        System.out.println(dto.getBooks().getFirst().getTitle());
-        session.setAttribute("musics", dto.getMusics());
-        System.out.println(dto.getMusics().getFirst().getTitle());
     }
 
 
@@ -108,11 +119,5 @@ public class RecommendController {
         return principal.getUsername();
     }
 
-    @Data
-    @Builder
-    public static class RecommendationDto {
-        private List<Movie> movies;
-        private List<Book> books;
-        private List<Music> musics;
-    }
+
 }

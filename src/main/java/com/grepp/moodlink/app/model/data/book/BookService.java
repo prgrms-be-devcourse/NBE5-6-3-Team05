@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import static com.grepp.moodlink.app.model.data.movie.MovieService.processEnclosures;
 
 @Slf4j
 @Service
@@ -130,24 +129,22 @@ public class BookService {
         bookRepository.findByIsbn(isbn).unActivated();
     }
 
-    public List<Book> parseRecommend(String bookResult) {
-        List<String> titles = new ArrayList<>();
-        Pattern pattern = Pattern.compile("^\\d+\\.\\s*(.*?)\\s*(?=:)", Pattern.MULTILINE);
-        String[] lines = bookResult.split("\\r?\\n");
+    public List<String> parseRecommend(String movieResult) {
+        List<String> result = new ArrayList<>();
+        if (movieResult == null || movieResult.isBlank()) return result;
 
-        for (String line : lines) {
-            line = line.trim();
-            if (line.isEmpty()) continue;
+        String line = movieResult.trim().replaceFirst("^[가-힣a-zA-Z0-9\\s:]+", "");
 
-            Matcher matcher = pattern.matcher(line);
-            if (matcher.find()) {
-                String title = processEnclosures(matcher.group(1).trim());
-                titles.add(title);
+        Matcher m = Pattern.compile("\"([^\"]+)\"").matcher(line);
+        while (m.find()) {
+            String title = m.group(1).trim();
+            if (title.startsWith("[") && title.endsWith("]")) {
+                title = title.substring(1, title.length()-1).trim();
             }
+            result.add(title);
         }
-
-        return titles.stream()
-                .map(bookRepository::findByTitle)
+        return result.stream()
+                .map(bookRepository::findIsbnByTitle)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .distinct()

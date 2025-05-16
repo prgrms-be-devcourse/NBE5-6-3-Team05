@@ -59,39 +59,26 @@ public class MovieService {
         }
     }
 
-    @Transactional
-    public List<Movie> parseRecommend(String movieResult) {
-        List<String> titles = new ArrayList<>();
-        Pattern pattern = Pattern.compile("^\\d+\\.\\s*(.*?)\\s*(?=:)", Pattern.MULTILINE);
-        String[] lines = movieResult.split("\\r?\\n");
+    public List<String> parseRecommend(String movieResult) {
+        List<String> result = new ArrayList<>();
+        if (movieResult == null || movieResult.isBlank()) return result;
 
-        for (String line : lines) {
-            line = line.trim();
-            if (line.isEmpty()) continue;
+        String line = movieResult.trim().replaceFirst("^[가-힣a-zA-Z0-9\\s:]+", "");
 
-            Matcher matcher = pattern.matcher(line);
-            if (matcher.find()) {
-                String title = processEnclosures(matcher.group(1).trim());
-                titles.add(title);
+        Matcher m = Pattern.compile("\"([^\"]+)\"").matcher(line);
+        while (m.find()) {
+            String title = m.group(1).trim();
+            if (title.startsWith("[") && title.endsWith("]")) {
+                title = title.substring(1, title.length()-1).trim();
             }
+            result.add(title);
         }
-        return titles.stream()
-                .map(movieRepository::findByTitle)
+        return result.stream()
+                .map(movieRepository::findIdByTitle)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .distinct()
                 .collect(Collectors.toList());
     }
 
-    public static String processEnclosures(String title) {
-        String[][] enclosures = {{"\"", "\""}, {"[", "]"}};
-        for (String[] enc : enclosures) {
-            String start = enc[0];
-            String end = enc[1];
-            if (title.startsWith(start) && title.endsWith(end)) {
-                title = title.substring(start.length(), title.length() - end.length()).trim();
-            }
-        }
-        return title.replace("\"", "");
-    }
 }

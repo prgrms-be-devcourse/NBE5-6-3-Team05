@@ -15,12 +15,10 @@ public interface MusicRepository extends JpaRepository<Music, String> {
 
     List<Music> findByEmbeddingIsNull();
 
-    @Query("SELECT m FROM Music m WHERE LOWER(REPLACE(m.title, ' ', '')) = LOWER(REPLACE(m.title, ' ', ''))")
-    Optional<Music> findByTitleIgnoreCaseContaining(String trim);
-
-
     @Query("SELECT new com.grepp.moodlink.app.model.result.dto.SongDto(m.id, m.title, m.thumbnail) " +
         "FROM Music m WHERE m.id = :id")
     Optional<SongDto> findSimpleById(@Param("id") String id);
 
+    @Query("SELECT m.id FROM Music m where m.title = :title")
+    Optional<String> findIdByTitle(@Param("title")String s);
 }

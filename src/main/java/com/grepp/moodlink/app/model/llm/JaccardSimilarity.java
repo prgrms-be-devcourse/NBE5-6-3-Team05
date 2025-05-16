@@ -1,4 +1,4 @@
-package com.grepp.moodlink.app.model.embedding;
+package com.grepp.moodlink.app.model.llm;
 
 import java.util.HashSet;
 import java.util.Set;

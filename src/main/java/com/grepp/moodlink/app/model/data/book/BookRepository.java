@@ -23,4 +23,7 @@ public interface BookRepository extends JpaRepository<Book, String>, BookReposit
         "FROM Book b WHERE b.isbn = :isbn")
     Optional<BookDto> findSimpleByIsbn(@Param("isbn") String isbn);
 
+    @Query("SELECT b.isbn FROM Book b where b.title = :title")
+    Optional<String> findIsbnByTitle(@Param("title") String title);
+
 }
