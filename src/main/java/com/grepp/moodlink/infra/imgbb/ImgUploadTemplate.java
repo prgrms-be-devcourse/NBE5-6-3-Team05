@@ -47,7 +47,7 @@ public class ImgUploadTemplate {
             .bodyToMono(ImgbbUploadResponse.class)
             .map(ImgbbUploadResponse::getDisplayUrl)
             .onErrorMap(WebClientResponseException.GatewayTimeout.class, ex ->
-                new CommonException(ResponseCode.INTERNAL_SERVER_ERROR))
+                new CommonException(ResponseCode.EXTERNAL_API_TIMEOUT))
             .block();
 
         return response;
