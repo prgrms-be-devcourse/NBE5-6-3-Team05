@@ -11,6 +11,7 @@ import com.grepp.moodlink.app.model.data.book.code.BookGenre;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.movie.MovieService;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
+import com.grepp.moodlink.app.model.data.movie.entity.Genre;
 import com.grepp.moodlink.app.model.data.music.MusicService;
 import com.grepp.moodlink.app.model.data.music.code.MusicGenre;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
@@ -196,14 +197,12 @@ public class AdminController {
         // movieModifyRequest 기존에 저장된 데이터 값 넣어두기
         movieModifyRequest.setDescription(movie.getDescription());
         String selectedGenre = "";
-        for(com.grepp.moodlink.app.model.data.movie.entity.Genre genre : movie.getGenres()){
+        for(Genre genre : movie.getGenres()){
             selectedGenre=selectedGenre.concat(genre.getId()+",");
         }
         selectedGenre = selectedGenre.substring(0, selectedGenre.length()-1);
         log.info(selectedGenre);
         model.addAttribute("selectedGenre",selectedGenre);
-        // 이미지는 파일 형식이 달라서 더 고민해보기
-
 
 
         // 미리 값을 저장해둔 request 넘기기
@@ -229,9 +228,9 @@ public class AdminController {
         // Service로 넘길 dto 만들기
         MovieInfoDto dto = movieModifyRequest.toDto();
         dto.setId(id);
-        log.info("{}", dto);
+        log.info("{}", movieModifyRequest.getDescription());
 
-        movieService.updateMovie(movieModifyRequest.getImage(), dto);
+        movieService.updateMovie(movieModifyRequest.getThumbnail(), dto);
 
         return "redirect:/admin/movies";
     }

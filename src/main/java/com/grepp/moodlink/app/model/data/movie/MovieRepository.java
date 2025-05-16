@@ -21,11 +21,9 @@ public interface MovieRepository extends JpaRepository<Movie, String>, MovieRepo
             "WHERE g.name = :genreName")
     List<Movie> findByGenreName(@Param("genreName") String genreName);
 
+    @Query("SELECT m.id FROM Movie m where m.title = :title")
+    Optional<String> findIdByTitle(@Param("title") String title);
     boolean existsByTitleAndReleaseDate(String title, LocalDate releaseDate);
-
-    Optional<Movie> findByTitleContainingIgnoreCase(String title);
-
-    Movie findByTitle(String title);
 
     List<Movie> findAllByIdIn(List<String> id);
 }

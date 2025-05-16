@@ -1,6 +1,6 @@
 package com.grepp.moodlink.app.controller.api;
 
-import com.grepp.moodlink.app.model.embedding.EmbeddingService;
+import com.grepp.moodlink.app.model.llm.EmbeddingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

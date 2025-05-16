@@ -2,12 +2,21 @@ package com.grepp.moodlink.app.model.data.book;
 
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
+import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
+import com.grepp.moodlink.infra.imgbb.ImgUploadTemplate;
 import com.grepp.moodlink.infra.response.ResponseCode;
 import com.grepp.moodlink.infra.util.file.FileDto;
 import com.grepp.moodlink.infra.util.file.FileUtil;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -16,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 
 @Slf4j
 @Service
@@ -26,6 +36,7 @@ public class BookService {
     private final BookRepositoryImpl bookRepositoryImpl;
     private final FileUtil fileUtil;
     private final ModelMapper mapper;
+    private final ImgUploadTemplate imgUploadTemplate;
 
     // 관리자 페이지에서 도서 추가
     @Transactional
@@ -38,12 +49,14 @@ public class BookService {
             List<FileDto> fileDtos = fileUtil.upload(thumbnail, "book");
             Book book = mapper.map(dto, Book.class);
 
-            if(!fileDtos.isEmpty()){
-                FileDto fileDto = fileDtos.getFirst();
-                String renameFileName = fileDto.renameFileName();
-                String savePath = fileDto.savePath();
+            if(thumbnail != null){
+                MultipartFile file =  thumbnail.getFirst();
+                String originFileName = file.getOriginalFilename();
+                String ext = originFileName.substring(originFileName.lastIndexOf("."));
+                String renameFileName = UUID.randomUUID().toString() + ext;
 
-                book.setImage("/download/" + savePath + renameFileName);
+                String thumbnailUrl = imgUploadTemplate.uploadImage(thumbnail.getFirst(), renameFileName);
+                book.setImage(thumbnailUrl);
             }
 
             long count = bookRepository.count();
@@ -92,17 +105,18 @@ public class BookService {
         return mapper.map(bookRepository.findByIsbn(isbn), BookDto.class);
     }
 
-    public void updateBook(List<MultipartFile> image, BookDto dto) {
+    public void updateBook(List<MultipartFile> thumbnail, BookDto dto) {
 
         try {
-            List<FileDto> fileDtos = fileUtil.upload(image, "book");
 
-            if(!fileDtos.isEmpty()){
-                FileDto fileDto = fileDtos.getFirst();
-                String renameFileName = fileDto.renameFileName();
-                String savePath = fileDto.savePath();
+            if(thumbnail != null){
+                MultipartFile file =  thumbnail.getFirst();
+                String originFileName = file.getOriginalFilename();
+                String ext = originFileName.substring(originFileName.lastIndexOf("."));
+                String renameFileName = UUID.randomUUID().toString() + ext;
 
-                dto.setImage("/download/" + savePath + renameFileName);
+                String thumbnailUrl = imgUploadTemplate.uploadImage(thumbnail.getFirst(), renameFileName);
+                dto.setImage(thumbnailUrl);
             }
 
             // 업데이트
@@ -121,7 +135,25 @@ public class BookService {
         bookRepository.findByIsbn(isbn).unActivated();
     }
 
-    public List<Book> parseRecommend(String bookResult) {
-        return null;
+    public List<String> parseRecommend(String movieResult) {
+        List<String> result = new ArrayList<>();
+        if (movieResult == null || movieResult.isBlank()) return result;
+
+        String line = movieResult.trim().replaceFirst("^[가-힣a-zA-Z0-9\\s:]+", "");
+
+        Matcher m = Pattern.compile("\"([^\"]+)\"").matcher(line);
+        while (m.find()) {
+            String title = m.group(1).trim();
+            if (title.startsWith("[") && title.endsWith("]")) {
+                title = title.substring(1, title.length()-1).trim();
+            }
+            result.add(title);
+        }
+        return result.stream()
+                .map(bookRepository::findIsbnByTitle)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }
