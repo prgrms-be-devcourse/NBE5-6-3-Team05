@@ -8,9 +8,10 @@
 <div layout:fragment="content">
   <div class="main-content">
     <div class="search-container">
-      <input type="text" id="search-input" placeholder="원하는 음악,영화,도서를 찾아보세요!"
-             oninput="filterContent()">
-      <button onclick="filterContent()">검색</button>
+      <form id="searchForm" th:action="@{'/serch/' + ${searchQuery}}" method="get" onsubmit="return submitSearchForm()">
+        <input type="text" id="search-input" name="searchQuery" placeholder="원하는 음악,영화,도서를 찾아보세요!">
+        <button type="submit">검색</button>
+      </form>
     </div>
 
     <h2>오늘의 기분, 하나의 링크로 영화·도서·음악을 만나보세요.</h2>
@@ -64,7 +65,7 @@
         오늘의 운세
       </button>
 
-      <div id="fortuneModal" class="modal" onclick="closeModal(event)">
+      <div id="fortuneModal" class="modal modal-backdrop" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
           <span class="close-btn" onclick="closeModal()">&times;</span>
           <h4 style="color: #814700 ; margin-bottom: 20px;">오늘의 운세</h4>
@@ -188,5 +189,13 @@
       }, 15000);
     }
   });
+
+  function submitSearchForm() {
+    const input = document.getElementById('search-input').value.trim();
+    if (input) {
+      window.location.href = '/serch/' + encodeURIComponent(input);
+    }
+    return false; // 폼 기본 제출 막기
+  }
 
 </script>

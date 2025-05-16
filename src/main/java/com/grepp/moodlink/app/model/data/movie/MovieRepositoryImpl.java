@@ -1,11 +1,10 @@
 package com.grepp.moodlink.app.model.data.movie;
 
-import static com.grepp.moodlink.app.model.data.movie.entity.QMovie.movie;
-
-import com.grepp.moodlink.app.model.data.book.entity.Book;
+import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import com.grepp.moodlink.app.model.data.movie.entity.QMovie;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -43,14 +42,6 @@ public class MovieRepositoryImpl implements MovieRepositoryCustom {
     public String findTitle() {
         return em.createQuery(
                 "SELECT m.title FROM Movie m ORDER BY m.likeCount DESC", String.class)
-            .setMaxResults(1)
-            .getSingleResult();
-    }
-
-    @Override
-    public String findDescription() {
-        return em.createQuery(
-                "SELECT m.description FROM Movie m ORDER BY m.likeCount DESC", String.class)
             .setMaxResults(1)
             .getSingleResult();
     }
@@ -106,5 +97,16 @@ public class MovieRepositoryImpl implements MovieRepositoryCustom {
             entity.setThumbnail(dto.getThumbnail());
         }
         entity.setDescription(dto.getDescription());
+    }
+
+    @Override
+    public List<MovieDto> searchContent(String contentName) {
+        return queryFactory.select(Projections.constructor(MovieDto.class,
+                movie.title,
+                movie.summary,
+                movie.releaseDate,
+                movie.thumbnail))
+            .from(movie)
+            .where(movie.title.lower().like("%" + contentName.toLowerCase() + "%")).fetch();
     }
 }

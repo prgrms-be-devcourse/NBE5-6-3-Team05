@@ -1,8 +1,12 @@
 package com.grepp.moodlink.app.model.home;
 
+import com.grepp.moodlink.app.model.data.ContentDto;
 import com.grepp.moodlink.app.model.data.book.BookRepositoryImpl;
+import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.movie.MovieRepositoryImpl;
+import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
 import com.grepp.moodlink.app.model.data.music.MusicRepositoryImpl;
+import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.member.MemberRepositoryImpl;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,17 +68,17 @@ public class HomeService {
         return title;
     }
 
-    public List<String> findDescription() {
-        List<String> description = new ArrayList<>();
+    public List<? extends ContentDto> searchContent(String contentName) {
+        List<MusicDto> music = musicRepositoryImpl.searchContent(contentName);
+        System.out.println("음악 검색 결과: " + music.size());
+        if (!music.isEmpty()) return music;
 
-        String music = musicRepositoryImpl.findDescription();
-        String movie = movieRepositoryImpl.findDescription();
-        String book = bookRepositoryImpl.findDescription();
+        List<MovieDto> movie = movieRepositoryImpl.searchContent(contentName);
+        System.out.println("영화 검색 결과: " + movie.size());
+        if (!movie.isEmpty()) return movie;
 
-        description.add(music);
-        description.add(movie);
-        description.add(book);
-
-        return description;
+        List<BookDto> book = bookRepositoryImpl.searchContent(contentName);
+        System.out.println("책 검색 결과: " + book.size());
+        return book;
     }
 }

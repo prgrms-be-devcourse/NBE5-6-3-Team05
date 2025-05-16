@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>검색 결과</title>
+</head>
+<body>
+<main layout:fragment="content" class="search-result-container">
+
+  <div class="content-grid" th:switch="${contentType}">
+    <div th:case="'music'" th:each="music : ${contentDetails}" class="content-item music-item"
+         th:attr="data-title=${music.title}, data-description=${music.lyrics}">
+      <img th:src="${music.thumbnail}" alt="음악 썸네일" class="content-thumbnail" />
+      <p class="content-title"><strong th:text="${music.title}"></strong></p>
+      <p class="content-subtext" th:text="${music.singer}"></p>
+      <p class="content-subtext" th:text="${music.releaseDate}"></p>
+      <p class="content-description" th:text="${music.lyrics}"></p>
+    </div>
+
+    <div th:case="'movie'" th:each="movie : ${contentDetails}" class="content-item movie-item"
+         th:attr="data-title=${movie.title}, data-description=${movie.summary}">
+      <img th:src="${movie.thumbnail}" alt="영화 썸네일" class="content-thumbnail" />
+      <p class="content-title"><strong th:text="${movie.title}"></strong></p>
+      <p class="content-description" th:text="${movie.summary}"></p>
+      <p class="content-subtext" th:text="${movie.releaseDate}"></p>
+      <ul class="genre-list">
+        <li class="genre-tag" th:each="genre : ${movie.genres}" th:text="${genre}"></li>
+      </ul>
+    </div>
+
+    <div th:case="'book'" th:each="book : ${contentDetails}" class="content-item book-item"
+         th:attr="data-title=${book.title}, data-description=${book.description}">
+      <img th:src="${book.image}" alt="책 표지" class="content-thumbnail" />
+      <p class="content-title"><strong th:text="${book.title}"></strong></p>
+      <p class="content-description" th:text="${book.description}"></p>
+      <p class="content-subtext" th:text="${book.publishedDate}"></p>
+      <p class="content-subtext" th:text="${book.publisher}"></p>
+    </div>
+
+    <div th:case="*">
+      <div class="no-result">
+        <p>검색 결과가 없습니다.</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>
+
+<script>
+  function filterContent() {
+    const input = document.getElementById("search-input").value.toLowerCase();
+    const items = document.querySelectorAll(".content-item");
+
+    items.forEach(item => {
+      const title = item.getAttribute("data-title")?.toLowerCase() || "";
+      const description = item.getAttribute("data-description")?.toLowerCase() || "";
+
+      if (title.includes(input) || description.includes(input)) {
+        item.style.display = "";
+      } else {
+        item.style.display = "none";
+      }
+    });
+  }
+</script>

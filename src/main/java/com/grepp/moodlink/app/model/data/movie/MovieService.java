@@ -46,10 +46,10 @@ public class MovieService {
             movie.setId("M" + count);
             movie.setTitle(dto.getTitle());
             movie.setDescription(dto.getOverview());
-            String dateStr = dto.getReleaseDate();
+            LocalDate dateStr = dto.getReleaseDate();
             LocalDate releaseDate = null;
-            if (dateStr != null && !dateStr.isBlank()) {
-                releaseDate = LocalDate.parse(dateStr, formatter);
+            if (dateStr != null ) {
+                releaseDate = dateStr;
             }
             movie.setReleaseDate(releaseDate);
             movie.setThumbnail(
