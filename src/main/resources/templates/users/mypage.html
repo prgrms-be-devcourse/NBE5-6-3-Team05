@@ -74,12 +74,51 @@
     const likeBookGenre = /*[[${LikeBookGenre}]]*/ [];
     const mostLikeBookGenre = /*[[${mostLikeBookGenre}]]*/ [];
 
+
+
     function extractData(list) {
       if (!Array.isArray(list)) return { labels: [], values: [] };
       return {
         labels: list.map(item => item.genre),
         values: list.map(item => item.count)
       };
+    }
+
+    function fillDataWithPopular(data, popularData, maxCount = 6) {
+      if (data?.labels?.length === 0 && data?.values?.length === 0) {
+        return data;
+      }
+      const { labels, values } = data;
+
+      if (labels.length >= maxCount) return data;
+
+      const existingGenres = new Set(labels);
+
+      // popularData 배열로 변환
+      const popularList = popularData.labels.map((genre, index) => ({
+        genre,
+        count: popularData.values[index]
+      }));
+
+      // count 순 정렬 (내림차순)
+      popularList.sort((a, b) => b.count - a.count);
+
+      for (const item of popularList) {
+        if (!existingGenres.has(item.genre)) {
+          labels.push(item.genre);
+          values.push(0);
+          existingGenres.add(item.genre);
+        }
+        if (labels.length === maxCount) break;
+      }
+
+      // 부족하면 '기타'로 채우기
+      while (labels.length < maxCount) {
+        labels.push(`기타${labels.length + 1}`);
+        values.push(0);
+      }
+
+      return { labels, values };
     }
 
     const musicData = extractData(likeMusicGenre);
@@ -89,6 +128,9 @@
     const bookData = extractData(likeBookGenre);
     const popularBookData = extractData(mostLikeBookGenre);
 
+    const finalMusicData = fillDataWithPopular(musicData, popularMusicData);
+    const finalMovieData = fillDataWithPopular(movieData, popularMovieData);
+    const finalBookData = fillDataWithPopular(bookData, popularBookData);
 
 
     const colors = {
@@ -159,15 +201,15 @@
 
       if (!isChartInitialized[tabName]) {
         if (tabName === 'books') {
-          makeRadarChart("bookChart", "내 책 선호", bookData, colors.purple);
+          makeRadarChart("bookChart", "내 책 선호", finalBookData, colors.purple);
           makeRadarChart("popularBookChart", "인기 책 장르", popularBookData, colors.yellow);
         }
         if (tabName === 'movies') {
-          makeRadarChart("movieChart", "내 영화 선호", movieData, colors.green);
+          makeRadarChart("movieChart", "내 영화 선호", finalMovieData, colors.green);
           makeRadarChart("popularMovieChart", "인기 영화 장르", popularMovieData, colors.orange);
         }
         if (tabName === 'musics') {
-          makeRadarChart("musicChart", "내 음악 선호", musicData, colors.blue);
+          makeRadarChart("musicChart", "내 음악 선호", finalMusicData, colors.blue);
           makeRadarChart("popularMusicChart", "인기 음악 장르", popularMusicData, colors.red);
         }
         isChartInitialized[tabName] = true;
