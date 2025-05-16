@@ -28,7 +28,4 @@ public interface MovieRepository extends JpaRepository<Movie, String>, MovieRepo
 
     Movie findByTitle(String title);
 
-    @Query("SELECT new com.grepp.moodlink.app.model.result.dto.MovieDto(m.id, m.title, m.thumbnail) " +
-        "FROM Movie m WHERE m.id = :id")
-    Optional<MovieDto> findSimpleById(@Param("id") String id);
 }

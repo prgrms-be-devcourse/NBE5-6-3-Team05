@@ -287,6 +287,8 @@ public class LikeService {
             .collect(Collectors.toList());
     }
 
+
+    //TODO: like테이블 수정 및 각 컨텐츠의 like_count증감 적용
     @Transactional
     public boolean toggleLikeMusic(String userId, String id){
         List<Likes> likes = getLikeInfo(userId);
@@ -316,7 +318,70 @@ public class LikeService {
             newLikeMusic.setLikesId(newLike.getId());
             likeDetailMusicRepository.save(newLikeMusic);
         }
-        System.out.println(exists);
+        return exists;
+    }
+
+    @Transactional
+    public boolean toggleLikeMovie(String userId, String id) {
+        List<Likes> likes = getLikeInfo(userId);
+        List<LikeDetailMovies> likeDetailMovies = getLikeDetailMovie(likes);
+        boolean exists = true;
+        for(LikeDetailMovies movie : likeDetailMovies){
+            if(movie.getMovieId().equals(id)){
+                exists = false;
+                // likes 테이블에 요소 삭제
+                likeRepository.deleteById(movie.getLikesId());
+                // like_detail_movie 테이블에 요소 삭제
+                likeDetailMoviesRepository.deleteByMovieId(id);
+                // 삭제
+                break;
+            }
+        }
+        if (exists){
+            // 삽입하기
+            // likes테이블에 요소 추가
+            Likes newLike = new Likes();
+            newLike.setUserId(userId);
+            likeRepository.save(newLike);
+
+            // like_detail_movie 테이블에 요소 추가
+            LikeDetailMovies newLikeMovies = new LikeDetailMovies();
+            newLikeMovies.setMovieId(id);
+            newLikeMovies.setLikesId(newLike.getId());
+            likeDetailMoviesRepository.save(newLikeMovies);
+        }
+        return exists;
+    }
+
+    @Transactional
+    public boolean toggleLikeBook(String userId, String id) {
+        List<Likes> likes = getLikeInfo(userId);
+        List<LikeDetailBooks> likeDetailBooks = getLikeDetailBook(likes);
+        boolean exists = true;
+        for(LikeDetailBooks book : likeDetailBooks){
+            if(book.getBookId().equals(id)){
+                exists = false;
+                // likes 테이블에 요소 삭제
+                likeRepository.deleteById(book.getLikesId());
+                // like_detail_book 테이블에 요소 삭제
+                likeDetailBooksRepository.deleteByBookId(id);
+                // 삭제
+                break;
+            }
+        }
+        if (exists){
+            // 삽입하기
+            // likes테이블에 요소 추가
+            Likes newLike = new Likes();
+            newLike.setUserId(userId);
+            likeRepository.save(newLike);
+
+            // like_detail_book 테이블에 요소 추가
+            LikeDetailBooks newLikeBooks = new LikeDetailBooks();
+            newLikeBooks.setBookId(id);
+            newLikeBooks.setLikesId(newLike.getId());
+            likeDetailBooksRepository.save(newLikeBooks);
+        }
         return exists;
     }
 }

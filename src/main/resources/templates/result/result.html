@@ -6,7 +6,7 @@
 
     /* 전체 배경 및 기본 글자색 */
     body {
-      background-color: #121212;
+      background: linear-gradient( #000000, #683997);
       color: #ffffff;
       font-family: 'Pretendard', 'Spoqa Han Sans', sans-serif;
       margin: 0;
@@ -235,6 +235,14 @@
       font-size: 24px;
       cursor: pointer;
       color: black;
+
+      /* ★ 텍스트만큼만 버튼 크기 지정 */
+      width: 1em;
+      height: 1em;
+      line-height: 1em;
+      display: inline-block;
+      text-align: center;
+
       text-shadow: /* 🔥 노란 윤곽선 효과 */ 0.8px 0 #f4b464,
       -0.8px 0 #f4b464,
       0 0.8px #f4b464,
@@ -333,6 +341,24 @@
       padding: 4px 8px;
       border-radius: 6px;
       margin-top: 10px;
+    }
+
+    /*모달 창 내 텍스트 전체보기/간략히 보기*/
+    .text-button {
+      background: none;
+      border: none;
+      color: #aaa;
+      font-size: 0.8rem;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      opacity: 0.7;
+      transform: scale(0.9);
+    }
+
+    .text-button:hover {
+      color: #ccc;
+      opacity: 1;
     }
   </style>
 
@@ -564,16 +590,21 @@
 
     if (type === "book") {
       details += `<p><strong>작가:</strong> ${data.author}</p>`;
-      details += `<p><strong>출판일:</strong> ${data.publishedAt}</p>`;
-      details += `<p><strong>설명:</strong> ${data.description}</p>`;
-    } else if (type === "movie") {
-      details += `<p><strong>감독:</strong> ${data.director}</p>`;
       details += `<p><strong>장르:</strong> ${data.genre}</p>`;
-      details += `<p><strong>설명:</strong> ${data.description}</p>`;
+      details += `<p><strong>요약:</strong> ${buildExpandable(data.summary, "summary")}</p>`;
+      details += `<p><strong>설명:</strong> ${buildExpandable(data.description, "description")}</p>`;
+      details += `<p><strong>출판사:</strong> ${data.publisher}</p>`;
+      details += `<p><strong>출판일:</strong> ${data.publishedAt}</p>`;
+
+    } else if (type === "movie") {
+      details += `<p><strong>장르:</strong> ${data.genre}</p>`;
+      details += `<p><strong>설명:</strong> ${buildExpandable(data.description, "description")}</p>`;     //간략히
+      details += `<p><strong>개봉일:</strong> ${data.releaseDate}</p>`;
     } else if (type === "song") {
       details += `<p><strong>아티스트:</strong> ${data.artist}</p>`;
       details += `<p><strong>발매일:</strong> ${data.releasedAt}</p>`;
-      details += `<p><strong>설명:</strong> ${data.description}</p>`;
+      details += `<p><strong>요약:</strong> ${buildExpandable(data.summary, "summary")}</p>`;
+      details += `<p><strong>가사:</strong> ${buildExpandable(data.lyrics, "lyrics")}</p>`;
     }
 
     meta.innerHTML = details;
@@ -593,6 +624,35 @@
   function closeModal() {
     document.getElementById("detailModal").classList.add("hidden");
   }
+
+  //모달 창의 텍스트 줄여서 보기
+  function buildExpandable(content, idPrefix) {
+    const shortId = `${idPrefix}-short`;
+    const fullId = `${idPrefix}-full`;
+    const btnId = `${idPrefix}-btn`;
+
+    return `
+    <span id="${shortId}" style="display:block; overflow: hidden; text-overflow: ellipsis; max-height: 4.5em;">
+      ${content}
+    </span>
+    <span id="${fullId}" style="display:none;">
+      ${content}
+    </span>
+    <button onclick="toggleText('${shortId}', '${fullId}', '${btnId}')" id="${btnId}" class="text-button">전체 보기</button>
+  `;
+  }
+
+  function toggleText(shortId, fullId, btnId) {
+    const shortEl = document.getElementById(shortId);
+    const fullEl = document.getElementById(fullId);
+    const btnEl = document.getElementById(btnId);
+
+    const isShortVisible = shortEl.style.display !== "none";
+    shortEl.style.display = isShortVisible ? "none" : "block";
+    fullEl.style.display = isShortVisible ? "block" : "none";
+    btnEl.textContent = isShortVisible ? "간략히 보기" : "전체 보기";
+  }
+
 </script>
 
 </body>
