@@ -1,20 +1,16 @@
 package com.grepp.moodlink.app.model.data.music;
 
-import com.grepp.moodlink.app.model.data.book.dto.BookDto;
-import com.grepp.moodlink.app.model.data.book.entity.Book;
-import com.grepp.moodlink.app.model.data.movie.entity.Movie;
-import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
+import com.grepp.moodlink.infra.imgbb.ImgUploadTemplate;
 import com.grepp.moodlink.infra.response.ResponseCode;
-import com.grepp.moodlink.infra.util.file.FileDto;
-import com.grepp.moodlink.infra.util.file.FileUtil;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -35,7 +31,7 @@ public class MusicService {
 
     private final MusicRepository musicRepository;
     private final ModelMapper mapper;
-    private final FileUtil fileUtil;
+    private final ImgUploadTemplate imgUploadTemplate;
 
     public void saveMusic(List<MusicDto> musicDtos) {
 
@@ -69,15 +65,16 @@ public class MusicService {
             throw new CommonException(ResponseCode.DUPLICATED_DATA);
 
         try {
-            List<FileDto> fileDtos = fileUtil.upload(thumbnail, "music");
             Music music = mapper.map(dto, Music.class);
 
-            if(!fileDtos.isEmpty()){
-                FileDto fileDto = fileDtos.getFirst();
-                String renameFileName = fileDto.renameFileName();
-                String savePath = fileDto.savePath();
+            if(thumbnail != null){
+                MultipartFile file =  thumbnail.getFirst();
+                String originFileName = file.getOriginalFilename();
+                String ext = originFileName.substring(originFileName.lastIndexOf("."));
+                String renameFileName = UUID.randomUUID().toString() + ext;
 
-                music.setThumbnail("/download/" + savePath + renameFileName);
+                String thumbnailUrl = imgUploadTemplate.uploadImage(thumbnail.getFirst(), renameFileName);
+                music.setThumbnail(thumbnailUrl);
             }
 
             long count = musicRepository.count();
@@ -98,14 +95,14 @@ public class MusicService {
     public void updateMusic(List<MultipartFile> thumbnail, MusicDto dto) {
 
         try {
-            List<FileDto> fileDtos = fileUtil.upload(thumbnail, "music");
+            if(thumbnail != null){
+                MultipartFile file =  thumbnail.getFirst();
+                String originFileName = file.getOriginalFilename();
+                String ext = originFileName.substring(originFileName.lastIndexOf("."));
+                String renameFileName = UUID.randomUUID().toString() + ext;
 
-            if(!fileDtos.isEmpty()){
-                FileDto fileDto = fileDtos.getFirst();
-                String renameFileName = fileDto.renameFileName();
-                String savePath = fileDto.savePath();
-
-                dto.setThumbnail("/download/" + savePath + renameFileName);
+                String thumbnailUrl = imgUploadTemplate.uploadImage(file, renameFileName);
+                dto.setThumbnail(thumbnailUrl);
             }
 
             // 업데이트
