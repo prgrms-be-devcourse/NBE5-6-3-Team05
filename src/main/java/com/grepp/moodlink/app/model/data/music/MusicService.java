@@ -1,5 +1,6 @@
 package com.grepp.moodlink.app.model.data.music;
 
+import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
@@ -120,16 +121,23 @@ public class MusicService {
     public void deleteMusic(String id) {
         musicRepository.findById(id).ifPresent(Music::unActivated);
     }
-    public List<Music> parseRecommend(String musicResult) {
-        Pattern pattern = Pattern.compile("\"([^\"]+)\"");
-        Matcher matcher = pattern.matcher(musicResult);
 
-        List<String> recommendedTitles = new ArrayList<>();
-        while (matcher.find()) {
-            recommendedTitles.add(matcher.group(1).trim());
+    public List<String> parseRecommend(String musicResult) {
+        List<String> result = new ArrayList<>();
+        if (musicResult == null || musicResult.isBlank()) return result;
+
+        String line = musicResult.trim().replaceFirst("^[가-힣a-zA-Z0-9\\s:]+", "");
+
+        Matcher m = Pattern.compile("\"([^\"]+)\"").matcher(line);
+        while (m.find()) {
+            String title = m.group(1).trim();
+            if (title.startsWith("[") && title.endsWith("]")) {
+                title = title.substring(1, title.length()-1).trim();
+            }
+            result.add(title);
         }
-        return recommendedTitles.stream()
-                .map(title -> musicRepository.findByTitleIgnoreCaseContaining(title.replaceAll("\\s+", " ").trim()))
+        return result.stream()
+                .map(musicRepository::findIdByTitle)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .distinct()

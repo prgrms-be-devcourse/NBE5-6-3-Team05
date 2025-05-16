@@ -2,11 +2,20 @@ package com.grepp.moodlink.app.model.data.book;
 
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
+import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
 import com.grepp.moodlink.infra.imgbb.ImgUploadTemplate;
 import com.grepp.moodlink.infra.response.ResponseCode;
+import com.grepp.moodlink.infra.util.file.FileDto;
+import com.grepp.moodlink.infra.util.file.FileUtil;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,12 +26,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final BookRepositoryImpl bookRepositoryImpl;
+    private final FileUtil fileUtil;
     private final ModelMapper mapper;
     private final ImgUploadTemplate imgUploadTemplate;
 
@@ -34,6 +46,7 @@ public class BookService {
             throw new CommonException(ResponseCode.DUPLICATED_DATA);
 
         try {
+            List<FileDto> fileDtos = fileUtil.upload(thumbnail, "book");
             Book book = mapper.map(dto, Book.class);
 
             if(thumbnail != null){
@@ -122,7 +135,25 @@ public class BookService {
         bookRepository.findByIsbn(isbn).unActivated();
     }
 
-    public List<Book> parseRecommend(String bookResult) {
-        return null;
+    public List<String> parseRecommend(String movieResult) {
+        List<String> result = new ArrayList<>();
+        if (movieResult == null || movieResult.isBlank()) return result;
+
+        String line = movieResult.trim().replaceFirst("^[가-힣a-zA-Z0-9\\s:]+", "");
+
+        Matcher m = Pattern.compile("\"([^\"]+)\"").matcher(line);
+        while (m.find()) {
+            String title = m.group(1).trim();
+            if (title.startsWith("[") && title.endsWith("]")) {
+                title = title.substring(1, title.length()-1).trim();
+            }
+            result.add(title);
+        }
+        return result.stream()
+                .map(bookRepository::findIsbnByTitle)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

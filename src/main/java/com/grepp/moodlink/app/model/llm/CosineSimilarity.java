@@ -1,4 +1,4 @@
-package com.grepp.moodlink.app.model.embedding;
+package com.grepp.moodlink.app.model.llm;
 
 public class CosineSimilarity {
     public static float compute(float[] vectorA, float[] vectorB) {
