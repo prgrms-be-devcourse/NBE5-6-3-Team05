@@ -33,6 +33,9 @@ public class MovieService {
 
     private final MovieRepository movieRepository;
     private final GenreRepository genreRepository;
+    private final ModelMapper mapper;
+    private final ImgUploadTemplate imgUploadTemplate;
+
 
     public void saveMovies(List<MovieDto> movieDtos) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

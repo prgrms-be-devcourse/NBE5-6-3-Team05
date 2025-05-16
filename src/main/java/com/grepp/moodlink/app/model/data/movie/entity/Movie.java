@@ -51,9 +51,6 @@ public class Movie extends BaseEntity {
 
     private Boolean activated = true;
 
-    @Column(columnDefinition = "TEXT")
-    private String descriptionSummary;
-
     public void unActivated() {
         this.activated = false;
     }
