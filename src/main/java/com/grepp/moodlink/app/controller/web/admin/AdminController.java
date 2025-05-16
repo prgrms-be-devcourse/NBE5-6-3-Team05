@@ -64,7 +64,7 @@ public class AdminController {
         PageResponse<MovieInfoDto> response = new PageResponse<>("/admin/movies", page, 10);
         model.addAttribute("page", response);
 
-        return "admin/movies";
+        return "admin/contents/movies";
     }
 
     // 음악 리스트를 보여주는 화면
@@ -84,7 +84,7 @@ public class AdminController {
 
         PageResponse<MusicDto> response = new PageResponse<>("/admin/music", page, 10);
         model.addAttribute("page", response);
-        return "admin/music";
+        return "admin/contents/music";
     }
 
     // 도서 리스트를 보여주는 화면
@@ -104,14 +104,14 @@ public class AdminController {
 
         PageResponse<BookDto> response = new PageResponse<>("/admin/books", page, 10);
         model.addAttribute("page", response);
-        return "admin/books";
+        return "admin/contents/books";
     }
 
     // 영화 추가 화면
     @GetMapping("movies/add")
     public String addMovie(MovieAddRequest movieAddRequest, Model model){
         model.addAttribute("genreList", movieService.findAllGenre());
-        return "admin/movies-add";
+        return "admin/contents/movies-add";
     }
 
     // 영화 추가 화면
@@ -137,7 +137,7 @@ public class AdminController {
     @GetMapping("music/add")
     public String addMusic(MusicAddRequest musicAddRequest, Model model){
         model.addAttribute("genres", MusicGenre.values());
-        return "admin/music-add";
+        return "admin/contents/music-add";
     }
 
     // 음악 추가 화면
@@ -163,7 +163,7 @@ public class AdminController {
     @GetMapping("books/add")
     public String addBooks(BookAddRequest bookAddRequest, Model model){
         model.addAttribute("genres", BookGenre.values());
-        return "admin/books-add";
+        return "admin/contents/books-add";
     }
 
     // 도서 추가 화면
@@ -210,7 +210,7 @@ public class AdminController {
         // 장르 데이터 넘기기
         model.addAttribute("genreList", movieService.findAllGenre());
 
-        return "admin/movies-modify";
+        return "admin/contents/movies-modify";
     }
 
     // 영화 수정 화면
@@ -250,14 +250,13 @@ public class AdminController {
         bookModifyRequest.setPublisher(book.getPublisher());
         bookModifyRequest.setGenre(book.getGenre());
         bookModifyRequest.setPublishedDate(book.getPublishedDate());
-        // 이미지는 파일 형식이 달라서 더 고민해보기
 
 
         // 미리 값을 저장해둔 request 넘기기
         model.addAttribute("bookModifyRequest",bookModifyRequest);
         // 장르 데이터 넘기기
         model.addAttribute("genres", BookGenre.values());
-        return "admin/books-modify";
+        return "admin/contents/books-modify";
     }
 
     // 도서 수정 화면
@@ -276,6 +275,8 @@ public class AdminController {
         BookDto dto = bookModifyRequest.toDto();
         dto.setIsbn(isbn);
         log.info("{}", dto);
+        log.info("{}", bookModifyRequest.getImage().isEmpty());
+        log.info("{}", bookModifyRequest);
 
         bookService.updateBook(bookModifyRequest.getImage(), dto);
 
@@ -303,7 +304,7 @@ public class AdminController {
         model.addAttribute("musicModifyRequest",musicModifyRequest);
         // 장르 데이터 넘기기
         model.addAttribute("genres", MusicGenre.values());
-        return "admin/music-modify";
+        return "admin/contents/music-modify";
     }
 
     // 음악 수정 화면
