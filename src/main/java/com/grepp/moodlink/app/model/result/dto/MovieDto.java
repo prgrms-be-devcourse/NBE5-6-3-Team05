@@ -1,5 +1,6 @@
 package com.grepp.moodlink.app.model.result.dto;
 
+import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -17,4 +18,9 @@ public class MovieDto {
         this.name = name;
         this.imgUrl = imgUrl;
     }
+
+    public static MovieDto from(Movie movie){
+        return new MovieDto(movie.getId(), movie.getTitle(), movie.getThumbnail());
+    }
+
 }

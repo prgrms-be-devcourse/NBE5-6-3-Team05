@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 public class CuratingDetail {
 
     @Id
-    private String id;
-    private String curatingId;
+    private Long id;
+    private Long curatingId;
     private String movieId;
     private String songId;
     private String bookId;

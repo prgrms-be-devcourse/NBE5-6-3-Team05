@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Curating {
     @Id
-    private String id;
+    private Long id;
     private String userId;
     private LocalDate curatingDate;
 
