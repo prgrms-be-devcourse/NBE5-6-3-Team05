@@ -1,6 +1,7 @@
 package com.grepp.moodlink.app.model.recomend.entity;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,4 +23,6 @@ public class Likes {
     private Long id;
 
     private String userId;
+    @Column(name = "total_count", nullable = false)
+    private Long totalCount;
 }

@@ -11,9 +11,6 @@ import com.grepp.moodlink.app.model.recomend.LikeDetailBooksRepository;
 import com.grepp.moodlink.app.model.recomend.LikeDetailMoviesRepository;
 import com.grepp.moodlink.app.model.recomend.LikeDetailMusicRepository;
 import com.grepp.moodlink.app.model.recomend.LikeRepository;
-import com.grepp.moodlink.app.model.recomend.entity.LikeDetailBooks;
-import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMovies;
-import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMusic;
 import com.grepp.moodlink.app.model.recomend.entity.Likes;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -54,7 +51,7 @@ public class DetailsService {
             return bookDetailsDto;
         }
 
-        Long likeId;
+        /*Long likeId;
         LikeDetailBooks likeDetailBooks;
         for(Likes likes1: likes){
             likeId = likes1.getId();
@@ -64,7 +61,7 @@ public class DetailsService {
                     bookDetailsDto.setStatus(true);
                 }
             }
-        }
+        }*/
         return bookDetailsDto;
     }
 
@@ -86,7 +83,7 @@ public class DetailsService {
             return songDetailsDto;
         }
 
-        Long likeId;
+        /*Long likeId;
         LikeDetailMusic likeDetailMusic;
         for(Likes likes1: likes){
             likeId = likes1.getId();
@@ -96,7 +93,7 @@ public class DetailsService {
                     songDetailsDto.setStatus(true);
                 }
             }
-        }
+        }*/
         return songDetailsDto;
     }
 
@@ -119,7 +116,7 @@ public class DetailsService {
             return movieDetailsDto;
         }
 
-        Long likeId;
+        /*Long likeId;
         LikeDetailMovies likeDetailMovies;
         for(Likes likes1: likes){
             likeId = likes1.getId();
@@ -129,7 +126,7 @@ public class DetailsService {
                     movieDetailsDto.setStatus(true);
                 }
             }
-        }
+        }*/
         return movieDetailsDto;
     }
 }

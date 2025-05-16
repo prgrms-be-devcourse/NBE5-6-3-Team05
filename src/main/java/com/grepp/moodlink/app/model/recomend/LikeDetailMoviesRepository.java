@@ -18,7 +18,8 @@ public interface LikeDetailMoviesRepository extends JpaRepository<LikeDetailMovi
     @Query("SELECT l FROM LikeDetailMovies l WHERE l.likesId IN :likesIds")
     Page<LikeDetailMovies> findAllByLikesIdInPagination(@Param("likesIds") Collection<String> likesIds, Pageable pageable);
 
-    LikeDetailMovies findByLikesId(Long likeId);
+    List<LikeDetailMovies> findByLikesId(Long likeId);
 
-    void deleteByMovieId(String id);
+
+    void deleteByMovieIdAndLikesId(String id, Long likesId);
 }
