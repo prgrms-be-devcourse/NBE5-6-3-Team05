@@ -21,6 +21,7 @@
           <div class="image-upload">
             <div id="preview" class="image-preview"></div>
             <input type="file" id="image-input" name="image" style="display:none"/>
+            <div id="sizeInfo"></div>
             <button class="img-btn" type="button" onclick="document.getElementById('image-input').click()">이미지 추가</button>
           </div>
 
@@ -63,8 +64,19 @@
     const input = document.getElementById('image-input');
     const preview = document.getElementById('preview');
     input.addEventListener('change', function () {
+      let totalSize = 0;
       const file = this.files[0];
       if (file) {
+        totalSize += file.size;
+
+        const sizeInMB = (totalSize / (1024 * 1024)).toFixed(2);
+        document.getElementById("sizeInfo").innerText = `총 파일 용량: ${sizeInMB} MB`;
+
+        if (totalSize > 32 * 1024 * 1024) {
+          alert("이미지 총 용량은 32MB를 초과할 수 없습니다.");
+          this.value = ""; // 파일 초기화
+        }
+
         const reader = new FileReader();
         reader.onload = e => preview.style.backgroundImage = `url(${e.target.result})`;
         reader.readAsDataURL(file);

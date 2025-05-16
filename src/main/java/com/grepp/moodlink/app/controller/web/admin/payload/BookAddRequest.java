@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class BookAddRequest {
+
     private List<MultipartFile> image;
     @NotBlank
     private String title;
