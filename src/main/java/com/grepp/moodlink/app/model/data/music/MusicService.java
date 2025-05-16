@@ -65,17 +65,9 @@ public class MusicService {
             throw new CommonException(ResponseCode.DUPLICATED_DATA);
 
         try {
+
+            uploadImage(thumbnail, dto);
             Music music = mapper.map(dto, Music.class);
-
-            if(thumbnail != null){
-                MultipartFile file =  thumbnail.getFirst();
-                String originFileName = file.getOriginalFilename();
-                String ext = originFileName.substring(originFileName.lastIndexOf("."));
-                String renameFileName = UUID.randomUUID().toString() + ext;
-
-                String thumbnailUrl = imgUploadTemplate.uploadImage(thumbnail.getFirst(), renameFileName);
-                music.setThumbnail(thumbnailUrl);
-            }
 
             long count = musicRepository.count();
             music.setId("S"+count);
@@ -88,6 +80,20 @@ public class MusicService {
         }
     }
 
+    private void uploadImage(List<MultipartFile> thumbnail, MusicDto dto) throws IOException {
+        if(thumbnail != null){
+            MultipartFile file =  thumbnail.getFirst();
+            String originFileName = file.getOriginalFilename();
+            if (originFileName != null && originFileName.contains(".")) {
+                String ext = originFileName.substring(originFileName.lastIndexOf("."));
+                String renameFileName = UUID.randomUUID().toString() + ext;
+
+                String thumbnailUrl = imgUploadTemplate.uploadImage(file, renameFileName);
+                dto.setThumbnail(thumbnailUrl);
+            }
+        }
+    }
+
     public MusicDto findById(String id) {
         return musicRepository.findById(id).map(e -> mapper.map(e, MusicDto.class)).orElse(null);
     }
@@ -95,16 +101,7 @@ public class MusicService {
     public void updateMusic(List<MultipartFile> thumbnail, MusicDto dto) {
 
         try {
-            if(thumbnail != null){
-                MultipartFile file =  thumbnail.getFirst();
-                String originFileName = file.getOriginalFilename();
-                String ext = originFileName.substring(originFileName.lastIndexOf("."));
-                String renameFileName = UUID.randomUUID().toString() + ext;
-
-                String thumbnailUrl = imgUploadTemplate.uploadImage(file, renameFileName);
-                dto.setThumbnail(thumbnailUrl);
-            }
-
+           uploadImage(thumbnail,dto);
             // 업데이트
             musicRepository.updateBook(dto);
 

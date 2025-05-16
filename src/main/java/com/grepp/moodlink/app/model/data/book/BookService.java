@@ -34,17 +34,9 @@ public class BookService {
             throw new CommonException(ResponseCode.DUPLICATED_DATA);
 
         try {
+            uploadImage(thumbnail, dto);
+
             Book book = mapper.map(dto, Book.class);
-
-            if(thumbnail != null){
-                MultipartFile file =  thumbnail.getFirst();
-                String originFileName = file.getOriginalFilename();
-                String ext = originFileName.substring(originFileName.lastIndexOf("."));
-                String renameFileName = UUID.randomUUID().toString() + ext;
-
-                String thumbnailUrl = imgUploadTemplate.uploadImage(thumbnail.getFirst(), renameFileName);
-                book.setImage(thumbnailUrl);
-            }
 
             long count = bookRepository.count();
             book.setIsbn("B"+count);
@@ -54,6 +46,20 @@ public class BookService {
             bookRepository.save(book);
         } catch (IOException e) {
             throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR, e);
+        }
+    }
+
+    private void uploadImage(List<MultipartFile> thumbnail, BookDto dto) throws IOException {
+        if(thumbnail != null){
+            MultipartFile file =  thumbnail.getFirst();
+            String originFileName = file.getOriginalFilename();
+            if (originFileName != null && originFileName.contains(".")) {
+                String ext = originFileName.substring(originFileName.lastIndexOf("."));
+                String renameFileName = UUID.randomUUID().toString() + ext;
+
+                String thumbnailUrl = imgUploadTemplate.uploadImage(file, renameFileName);
+                dto.setImage(thumbnailUrl);
+            }
         }
     }
 
@@ -95,17 +101,7 @@ public class BookService {
     public void updateBook(List<MultipartFile> thumbnail, BookDto dto) {
 
         try {
-
-            if(thumbnail != null){
-                MultipartFile file =  thumbnail.getFirst();
-                String originFileName = file.getOriginalFilename();
-                String ext = originFileName.substring(originFileName.lastIndexOf("."));
-                String renameFileName = UUID.randomUUID().toString() + ext;
-
-                String thumbnailUrl = imgUploadTemplate.uploadImage(thumbnail.getFirst(), renameFileName);
-                dto.setImage(thumbnailUrl);
-            }
-
+            uploadImage(thumbnail, dto);
             // 업데이트
             bookRepository.updateBook(dto);
 

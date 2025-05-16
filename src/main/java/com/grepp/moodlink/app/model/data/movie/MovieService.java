@@ -90,17 +90,9 @@ public class MovieService {
             throw new CommonException(ResponseCode.DUPLICATED_DATA);
 
         try {
+
+            uploadImage(thumbnail, dto);
             Movie movie = mapper.map(dto, Movie.class);
-
-            if(thumbnail != null){
-                MultipartFile file =  thumbnail.getFirst();
-                String originFileName = file.getOriginalFilename();
-                String ext = originFileName.substring(originFileName.lastIndexOf("."));
-                String renameFileName = UUID.randomUUID().toString() + ext;
-
-                String thumbnailUrl = imgUploadTemplate.uploadImage(thumbnail.getFirst(), renameFileName);
-                movie.setThumbnail(thumbnailUrl);
-            }
 
             long count = movieRepository.count();
             movie.setId("M"+count);
@@ -116,6 +108,20 @@ public class MovieService {
         }
     }
 
+    private void uploadImage(List<MultipartFile> thumbnail, MovieInfoDto dto) throws IOException {
+        if(thumbnail != null){
+            MultipartFile file =  thumbnail.getFirst();
+            String originFileName = file.getOriginalFilename();
+            if (originFileName != null && originFileName.contains(".")) {
+                String ext = originFileName.substring(originFileName.lastIndexOf("."));
+                String renameFileName = UUID.randomUUID().toString() + ext;
+
+                String thumbnailUrl = imgUploadTemplate.uploadImage(file, renameFileName);
+                dto.setThumbnail(thumbnailUrl);
+            }
+        }
+    }
+
     public MovieInfoDto findById(String id) {
         return movieRepository.findByIdWithGenre(id).map(MovieInfoDto::toDto).orElse(null);
     }
@@ -123,16 +129,7 @@ public class MovieService {
     public void updateMovie(List<MultipartFile> thumbnail, MovieInfoDto dto) {
 
         try {
-
-            if(thumbnail != null){
-                MultipartFile file =  thumbnail.getFirst();
-                String originFileName = file.getOriginalFilename();
-                String ext = originFileName.substring(originFileName.lastIndexOf("."));
-                String renameFileName = UUID.randomUUID().toString() + ext;
-
-                String thumbnailUrl = imgUploadTemplate.uploadImage(thumbnail.getFirst(), renameFileName);
-                dto.setThumbnail(thumbnailUrl);
-            }
+            uploadImage(thumbnail, dto);
 
             // 업데이트
             movieRepository.updateBook(dto);
