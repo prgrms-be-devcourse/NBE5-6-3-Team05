@@ -1,8 +1,10 @@
 package com.grepp.moodlink.app.model.data.music;
 
 import com.grepp.moodlink.app.model.data.music.entity.Music;
+import com.grepp.moodlink.app.model.result.dto.SongDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,11 +15,9 @@ public interface MusicRepository extends JpaRepository<Music, String>, MusicRepo
 
     List<Music> findByEmbeddingIsNull();
 
+    @Query("SELECT m.id FROM Music m where m.title = :title")
+    Optional<String> findIdByTitle(@Param("title")String s);
     boolean existsByTitleAndSinger(String title, String singer);
-
-    @Query("SELECT m FROM Music m WHERE LOWER(REPLACE(m.title, ' ', '')) = LOWER(REPLACE(m.title, ' ', ''))")
-    Optional<Music> findByTitleIgnoreCaseContaining(String trim);
-
 
     List<Music> findAllByIdIn(List<String> id);
 }
