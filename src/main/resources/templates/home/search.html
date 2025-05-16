@@ -61,6 +61,7 @@
         <p class="content-title" th:text="${b.title}"></p>
         <p class="content-subtext" th:text="${b.publisher}"></p>
         <p class="content-subtext" th:text="${b.publishedDate}"></p>
+        <p class="content-subtext" th:text="${b.description}"></p>
       </div>
     </div>
     <div th:if="${book.size() == 0}">
