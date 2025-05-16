@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
@@ -28,7 +29,9 @@ public class Book extends BaseEntity {
     private LocalDate publishedDate;
     @Column(columnDefinition = "TEXT")
     private String description;
-    @Column(columnDefinition = "TEXT")
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDate createdAt;    @Column(columnDefinition = "TEXT")
     private String summary;
     @Column(columnDefinition = "BLOB")
     private byte[] embedding;

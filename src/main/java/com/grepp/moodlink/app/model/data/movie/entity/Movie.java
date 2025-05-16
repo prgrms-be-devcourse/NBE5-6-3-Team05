@@ -14,6 +14,7 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
@@ -43,6 +44,8 @@ public class Movie extends BaseEntity {
     private String summary;
 
     private LocalDate releaseDate;
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
     private LocalDate createdAt;
     @Column(columnDefinition = "TEXT")
     private String thumbnail;
