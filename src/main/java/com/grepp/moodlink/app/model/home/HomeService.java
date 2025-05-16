@@ -7,6 +7,7 @@ import com.grepp.moodlink.app.model.data.movie.MovieRepositoryImpl;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
 import com.grepp.moodlink.app.model.data.music.MusicRepositoryImpl;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
+import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.member.MemberRepositoryImpl;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,17 +69,15 @@ public class HomeService {
         return title;
     }
 
-    public List<? extends ContentDto> searchContent(String contentName) {
-        List<MusicDto> music = musicRepositoryImpl.searchContent(contentName);
-        System.out.println("음악 검색 결과: " + music.size());
-        if (!music.isEmpty()) return music;
+    public List<MusicDto> searchMusicContent(String contentName) {
+        return musicRepositoryImpl.searchContent(contentName);
+    }
 
-        List<MovieDto> movie = movieRepositoryImpl.searchContent(contentName);
-        System.out.println("영화 검색 결과: " + movie.size());
-        if (!movie.isEmpty()) return movie;
+    public List<MovieDto> searchMovieContent(String contentName) {
+        return movieRepositoryImpl.searchContent(contentName);
+    }
 
-        List<BookDto> book = bookRepositoryImpl.searchContent(contentName);
-        System.out.println("책 검색 결과: " + book.size());
-        return book;
+    public List<BookDto> searchBookContent(String contentName) {
+        return bookRepositoryImpl.searchContent(contentName);
     }
 }

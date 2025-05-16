@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>검색 결과</title>
+</head>
+<body>
+<main layout:fragment="content" class="search-result-container">
+
+  <h2 th:text="'&quot;' + ${contentName} + '&quot; 검색결과 입니다.'"></h2>
+
+  <!-- 카테고리 메뉴 -->
+  <div class="menu">
+    <button onclick="showCategory('movie')">영화</button>
+    <button onclick="showCategory('music')">음악</button>
+    <button onclick="showCategory('book')">도서</button>
+  </div>
+
+  <!-- 영화 -->
+  <div class="category" id="movie" style="display:none">
+    <h3>영화 검색 결과</h3>
+    <div th:if="${movie.size() > 0}">
+      <div th:each="m : ${movie}" class="content-item">
+        <img th:src="${m.thumbnail}" alt="영화 썸네일" class="content-thumbnail" />
+        <p class="content-title" th:text="${m.title}"></p>
+        <p class="content-subtext" th:text="${m.summary}"></p>
+        <p class="content-subtext" th:text="${m.releaseDate}"></p>
+      </div>
+    </div>
+    <div th:if="${movie.size() == 0}">
+      <p>검색 결과가 없습니다.</p>
+    </div>
+  </div>
+
+  <!-- 음악 -->
+  <div class="category" id="music">
+    <h3>음악 검색 결과</h3>
+    <div th:if="${music.size() > 0}">
+      <div th:each="m : ${music}" class="content-item music-item"
+           th:attr="data-title=${m.title}, data-description=${m.lyrics}">
+        <img th:src="${m.thumbnail}" alt="음악 썸네일" class="content-thumbnail" />
+        <p class="content-title" th:text="${m.title}"></p>
+        <p class="content-subtext" th:text="${m.singer}"></p>
+        <p class="content-subtext" th:text="${m.releaseDate}"></p>
+        <p class="content-description" th:text="${m.lyrics}"></p>
+      </div>
+    </div>
+    <div th:if="${music.size() == 0}">
+      <p>검색 결과가 없습니다.</p>
+    </div>
+  </div>
+
+  <!-- 도서 -->
+  <div class="category" id="book" style="display:none">
+    <h3>도서 검색 결과</h3>
+    <div th:if="${book.size() > 0}">
+      <div th:each="b : ${book}" class="content-item">
+        <img th:src="${b.image}" alt="도서 썸네일" class="content-thumbnail" />
+        <p class="content-title" th:text="${b.title}"></p>
+        <p class="content-subtext" th:text="${b.publisher}"></p>
+        <p class="content-subtext" th:text="${b.publishedDate}"></p>
+        <p class="content-subtext" th:text="${b.description}"></p>
+      </div>
+    </div>
+    <div th:if="${book.size() == 0}">
+      <p>검색 결과가 없습니다.</p>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>
+
+<script>
+  function showCategory(categoryId) {
+    document.querySelectorAll('.category').forEach(cat => {
+      cat.style.display = 'none';
+    });
+    document.getElementById(categoryId).style.display = 'block';
+  }
+
+  // 기본으로 음악 카테고리 보여주기
+  document.addEventListener("DOMContentLoaded", () => {
+    showCategory("movie");
+  });
+</script>

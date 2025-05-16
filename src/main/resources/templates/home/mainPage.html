@@ -8,8 +8,8 @@
 <div layout:fragment="content">
   <div class="main-content">
     <div class="search-container">
-      <form id="searchForm" th:action="@{'/serch/' + ${searchQuery}}" method="get" onsubmit="return submitSearchForm()">
-        <input type="text" id="search-input" name="searchQuery" placeholder="원하는 음악,영화,도서를 찾아보세요!">
+      <form id="searchForm" th:action="@{/search}" method="get">
+        <input type="text" id="search-input" name="contentName" placeholder="원하는 음악,영화,도서를 찾아보세요!">
         <button type="submit">검색</button>
       </form>
     </div>
@@ -189,13 +189,5 @@
       }, 15000);
     }
   });
-
-  function submitSearchForm() {
-    const input = document.getElementById('search-input').value.trim();
-    if (input) {
-      window.location.href = '/serch/' + encodeURIComponent(input);
-    }
-    return false; // 폼 기본 제출 막기
-  }
 
 </script>
