@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LikeDetailMoviesRepository extends JpaRepository<LikeDetailMovies, String> {
+public interface LikeDetailMoviesRepository extends JpaRepository<LikeDetailMovies, Long> {
 
 
     List<LikeDetailMovies> findAllByLikesIdIn(Collection<String> likesIds);
@@ -20,5 +20,5 @@ public interface LikeDetailMoviesRepository extends JpaRepository<LikeDetailMovi
 
     LikeDetailMovies findByLikesId(Long likeId);
 
-    void deleteById(String id);
+    void deleteByMovieId(String id);
 }

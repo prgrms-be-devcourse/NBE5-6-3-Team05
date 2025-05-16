@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LikeDetailMusicRepository extends JpaRepository<LikeDetailMusic, String> {
+public interface LikeDetailMusicRepository extends JpaRepository<LikeDetailMusic, Long> {
 
 
 

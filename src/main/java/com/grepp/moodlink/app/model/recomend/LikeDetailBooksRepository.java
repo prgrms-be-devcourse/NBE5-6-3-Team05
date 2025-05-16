@@ -11,12 +11,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LikeDetailBooksRepository extends JpaRepository<LikeDetailBooks, String> {
+public interface LikeDetailBooksRepository extends JpaRepository<LikeDetailBooks, Long> {
 
     List<LikeDetailBooks> findAllByLikesIdIn(Collection<String> likesIds);
     @Query("SELECT l FROM LikeDetailBooks l WHERE l.likesId IN :likesIds")
     Page<LikeDetailBooks> findAllByLikesIdInPagination(@Param("likesIds") Collection<String> likesIds, Pageable pageable);
     LikeDetailBooks findByLikesId(Long likeId);
 
-    void deleteById(String id);
+    void deleteByBookId(String id);
 }
