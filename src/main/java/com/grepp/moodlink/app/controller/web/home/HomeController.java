@@ -1,11 +1,13 @@
 package com.grepp.moodlink.app.controller.web.home;
 
+import com.grepp.moodlink.app.model.data.ContentDto;
 import com.grepp.moodlink.app.model.home.HomeService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,6 +31,18 @@ public class HomeController {
     @GetMapping("/worldcup")
     public String worldcupPage(Model model) {
         return "/home/worldcup";
+    }
+
+    @GetMapping("/serch/{contentName}")
+    public String serchPage(Model model, @PathVariable String contentName) {
+        List<? extends ContentDto> contentDetails = homeService.searchContent(contentName);
+        model.addAttribute("contentDetails", contentDetails);
+
+        if (!contentDetails.isEmpty()) {
+            model.addAttribute("contentType", contentDetails.get(0).getType());
+        }
+
+        return "/home/serch";
     }
 
 }

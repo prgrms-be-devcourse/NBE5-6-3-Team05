@@ -1,9 +1,9 @@
 package com.grepp.moodlink.app.model.data.music;
 
-import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.data.music.entity.QMusic;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -38,7 +38,8 @@ public class MusicRepositoryImpl implements MusicRepositoryCustom {
 
     @Override
     public String findPeople() {
-        return em.createQuery("select s.singer from Music s ORDER BY s.likeCount DESC", String.class)
+        return em.createQuery("select s.singer from Music s ORDER BY s.likeCount DESC",
+                String.class)
             .setMaxResults(1)
             .getSingleResult();
     }
@@ -46,13 +47,6 @@ public class MusicRepositoryImpl implements MusicRepositoryCustom {
     @Override
     public String findTitle() {
         return em.createQuery("select s.title from Music s ORDER BY s.likeCount DESC", String.class)
-            .setMaxResults(1)
-            .getSingleResult();
-    }
-
-    @Override
-    public String findDescription() {
-        return em.createQuery("select s.lyrics from Music s ORDER BY s.likeCount DESC", String.class)
             .setMaxResults(1)
             .getSingleResult();
     }
@@ -83,11 +77,23 @@ public class MusicRepositoryImpl implements MusicRepositoryCustom {
         Music entity = em.find(Music.class, music.getId());
 
         entity.setGenre(music.getGenre());
-        if(music.getThumbnail()!=null){
+        if (music.getThumbnail() != null) {
             entity.setThumbnail(music.getThumbnail());
         }
         entity.setGenre(music.getGenre());
         entity.setDescription(music.getDescription());
         entity.setLyrics(music.getLyrics());
+    }
+
+    @Override
+    public List<MusicDto> searchContent(String contentName) {
+        return queryFactory.select(Projections.constructor(MusicDto.class,
+                music.title,
+                music.singer,
+                music.thumbnail,
+                music.releaseDate,
+                music.lyrics))
+            .from(music)
+            .where(music.title.eq(contentName)).fetch();
     }
 }

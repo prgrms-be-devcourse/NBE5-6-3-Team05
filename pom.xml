@@ -180,6 +180,12 @@
       <artifactId>langchain4j-open-ai</artifactId> <!-- OpenAI 호환 API용 -->
     </dependency>
 
+<!--    &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-webflux &ndash;&gt;-->
+<!--    <dependency>-->
+<!--      <groupId>org.springframework.boot</groupId>-->
+<!--      <artifactId>spring-boot-starter-webflux</artifactId>-->
+<!--    </dependency>-->
+
 
   </dependencies>
 

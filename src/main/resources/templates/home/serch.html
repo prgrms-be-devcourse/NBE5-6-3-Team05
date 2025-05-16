@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<main layout:fragment="content">
+
+  <div th:switch="${contentType}">
+    <div th:case="'music'" th:each="music : ${contentDetails}" class="content-item"
+         th:attr="data-title=${music.title}, data-description=${music.lyrics}">
+      <img th:src="${music.thumbnail}" />
+      <p th:text="${music.title}" />
+      <p th:text="${music.singer}" />
+      <p th:text="${music.releaseDate}" />
+      <p th:text="${music.lyrics}" />
+    </div>
+
+    <div th:case="'movie'" th:each="movie : ${contentDetails}" class="content-item"
+         th:attr="data-title=${movie.title}, data-description=${movie.description}">
+      <img th:src="${movie.thumbnail}" />
+      <p th:text="${movie.title}" />
+      <p th:text="${movie.description}" />
+      <p th:text="${movie.releaseDate}" />
+      <ul>
+        <li th:each="genre : ${movie.genres}" th:text="${genre}"></li>
+      </ul>
+    </div>
+
+    <div th:case="'book'" th:each="book : ${contentDetails}" class="content-item"
+         th:attr="data-title=${book.title}, data-description=${book.description}">
+      <img th:src="${book.thumbnail}" />
+      <p th:text="${book.title}" />
+      <p th:text="${book.description}" />
+      <p th:text="${book.publishedDate}" />
+      <p th:text="${book.author}" />
+<!--      <p th:text="${book.genre}" />-->
+    </div>
+    <div th:case="*">
+      <p>검색 결과가 없습니다.</p>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>
+
+<script>
+  function filterContent() {
+    const input = document.getElementById("search-input").value.toLowerCase();
+    const items = document.querySelectorAll(".content-item");
+
+    items.forEach(item => {
+      const title = item.getAttribute("data-title")?.toLowerCase() || "";
+      const description = item.getAttribute("data-description")?.toLowerCase() || "";
+
+      if (title.includes(input) || description.includes(input)) {
+        item.style.display = "";
+      } else {
+        item.style.display = "none";
+      }
+    });
+  }
+</script>
