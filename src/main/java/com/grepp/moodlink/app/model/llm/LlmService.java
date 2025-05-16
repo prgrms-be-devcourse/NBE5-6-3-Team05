@@ -151,9 +151,9 @@ public class LlmService {
         String prompt = String.format("""
                 [시스템]
                 - 당신은 %s 추천 전문가입니다.
-                - 반드시 제공된 %s 목록에서만 추천하세요.
+                - 반드시 제공된 목록에서만 추천하세요.
                 - 한국어로만 답변하고, 4개를 추천하세요.
-                - 제목만 출력하세요.
+                - 제공된 목록에서 제목만 출력하세요.
                 - 각 제목은 '"'로 감싸져있고, ','로 구분하여 출력하세요.
                 - 출력 형식:
                     "[%s 제목]", "[%s 제목]", "[%s 제목]", "[%s 제목]"
@@ -162,7 +162,7 @@ public class LlmService {
                 
                 [%s 목록]:
                 %s
-                """, category, category, category, category, category, category, keywords, category, context);
+                """, category, category, category, category, category, keywords, category, context);
         String recommendation;
         try {
             recommendation = chatLanguageModel.chat(prompt);
