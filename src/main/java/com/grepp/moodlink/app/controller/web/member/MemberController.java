@@ -76,6 +76,10 @@ public class MemberController {
         List<LikeGenreResponse> likeMusicGenre = likeService.getPersonalLikeMusicGenre(userId);
         List<LikeGenreResponse> likeMovieGenre = likeService.getPersonalLikeMovieGenre(userId);
 
+
+        log.info("영화 좋아요 수: {}", likeMovieGenre.size());
+
+
         model.addAttribute("LikeBookGenre", likeBookGenre);
         model.addAttribute("LikeMusicGenre", likeMusicGenre);
         model.addAttribute("LikeMovieGenre", likeMovieGenre);

@@ -137,8 +137,11 @@ public class LikeService {
         List<String> MovieIds = likeDetailMovies.stream()
             .map(LikeDetailMovies::getMovieId)
             .collect(Collectors.toList());
+        log.info("🎬 영화 ID 목록: {}", MovieIds);
 
         List<Movie> movies = movieRepository.findAllByIdIn(MovieIds);
+        log.info("✅ 조회된 영화: {}", movies);
+
 
         return movies.stream()
             .map(MovieInfoDto::toDto)
@@ -166,6 +169,7 @@ public class LikeService {
     public List<MovieInfoDto> getUserLikedMovies(String userId) {
         List<Likes> likes = getLikeInfo(userId);
         List<LikeDetailMovies> likeDetailMovies = getLikeDetailMovie(likes);
+
         return getMovieList(likeDetailMovies);
     }
 

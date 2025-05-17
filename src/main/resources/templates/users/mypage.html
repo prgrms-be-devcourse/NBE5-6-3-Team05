@@ -132,6 +132,7 @@
     const finalMovieData = fillDataWithPopular(movieData, popularMovieData);
     const finalBookData = fillDataWithPopular(bookData, popularBookData);
 
+    console.log(finalMovieData);
 
     const colors = {
       blue: { bg: 'rgba(54, 162, 235, 0.2)', border: 'rgba(54, 162, 235, 1)' },
@@ -167,7 +168,7 @@
             r: {
               angleLines: { display: true },
               suggestedMin: 0,
-              suggestedMax: data.values/2,
+              suggestedMax: Math.max(...data.values, 1),
               ticks:{color : 'rgba(255, 255, 255, 0.7)', backdropColor : 'rgba(255, 255, 255, 0)'},
               pointLabels: {
                 font: { size: 14 },
