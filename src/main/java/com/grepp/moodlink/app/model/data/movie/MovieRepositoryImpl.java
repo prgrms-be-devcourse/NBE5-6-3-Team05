@@ -92,6 +92,7 @@ public class MovieRepositoryImpl implements MovieRepositoryCustom {
             log.warn("영화 없음: {}", dto.getId());
         }
 
+        assert entity != null;
         entity.setGenres(dto.getGenres());
         if(dto.getThumbnail()!=null){
             entity.setThumbnail(dto.getThumbnail());
