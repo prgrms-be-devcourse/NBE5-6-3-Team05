@@ -1,8 +1,9 @@
 package com.grepp.moodlink.app.model.data.movie;
 
+import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
-import java.nio.channels.FileChannel;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,11 +16,11 @@ public interface MovieRepositoryCustom {
 
     String findTitle();
 
-    String findDescription();
-
     Page<Movie> findPaged(Pageable pageable);
 
     Optional<Movie> findByIdWithGenre(String id);
 
     void updateBook(MovieInfoDto dto);
+
+    List<MovieDto> searchContent(String contentName);
 }

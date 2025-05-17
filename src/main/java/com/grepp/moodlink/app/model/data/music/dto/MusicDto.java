@@ -1,16 +1,22 @@
 package com.grepp.moodlink.app.model.data.music.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.grepp.moodlink.app.model.data.ContentDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import java.time.LocalDate;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Getter
 @Setter
 @ToString
-public class MusicDto {
+@NoArgsConstructor
+@AllArgsConstructor
+public class MusicDto implements ContentDto {
+    private String type = "music";
 
     private String id;
     private String title;
@@ -23,6 +29,14 @@ public class MusicDto {
     private String thumbnail;
     private Long likeCount;
     private Boolean activated;
+
+    public MusicDto(String title, String singer, String thumbnail, LocalDate releaseDate, String lyric) {
+        this.title = title;
+        this.singer = singer;
+        this.thumbnail = thumbnail;
+        this.releaseDate = releaseDate;
+        this.lyrics = lyric;
+    }
 
     public static MusicDto toDto(Music music) {
         MusicDto dto = new MusicDto();
