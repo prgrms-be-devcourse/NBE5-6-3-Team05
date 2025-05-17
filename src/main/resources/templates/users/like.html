@@ -64,14 +64,14 @@
                 onclick="toggle(this)">
           ★
         </button> </td>
-        <td th:text="${book.title}"></td>
-        <td th:text="${book.isbn}"></td>
-        <td><img th:src="${book.image}" width="100"></td>
-        <td th:text="${book.author}"></td>
-        <td th:text="${book.publisher}"></td>
-        <td th:text="${book.publishedDate}"></td>
-        <td th:text="${book.genre}"></td>
-        <td th:text="${book.description}"></td>
+        <td th:text="${book.title}">테스트</td>
+        <td th:text="${book.isbn}">테스트</td>
+        <td><img th:src="${book.image}" width="100">테스트</td>
+        <td th:text="${book.author}">테스트</td>
+        <td th:text="${book.publisher}">테스트</td>
+        <td th:text="${book.publishedDate}">테스트</td>
+        <td th:text="${book.genre}">테스트</td>
+        <td th:text="${book.description}">테스트</td>
       </tr>
       </tbody>
     </table>
@@ -251,8 +251,16 @@
 
     function loadTab(tabName) {
       const tabItems = document.querySelectorAll('.like-item');
-      tabItems.forEach(item => item.style.display = 'none');
-      document.getElementById(tabName).style.display = 'block';
+      console.log("모든 like-item:", tabItems);
+      tabItems.forEach(item => {
+        console.log(`숨기는 요소 ID: ${item.id}`);
+        item.style.display = 'none';
+      });
+      const targetTab = document.getElementById(tabName);
+      console.log(`보여줄 요소 ID: ${targetTab ? targetTab.id : '없음'}`);
+      if (targetTab) {
+        targetTab.style.display = 'block';
+      }
       updatePaginationLinks(tabName);
     }
 

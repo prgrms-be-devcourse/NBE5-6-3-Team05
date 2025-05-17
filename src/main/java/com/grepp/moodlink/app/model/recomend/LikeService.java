@@ -15,6 +15,8 @@ import com.grepp.moodlink.app.model.recomend.entity.LikeDetailBooks;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMovies;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMusic;
 import com.grepp.moodlink.app.model.recomend.entity.Likes;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +46,9 @@ public class LikeService {
     private final MusicRepository musicRepository;
     private final MovieRepository movieRepository;
     private final ModelMapper mapper;
+    @PersistenceContext
+    private EntityManager em;
+
 
     public List<Likes> getLikeInfo(String userId) {
         return likeRepository.findByUserId(userId);
@@ -58,7 +63,6 @@ public class LikeService {
 
     }
     public Page<LikeDetailBooks> getLikeDetailBookPaged(List<Likes> likes,Pageable pageable) {
-
         List<String> likeIds = likes.stream()
             .map(like -> String.valueOf(like.getId()))
             .collect(Collectors.toList());
@@ -91,7 +95,6 @@ public class LikeService {
 
     }
     public Page<LikeDetailMusic> getLikeDetailMusicPaged(List<Likes> likes,Pageable pageable) {
-
         List<String> likeIds = likes.stream()
             .map(like -> String.valueOf(like.getId()))
             .collect(Collectors.toList());
@@ -495,6 +498,9 @@ public class LikeService {
                 if (likeCount == 1){
                     likeRepository.deleteById(userLike.getId());
                 }
+
+
+
                 return false;
             }
         }
