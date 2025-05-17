@@ -9,7 +9,7 @@
 <body>
 <main layout:fragment="content" class="search-result-container">
 
-  <h2 th:text="'&quot;' + ${contentName} + '&quot; 검색결과 입니다.'"></h2>
+  <h4 th:text="'&quot;' + ${contentName} + '&quot; 검색결과 입니다.'"></h4>
 
   <!-- 카테고리 메뉴 -->
   <div class="menu">
@@ -21,16 +21,38 @@
   <!-- 영화 -->
   <div class="category" id="movie" style="display:none">
     <h3>영화 검색 결과</h3>
-    <div th:if="${movie.size() > 0}">
-      <div th:each="m : ${movie}" class="content-item">
-        <img th:src="${m.thumbnail}" alt="영화 썸네일" class="content-thumbnail" />
-        <p class="content-title" th:text="${m.title}"></p>
-        <p class="content-subtext" th:text="${m.summary}"></p>
-        <p class="content-subtext" th:text="${m.releaseDate}"></p>
+
+    <div th:if="${movie.size() > 0}" class="card-container">
+      <div th:each="m : ${movie}" class="card"
+           onclick="showDetailModal(
+           /*[[${#strings.escapeJavaScript(m.title)}]],*/
+           /*[[${#strings.escapeJavaScript(m.releaseDate)}]],*/
+           /*[[${#strings.escapeJavaScript(m.summary)}]]*/
+           )"
+           th:attr="onclick=
+           'showDetailModal(' +
+           '\'' + ${#strings.escapeJavaScript(m.title)} + '\',' +
+           '\'' + ${#strings.escapeJavaScript(m.releaseDate)} + '\',' +
+           '\'' + ${#strings.escapeJavaScript(m.summary)} + '\'' +
+           ')'"
+      >
+        <img th:src="${m.thumbnail}" alt="영화 썸네일" class="card-thumbnail" />
+<!--        <p class="card-title" th:text="${m.title}"></p>-->
       </div>
     </div>
+
     <div th:if="${movie.size() == 0}">
       <p>검색 결과가 없습니다.</p>
+    </div>
+  </div>
+
+  <!-- 모달 영역 -->
+  <div id="detailModal" onclick="if(event.target===this) closeModal()">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal()">×</span>
+      <h3 class="modal-title" id="modalTitle"></h3>
+      <p class="modal-release" id="modalReleaseDate"></p>
+      <p class="modal-summary" id="modalSummary"></p>
     </div>
   </div>
 
@@ -85,4 +107,17 @@
   document.addEventListener("DOMContentLoaded", () => {
     showCategory("movie");
   });
+
+  // 카드 상세 보기
+  function showDetailModal(title, releaseDate, summary) {
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalReleaseDate').textContent = '개봉일: ' + releaseDate;
+    document.getElementById('modalSummary').textContent = summary;
+
+    document.getElementById('detailModal').classList.add('active');
+  }
+
+  function closeModal() {
+    document.getElementById('detailModal').classList.remove('active');
+  }
 </script>
