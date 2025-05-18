@@ -1,70 +1,18 @@
 <!DOCTYPE html>
-<html lang="ko">
+
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
   <meta charset="UTF-8">
   <style>
 
     /* 전체 배경 및 기본 글자색 */
     body {
-      background: linear-gradient( #000000, #683997);
-      color: #ffffff;
-      font-family: 'Pretendard', 'Spoqa Han Sans', sans-serif;
+      background-attachment: fixed;
+      background-position: center;
       margin: 0;
-      padding: 0;
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 40px;
-    }
-
-    .purple-header-btn {
-      width: 80px;
-      background-color: #a259ff;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 14px;
-      box-sizing: border-box;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-      transition: background-color 0.2s ease;
-      text-align: center;
-      width: auto;
-    }
-
-    .header-left .logo {
-      font-size: 32px;
-      font-weight: bold;
-      color: #a259ff;
-      line-height: 1.2;
-    }
-
-    .header-left .subtitle {
-      font-size: 20px;
-      font-weight: 500;
-      color: white;
-    }
-
-    .header-right {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 12px;
-    }
-
-    .top-buttons {
-      display: flex;
-      gap: 10px;
-    }
-
-    .bottom-button {
-      margin-top: 10px;
     }
 
     .main-content {
@@ -72,16 +20,38 @@
       margin-top: 40px;
     }
 
-    .recommend-form {
-      margin-bottom: 20px;
+    .divider-wrapper {
+      width: 80%;
+      margin: 0 auto 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center; /* 높이 정렬 포인트 */
+      position: relative;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
+    .label-left {
+      font-size: 26px;         /* 글자 크기 ↑ */
+      font-weight: bold;
+      color: white;
+      padding: 4px 0;
+      display: flex;
+      align-items: center;     /* 세로 정렬 */
+    }
+
+    .label-right {
+      display: flex;
+      align-items: center;     /* 버튼과 높이 맞추기 */
+    }
+
+    /* 아래 선 */
     .divider {
+      width: 100%;
       height: 8px;
-      width: 80%;
-      margin: 0 auto 20px;
       background: linear-gradient(to right, #aaa, #eee, #aaa);
       border-radius: 5px;
+      margin-top: 12px;
     }
 
     .guide-text {
@@ -90,7 +60,7 @@
     }
 
 
-    /* 헤더 영역 */
+    /* 큐레이팅 헤더 영역 */
     .curation-header {
       display: flex;
       justify-content: space-between;
@@ -179,6 +149,27 @@
       align-items: flex-start;
     }
 
+    /*추가 */
+
+    .no-song-msg {
+      color: #ccc;
+      font-size: 14px;
+      text-align: center;
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .no-song-wrapper {
+      background-color: #1e1e1e;
+      color: #bbb;
+      font-size: 14px;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      text-align: center;
+      padding: 10px;
+    }
+
     .purple-btn {
       width: 80px;
       background-color: #a259ff;
@@ -203,7 +194,7 @@
     }
 
     /* 버튼 스타일 */
-    button {
+    .info-block button:not(.toggle-star-btn) {
       width: 80px;
       background-color: #a259ff;
       color: white;
@@ -217,15 +208,10 @@
       transition: background-color 0.2s;
     }
 
-    button:hover {
+    .info-block button:hover {
       background-color: #8e44ec;
     }
 
-    /* 토글 버튼 스타일 */
-    /* 공통 버튼 hover 제거 */
-    button:hover {
-      background-color: inherit;
-    }
 
     /* 별 버튼은 hover 배경 없음 */
     .toggle-star-btn {
@@ -261,6 +247,21 @@
       text-shadow: none;
     }
 
+    .like-msg {
+      display: block;
+      font-size: 0.8rem;
+      color: #f4b464;
+      height: 1em; /* 문구 크기만큼 공간 확보 */
+      line-height: 1em;
+      margin-top: 4px;
+      visibility: hidden; /* 처음에는 숨김 */
+      text-align: center;
+    }
+
+    .like-msg.show {
+      visibility: visible;
+    }
+
     /* 링크 스타일 */
     a {
       color: #a259ff;
@@ -272,65 +273,87 @@
     }
 
     /* 모달 스타일 */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-
-      background-color: rgba(0, 0, 0, 0.6); /* 살짝 투명한 배경 */
-      display: flex;
+    /* 전체 모달 배경 (검은 반투명 배경) */
+    .custom-modal {
+      display: flex; /* 기본 display는 JS에서 hidden 클래스로 토글 관리 */
       justify-content: center;
       align-items: center;
-
-      z-index: 1000; /* 기본 창보다 위로 */
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background-color: rgba(0, 0, 0, 0.8);
     }
 
-    .modal-body-layout {
+    /* JS에서 모달을 숨길 때 사용할 클래스 */
+    .custom-modal.hidden {
+      display: none;
+    }
+
+    /* 모달 내부 콘텐츠 영역 */
+    .custom-modal-content {
+      background-color: #1a1a1a;
+      padding: 2rem;
+      border-radius: 10px;
+      max-width: 800px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      color: white;
+    }
+
+    /* 닫기 버튼 (오른쪽 위 X 버튼) */
+    .custom-close-btn {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #fff;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    .custom-close-btn:hover {
+      color: #aaa;
+    }
+
+    /* 모달 본문 레이아웃 */
+    .custom-modal-body-layout {
       display: flex;
       gap: 2rem;
       align-items: flex-start;
       margin-top: 1rem;
     }
 
-    .modal-body-main img {
+    /* 이미지 영역 */
+    .custom-modal-body-main img,
+    .custom-modal-img {
       width: 200px;
       max-height: 250px;
       object-fit: contain;
       border-radius: 0;
     }
 
-    .modal-info {
+    /* 텍스트 정보 영역 */
+    .custom-modal-info {
       flex: 1;
+      overflow-wrap: break-word;
     }
 
-    #modal-meta p {
+    /* 설명문 내부 여백 */
+    #custom-modal-meta p {
       margin: 0.5rem 0;
     }
 
-    .modal.hidden {
-      display: none;
+    /* 아래쪽 버튼 영역 */
+    #modal-like-wrapper {
+      margin-top: 1.5rem;
+      text-align: right;
     }
 
-
-    .modal-content {
-      background-color: #1a1a1a; /* 약간 밝은 검정 */
-      padding: 2rem;
-      border-radius: 0;
-      max-width: 800px;
-      width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-    }
-
-    .close-button {
-      float: right;
-      cursor: pointer;
-      font-size: 20px;
-      color: white;
-    }
 
     /* PICK 강조 태그 */
     .pick-tag {
@@ -366,272 +389,313 @@
 
 </head>
 <body>
-<header class="header">
-  <div class="header-left">
-    <div class="logo">
-      <a href="/">Moodlink</a>
-    </div>
-    <div class="subtitle">Result</div>
-  </div>
-  <div class="header-right">
-    <div class="top-buttons">
-      <form action="/users/mypage" method="get">
-        <button type="submit" class="purple-header-btn">My page</button>
-      </form>
-      <form action="/signin" method="get">
-        <button type="submit" class="purple-header-btn">Logout</button>
-        <!-- anonymous면 Login으로 바꾸기 -->
-      </form>
-    </div>
-      <div class="bottom-button">
-      <form action="/recommend" method="get" class="recommend-form">
-        <button type="submit" class="purple-header-btn">Recommend</button>
-      </form>
-    </div>
-  </div>
-</header>
 
-<main class="main-content">
-
-  <div class="divider"></div>
-
-  <p class="guide-text" th:utext="${curatingReason}">
-    오늘 해고당해서 우울한 당신! 고단한 하루를 달래줄 명작을 소개해드릴게요.
-    다음 작품들은 위로가 될 거예요!
-  </p>
-</main>
+<div layout:fragment="content">
 
 
+  <main class="main-content">
 
-<div class="curation-header">
-  <div class="curation-label">BOOK</div>
-  <div class="curation-label">MOVIE</div>
-  <div class="curation-label">SONG</div>
-</div>
-
-
-<div th:each="item : ${items}" class="curation-item">
-
-  <!-- Book 영역 -->
-  <div class="book">
-    <div class="image-and-info">
-      <div class="image-block">
-        <div class="image-wrapper">
-          <img th:src="${item.book.imgUrl}" alt="임의의 책 이미지"/>
-        </div>
-        <div class="title" th:text="${item.book.name}"></div>
+    <div class="divider-wrapper">
+      <div class="label-left">RESULT</div>
+      <div class="label-right">
+        <form action="/recommend" method="get" class="recommend-form">
+          <button type="submit" class="purple-header-btn">Recommend</button>
+        </form>
       </div>
 
-      <div class="info-block">
-        <a th:href="${item.book.externalLink}" target="_blank" class="purple-btn">Search</a>
-        <button class="details-btn" data-type="book" th:attr="data-id=${item.book.id}">Details
-        </button>
+      <div class="divider"></div>
+    </div>
+    <p class="guide-text" th:utext="${curatingReason}">
+      오늘 해고당해서 우울한 당신! 고단한 하루를 달래줄 명작을 소개해드릴게요.
+      다음 작품들은 위로가 될 거예요!
+    </p>
+  </main>
+
+
+  <div class="curation-header">
+    <div class="curation-label">BOOK</div>
+    <div class="curation-label">MOVIE</div>
+    <div class="curation-label">SONG</div>
+  </div>
+
+
+  <div th:each="item : ${items}" class="curation-item">
+
+    <!-- Book 영역 -->
+    <div class="book">
+      <div th:if="${item.book.id != null}" class="image-and-info">
+        <div class="image-block">
+          <div class="image-wrapper">
+            <img th:src="${item.book.imgUrl}" alt="임의의 책 이미지"/>
+          </div>
+          <div class="title" th:text="${item.book.name}"></div>
+        </div>
+
+        <div class="info-block">
+          <a th:href="${item.book.externalLink}" target="_blank" class="purple-btn">Search</a>
+          <button class="details-btn" data-type="book" th:attr="data-id=${item.book.id}">Details
+          </button>
+          <button class="toggle-star-btn"
+                  th:classappend="${item.book.status} ? ' on' : ''"
+                  th:id="'toggle-book-' + ${item.book.id}"
+                  th:attr="data-type='book', data-id=${item.book.id}"
+                  onclick="toggle(this)">
+            ★
+          </button>
+          <span class="like-msg">로그인 후, 좋아요!</span>
+        </div>
+      </div>
+      <!-- book가 null일 때 -->
+      <div th:if="${item.book.id == null}" class="image-and-info">
+        <div class="image-block">
+          <div class="image-wrapper no-song-wrapper">
+            <p class="no-song-msg">적절한 영화를 찾지 못했습니다.</p>
+          </div>
+          <div class="title" style="visibility: hidden;">빈 제목</div>
+        </div>
+        <div class="info-block">
+          <span style="visibility: hidden;">버튼 자리</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Movie 영역 -->
+    <div class="movie">
+      <!-- movie가 누락되지 않은 경우-->
+      <div th:if="${item.movie.id != null}" class="image-and-info">
+        <div class="image-block">
+          <div class="image-wrapper">
+            <img th:src="${item.movie.imgUrl}" alt="임의의 영화이미지"/>
+          </div>
+          <div class="title" th:text="${item.movie.name}"></div>
+        </div>
+        <div class="info-block">
+          <a th:href="${item.movie.externalLink}" target="_blank" class="purple-btn">Search</a>
+          <button class="details-btn" data-type="movie" th:attr="data-id=${item.movie.id}">Details
+          </button>
+          <button class="toggle-star-btn"
+                  th:classappend="${item.movie.status} ? ' on' : ''"
+                  th:id="'toggle-movie-' + ${item.movie.id}"
+                  th:attr="data-type='movie', data-id=${item.movie.id}"
+                  onclick="toggle(this)">
+            ★
+          </button>
+          <span class="like-msg">로그인 후, 좋아요!</span>
+        </div>
+      </div>
+      <!-- movie가 null일 때 -->
+      <div th:if="${item.movie.id == null}" class="image-and-info">
+        <div class="image-block">
+          <div class="image-wrapper no-song-wrapper">
+            <p class="no-song-msg">적절한 영화를 찾지 못했습니다.</p>
+          </div>
+          <div class="title" style="visibility: hidden;">빈 제목</div>
+        </div>
+        <div class="info-block">
+          <span style="visibility: hidden;">버튼 자리</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Song 영역 -->
+    <div class="song">
+      <!-- song이 누락되지 않은 경우-->
+      <div th:if="${item.song.id != null}" class="image-and-info">
+        <div class="image-block">
+          <div class="image-wrapper">
+            <img th:src="${item.song.imgUrl}" alt="임의의 노래이미지"/>
+          </div>
+          <div class="title" th:text="${item.song.name}"></div>
+        </div>
+        <div class="info-block">
+          <a th:href="${item.song.externalLink}" target="_blank" class="purple-btn">Search</a>
+          <button class="details-btn" data-type="song" th:attr="data-id=${item.song.id}">Details
+          </button>
+          <button class="toggle-star-btn"
+                  th:classappend="${item.song.status} ? ' on' : ''"
+                  th:id="'toggle-song-' + ${item.song.id}"
+                  th:attr="data-type='song', data-id=${item.song.id}"
+                  onclick="toggle(this)">
+            ★
+          </button>
+          <span class="like-msg">로그인 후, 좋아요!</span>
+        </div>
+      </div>
+      <!-- song이 null일 때 -->
+      <div th:if="${item.song.id == null}" class="image-and-info">
+        <div class="image-block">
+          <div class="image-wrapper no-song-wrapper">
+            <p class="no-song-msg">적절한 노래를 찾지 못했습니다.</p>
+          </div>
+          <div class="title" style="visibility: hidden;">빈 제목</div>
+        </div>
+        <div class="info-block">
+          <span style="visibility: hidden;">버튼 자리</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 모달창 HTML -->
+  <div id="detailModal" class="custom-modal hidden">
+    <div class="custom-modal-content">
+      <span class="custom-close-btn" onclick="closeModal()">&times;</span>
+
+      <h2 id="custom-modal-title"></h2>
+
+      <div class="custom-modal-body-layout">
+
+        <div class="custom-modal-body-main">
+          <img id="modal-img" class="custom-modal-img" src="" alt="컨텐츠 이미지"/>
+        </div>
+
+        <div class="custom-modal-info">
+          <div id="custom-modal-meta"></div> <!-- 타입별로 여기에 JS로 채워 넣기 -->
+        </div>
+      </div>
+
+      <div id="modal-like-wrapper" style="margin-top: 1rem; text-align: right">
+        <a id="modal-search-link" class="purple-btn" href="#" target="_blank">Search</a>
         <button class="toggle-star-btn"
-                th:classappend="${item.book.status} ? ' on' : ''"
-                th:id="'toggle-book-' + ${item.book.id}"
-                th:attr="data-type='book', data-id=${item.book.id}"
+                id="modal-like-btn"
+                data-type=""
+                data-id=""
                 onclick="toggle(this)">
           ★
         </button>
+        <span class="like-msg">로그인 후, 좋아요!</span>
       </div>
     </div>
   </div>
 
-  <!-- Movie 영역 -->
-  <div class="movie">
-    <div class="image-and-info">
-      <div class="image-block">
-        <div class="image-wrapper">
-          <img th:src="${item.movie.imgUrl}" alt="임의의 영화이미지"/>
-        </div>
-        <div class="title" th:text="${item.movie.name}"></div>
-      </div>
-      <div class="info-block">
-        <a th:href="${item.movie.externalLink}" target="_blank" class="purple-btn">Search</a>
-        <button class="details-btn" data-type="movie" th:attr="data-id=${item.movie.id}">Details
-        </button>
-        <button class="toggle-star-btn"
-                th:classappend="${item.movie.status} ? ' on' : ''"
-                th:id="'toggle-movie-' + ${item.movie.id}"
-                th:attr="data-type='movie', data-id=${item.movie.id}"
-                onclick="toggle(this)">
-          ★
-        </button>
-      </div>
-    </div>
-  </div>
+  <script>
+    /// 토글 버튼 구현
+    function toggle(btn) {
+      const type = btn.dataset.type;
+      const id = btn.dataset.id;
 
-  <!-- Song 영역 -->
-  <div class="song">
-    <div class="image-and-info">
-      <div class="image-block">
-        <div class="image-wrapper">
-          <img th:src="${item.song.imgUrl}" alt="임의의 노래이미지"/>
-        </div>
-        <div class="title" th:text="${item.song.name}"></div>
-      </div>
-      <div class="info-block">
-        <a th:href="${item.song.externalLink}" target="_blank" class="purple-btn">Search</a>
-        <button class="details-btn" data-type="song" th:attr="data-id=${item.song.id}">Details
-        </button>
-        <button class="toggle-star-btn"
-                th:classappend="${item.song.status} ? ' on' : ''"
-                th:id="'toggle-song-' + ${item.song.id}"
-                th:attr="data-type='song', data-id=${item.song.id}"
-                onclick="toggle(this)">
-          ★
-        </button>
-      </div>
-    </div>
-  </div>
+      fetch(`/api/like/${type}/toggle`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({id})
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log("서버 응답", data);
+        const isOn = data.status;
 
-</div>
+        // 텍스트는 항상 별로 고정
+        const wasOn = btn.classList.contains('on'); // 이전 상태 기억
+        btn.textContent = '★';
+        btn.classList.toggle('on', isOn);
 
-<!-- 모달창 HTML -->
-<div id="detailModal" class="modal hidden">
-  <div class="modal-content">
-    <span class="close-button" onclick="closeModal()">&times;</span>
+        const msg = btn.nextElementSibling; // <span class="like-msg"> 태그
 
-    <h2 id="modal-title"></h2>
+        if (msg && !isOn && !wasOn) {
+          msg.classList.add('show');
 
-    <div class="modal-body-layout">
-
-      <div class="modal-body-main">
-        <img id="modal-img" class="modal-img" src="" alt="컨텐츠 이미지" />
-      </div>
-
-        <div class="modal-info">
-          <div id="modal-meta"></div> <!-- 타입별로 여기에 JS로 채워 넣기 -->
-        </div>
-      </div>
-
-    <div id="modal-like-wrapper" style="margin-top: 1rem; text-align: right">
-      <a id="modal-search-link" class="purple-btn" href="#" target="_blank">Search</a>
-      <button class="toggle-star-btn"
-              id="modal-like-btn"
-              data-type=""
-              data-id=""
-              onclick="toggle(this)">
-        ★
-      </button>
-    </div>
-  </div>
-</div>
-
-<script>
-  /// 토글 버튼 구현
-  function toggle(btn) {
-    const type = btn.dataset.type;
-    const id = btn.dataset.id;
-
-    fetch(`/api/like/${type}/toggle`, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({id})
-    })
-    .then(res => res.json())
-    .then(data => {
-      console.log("서버 응답",data);
-      const isOn = data.status;
-
-      // 텍스트는 항상 별로 고정
-      btn.textContent = '★';
-      btn.classList.toggle('on', isOn);
-
-
-      // 동일 type, id를 가진 다른 버튼들 동기화
-      const selector = `.toggle-star-btn[data-type='${type}'][data-id='${id}']`;
-      document.querySelectorAll(selector).forEach(otherBtn => {
-        if (otherBtn !== btn) {
-          otherBtn.textContent = '★';
-          otherBtn.classList.toggle('on',isOn);
+          // 2초 뒤에 문구 숨기기
+          setTimeout(() => {
+            msg.classList.remove('show');
+          }, 2000);
         }
+
+        // 동일 type, id를 가진 다른 버튼들 동기화
+        const selector = `.toggle-star-btn[data-type='${type}'][data-id='${id}']`;
+        document.querySelectorAll(selector).forEach(otherBtn => {
+          if (otherBtn !== btn) {
+            otherBtn.textContent = '★';
+            otherBtn.classList.toggle('on', isOn);
+          }
+        });
       });
-    });
 
-  }
+    }
 
-  /// 모달창
-  // 모달 창 좋아요 버튼 연동 작성하기
-  document.addEventListener("DOMContentLoaded", function () {
-    const buttons = document.querySelectorAll(".details-btn");
+    /// 모달창
+    // 모달 창 좋아요 버튼 연동 작성하기
+    document.addEventListener("DOMContentLoaded", function () {
+      const buttons = document.querySelectorAll(".details-btn");
 
-    buttons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const type = btn.dataset.type; // book, movie, song
-        const id = btn.dataset.id;
+      buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const type = btn.dataset.type; // book, movie, song
+          const id = btn.dataset.id;
 
-        fetch(`/api/details/${type}/${id}`)
-        .then(res => res.json())
-        .then(data => {
-          openModal(type, data);
+          fetch(`/api/details/${type}/${id}`)
+          .then(res => res.json())
+          .then(data => {
+            openModal(type, data);
+          });
         });
       });
     });
-  });
 
-  function openModal(type, data) {
-    const modal = document.getElementById("detailModal");
-    const body = document.getElementById("modal-body");
-    const meta = document.getElementById("modal-meta");
-    const likeBtn = document.getElementById("modal-like-btn");
-    const searchLink = document.getElementById("modal-search-link");
+    function openModal(type, data) {
+      const modal = document.getElementById("detailModal");
+      const body = document.getElementById("modal-body");
+      const meta = document.getElementById("custom-modal-meta");
+      const likeBtn = document.getElementById("modal-like-btn");
+      const searchLink = document.getElementById("modal-search-link");
 
-    // 제목 + 이미지는 항상 고정 위치
-    document.getElementById("modal-title").textContent = data.name;
-    document.getElementById("modal-img").src = data[`${type}Img`];
-    document.getElementById("modal-img").alt = data.name;
+      // 제목 + 이미지는 항상 고정 위치
+      document.getElementById("custom-modal-title").textContent = data.name;
+      document.getElementById("modal-img").src = data[`${type}Img`];
+      document.getElementById("modal-img").alt = data.name;
 
-    // 링크 설정
-    searchLink.href = data.externalLink;
+      // 링크 설정
+      searchLink.href = data.externalLink;
 
-    // 타입별 부가 정보 + description
-    let details = "";
+      // 타입별 부가 정보 + description
+      let details = "";
 
-    if (type === "book") {
-      details += `<p><strong>작가:</strong> ${data.author}</p>`;
-      details += `<p><strong>장르:</strong> ${data.genre}</p>`;
-      details += `<p><strong>요약:</strong> ${buildExpandable(data.summary, "summary")}</p>`;
-      details += `<p><strong>설명:</strong> ${buildExpandable(data.description, "description")}</p>`;
-      details += `<p><strong>출판사:</strong> ${data.publisher}</p>`;
-      details += `<p><strong>출판일:</strong> ${data.publishedAt}</p>`;
+      if (type === "book") {
+        details += `<p><strong>작가:</strong> ${data.author}</p>`;
+        details += `<p><strong>장르:</strong> ${data.genre}</p>`;
+        details += `<p><strong>요약:</strong> ${buildExpandable(data.summary, "summary")}</p>`;
+        details += `<p><strong>설명:</strong> ${buildExpandable(data.description,
+            "description")}</p>`;
+        details += `<p><strong>출판사:</strong> ${data.publisher}</p>`;
+        details += `<p><strong>출판일:</strong> ${data.publishedAt}</p>`;
 
-    } else if (type === "movie") {
-      details += `<p><strong>장르:</strong> ${data.genre}</p>`;
-      details += `<p><strong>설명:</strong> ${buildExpandable(data.description, "description")}</p>`;     //간략히
-      details += `<p><strong>개봉일:</strong> ${data.releaseDate}</p>`;
-    } else if (type === "song") {
-      details += `<p><strong>아티스트:</strong> ${data.artist}</p>`;
-      details += `<p><strong>발매일:</strong> ${data.releasedAt}</p>`;
-      details += `<p><strong>요약:</strong> ${buildExpandable(data.summary, "summary")}</p>`;
-      details += `<p><strong>가사:</strong> ${buildExpandable(data.lyrics, "lyrics")}</p>`;
+      } else if (type === "movie") {
+        details += `<p><strong>장르:</strong> ${data.genre}</p>`;
+        details += `<p><strong>설명:</strong> ${buildExpandable(data.description,
+            "description")}</p>`;     //간략히
+        details += `<p><strong>개봉일:</strong> ${data.releaseDate}</p>`;
+      } else if (type === "song") {
+        details += `<p><strong>아티스트:</strong> ${data.artist}</p>`;
+        details += `<p><strong>발매일:</strong> ${data.releasedAt}</p>`;
+        details += `<p><strong>요약:</strong> ${buildExpandable(data.summary, "summary")}</p>`;
+        details += `<p><strong>가사:</strong> ${buildExpandable(data.lyrics, "lyrics")}</p>`;
+      }
+
+      meta.innerHTML = details;
+
+      // 별 버튼 설정
+      likeBtn.dataset.type = type;
+      likeBtn.dataset.id = data.id;
+      likeBtn.textContent = '★';
+      likeBtn.classList.remove("on");
+      if (data.status) {
+        likeBtn.classList.add("on");
+      }
+
+      modal.classList.remove("hidden");
     }
 
-    meta.innerHTML = details;
-
-    // 별 버튼 설정
-    likeBtn.dataset.type = type;
-    likeBtn.dataset.id = data.id;
-    likeBtn.textContent = '★';
-    likeBtn.classList.remove("on");
-    if (data.status) {
-      likeBtn.classList.add("on");
+    function closeModal() {
+      document.getElementById("detailModal").classList.add("hidden");
     }
 
-    modal.classList.remove("hidden");
-  }
+    //모달 창의 텍스트 줄여서 보기
+    function buildExpandable(content, idPrefix) {
+      const shortId = `${idPrefix}-short`;
+      const fullId = `${idPrefix}-full`;
+      const btnId = `${idPrefix}-btn`;
 
-  function closeModal() {
-    document.getElementById("detailModal").classList.add("hidden");
-  }
-
-  //모달 창의 텍스트 줄여서 보기
-  function buildExpandable(content, idPrefix) {
-    const shortId = `${idPrefix}-short`;
-    const fullId = `${idPrefix}-full`;
-    const btnId = `${idPrefix}-btn`;
-
-    return `
+      return `
     <span id="${shortId}" style="display:block; overflow: hidden; text-overflow: ellipsis; max-height: 4.5em;">
       ${content}
     </span>
@@ -640,20 +704,20 @@
     </span>
     <button onclick="toggleText('${shortId}', '${fullId}', '${btnId}')" id="${btnId}" class="text-button">전체 보기</button>
   `;
-  }
+    }
 
-  function toggleText(shortId, fullId, btnId) {
-    const shortEl = document.getElementById(shortId);
-    const fullEl = document.getElementById(fullId);
-    const btnEl = document.getElementById(btnId);
+    function toggleText(shortId, fullId, btnId) {
+      const shortEl = document.getElementById(shortId);
+      const fullEl = document.getElementById(fullId);
+      const btnEl = document.getElementById(btnId);
 
-    const isShortVisible = shortEl.style.display !== "none";
-    shortEl.style.display = isShortVisible ? "none" : "block";
-    fullEl.style.display = isShortVisible ? "block" : "none";
-    btnEl.textContent = isShortVisible ? "간략히 보기" : "전체 보기";
-  }
+      const isShortVisible = shortEl.style.display !== "none";
+      shortEl.style.display = isShortVisible ? "none" : "block";
+      fullEl.style.display = isShortVisible ? "block" : "none";
+      btnEl.textContent = isShortVisible ? "간략히 보기" : "전체 보기";
+    }
 
-</script>
-
+  </script>
+</div>
 </body>
 </html>

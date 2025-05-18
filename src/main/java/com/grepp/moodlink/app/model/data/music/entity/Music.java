@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
@@ -32,6 +33,8 @@ public class Music extends BaseEntity {
     @Column(columnDefinition = "BLOB")
     private byte[] embedding;
     private LocalDate releaseDate;
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
     private LocalDate createdAt;
     @Column(columnDefinition = "TEXT")
     private String thumbnail;

@@ -316,7 +316,6 @@ public class LikeService {
     }
 
 
-    //TODO: like테이블 수정 및 각 컨텐츠의 like_count증감 적용
     @Transactional
     public Page<BookDto> getUserLikedBooksPaged(String userId, Pageable pageable) {
         List<Likes> likes = getLikeInfo(userId);

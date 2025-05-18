@@ -14,9 +14,9 @@ import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMusic;
 import com.grepp.moodlink.app.model.recomend.entity.Likes;
 import com.grepp.moodlink.app.model.result.dto.BookDto;
 import com.grepp.moodlink.app.model.result.dto.CuratingDetailDto;
+import com.grepp.moodlink.app.model.result.dto.CuratingDetailIdDto;
 import com.grepp.moodlink.app.model.result.dto.MovieDto;
 import com.grepp.moodlink.app.model.result.dto.SongDto;
-import com.grepp.moodlink.app.model.result.entity.CuratingDetail;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -38,13 +38,11 @@ public class ResultService {
     private final LikeDetailMoviesRepository likeDetailMoviesRepository;
 
 
-    public List<CuratingDetailDto> curatingDetailDtoList(String userId){
+    public List<CuratingDetailDto> curatingDetailDtoList(String userId, List<CuratingDetailIdDto> recommendResult){
 
         String googleStr="https://www.google.com/search?q=";
 
         // db에서 curating 값 가져오기
-        Long curatingId = curatingRepository.findByUserId(userId).getFirst().getId();
-        List<CuratingDetail> curatingDetails = curatingDetailRepository.findByCuratingId(curatingId);
 
         String tempBookId;
         String tempSongId;
@@ -52,7 +50,7 @@ public class ResultService {
         List<CuratingDetailDto> items = new ArrayList<>();
 
         // db에서 curating의 각 컨텐츠(책, 노래, 영화)들 가져오기
-        for(CuratingDetail curatingDetail: curatingDetails) {
+        for(CuratingDetailIdDto curatingDetail: recommendResult) {
             tempBookId = curatingDetail.getBookId();
             tempSongId = curatingDetail.getSongId();
             tempMovieId = curatingDetail.getMovieId();
@@ -71,7 +69,6 @@ public class ResultService {
         }
 
         // User가 비회원이면 각 컨텐츠의 상태를 false로 return
-        // TODO: 비회원으로 수정해야 함.
         if (userId.isEmpty()){
             return items;
         }
