@@ -102,7 +102,7 @@
         border: 1px solid rgba(255, 255, 255, 0.1);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         padding: 20px;
-        width: 220px;
+        width: 300px;
         text-align: center;
         transition: all 0.4s ease;
         position: relative;
@@ -133,8 +133,8 @@
       }
 
       .category-card img {
-        width: 160px;
-        height: 160px;
+        width: 230px;
+        height: 320px;
         object-fit: cover;
         border-radius: 15px;
         border: 2px solid #ff6347;
@@ -503,89 +503,70 @@
       }
 
       /*검색결과 디자인*/
-      .card-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 16px;
+      /* 카드 공통 */
+      .card-container{display:flex;flex-wrap:wrap;gap:16px}
+
+      /* 영화 */
+      .card-movie{
+        width:300px;
+        border:4px solid;
+        border-image:linear-gradient(to right,#FF512F,#DD2476) 1;
+        border-radius:6px;
+        cursor:pointer;
+        box-sizing:border-box;
+        background:#000;
+      }
+      .card-movie .card-thumbnail{width:100%;border-radius:4px;display:block}
+
+      /* 음악 */
+      .card-music{
+        width:300px;
+        border:4px solid;
+        border-image:linear-gradient(to right,#1FA2FF,#12D8FA,#A6FFCB) 1;
+        border-radius:6px;
+        cursor:pointer;
+        box-sizing:border-box;
+        background:#000;
+      }
+      .card-music .card-thumbnail{width:100%;border-radius:4px;display:block}
+
+
+      /* 도서 */
+      .card-book{
+        flex:0 0 calc(25% - 16px); /* 4개 = 100 / 4, gap 보정 */
+        max-width:250px;           /* 250px 이상 커지지 않도록 */
+        border:4px solid;
+        border-image:linear-gradient(to right,#a34dff,#2ebf91) 1;
+        border-radius:6px;
+        cursor:pointer;
+        box-sizing:border-box;
+        background:#000;
       }
 
-      .card {
-        width: 300px;
-        border: 4px solid; /* 테두리 두께 지정 */
-        /*border-image: linear-gradient(to right, #D8BFD8, #FF69B4) 1;*/
-        border-image: linear-gradient(to right, #6A0DAD, #00CED1) 1;
-        /*border-image: linear-gradient(to right, #6A0DAD, #FFD700) 1;*/
-        /*border-image: linear-gradient(to right, #7B68EE, #E6E6FA) 1;*/
-        border-radius: 6px;
-        cursor: pointer;
-        box-sizing: border-box;
-        /*padding: 10px;*/
-        background: #000000;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      .card-book .card-thumbnail{
+        width:100%;
+        border-radius:4px;
+        display:block;
       }
 
-      .card-thumbnail {
-        width: 100%;
-        border-radius: 4px;
-        display: block;
-        margin-bottom: 8px;
-      }
+      /* 모달 배경 */
+      #detailModal{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.75);
+        justify-content:center;align-items:center}
+      #detailModal.active{display:flex}
 
-      .card-title {
-        font-weight: bold;
-        margin: 0;
-        font-size: 16px;
-      }
-
-      /* 모달 스타일 */
-      #detailModal {
-        display: none; /* 숨김 */
-        position: fixed;
-        z-index: 1000;
-        left: 0; top: 0; right: 0; bottom: 0;
-        background: rgba(0,0,0,0.5);
-        justify-content: center;
-        align-items: center;
-      }
-
-      #detailModal.active {
-        display: flex;
-      }
-
-      .modal-content {
-        background: white;
-        border-radius: 8px;
-        padding: 20px 30px;
-        max-width: 400px;
-        width: 90%;
-        box-sizing: border-box;
-        position: relative;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-      }
-
-      .modal-close {
-        position: absolute;
-        top: 12px;
-        right: 15px;
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 22px;
-        user-select: none;
-      }
-      .modal-title {
-        margin-top: 0;
-        margin-bottom: 12px;
-        font-size: 20px;
-      }
-      .modal-release {
-        margin: 0 0 10px;
-        color: #555;
-      }
-      .modal-summary {
-        white-space: pre-line;
-        font-size: 14px;
-        color: #333;
-      }
+      /* 모달 내용 */
+      .modal-content{display:flex;max-width:900px;width:90%;height:70vh;overflow:hidden;border-radius:8px}
+      .modal-bg{flex:1 1 55%;object-fit:cover}
+      .modal-info{flex:1 1 45%;background:#000;color:#fff;padding:40px 50px;position:relative;
+        display:flex;flex-direction:column;gap:20px;overflow-y:auto}
+      .modal-close{position:absolute;top:20px;right:25px;font-size:28px;cursor:pointer}
+      .modal-title{font-size:40px;font-weight:700;margin:0}
+      .modal-badges{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0}
+      .modal-badges li{list-style:none;font-size:14px;font-weight:600;background:#444;
+        padding:4px 10px;border-radius:4px}
+      .modal-summary{line-height:1.5;font-size:16px}
+      .modal-play{align-self:flex-start;padding:12px 28px;font-size:18px;font-weight:600;
+        border:none;border-radius:4px;background: #632e9c;color:#fff;cursor:pointer}
 
     </style>
 

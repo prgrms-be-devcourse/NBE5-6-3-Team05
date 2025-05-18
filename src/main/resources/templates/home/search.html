@@ -13,81 +13,82 @@
 
   <!-- 카테고리 메뉴 -->
   <div class="menu">
-    <button onclick="showCategory('movie')">영화</button>
-    <button onclick="showCategory('music')">음악</button>
-    <button onclick="showCategory('book')">도서</button>
+    <button onclick="showCategory('movie')">🎬 영화</button>
+    <button onclick="showCategory('music')">🎧 음악</button>
+    <button onclick="showCategory('book')">📚 도서</button>
   </div>
 
   <!-- 영화 -->
-  <div class="category" id="movie" style="display:none">
+  <div class="category" id="movie">
     <h3>영화 검색 결과</h3>
-
     <div th:if="${movie.size() > 0}" class="card-container">
-      <div th:each="m : ${movie}" class="card"
-           onclick="showDetailModal(
-           /*[[${#strings.escapeJavaScript(m.title)}]],*/
-           /*[[${#strings.escapeJavaScript(m.releaseDate)}]],*/
-           /*[[${#strings.escapeJavaScript(m.summary)}]]*/
-           )"
+      <div th:each="m : ${movie}" class="card-movie"
            th:attr="onclick=
-           'showDetailModal(' +
-           '\'' + ${#strings.escapeJavaScript(m.title)} + '\',' +
-           '\'' + ${#strings.escapeJavaScript(m.releaseDate)} + '\',' +
-           '\'' + ${#strings.escapeJavaScript(m.summary)} + '\'' +
-           ')'"
-      >
-        <img th:src="${m.thumbnail}" alt="영화 썸네일" class="card-thumbnail" />
-<!--        <p class="card-title" th:text="${m.title}"></p>-->
+             'showDetailModal(' +
+               '\'' + ${#strings.escapeJavaScript(m.title)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(m.releaseDate)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(m.summary)} + '\',' +
+               '\'' + ${m.thumbnail} + '\'' +
+             ')'">
+        <img th:src="${m.thumbnail}" alt="영화 썸네일" class="card-thumbnail"/>
       </div>
     </div>
-
-    <div th:if="${movie.size() == 0}">
-      <p>검색 결과가 없습니다.</p>
-    </div>
-  </div>
-
-  <!-- 모달 영역 -->
-  <div id="detailModal" onclick="if(event.target===this) closeModal()">
-    <div class="modal-content">
-      <span class="modal-close" onclick="closeModal()">×</span>
-      <h3 class="modal-title" id="modalTitle"></h3>
-      <p class="modal-release" id="modalReleaseDate"></p>
-      <p class="modal-summary" id="modalSummary"></p>
-    </div>
+    <div th:if="${movie.size() == 0}"><p>검색 결과가 없습니다.</p></div>
   </div>
 
   <!-- 음악 -->
   <div class="category" id="music">
     <h3>음악 검색 결과</h3>
-    <div th:if="${music.size() > 0}">
-      <div th:each="m : ${music}" class="content-item music-item"
-           th:attr="data-title=${m.title}, data-description=${m.lyrics}">
-        <img th:src="${m.thumbnail}" alt="음악 썸네일" class="content-thumbnail" />
-        <p class="content-title" th:text="${m.title}"></p>
-        <p class="content-subtext" th:text="${m.singer}"></p>
-        <p class="content-subtext" th:text="${m.releaseDate}"></p>
-        <p class="content-description" th:text="${m.lyrics}"></p>
+    <div th:if="${music.size() > 0}" class="card-container">
+      <div th:each="m : ${music}" class="card-music"
+           th:attr="onclick=
+             'showDetailModal(' +
+               '\'' + ${#strings.escapeJavaScript(m.title)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(m.releaseDate)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(m.lyrics)} + '\',' +
+               '\'' + ${m.thumbnail} + '\'' +
+             ')'">
+        <img th:src="${m.thumbnail}" alt="음악 썸네일" class="card-thumbnail"/>
       </div>
     </div>
-    <div th:if="${music.size() == 0}">
-      <p>검색 결과가 없습니다.</p>
-    </div>
+    <div th:if="${music.size() == 0}"><p>검색 결과가 없습니다.</p></div>
   </div>
 
   <!-- 도서 -->
-  <div class="category" id="book" style="display:none">
+  <div class="category" id="book">
     <h3>도서 검색 결과</h3>
-    <div th:if="${book.size() > 0}">
-      <div th:each="b : ${book}" class="content-item">
-        <img th:src="${b.image}" alt="도서 썸네일" class="content-thumbnail" />
-        <p class="content-title" th:text="${b.title}"></p>
-        <p class="content-subtext" th:text="${b.publisher}"></p>
-        <p class="content-subtext" th:text="${b.publishedDate}"></p>
-        <p class="content-subtext" th:text="${b.description}"></p>
+    <div th:if="${book.size() > 0}" class="card-container">
+      <div th:each="b : ${book}" class="card-book"
+           th:attr="onclick=
+             'showDetailModal(' +
+               '\'' + ${#strings.escapeJavaScript(b.title)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(b.publishedDate)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(b.description)} + '\',' +
+               '\'' + ${b.image} + '\'' +
+             ')'">
+        <img th:src="${b.image}" alt="도서 썸네일" class="card-thumbnail"/>
       </div>
     </div>
-    <div th:if="${book.size() == 0}">
-      <p>검색 결과가 없습니다.</p>
+    <div th:if="${book.size() == 0}"><p>검색 결과가 없습니다.</p></div>
+  </div>
+
+  <!-- 모달 -->
+  <div id="detailModal" onclick="if(event.target===this) closeModal()">
+    <div class="modal-content">
+      <img id="modalBg" class="modal-bg" src="" alt="배경"/>
+      <div class="modal-info">
+        <span class="modal-close" onclick="closeModal()">×</span>
+        <h1 id="modalTitle" class="modal-title"></h1>
+        <ul class="modal-badges">
+          <li id="modalYear"></li>
+<!--          연령, 장르 등 정보 3차 플젝 때 추가 예정-->
+<!--          <li>12+</li>-->
+<!--          <li id="modalSeries">콘텐츠</li>-->
+<!--          <li id="modalGenre">장르</li>-->
+        </ul>
+        <p id="modalSummary" class="modal-summary"></p>
+        <button disabled class="modal-play">검색하기 ➜</button>
+      </div>
     </div>
   </div>
 
@@ -96,28 +97,24 @@
 </html>
 
 <script>
-  function showCategory(categoryId) {
-    document.querySelectorAll('.category').forEach(cat => {
-      cat.style.display = 'none';
-    });
-    document.getElementById(categoryId).style.display = 'block';
+  /* 카테고리 토글 */
+  function showCategory(id){
+    document.querySelectorAll('.category').forEach(c=>c.style.display='none');
+    document.getElementById(id).style.display='block';
   }
+  document.addEventListener('DOMContentLoaded',()=>showCategory('movie'));
 
-  // 기본으로 음악 카테고리 보여주기
-  document.addEventListener("DOMContentLoaded", () => {
-    showCategory("movie");
-  });
-
-  // 카드 상세 보기
-  function showDetailModal(title, releaseDate, summary) {
+  /* 모달 열기 */
+  function showDetailModal(title, releaseDate, summary, thumbnail){
     document.getElementById('modalTitle').textContent = title;
-    document.getElementById('modalReleaseDate').textContent = '개봉일: ' + releaseDate;
+    document.getElementById('modalYear').textContent = releaseDate.split('-')[0] || releaseDate;
     document.getElementById('modalSummary').textContent = summary;
-
+    document.getElementById('modalBg').src = thumbnail;
     document.getElementById('detailModal').classList.add('active');
   }
 
-  function closeModal() {
+  /* 모달 닫기 */
+  function closeModal(){
     document.getElementById('detailModal').classList.remove('active');
   }
 </script>
