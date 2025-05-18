@@ -21,8 +21,9 @@ public class SongDetailsDto {
     private String summary;
     private Boolean status;
 
-    public SongDetailsDto(String name, String artist, LocalDate releasedAt, LocalDate createdAt,
-        String genre, String description, String songImg, String lyrics, String summary) {
+    public SongDetailsDto(String id, String name, String artist, LocalDate releasedAt, LocalDate createdAt,
+        String genre, String description, String songImg, String lyrics, String summary, String externalLink) {
+        this.id = id;
         this.name = name;
         this.artist = artist;
         this.releasedAt = releasedAt;
@@ -32,10 +33,13 @@ public class SongDetailsDto {
         this.songImg = songImg;
         this.lyrics = lyrics;
         this.summary = summary;
+        this.status = false;
+        this.externalLink = externalLink;
     }
 
     public static SongDetailsDto from(Music music){
         return new SongDetailsDto(
+            music.getId(),
             music.getTitle(),
             music.getSinger(),
             music.getReleaseDate(),
@@ -44,7 +48,8 @@ public class SongDetailsDto {
             music.getDescription(),
             music.getThumbnail(),
             music.getLyrics(),
-            music.getSummary()
+            music.getSummary(),
+            "https://www.google.com/search?q="+music.getTitle()
         );
     }
 }

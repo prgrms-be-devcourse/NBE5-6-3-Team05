@@ -21,14 +21,17 @@ public class MovieDetailsDto {
     private LocalDate modifiedAt;
     private LocalDate releaseDate;
 
-    public MovieDetailsDto(String name, List<String> genre, String description,
-        LocalDate createdAt, LocalDate releaseDate, String movieImg) {
+    public MovieDetailsDto(String id, String name, List<String> genre, String description,
+        LocalDate createdAt, LocalDate releaseDate, String movieImg, String externalLink) {
+        this.id = id;
         this.name = name;
         this.genre = genre;
         this.description = description;
         this.createdAt = createdAt;
         this.releaseDate = releaseDate;
         this.movieImg = movieImg;
+        this.externalLink = externalLink;
+        this.status = false;
     }
 
     public static MovieDetailsDto from(Movie movie){
@@ -37,12 +40,14 @@ public class MovieDetailsDto {
             .map(Genre::getName)
             .toList();
         return new MovieDetailsDto(
+            movie.getId(),
             movie.getTitle(),
             genreNames,
             movie.getDescription(),
             movie.getCreatedAt(),
             movie.getReleaseDate(),
-            movie.getThumbnail()
+            movie.getThumbnail(),
+            "https://www.google.com/search?q="+movie.getTitle()
         );
 
     }
