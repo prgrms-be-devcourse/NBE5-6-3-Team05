@@ -16,9 +16,9 @@ import org.springframework.stereotype.Repository;
 public interface LikeDetailMoviesRepository extends JpaRepository<LikeDetailMovies, Long> {
 
 
-    List<LikeDetailMovies> findAllByLikesIdIn(Collection<String> likesIds);
+    List<LikeDetailMovies> findAllByLikesIdIn(Collection<Long> likesIds);
     @Query("SELECT l FROM LikeDetailMovies l WHERE l.likesId IN :likesIds")
-    Page<LikeDetailMovies> findAllByLikesIdInPagination(@Param("likesIds") Collection<String> likesIds, Pageable pageable);
+    Page<LikeDetailMovies> findAllByLikesIdInPagination(@Param("likesIds") Collection<Long> likesIds, Pageable pageable);
 
     List<LikeDetailMovies> findByLikesId(Long likeId);
 

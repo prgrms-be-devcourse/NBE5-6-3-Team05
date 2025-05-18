@@ -17,9 +17,9 @@ public interface LikeDetailMusicRepository extends JpaRepository<LikeDetailMusic
 
 
 
-    List<LikeDetailMusic> findAllByLikesIdIn(Collection<String> likesIds);
+    List<LikeDetailMusic> findAllByLikesIdIn(Collection<Long> likesIds);
     @Query("SELECT l FROM LikeDetailMusic l WHERE l.likesId IN :likesIds")
-    Page<LikeDetailMusic> findAllByLikesIdInPagination(@Param("likesIds") Collection<String> likesIds, Pageable pageable);
+    Page<LikeDetailMusic> findAllByLikesIdInPagination(@Param("likesIds") Collection<Long> likesIds, Pageable pageable);
 
     List<LikeDetailMusic> findByLikesId(Long likeId);
 

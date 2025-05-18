@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -56,31 +57,34 @@ public class LikeService {
 
     public List<LikeDetailBooks> getLikeDetailBook(List<Likes> likes) {
 
-        List<String> likeIds = likes.stream()
-            .map(like -> String.valueOf(like.getId()))
+        List<Long> likeIds = likes.stream()
+            .map(Likes::getId)
             .collect(Collectors.toList());
         return likeDetailBooksRepository.findAllByLikesIdIn(likeIds);
 
     }
     public Page<LikeDetailBooks> getLikeDetailBookPaged(List<Likes> likes,Pageable pageable) {
-        List<String> likeIds = likes.stream()
-            .map(like -> String.valueOf(like.getId()))
+        List<Long> likeIds = likes.stream()
+            .map(Likes::getId)
             .collect(Collectors.toList());
         return likeDetailBooksRepository.findAllByLikesIdInPagination(likeIds,pageable);
 
     }
 
     public List<BookDto> getBookList(List<LikeDetailBooks> likeDetailBooks) {
-
         List<String> bookIds = likeDetailBooks.stream()
             .map(LikeDetailBooks::getBookId)
             .collect(Collectors.toList());
 
         List<Book> books = bookRepository.findAllByIsbnIn(bookIds);
 
-        log.info("Books: {}", books);
+        Map<String, Book> bookMap = books.stream()
+            .collect(Collectors.toMap(Book::getIsbn, b -> b));
 
-        return books.stream()
+
+        return bookIds.stream()
+            .map(bookMap::get)
+            .filter(Objects::nonNull)
             .map(BookDto::toDto)
             .collect(Collectors.toList());
     }
@@ -88,36 +92,41 @@ public class LikeService {
 
     public List<LikeDetailMusic> getLikeDetailMusic(List<Likes> likes) {
 
-        List<String> likeIds = likes.stream()
-            .map(like -> String.valueOf(like.getId()))
+        List<Long> likeIds = likes.stream()
+            .map(Likes::getId)
             .collect(Collectors.toList());
         return likeDetailMusicRepository.findAllByLikesIdIn(likeIds);
 
     }
     public Page<LikeDetailMusic> getLikeDetailMusicPaged(List<Likes> likes,Pageable pageable) {
-        List<String> likeIds = likes.stream()
-            .map(like -> String.valueOf(like.getId()))
+        List<Long> likeIds = likes.stream()
+            .map(Likes::getId)
             .collect(Collectors.toList());
         return likeDetailMusicRepository.findAllByLikesIdInPagination(likeIds,pageable);
 
     }
 
     public List<MusicDto> getMusicList(List<LikeDetailMusic> likeDetailMusics) {
-
-        List<String> MusicIds = likeDetailMusics.stream()
+        List<String> musicIds = likeDetailMusics.stream()
             .map(LikeDetailMusic::getMusicId)
             .collect(Collectors.toList());
 
-        List<Music> musics = musicRepository.findAllByIdIn(MusicIds);
+        List<Music> musics = musicRepository.findAllByIdIn(musicIds);
 
-        return musics.stream()
+        Map<String, Music> musicMap = musics.stream()
+            .collect(Collectors.toMap(Music::getId, m -> m));
+
+        return musicIds.stream()
+            .map(musicMap::get)
+            .filter(Objects::nonNull)
             .map(MusicDto::toDto)
             .collect(Collectors.toList());
     }
 
+
     public List<LikeDetailMovies> getLikeDetailMovie(List<Likes> likes) {
-        List<String> likeIds = likes.stream()
-            .map(like -> String.valueOf(like.getId()))
+        List<Long> likeIds = likes.stream()
+            .map((Likes::getId))
             .collect(Collectors.toList());
 
         return likeDetailMoviesRepository.findAllByLikesIdIn(likeIds);
@@ -125,8 +134,8 @@ public class LikeService {
     }
 
     public Page<LikeDetailMovies> getLikeDetailMoviePaged(List<Likes> likes,Pageable pageable) {
-        List<String> likeIds = likes.stream()
-            .map(like -> String.valueOf(like.getId()))
+        List<Long> likeIds = likes.stream()
+            .map((Likes::getId))
             .collect(Collectors.toList());
 
         return likeDetailMoviesRepository.findAllByLikesIdInPagination(likeIds,pageable);
@@ -134,16 +143,18 @@ public class LikeService {
     }
 
     public List<MovieInfoDto> getMovieList(List<LikeDetailMovies> likeDetailMovies) {
-        List<String> MovieIds = likeDetailMovies.stream()
+        List<String> movieIds = likeDetailMovies.stream()
             .map(LikeDetailMovies::getMovieId)
             .collect(Collectors.toList());
-        log.info("🎬 영화 ID 목록: {}", MovieIds);
 
-        List<Movie> movies = movieRepository.findAllByIdIn(MovieIds);
-        log.info("✅ 조회된 영화: {}", movies);
+        List<Movie> movies = movieRepository.findAllByIdIn(movieIds);
 
+        Map<String, Movie> movieMap = movies.stream()
+            .collect(Collectors.toMap(Movie::getId, m -> m));
 
-        return movies.stream()
+        return movieIds.stream()
+            .map(movieMap::get)
+            .filter(Objects::nonNull)
             .map(MovieInfoDto::toDto)
             .collect(Collectors.toList());
     }
@@ -310,7 +321,10 @@ public class LikeService {
     public Page<BookDto> getUserLikedBooksPaged(String userId, Pageable pageable) {
         List<Likes> likes = getLikeInfo(userId);
         Page<LikeDetailBooks> likeDetailBooks = getLikeDetailBookPaged(likes,pageable);
+
+        System.out.println("좋아요 세부 정보 개수: " + likeDetailBooks.getContent());
         List<BookDto> Books = getBookList(likeDetailBooks.getContent());
+        System.out.println("북리스트 개수: " + Books.size());
 
         return new PageImpl<>(Books, pageable, likeDetailBooks.getTotalElements());
     }

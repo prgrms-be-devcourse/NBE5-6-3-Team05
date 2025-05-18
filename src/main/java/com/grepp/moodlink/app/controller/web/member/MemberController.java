@@ -4,6 +4,7 @@ import com.grepp.moodlink.app.controller.web.member.payload.LikeGenreResponse;
 import com.grepp.moodlink.app.controller.web.member.payload.ModifyRequest;
 import com.grepp.moodlink.app.model.auth.domain.Principal;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
+import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.home.HomeService;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -154,7 +156,7 @@ public class MemberController {
         @RequestParam(value = "book_page", defaultValue = "0") int bookPage,
         @RequestParam(value = "music_page", defaultValue = "0") int musicPage,
         @RequestParam(value = "movie_page", defaultValue = "0") int moviePage,
-        @RequestParam(value = "size", defaultValue = "3") int size,
+        @RequestParam(value = "size", defaultValue = "4") int size,
         @RequestParam(value = "tab", defaultValue = "books") String tab) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isAuthenticated = authentication != null &&
@@ -173,7 +175,9 @@ public class MemberController {
         Pageable moviePageable = PageRequest.of(moviePage, size);
 
         System.out.println("Book Page: " + bookPage);
+        System.out.println("북페이지 크기: " + size);
         System.out.println("Music Page: " + musicPage);
+        System.out.println("뮤직페이지 크기: " + size);
         System.out.println("Movie Page: " + moviePage);
 
         Page<BookDto> likedBooksPage = likeService.getUserLikedBooksPaged(userId, bookPageable);
@@ -181,19 +185,19 @@ public class MemberController {
         Page<MovieInfoDto> likedMoviesPage = likeService.getUserLikedMoviesPaged(userId, moviePageable);
 
 
+
         System.out.println("총 도서 좋아요 수: " + likedBooksPage.getTotalElements());
         System.out.println("총 페이지 수: " + likedBooksPage.getTotalPages());
         System.out.println("총 영화 좋아요 수: " + likedMoviesPage.getTotalElements());
         System.out.println("총 페이지 수: " + likedMoviesPage.getTotalPages());
-
         System.out.println("총 음악 좋아요 수: " + likedMusicsPage.getTotalElements());
         System.out.println("총 페이지 수: " + likedMusicsPage.getTotalPages());
 
 
 
-        PageResponse<BookDto> bookResponse = new PageResponse<>("users/like", likedBooksPage, 3);
-        PageResponse<MusicDto> musicResponse = new PageResponse<>("users/like", likedMusicsPage, 3);
-        PageResponse<MovieInfoDto> movieResponse = new PageResponse<>("users/like", likedMoviesPage, 3);
+        PageResponse<BookDto> bookResponse = new PageResponse<>("users/like", likedBooksPage, 5);
+        PageResponse<MusicDto> musicResponse = new PageResponse<>("users/like", likedMusicsPage, 5);
+        PageResponse<MovieInfoDto> movieResponse = new PageResponse<>("users/like", likedMoviesPage, 5);
 
         model.addAttribute("likedbooks", bookResponse);
         model.addAttribute("likedmusics", musicResponse);

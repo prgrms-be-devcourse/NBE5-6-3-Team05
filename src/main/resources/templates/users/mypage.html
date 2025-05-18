@@ -5,64 +5,295 @@
 
 <head>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary-color: #6a3de8;
+      --secondary-color: #4a30a0;
+      --accent-color: #8a55ff;
+      --text-color: #ffffff;
+      --bg-dark: #1c1533;
+      --bg-card: #2d2151;
+      --shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      color: var(--text-color);
+      background: linear-gradient(135deg, var(--bg-dark), #0c0817);
+    }
+
+    .content-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      background: linear-gradient(to right, var(--accent-color), #b78dff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+    }
+
+    .user-info-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .user-info-card::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, var(--accent-color), transparent 70%);
+      opacity: 0.3;
+      border-radius: 50%;
+      z-index: 0;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .info-item {
+      margin-bottom: 0.5rem;
+    }
+
+    .info-label {
+      font-size: 0.9rem;
+      color: #a5a0b9;
+      margin-bottom: 0.3rem;
+    }
+
+    .info-value {
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .action-btn {
+      background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(106, 61, 232, 0.3);
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(106, 61, 232, 0.4);
+    }
+
+    .action-btn:active {
+      transform: translateY(0);
+    }
+
+    .action-btn-outline {
+      background: transparent;
+      color: var(--accent-color);
+      border: 2px solid var(--accent-color);
+      margin-right: 0.5rem;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .tab-buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-btn {
+      background: var(--bg-card);
+      color: var(--text-color);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .like-item {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .chart-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3rem;
+      margin: 2rem 0;
+    }
+
+    .chart-wrapper {
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+      height: 450px;
+    }
+
+    .chart-title {
+      font-size: 1.4rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      color: var(--accent-color);
+    }
+
+    .no-data-message {
+      text-align: center;
+      color: #a5a0b9;
+      font-size: 1.1rem;
+      margin: 2rem 0;
+    }
+
+    @media (max-width: 768px) {
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 
 <body>
-<div layout:fragment="content">
-  <h1>User List Page</h1>
 
+<div layout:fragment="content" class="content-container">
+  <h1 class="page-title">User Profile</h1>
 
-  <button class="mypage-btn" th:onclick="'location.href=\'' + @{/users/modify} + '\''">
-    정보 수정하기
-  </button>
-  <div th:text="'아이디 : '+${userId}">아이디</div>
-  <div th:text="'유저이름 : '+${username}">유저이름</div>
-  <div th:text="'가입일 : '+${createdAt}">가입일</div>
-  <div th:text="'수정일 : '+${updatedAt}">수정일</div>
-  <div th:text="'장르 : '+${genre}"> 장르</div>
-  <div th:text="'시대 : '+${periods}"> 시대</div>
-  <div th:text="'국가 : '+${countries}"> 국가</div>
+  <div class="user-info-card">
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-label">아이디</div>
+        <div class="info-value" th:text="${userId}">아이디</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">유저이름</div>
+        <div class="info-value" th:text="${username}">유저이름</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">가입일</div>
+        <div class="info-value" th:text="${createdAt}">가입일</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">수정일</div>
+        <div class="info-value" th:text="${updatedAt}">수정일</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">선호 장르</div>
+        <div class="info-value" th:text="${genre}">장르</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">선호 시대</div>
+        <div class="info-value" th:text="${periods}">시대</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">선호 국가</div>
+        <div class="info-value" th:text="${countries}">국가</div>
+      </div>
+    </div>
+  </div>
 
+  <div class="btn-group">
+    <button class="action-btn" th:onclick="'location.href=\'' + @{/users/modify} + '\''">
+      정보 수정하기
+    </button>
+    <button class="action-btn action-btn-outline" th:onclick="'location.href=\'' + @{/users/like} + '\''">
+      좋아요 목록조회
+    </button>
+  </div>
 
-
-  <button class="mypage-btn" th:onclick="'location.href=\'' + @{/users/like} + '\''">
-    좋아요 목록조회
-  </button>
-
-  <div>
-    <button class="mypage-btn" onclick="loadTab('books')">도서</button>
-    <button class="mypage-btn" onclick="loadTab('movies')">영화</button>
-    <button class="mypage-btn" onclick="loadTab('musics')">음악</button>
+  <div class="tab-buttons">
+    <button class="tab-btn" id="books-tab" onclick="loadTab('books')">도서</button>
+    <button class="tab-btn" id="movies-tab" onclick="loadTab('movies')">영화</button>
+    <button class="tab-btn" id="musics-tab" onclick="loadTab('musics')">음악</button>
   </div>
 
   <!-- 도서 -->
   <div id="books" class="like-item" style="display: none;">
-    <h2 th:if="${!#lists.isEmpty(LikeBookGenre)}" th:text="${username}+'님이 가장 선호하는 장르는'"></h2>
-    <h2 th:if="${#lists.isEmpty(LikeBookGenre)}" th:text="${username} + '님이 아직 추천받고 좋아한 책이 없어요.'"></h2>
-    <canvas id="bookChart" width="300" height="300"></canvas>
-
-    <h2>전체 사용자가 가장 선호하는 장르는</h2>
-    <canvas id="popularBookChart" width="300" height="300"></canvas>
+    <div th:if="${!#lists.isEmpty(LikeBookGenre)}" class="chart-container">
+      <div class="chart-wrapper">
+        <h2 class="chart-title" th:text="${username}+'님이 가장 선호하는 장르'"></h2>
+        <canvas id="bookChart" height="400"></canvas>
+      </div>
+      <div class="chart-wrapper">
+        <h2 class="chart-title">전체 사용자가 가장 선호하는 장르</h2>
+        <canvas id="popularBookChart" height="400"></canvas>
+      </div>
+    </div>
+    <div th:if="${#lists.isEmpty(LikeBookGenre)}" class="no-data-message">
+      <h2 th:text="${username} + '님이 아직 추천받고 좋아한 책이 없어요.'"></h2>
+      <p>새로운 책을 탐색하고 좋아요를 눌러보세요!</p>
+    </div>
   </div>
 
   <!-- 영화 -->
   <div id="movies" class="like-item" style="display: none;">
-    <h2 th:if="${!#lists.isEmpty(LikeMovieGenre)}" th:text="${username}+'님이 가장 선호하는 장르는'"></h2>
-    <h2 th:if="${#lists.isEmpty(LikeMovieGenre)}" th:text="${username} + '님이 아직 추천받고 좋아한 영화가 없어요.'"></h2>
-    <canvas id="movieChart" width="300" height="300"></canvas>
-
-    <h2>전체 사용자가 가장 선호하는 장르는</h2>
-    <canvas id="popularMovieChart" width="300" height="300"></canvas>
+    <div th:if="${!#lists.isEmpty(LikeMovieGenre)}" class="chart-container">
+      <div class="chart-wrapper">
+        <h2 class="chart-title" th:text="${username}+'님이 가장 선호하는 장르'"></h2>
+        <canvas id="movieChart" height="400"></canvas>
+      </div>
+      <div class="chart-wrapper">
+        <h2 class="chart-title">전체 사용자가 가장 선호하는 장르</h2>
+        <canvas id="popularMovieChart" height="400"></canvas>
+      </div>
+    </div>
+    <div th:if="${#lists.isEmpty(LikeMovieGenre)}" class="no-data-message">
+      <h2 th:text="${username} + '님이 아직 추천받고 좋아한 영화가 없어요.'"></h2>
+      <p>새로운 영화를 탐색하고 좋아요를 눌러보세요!</p>
+    </div>
   </div>
 
   <!-- 음악 -->
   <div id="musics" class="like-item" style="display: none;">
-    <h2 th:if="${!#lists.isEmpty(LikeMusicGenre)}" th:text="${username}+'님이 가장 선호하는 장르는'"></h2>
-    <h2 th:if="${#lists.isEmpty(LikeMusicGenre)}" th:text="${username} + '님이 아직 추천받고 좋아한 음악이 없어요.'"></h2>
-    <canvas id="musicChart" width="300" height="300"></canvas>
-
-    <h2>전체 사용자가 가장 선호하는 장르는</h2>
-    <canvas id="popularMusicChart" width="300" height="300"></canvas>
+    <div th:if="${!#lists.isEmpty(LikeMusicGenre)}" class="chart-container">
+      <div class="chart-wrapper">
+        <h2 class="chart-title" th:text="${username}+'님이 가장 선호하는 장르'"></h2>
+        <canvas id="musicChart" height="400"></canvas>
+      </div>
+      <div class="chart-wrapper">
+        <h2 class="chart-title">전체 사용자가 가장 선호하는 장르</h2>
+        <canvas id="popularMusicChart" height="400"></canvas>
+      </div>
+    </div>
+    <div th:if="${#lists.isEmpty(LikeMusicGenre)}" class="no-data-message">
+      <h2 th:text="${username} + '님이 아직 추천받고 좋아한 음악이 없어요.'"></h2>
+      <p>새로운 음악을 탐색하고 좋아요를 눌러보세요!</p>
+    </div>
   </div>
 
   <!-- 탭 & 차트 JS -->
@@ -73,8 +304,6 @@
     const mostLikeMovieGenre = /*[[${mostLikeMovieGenre}]]*/ [];
     const likeBookGenre = /*[[${LikeBookGenre}]]*/ [];
     const mostLikeBookGenre = /*[[${mostLikeBookGenre}]]*/ [];
-
-
 
     function extractData(list) {
       if (!Array.isArray(list)) return { labels: [], values: [] };
@@ -132,20 +361,43 @@
     const finalMovieData = fillDataWithPopular(movieData, popularMovieData);
     const finalBookData = fillDataWithPopular(bookData, popularBookData);
 
-    console.log(finalMovieData);
-
     const colors = {
-      blue: { bg: 'rgba(54, 162, 235, 0.2)', border: 'rgba(54, 162, 235, 1)' },
-      red: { bg: 'rgba(255, 99, 132, 0.2)', border: 'rgba(255, 99, 132, 1)' },
-      green: { bg: 'rgba(75, 192, 192, 0.2)', border: 'rgba(75, 192, 192, 1)' },
-      orange: { bg: 'rgba(255, 159, 64, 0.2)', border: 'rgba(255, 159, 64, 1)' },
-      purple: { bg: 'rgba(153, 102, 255, 0.2)', border: 'rgba(153, 102, 255, 1)' },
-      yellow: { bg: 'rgba(255, 206, 86, 0.2)', border: 'rgba(255, 206, 86, 1)' }
+      blue: {
+        bg: 'rgba(106, 61, 232, 0.2)',
+        border: 'rgba(106, 61, 232, 0.8)',
+        point: 'rgba(138, 85, 255, 1)'
+      },
+      red: {
+        bg: 'rgba(255, 99, 132, 0.2)',
+        border: 'rgba(255, 99, 132, 0.8)',
+        point: 'rgba(255, 99, 132, 1)'
+      },
+      green: {
+        bg: 'rgba(75, 192, 192, 0.2)',
+        border: 'rgba(75, 192, 192, 0.8)',
+        point: 'rgba(75, 192, 192, 1)'
+      },
+      orange: {
+        bg: 'rgba(255, 159, 64, 0.2)',
+        border: 'rgba(255, 159, 64, 0.8)',
+        point: 'rgba(255, 159, 64, 1)'
+      },
+      purple: {
+        bg: 'rgba(153, 102, 255, 0.2)',
+        border: 'rgba(153, 102, 255, 0.8)',
+        point: 'rgba(153, 102, 255, 1)'
+      },
+      yellow: {
+        bg: 'rgba(255, 206, 86, 0.2)',
+        border: 'rgba(255, 206, 86, 0.8)',
+        point: 'rgba(255, 206, 86, 1)'
+      }
     };
 
     function makeRadarChart(canvasId, label, data, color) {
       const ctx = document.getElementById(canvasId)?.getContext('2d');
       if (!ctx || data.labels.length === 0) return;
+
       return new Chart(ctx, {
         type: 'radar',
         data: {
@@ -156,34 +408,71 @@
             fill: true,
             backgroundColor: color.bg,
             borderColor: color.border,
-            pointBackgroundColor: '#000000',
+            pointBackgroundColor: color.point,
             pointBorderColor: '#FFFFFF',
             pointHoverBackgroundColor: '#FFFFFF',
-            pointHoverBorderColor: color.border
+            pointHoverBorderColor: color.border,
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6
           }]
         },
         options: {
-          responsive: false,
+          responsive: true,
+          maintainAspectRatio: true,
           scales: {
             r: {
-              angleLines: { display: true },
-              suggestedMin: 0,
-              suggestedMax: Math.max(...data.values, 1),
-              ticks:{color : 'rgba(255, 255, 255, 0.7)', backdropColor : 'rgba(255, 255, 255, 0)'},
-              pointLabels: {
-                font: { size: 14 },
-                color: '#FFFFFF',
-
+              angleLines: {
+                display: true,
+                color: 'rgba(255, 255, 255, 0.1)'
               },
-
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              },
+              suggestedMin: 0,
+              suggestedMax: Math.max(...data.values, 1) + 1,
+              ticks: {
+                color: 'rgba(255, 255, 255, 0.7)',
+                backdropColor: 'rgba(0, 0, 0, 0)',
+                font: {
+                  size: 10
+                }
+              },
+              pointLabels: {
+                font: {
+                  size: 14,
+                  weight: 'bold'
+                },
+                color: '#FFFFFF'
+              }
             }
-
           },
           plugins: {
-            legend: { display: false },
-            title: { display: false }
-
-
+            legend: {
+              display: false
+            },
+            tooltip: {
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+              titleFont: {
+                size: 14,
+                weight: 'bold'
+              },
+              bodyFont: {
+                size: 12
+              },
+              padding: 10,
+              cornerRadius: 6,
+              displayColors: false
+            }
+          },
+          elements: {
+            line: {
+              tension: 0.2 // 부드러운 곡선
+            }
+          },
+          animation: {
+            duration: 1500,
+            easing: 'easeOutQuart'
           }
         }
       });
@@ -196,10 +485,21 @@
     };
 
     function loadTab(tabName) {
+      // 모든 콘텐츠 숨기기
       const tabs = document.querySelectorAll('.like-item');
       tabs.forEach(tab => tab.style.display = 'none');
+
+      // 모든 탭 버튼 비활성화
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      tabButtons.forEach(button => button.classList.remove('active'));
+
+      // 선택된 탭 보이기
       document.getElementById(tabName).style.display = 'block';
 
+      // 선택된 탭 버튼 활성화
+      document.getElementById(`${tabName}-tab`).classList.add('active');
+
+      // 차트 초기화 (처음 열때만)
       if (!isChartInitialized[tabName]) {
         if (tabName === 'books') {
           makeRadarChart("bookChart", "내 책 선호", finalBookData, colors.purple);
@@ -217,8 +517,9 @@
       }
     }
 
+    // 페이지 로드 시 기본 탭 열기
     document.addEventListener("DOMContentLoaded", function () {
-      loadTab('books'); // 기본 탭 오픈
+      loadTab('books');
     });
   </script>
 </div>
