@@ -215,74 +215,86 @@
         font-weight: bold;
       }
 
-      .modal {
-        display: none;
-        position: fixed;
-        z-index: 9999;
-        left: 0;
-        top: 0;
-        width: 83vw;
-        height: 80vh;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.3);
+      /*운세 모달*/
+
+      /* ───── 모달 배경 그대로 ───── */
+      .fortune-modal{
+        display:none;
+        position:fixed; inset:0; z-index:9999;
+        background:rgba(0,0,0,.45);
+        overflow:hidden;
+      }
+      .fortune-modal.active{display:flex;justify-content:center;align-items:center}
+
+      /* ───── 파티클(별빛) ───── */
+      .fortune-modal::before{
+        content:''; position:absolute; inset:-50%;
+        background:radial-gradient(white 1px,transparent 1px);
+        background-size:20px 20px;
+        opacity:.07; animation:twinkle 8s linear infinite;
+      }
+      @keyframes twinkle{
+        from{transform:translate3d(0,0,0)}
+        to  {transform:translate3d(50px,50px,0)}
       }
 
-      .modal-content {
-        background-color: #222;
-        margin: 10% auto;
-        padding: 30px;
-        border-radius: 8px;
-        height: auto;
-        width: auto;
-        color: white;
+      /* ───── 모달 박스 ───── */
+      .fortune-modal-content{
+        overflow: hidden; /* 모달 밖으로 넘치는 글씨 숨기기 */
         position: relative;
-        z-index: 10000;
+        /* 기존 스타일 유지 */
+        width: min(600px, 90%);
+        padding: 50px 40px;
+        background: linear-gradient(145deg, #222 30%, #2d0054 130%);
+        border-radius: 16px;
+        box-shadow: 0 0 25px rgba(255, 204, 102, .45),
+        0 0 60px rgba(102, 153, 255, .25);
+        color: #fff;
+        animation: dropIn .7s cubic-bezier(.25, .85, .4, 1.1) forwards;
       }
 
-      /*.modal-backdrop::before {*/
-      /*  content: '';*/
-      /*  position: absolute;*/
-      /*  top: 0;*/
-      /*  left: 0;*/
-      /*  width: 100%;*/
-      /*  height: 100%;*/
-      /*  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1), transparent 70%);*/
-      /*  animation: aura 4s ease-in-out infinite alternate;*/
-      /*}*/
+      .scrolling-wrapper {
+        overflow: hidden; /* 글씨가 넘치면 숨김 */
+        width: 100%;      /* 모달 너비에 맞춤 */
+        box-sizing: border-box;
+      }
+      /* 빛나는 오라 */
+      .fortune-modal-content::after{
+        content:''; position:absolute; inset:-40%;
+        background:conic-gradient(from 0deg,#ffcc66 0 10%, transparent 40% 60%, #6699ff 85% 100%);
+        filter:blur(45px); opacity:.18; animation:rotate 6s linear infinite;
+        pointer-events:none;
+      }
 
-      /*@keyframes aura {*/
-      /*  from {*/
-      /*    transform: scale(1);*/
-      /*    opacity: 0.1;*/
-      /*  }*/
-      /*  to {*/
-      /*    transform: scale(1.1);*/
-      /*    opacity: 0.2;*/
-      /*  }*/
-      /*}*/
+      @keyframes dropIn{
+        0%  {transform:translateY(-120px) scale(.8); opacity:0}
+        80% {transform:translateY(10px)  scale(1);   opacity:1}
+        100%{transform:translateY(0)     scale(1)}
+      }
+      @keyframes rotate{to{transform:rotate(360deg)}}
 
-      /*!* 별빛 효과 *!*/
-      /*.modal-backdrop::before {*/
-      /*  content: '';*/
-      /*  position: absolute;*/
-      /*  top: -50%;*/
-      /*  left: -50%;*/
-      /*  width: 200%;*/
-      /*  height: 200%;*/
-      /*  background: radial-gradient(white 1px, transparent 1px);*/
-      /*  background-size: 20px 20px;*/
-      /*  opacity: 0.05;*/
-      /*  animation: twinkle 5s linear infinite;*/
-      /*}*/
+      .fortune-result{
+        white-space: nowrap;
+        width: max-content; /* 텍스트 길이에 맞게 넓이 조절 */
+        position: relative;
+      }
 
-      /*@keyframes twinkle {*/
-      /*  0% {*/
-      /*    transform: translate(0, 0);*/
-      /*  }*/
-      /*  100% {*/
-      /*    transform: translate(10px, 10px);*/
-      /*  }*/
-      /*}*/
+      .scrolling-text {
+        animation-name: scroll-left;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        animation-duration: 15s; /* 필요에 따라 속도 조절 */
+      }
+
+      @keyframes scroll-left {
+        0% {
+          transform: translateX(100%);
+        }
+        100% {
+          transform: translateX(-100%);
+        }
+      }
+
 
       .close-btn {
         position: absolute;
@@ -549,13 +561,15 @@
         display:block;
       }
 
+      /*검색 모달*/
+
       /* 모달 배경 */
       #detailModal{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.75);
         justify-content:center;align-items:center}
       #detailModal.active{display:flex}
 
       /* 모달 내용 */
-      .modal-content{display:flex;max-width:900px;width:90%;height:70vh;overflow:hidden;border-radius:8px}
+      .search-modal-content{display:flex;max-width:900px;width:90%;height:70vh;overflow:hidden;border-radius:8px}
       .modal-bg{flex:1 1 55%;object-fit:cover}
       .modal-info{flex:1 1 45%;background:#000;color:#fff;padding:40px 50px;position:relative;
         display:flex;flex-direction:column;gap:20px;overflow-y:auto}
