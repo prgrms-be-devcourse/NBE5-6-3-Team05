@@ -22,7 +22,7 @@ public class SongDetailsDto {
     private Boolean status;
 
     public SongDetailsDto(String id, String name, String artist, LocalDate releasedAt, LocalDate createdAt,
-        String genre, String description, String songImg, String lyrics, String summary, String externalLink) {
+        String genre, String description, String songImg, String lyrics, String summary) {
         this.id = id;
         this.name = name;
         this.artist = artist;
@@ -34,7 +34,7 @@ public class SongDetailsDto {
         this.lyrics = lyrics;
         this.summary = summary;
         this.status = false;
-        this.externalLink = externalLink;
+        this.externalLink = "https://www.google.com/search?q="+name;
     }
 
     public static SongDetailsDto from(Music music){
@@ -48,8 +48,7 @@ public class SongDetailsDto {
             music.getDescription(),
             music.getThumbnail(),
             music.getLyrics(),
-            music.getSummary(),
-            "https://www.google.com/search?q="+music.getTitle()
+            music.getSummary()
         );
     }
 }

@@ -19,6 +19,8 @@ public class SongDto {
         this.id = id;
         this.name = name;
         this.imgUrl = imgUrl;
+        this.status =false;
+        this.externalLink = "https://www.google.com/search?q="+name;
     }
 
 

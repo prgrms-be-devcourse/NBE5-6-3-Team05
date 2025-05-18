@@ -21,7 +21,7 @@ public class BookDetailsDto {
     private String summary;
 
     public BookDetailsDto(String id, String name, String author, LocalDate publishedAt, String description,
-        String bookImg, String genre, String publisher, String summary, String externalLink) {
+        String bookImg, String genre, String publisher, String summary) {
         this.id = id;
         this.name = name;
         this.author = author;
@@ -32,7 +32,7 @@ public class BookDetailsDto {
         this.publisher = publisher;
         this.summary = summary;
         this.status = false;
-        this.externalLink = externalLink;
+        this.externalLink = "https://www.google.com/search?q="+name;
     }
 
     public static BookDetailsDto from(Book book){
@@ -45,8 +45,7 @@ public class BookDetailsDto {
             book.getImage(),
             book.getGenre(),
             book.getPublisher(),
-            book.getSummary(),
-            "https://www.google.com/search?q="+book.getTitle()
+            book.getSummary()
         );
     }
 }

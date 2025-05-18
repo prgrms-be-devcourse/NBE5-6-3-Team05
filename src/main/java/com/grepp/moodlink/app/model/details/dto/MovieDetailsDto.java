@@ -22,7 +22,7 @@ public class MovieDetailsDto {
     private LocalDate releaseDate;
 
     public MovieDetailsDto(String id, String name, List<String> genre, String description,
-        LocalDate createdAt, LocalDate releaseDate, String movieImg, String externalLink) {
+        LocalDate createdAt, LocalDate releaseDate, String movieImg) {
         this.id = id;
         this.name = name;
         this.genre = genre;
@@ -30,7 +30,7 @@ public class MovieDetailsDto {
         this.createdAt = createdAt;
         this.releaseDate = releaseDate;
         this.movieImg = movieImg;
-        this.externalLink = externalLink;
+        this.externalLink = "https://www.google.com/search?q="+name;
         this.status = false;
     }
 
@@ -46,8 +46,7 @@ public class MovieDetailsDto {
             movie.getDescription(),
             movie.getCreatedAt(),
             movie.getReleaseDate(),
-            movie.getThumbnail(),
-            "https://www.google.com/search?q="+movie.getTitle()
+            movie.getThumbnail()
         );
 
     }
