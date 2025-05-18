@@ -516,7 +516,20 @@
 
       /*검색결과 디자인*/
       /* 카드 공통 */
-      .card-container{display:flex;flex-wrap:wrap;gap:16px}
+      .card-container{
+        display:flex;flex-wrap:wrap;gap:16px
+      }
+
+      /* 공통 호버 효과 */
+      .card-container > div:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0,0,0,.4);
+      }
+
+      /* 부드러운 애니메이션 */
+      .card-container > div {
+        transition: transform .25s ease, box-shadow .25s ease;
+      }
 
       /* 영화 */
       .card-movie{

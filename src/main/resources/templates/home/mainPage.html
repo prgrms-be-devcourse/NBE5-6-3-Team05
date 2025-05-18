@@ -19,7 +19,7 @@
     <div class="category">
       <div class="category-card" onclick="showContentInfo('music')">
         <img th:src="@{${thumbnail[0]}}" alt="음악">
-        <p>음악</p>
+        <h5>음악</h5>
         <div class="content-info" id="music-info">
           <h6 class="content-title" th:text="${people[0]}"></h6>
           <ul>
@@ -31,7 +31,7 @@
 
       <div class="category-card" onclick="showContentInfo('movie')">
         <img th:src="@{${thumbnail[1]}}" alt="영화">
-        <p>영화</p>
+        <h5>영화</h5>
         <div class="content-info" id="movie-info">
           <br>
           <h6 class="content-title" th:text="${title[1]}"></h6>
@@ -41,7 +41,7 @@
 
       <div class="category-card" onclick="showContentInfo('book')">
         <img th:src="@{${thumbnail[2]}}" alt="도서">
-        <p>도서</p>
+        <h5>도서</h5>
         <div class="content-info" id="book-info">
           <h6 class="content-title" th:text="${people[1]}"></h6>
           <ul>
