@@ -22,4 +22,6 @@ public interface LikeDetailMusicRepository extends JpaRepository<LikeDetailMusic
     List<LikeDetailMusic> findByLikesId(Long likeId);
 
     void deleteByMusicIdAndLikesId(String id, Long likesId);
+
+    boolean existsByLikesIdAndMusicId(Long LikesId, String id);
 }

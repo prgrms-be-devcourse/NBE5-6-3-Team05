@@ -22,4 +22,6 @@ public interface LikeDetailMoviesRepository extends JpaRepository<LikeDetailMovi
 
 
     void deleteByMovieIdAndLikesId(String id, Long likesId);
+
+    boolean existsByLikesIdAndMovieId(Long likesId, String movieId);
 }

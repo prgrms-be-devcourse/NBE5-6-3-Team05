@@ -19,4 +19,6 @@ public interface LikeDetailBooksRepository extends JpaRepository<LikeDetailBooks
     List<LikeDetailBooks> findByLikesId(Long likeId);
 
     void deleteByBookIdAndLikesId(String id, Long likesId);
+
+    boolean existsByLikesIdAndBookId(Long LikesId, String id);
 }
