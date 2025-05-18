@@ -46,10 +46,10 @@ public class MovieService {
             movie.setId("M" + count);
             movie.setTitle(dto.getTitle());
             movie.setDescription(dto.getOverview());
-            String dateStr = dto.getReleaseDate();
+            LocalDate dateStr = dto.getReleaseDate();
             LocalDate releaseDate = null;
-            if (dateStr != null && !dateStr.isBlank()) {
-                releaseDate = LocalDate.parse(dateStr, formatter);
+            if (dateStr != null ) {
+                releaseDate = dateStr;
             }
             movie.setReleaseDate(releaseDate);
             movie.setThumbnail(
@@ -146,21 +146,27 @@ public class MovieService {
     public void deleteMovie(String id) {
         movieRepository.findById(id).ifPresent(Movie::unActivated);
     }
+
     @Transactional
-    public List<Movie> parseRecommend(String movieResult) {
-        List<String> titles = new ArrayList<>();
-        Pattern pattern = Pattern.compile("\\d+\\.\\s*(.+?)\\s*:");
-        Matcher matcher = pattern.matcher(movieResult);
+    public List<String> parseRecommend(String movieResult) {
+        List<String> result = new ArrayList<>();
+        if (movieResult == null || movieResult.isBlank()) return result;
 
-        while (matcher.find()) {
-            titles.add(matcher.group(1).trim());
+        String line = movieResult.trim().replaceFirst("^[가-힣a-zA-Z0-9\\s:]+", "");
+
+        Matcher m = Pattern.compile("\"([^\"]+)\"").matcher(line);
+        while (m.find()) {
+            String title = m.group(1).trim();
+            if (title.startsWith("[") && title.endsWith("]")) {
+                title = title.substring(1, title.length()-1).trim();
+            }
+            result.add(title);
         }
-        List<Movie> movies = new ArrayList<>();
-        titles.forEach(title -> {
-            System.out.println(movieRepository.findByTitle(title));
-            movies.add(movieRepository.findByTitle(title));
-        });
-
-        return movies;
+        return result.stream()
+                .map(movieRepository::findIdByTitle)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

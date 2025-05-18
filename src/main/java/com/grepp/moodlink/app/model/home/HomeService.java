@@ -1,8 +1,13 @@
 package com.grepp.moodlink.app.model.home;
 
+import com.grepp.moodlink.app.model.data.ContentDto;
 import com.grepp.moodlink.app.model.data.book.BookRepositoryImpl;
+import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.movie.MovieRepositoryImpl;
+import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
 import com.grepp.moodlink.app.model.data.music.MusicRepositoryImpl;
+import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
+import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.member.MemberRepositoryImpl;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,17 +69,15 @@ public class HomeService {
         return title;
     }
 
-    public List<String> findDescription() {
-        List<String> description = new ArrayList<>();
+    public List<MusicDto> searchMusicContent(String contentName) {
+        return musicRepositoryImpl.searchContent(contentName);
+    }
 
-        String music = musicRepositoryImpl.findDescription();
-        String movie = movieRepositoryImpl.findDescription();
-        String book = bookRepositoryImpl.findDescription();
+    public List<MovieDto> searchMovieContent(String contentName) {
+        return movieRepositoryImpl.searchContent(contentName);
+    }
 
-        description.add(music);
-        description.add(movie);
-        description.add(book);
-
-        return description;
+    public List<BookDto> searchBookContent(String contentName) {
+        return bookRepositoryImpl.searchContent(contentName);
     }
 }

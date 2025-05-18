@@ -1,4 +1,4 @@
-package com.grepp.moodlink.infra.config;
+package com.grepp.moodlink.infra.llm;
 
 import com.grepp.moodlink.app.model.home.LlamaFortuneAiService;
 import dev.langchain4j.model.openai.OpenAiChatModel;

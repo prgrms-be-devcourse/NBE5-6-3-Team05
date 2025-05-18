@@ -43,8 +43,8 @@ public class DetailsService {
         bookDetailsDto.setExternalLink(googleStr+bookDetailsDto.getName());
         bookDetailsDto.setStatus(false);
 
-        // TODO: 비회원으로 수정해야 함.
-        if (userId.equals("anonymous")){
+        // 비회원 시 Like테이블 조회 없이 바로 반환
+        if (userId.isEmpty()){
             return bookDetailsDto;
         }
 
@@ -54,17 +54,16 @@ public class DetailsService {
             return bookDetailsDto;
         }
 
-        Long likeId;
-        LikeDetailBooks likeDetailBooks;
-        for(Likes likes1: likes){
-            likeId = likes1.getId();
-            likeDetailBooks = likeDetailBooksRepository.findByLikesId(likeId);
-            if (likeDetailBooks != null){
-                if (id.equals(likeDetailBooksRepository.findByLikesId(likeId).getBookId())){
-                    bookDetailsDto.setStatus(true);
-                }
+        // Like테이블 조회 후 현재 상세정보를 확인하는 컨텐츠와 같은 id의 컨텐츠가 있으면 status를 true로 변환
+        Long likeId = likes.getFirst().getId();
+        List<LikeDetailBooks> likeDetailBooks = likeDetailBooksRepository.findByLikesId(likeId);
+        for(LikeDetailBooks tempBook: likeDetailBooks){
+            if(tempBook.getBookId().equals(bookDetailsDto.getId())){
+                bookDetailsDto.setStatus(true);
+                break;
             }
         }
+
         return bookDetailsDto;
     }
 
@@ -75,8 +74,8 @@ public class DetailsService {
         songDetailsDto.setExternalLink(googleStr+songDetailsDto.getName());
         songDetailsDto.setStatus(false);
 
-        // TODO: 비회원으로 수정해야 함.
-        if (userId.equals("anonymous")){
+        // 비회원 시 Like테이블 조회 없이 바로 반환
+        if (userId.isEmpty()){
             return songDetailsDto;
         }
 
@@ -86,15 +85,13 @@ public class DetailsService {
             return songDetailsDto;
         }
 
-        Long likeId;
-        LikeDetailMusic likeDetailMusic;
-        for(Likes likes1: likes){
-            likeId = likes1.getId();
-            likeDetailMusic = likeDetailMusicRepository.findByLikesId(likeId);
-            if (likeDetailMusic != null){
-                if (id.equals(likeDetailMusicRepository.findByLikesId(likeId).getMusicId())){
-                    songDetailsDto.setStatus(true);
-                }
+        // Like테이블 조회 후 현재 상세정보를 확인하는 컨텐츠와 같은 id의 컨텐츠가 있으면 status를 true로 변환
+        Long likeId = likes.getFirst().getId();
+        List<LikeDetailMusic> likeDetailMusics = likeDetailMusicRepository.findByLikesId(likeId);
+        for(LikeDetailMusic tempMusic: likeDetailMusics){
+            if(tempMusic.getMusicId().equals(songDetailsDto.getId())){
+                songDetailsDto.setStatus(true);
+                break;
             }
         }
         return songDetailsDto;
@@ -108,8 +105,8 @@ public class DetailsService {
         movieDetailsDto.setExternalLink(googleStr+movieDetailsDto.getName());
         movieDetailsDto.setStatus(false);
 
-        // TODO: 비회원으로 수정해야 함.
-        if (userId.equals("anonymous")){
+        // 비회원 시 Like테이블 조회 없이 바로 반환
+        if (userId.isEmpty()){
             return movieDetailsDto;
         }
 
@@ -119,17 +116,16 @@ public class DetailsService {
             return movieDetailsDto;
         }
 
-        Long likeId;
-        LikeDetailMovies likeDetailMovies;
-        for(Likes likes1: likes){
-            likeId = likes1.getId();
-            likeDetailMovies = likeDetailMoviesRepository.findByLikesId(likeId);
-            if (likeDetailMovies != null){
-                if (id.equals(likeDetailMoviesRepository.findByLikesId(likeId).getMovieId())){
-                    movieDetailsDto.setStatus(true);
-                }
+        // Like테이블 조회 후 현재 상세정보를 확인하는 컨텐츠와 같은 id의 컨텐츠가 있으면 status를 true로 변환
+        Long likeId = likes.getFirst().getId();
+        List<LikeDetailMovies> likeDetailMovies = likeDetailMoviesRepository.findByLikesId(likeId);
+        for(LikeDetailMovies tempMovie: likeDetailMovies){
+            if(tempMovie.getMovieId().equals(movieDetailsDto.getId())){
+                movieDetailsDto.setStatus(true);
+                break;
             }
         }
+
         return movieDetailsDto;
     }
 }

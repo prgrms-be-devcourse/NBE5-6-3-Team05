@@ -40,9 +40,9 @@
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>org.springframework.ai</groupId>
-        <artifactId>spring-ai-bom</artifactId>
-        <version>1.0.0-M8</version>
+        <groupId>dev.langchain4j</groupId>
+        <artifactId>langchain4j-bom</artifactId>
+        <version>1.0.0-beta3</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -153,21 +153,35 @@
       <version>2.15.3</version>
     </dependency>
 
-    <!--  로컬 Ollama   -->
     <dependency>
-      <groupId>org.springframework.ai</groupId>
-      <artifactId>spring-ai-starter-model-ollama</artifactId>
-      <version>1.0.0-M8</version>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j-google-ai-gemini-spring-boot-starter</artifactId>
+      <version>1.0.0-beta3</version>
+    </dependency>
+    <dependency>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j-spring-boot-starter</artifactId>
+      <version>1.0.0-beta3</version>
+    </dependency>
+    <dependency>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j-embeddings-all-minilm-l6-v2</artifactId>
+      <version>1.0.0-beta3</version>
     </dependency>
 
-<!--&lt;!&ndash;    langchain4j&ndash;&gt;-->
-<!--    <dependency>-->
-<!--      <groupId>dev.langchain4j</groupId>-->
-<!--      <artifactId>langchain4j-bom</artifactId>-->
-<!--      <version>1.0.0-beta3</version>-->
-<!--      <type>pom</type>-->
-<!--      <scope>import</scope>-->
-<!--    </dependency>-->
+    <dependency>
+      <groupId>org.springframework.retry</groupId>
+      <artifactId>spring-retry</artifactId>
+    </dependency>
+
+    <!--&lt;!&ndash;    langchain4j&ndash;&gt;-->
+    <!--    <dependency>-->
+    <!--      <groupId>dev.langchain4j</groupId>-->
+    <!--      <artifactId>langchain4j-bom</artifactId>-->
+    <!--      <version>1.0.0-beta3</version>-->
+    <!--      <type>pom</type>-->
+    <!--      <scope>import</scope>-->
+    <!--    </dependency>-->
 
     <dependency>
       <groupId>dev.langchain4j</groupId>
@@ -178,6 +192,25 @@
     <dependency>
       <groupId>dev.langchain4j</groupId>
       <artifactId>langchain4j-open-ai</artifactId> <!-- OpenAI 호환 API용 -->
+    </dependency>
+
+
+    <!--    &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-webflux &ndash;&gt;-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.springframework.boot</groupId>-->
+    <!--      <artifactId>spring-boot-starter-webflux</artifactId>-->
+    <!--    </dependency>-->
+
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-webflux -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
     </dependency>
 
 
