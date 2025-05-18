@@ -27,14 +27,16 @@
 
           <div>
             <div class="form-row"><label>제목</label><input th:field="*{title}" class="input-line"/></div>
-            <span th:errors="*{title}" class="helper-text" ></span>
+            <span class="helper-text form-row" th:if="${fieldErrors != null and fieldErrors.containsKey('title')}" th:text="${fieldErrors.title}"></span>
             <div class="form-row"><label>개봉일</label><input th:field="*{releaseDate}" class="input-line" type="date" /></div>
+            <span class="helper-text form-row" th:if="${fieldErrors != null and fieldErrors.containsKey('releaseDate')}" th:text="${fieldErrors.releaseDate}"></span>
           </div>
         </div>
 
         <div class="form-row" style="flex-direction: column; align-items: flex-start;">
           <label style="margin-bottom: 0.3rem;">장르</label>
           <div class="selected-genres" id="selected-genres">선택된 장르 없음</div>
+          <span class="helper-text form-row" th:if="${fieldErrors != null and fieldErrors.containsKey('genres')}" th:text="${fieldErrors.genres}"></span>
           <div class="genre-list">
 <!--            임시로 -->
             <div th:each="gen : ${genreList}">

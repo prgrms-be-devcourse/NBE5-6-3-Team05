@@ -35,6 +35,7 @@
         <div class="form-row" style="flex-direction: column; align-items: flex-start;">
           <label style="margin-bottom: 0.3rem;">장르</label>
           <div class="selected-genres" id="selected-genres">선택된 장르 없음</div>
+          <span class="helper-text form-row" th:if="${fieldErrors != null and fieldErrors.containsKey('genres')}" th:text="${fieldErrors.genres}"></span>
           <div class="genre-list" th:attr="data-selected-genre=${selectedGenre}">
 
             <!--            임시로 -->

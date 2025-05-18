@@ -27,11 +27,9 @@
 
           <div>
             <div class="form-row"><label>제목</label><input th:field="*{title}" class="input-line"/></div>
-            <span th:errors="*{title}" class="form-row" style="margin-left: 1.5rem" ></span>
-            <span th:if="${errorMessage}" class="form-row" style="margin-left: 1.5rem" th:text="${errorMessage}"></span>
+            <span class="helper-text form-row" th:if="${fieldErrors != null and fieldErrors.containsKey('title')}" th:text="${fieldErrors.title}"></span>
             <div class="form-row"><label>작가</label><input th:field="*{author}" class="input-line" type="text" /></div>
-            <span th:errors="*{author}" class="form-row" style="margin-left: 1.5rem"></span>
-            <span th:if="${errorMessage}" class="form-row" style="margin-left: 1.5rem" th:text="${errorMessage}"></span>
+            <span class="helper-text form-row" th:if="${fieldErrors != null and fieldErrors.containsKey('author')}" th:text="${fieldErrors.author}"></span>
               <div class="form-row"><label>발행일</label><input th:field="*{publishedDate}" class="input-line" type="date"/></div>
             <div class="form-row"><label>출판사</label><input th:field="*{publisher}" class="input-line" type="text" /></div>
           </div>
@@ -46,6 +44,7 @@
                     th:text="${gen.name}">
             </option>
           </select>
+          <span class="helper-text form-row" th:if="${fieldErrors != null and fieldErrors.containsKey('genre')}" th:text="${fieldErrors.genre}"></span>
         </div>
 
         <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
