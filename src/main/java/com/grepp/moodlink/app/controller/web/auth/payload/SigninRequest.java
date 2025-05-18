@@ -14,6 +14,4 @@ public class SigninRequest {
     @Size(min = 4, max = 15)
     private String password;
 
-    private String username;
-
 }

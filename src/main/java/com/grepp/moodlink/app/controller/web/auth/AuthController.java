@@ -3,9 +3,11 @@ package com.grepp.moodlink.app.controller.web.auth;
 import com.grepp.moodlink.app.controller.web.auth.payload.SigninRequest;
 import com.grepp.moodlink.app.controller.web.auth.payload.SignupRequest;
 import com.grepp.moodlink.app.model.member.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -22,7 +24,10 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public String postSignup(SignupRequest signupRequest) {
+    public String postSignup(@Valid SignupRequest signupRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "auth/signup";
+        }
         memberService.signup(signupRequest.toDto());
         return "redirect:/signin";
     }
