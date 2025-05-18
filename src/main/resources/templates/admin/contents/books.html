@@ -20,20 +20,18 @@
     <div class="main-contents">
       <a class="add-btn" href="books/add">+ 추가</a>
       <!-- 데이터 존재 시 -->
-      <div th:if="${page.content() != null}">
-        <div th:each="book : ${page.content()}" class="item-card">
-          <img th:src="@{${book.image}}" alt="썸네일">
-          <div class="item-info">
-            <span style="font-weight: bold" th:text="${book.title + ' (' + #temporals.format(book.publishedDate, 'yyyy.MM.dd') + ')'}">
-            제목 (발매일)
-            </span>
-            <div>작가: <span th:text="${book.author}">작가</span></div>
-            <div>장르: <span th:text="${book.genre}">장르</span></div>
-            <div>설명: <span class="description-text" th:text="${book.description}">설명</span></div>
-          </div>
-          <div class="item-buttons">
-            <a th:href="@{'/admin/books/modify/'+${book.isbn}}">수정</a>
-            <a class="delete-btn" th:attr="data-isbn=${book.isbn}">삭제</a>
+
+      <div class="item-grid" th:if="${page.content() != null}">
+        <div th:each="book : ${page.content()}">
+          <div class="item-card"
+               th:attr="data-isbn=${book.isbn}">
+            <div class="item-thumbnail">
+              <img th:src="${book.image}" alt="썸네일" style="width: 100%; height: 100%; object-fit: cover;"/>
+            </div>
+            <div class="item-details">
+              <div class="item-title" th:text="${book.title}">제목</div>
+              <div class="item-meta"><span th:text="${book.author}">작가</span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -44,34 +42,24 @@
       </div>
 
       <div class="pagination" th:insert="~{fragments :: frg_pagination}"></div>
-  </div>
+    </div>
   </div>
 </main>
 <div layout:fragment="scripts">
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".delete-btn")
-    .forEach((btn) => {
-      btn.addEventListener("click", async function (event) {
-        event.preventDefault();
-
-        const isbn = btn.dataset.isbn;
-        const url = `http://localhost:8080/api/admin/books/delete/${isbn}`;
-        const response = await fetch(
-            url, {
-              method: 'DELETE'
-            });
-
-        if (response) {
-          alert("정상적으로 삭제되었습니다.");
-          window.location.reload();
-        } else {
-          alert("문제가 발생하였습니다.")
-        }
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll(".item-card")
+      .forEach((card) => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => {
+          const isbn = card.dataset.isbn;
+          if (isbn) {
+            window.location.href = `/admin/books/modify/${isbn}`;
+          }
+        });
       });
     });
-  });
-</script>
+  </script>
 </div>
 </body>
 

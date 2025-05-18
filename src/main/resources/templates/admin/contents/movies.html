@@ -20,22 +20,17 @@
     <div class="main-contents">
       <a class="add-btn" href="movies/add">+ 추가</a>
       <!-- 데이터 존재 시 -->
-      <div th:if="${page.content() != null}">
-        <div th:each="movie : ${page.content()}" class="item-card">
-          <img th:src="@{${movie.thumbnail}}" alt="썸네일">
-          <div class="item-info">
-            <span style="font-weight: bold" th:text="${movie.title + ' (' + #temporals.format(movie.releaseDate, 'yyyy.MM.dd') + ')'}">
-            제목 (발매일)
-            </span>
-            <div>
-              장르:
-              <span th:each="genre : ${movie.genres}" style="display: inline-block; margin-right: 5px;" th:text="${genre.name}">장르</span>
+      <div class="item-grid" th:if="${page.content() != null}">
+        <div th:each="movie : ${page.content()}">
+          <div class="item-card"
+               th:attr="data-id=${movie.id}">
+            <div class="item-thumbnail">
+              <img th:src="${movie.thumbnail}" alt="썸네일" style="width: 100%; height: 100%; object-fit: cover;"/>
             </div>
-            <div>설명: <span class="description-text" th:text="${movie.description}">설명</span></div>
-          </div>
-          <div class="item-buttons">
-            <a th:href="@{'/admin/movies/modify/'+${movie.id}}">수정</a>
-            <a class="delete-btn" th:attr="data-id=${movie.id}">삭제</a>
+            <div class="item-details">
+              <div class="item-title" th:text="${movie.title}">제목</div>
+              <div class="item-meta" th:text="${'(' + #temporals.format(movie.releaseDate, 'yyyy.MM.dd') + ')'}"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -52,23 +47,13 @@
 <div layout:fragment="scripts">
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      document.querySelectorAll(".delete-btn")
-      .forEach((btn) => {
-        btn.addEventListener("click", async function (event) {
-          event.preventDefault();
-
-          const id = btn.dataset.id;
-          const url = `http://localhost:8080/api/admin/movies/delete/${id}`;
-          const response = await fetch(
-              url, {
-                method: 'DELETE'
-              });
-
-          if (response) {
-            alert("정상적으로 삭제되었습니다.");
-            window.location.reload();
-          } else {
-            alert("문제가 발생하였습니다.")
+      document.querySelectorAll(".item-card")
+      .forEach((card) => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => {
+          const id = card.dataset.id;
+          if (id) {
+            window.location.href = `/admin/movies/modify/${id}`;
           }
         });
       });

@@ -20,21 +20,17 @@
     <div class="main-contents">
       <a class="add-btn" href="music/add">+ 추가</a>
       <!-- 데이터 존재 시 -->
-      <div th:if="${page.content() != null}">
-        <div th:each="music : ${page.content()}" class="item-card">
-          <img th:src="@{${music.thumbnail}}" alt="썸네일">
-          <div class="item-info">
-            <span style="font-weight: bold" th:text="${music.title + ' (' + #temporals.format(music.releaseDate, 'yyyy.MM.dd') + ')'}">
-            제목 (발매일)
-            </span>
-            <div>작가: <span th:text="${music.singer}">가수</span></div>
-            <div>장르: <span th:text="${music.genre}">장르</span></div>
-            <div th:if="${music.description != null}">설명: <span class="description-text" th:text="${music.description}">설명</span></div>
-            <div th:if="${music.description == null}">가사: <span class="description-text" th:text="${music.lyrics}">가사</span></div>
-          </div>
-          <div class="item-buttons">
-            <a th:href="@{'/admin/music/modify/'+${music.id}}">수정</a>
-            <a class="delete-btn" th:attr="data-id=${music.id}">삭제</a>
+      <div class="item-grid" th:if="${page.content() != null}">
+        <div th:each="music : ${page.content()}">
+          <div class="item-card"
+               th:attr="data-id=${music.id}">
+            <div class="item-thumbnail">
+              <img th:src="${music.thumbnail}" alt="썸네일" style="width: 100%; height: 100%; object-fit: cover;"/>
+            </div>
+            <div class="item-details">
+              <div class="item-title" th:text="${music.title}">제목</div>
+              <div class="item-meta" th:text="${music.singer}">가수</div>
+            </div>
           </div>
         </div>
       </div>
@@ -51,23 +47,13 @@
 <div layout:fragment="scripts">
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      document.querySelectorAll(".delete-btn")
-      .forEach((btn) => {
-        btn.addEventListener("click", async function (event) {
-          event.preventDefault();
-
-          const id = btn.dataset.id;
-          const url = `http://localhost:8080/api/admin/music/delete/${id}`;
-          const response = await fetch(
-              url, {
-                method: 'DELETE'
-              });
-
-          if (response) {
-            alert("정상적으로 삭제되었습니다.");
-            window.location.reload();
-          } else {
-            alert("문제가 발생하였습니다.")
+      document.querySelectorAll(".item-card")
+      .forEach((card) => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => {
+          const id = card.dataset.id;
+          if (id) {
+            window.location.href = `/admin/music/modify/${id}`;
           }
         });
       });

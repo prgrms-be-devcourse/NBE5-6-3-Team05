@@ -19,6 +19,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 1rem;
 }
 
 .layout {
@@ -45,26 +46,7 @@ body {
 
 .main-contents {
   flex: 1;
-  padding: 0rem 1rem;
-}
-
-.item-card {
-  display: flex;
-  border: 1px solid #444;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  align-items: center;
-}
-
-.item-card img {
-  width: 80px;
-  height: 100px;
-  background-color: #ccc;
-  margin-right: 1rem;
-}
-
-.item-info {
-  flex: 1;
+  padding: 0 150px 0 1rem;
 }
 
 .item-buttons {
@@ -73,28 +55,8 @@ body {
   gap: 0.5rem;
 }
 
-.item-buttons a {
-  background: linear-gradient(to right, #A64DFF, #6A00FF);
-  border: none;
-  color: white;
-  padding: 0.4rem 1rem;
-  border-radius: 10px;
-  cursor: pointer;
-  align-items: center;
-}
-
 .helper-text{
   color: white;
-}
-
-.description-text {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;   /* ⬅ 2줄까지만 표시 */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.4em;
-  max-height: 2.8em;       /* line-height × 줄 수 */
 }
 
 .pagination {
@@ -127,4 +89,45 @@ body {
   text-align: center;
   padding: 3rem;
   color: #666;
+}
+
+
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.item-card {
+  display: flex;
+  gap: 1rem;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 10px;
+  color: black;
+}
+
+.item-thumbnail {
+  width: 120px;
+  height: 160px;
+  background-color: #ccc;
+  flex-shrink: 0;
+}
+
+.item-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.item-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.item-meta {
+  color: gray;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
 }

@@ -28,7 +28,7 @@
 
 
           <div>
-            <div class="form-row"><label>제목</label><div th:text="${book.title}"></div></div>
+            <div class="form-row"><label>제목</label><div th:text="${book.title}"></div> <a class="delete-btn" th:attr="data-isbn=${book.isbn}">삭제</a> </div>
             <div class="form-row"><label>작가</label><div th:text="${book.author}"></div></div>
             <div class="form-row"><label>발행일</label><input th:field="*{publishedDate}" th:value="${#temporals.format(publishedDate, 'yyyy-MM-dd')}"  class="input-line" type="date"/></div>
             <div class="form-row"><label>출판사</label><input th:field="*{publisher}" class="input-line" type="text" /></div>
@@ -79,6 +79,33 @@
         reader.onload = e => preview.style.backgroundImage = `url(${e.target.result})`;
         reader.readAsDataURL(file);
       }
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll(".delete-btn")
+      .forEach((btn) => {
+        btn.addEventListener("click", async function (event) {
+          event.preventDefault();
+
+          const confirmed = confirm("정말 삭제하시겠습니까?");
+
+          if(confirmed){
+
+            const isbn = btn.dataset.isbn;
+            const url = `http://localhost:8080/api/admin/books/delete/${isbn}`;
+            const response = await fetch(
+                url, {
+                  method: 'DELETE'
+                });
+
+            if (response) {
+              alert("정상적으로 삭제되었습니다.");
+              window.location.href = "/admin/books";
+            } else {
+              alert("문제가 발생하였습니다.")
+            }
+          }
+        });
+      });
     });
   </script>
 </div>
