@@ -8,6 +8,8 @@ import com.grepp.moodlink.app.model.data.music.MusicRepository;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.keyword.KeywordRepository;
 import com.grepp.moodlink.app.model.keyword.entity.KeywordSelection;
+import com.grepp.moodlink.infra.error.LLMServiceUnavailableException;
+import com.grepp.moodlink.infra.response.ResponseCode;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import jakarta.transaction.Transactional;
@@ -56,8 +58,13 @@ public class EmbeddingService {
                     "영화줄거리를 보고 한두 문장으로 요약해줘. 핵심 주제, 분위기, 특징을 중심으로 간결하게 써줘.\n\n[설명]: %s",
                     movie.getDescription()
             );
-            String response = chatLanguageModel.chat(prompt);
-            movie.setSummary(response);
+            String summary;
+            try {
+                summary = chatLanguageModel.chat(prompt);
+            } catch (ResourceAccessException e) {
+                throw new LLMServiceUnavailableException(ResponseCode.EXTERNAL_API_UNAVAILABLE, e);
+            }
+            movie.setSummary(summary);
             movieRepository.save(movie);
         }
     }
@@ -82,8 +89,12 @@ public class EmbeddingService {
                     "책소개를 보고 한두 문장으로 요약해줘. 핵심 주제, 분위기, 특징을 중심으로 간결하게 써줘.\n\n[설명]: %s",
                     book.getDescription()
             );
-            String summary = chatLanguageModel.chat(prompt);
-
+            String summary;
+            try {
+                summary = chatLanguageModel.chat(prompt);
+            } catch (ResourceAccessException e) {
+                throw new LLMServiceUnavailableException(ResponseCode.EXTERNAL_API_UNAVAILABLE, e);
+            }
             book.setSummary(summary);
             bookRepository.save(book);
         }
@@ -109,8 +120,12 @@ public class EmbeddingService {
                     "가사를 보고 한두 문장으로 요약해줘. 핵심 주제, 분위기, 특징을 중심으로 간결하게 써줘.\n\n[설명]: %s",
                     music.getLyrics()
             );
-            String summary = chatLanguageModel.chat(prompt);
-
+            String summary;
+            try {
+                summary = chatLanguageModel.chat(prompt);
+            } catch (ResourceAccessException e) {
+                throw new LLMServiceUnavailableException(ResponseCode.EXTERNAL_API_UNAVAILABLE, e);
+            }
             music.setSummary(summary);
 
             musicRepository.save(music);
