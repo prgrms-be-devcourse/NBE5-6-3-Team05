@@ -46,12 +46,19 @@
         <td align="center"><a href="https://github.com/lnvisibledragon"><img src="https://github.com/lnvisibledragon.png" width="100px;" alt="최종우"/></a></td>
         <td align="center"><a href="https://github.com/june3780"><img src="https://github.com/june3780.png" width="100px;" alt="안준희"/></a></td>
       </tr>
+<tr>
+        <td align="center"><sub><b>PM</b></sub></td>
+        <td align="center"><sub><b>TM</b></sub></td>
+        <td align="center"><sub><b>TM</b></sub></td>
+        <td align="center"><sub><b>TM</b></sub></td>
+        <td align="center"><sub><b>TM</b></sub></td>
+      </tr>
       <tr>
-        <td align="center"><a href="https://github.com/Leeka99"><sub><b>@Leeka</b></sub></a></td>
-        <td align="center"><a href="https://github.com/childstone"><sub><b>@childstone</b></sub></a></td>
-        <td align="center"><a href="https://github.com/KangDaegyeom"><sub><b>@KangDaegyeom</b></sub></a></td>
-        <td align="center"><a href="https://github.com/lnvisibledragon"><sub><b>@lnvisibledragon</b></sub></a></td>
-        <td align="center"><a href="https://github.com/june3780"><sub><b>@june3780</b></sub></a></td>
+        <td align="center"><a href="https://github.com/Leeka99"><sub><b>GitHub</b></sub></a></td>
+        <td align="center"><a href="https://github.com/childstone"><sub><b>GitHub</b></sub></a></td>
+        <td align="center"><a href="https://github.com/KangDaegyeom"><sub><b>GitHub</b></sub></a></td>
+        <td align="center"><a href="https://github.com/lnvisibledragon"><sub><b>GitHub</b></sub></a></td>
+        <td align="center"><a href="https://github.com/june3780"><sub><b>GitHub</b></sub></a></td>
       </tr>
     </tbody>
   </table>

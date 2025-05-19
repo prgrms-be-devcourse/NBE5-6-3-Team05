@@ -34,7 +34,8 @@
                '\'' + ${#strings.escapeJavaScript(m.title)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(m.releaseDate)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(m.summary)} + '\',' +
-               '\'' + ${m.thumbnail} + '\'' +
+               '\'' + ${m.thumbnail} + '\',' +
+               '\'movie\'' +
              ')'">
         <img th:src="${m.thumbnail}" alt="영화 썸네일" class="card-thumbnail"/>
       </div>
@@ -52,9 +53,10 @@
                '\'' + ${#strings.escapeJavaScript(m.title)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(m.releaseDate)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(m.lyrics)} + '\',' +
-               '\'' + ${m.thumbnail} + '\'' +
+               '\'' + ${m.thumbnail} + '\',' +
+               '\'music\'' +
              ')'">
-        <img th:src="${m.thumbnail}" alt="음악 썸네일" class="card-thumbnail"/>
+        <img th:src="${m.thumbnail}" alt="음악 썸네일" class="card-thumbnail music-thumb"/>
       </div>
     </div>
     <div th:if="${music.size() == 0}"><p>검색 결과가 없습니다.</p></div>
@@ -70,9 +72,10 @@
                '\'' + ${#strings.escapeJavaScript(b.title)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(b.publishedDate)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(b.description)} + '\',' +
-               '\'' + ${b.image} + '\'' +
+               '\'' + ${b.image} + '\',' +
+               '\'book\'' +
              ')'">
-        <img th:src="${b.image}" alt="도서 썸네일" class="card-thumbnail"/>
+        <img th:src="${b.image}" alt="도서 썸네일" class="card-thumbnail modal-bg.book"/>
       </div>
     </div>
     <div th:if="${book.size() == 0}"><p>검색 결과가 없습니다.</p></div>
@@ -113,13 +116,39 @@
   document.addEventListener('DOMContentLoaded',()=>showCategory('movie'));
 
   /* 모달 열기 */
-  function showDetailModal(title, releaseDate, summary, thumbnail){
+  // function showDetailModal(title, releaseDate, summary, thumbnail){
+  //   document.getElementById('modalTitle').textContent = title;
+  //   document.getElementById('modalYear').textContent = releaseDate.split('-')[0] || releaseDate;
+  //   // document.getElementById('singer').textContent = singer;
+  //   // document.getElementById('auther').textContent = author;
+  //   document.getElementById('modalSummary').textContent = summary;
+  //   document.getElementById('modalBg').src = thumbnail;
+  //   document.getElementById('detailModal').classList.add('active');
+  // }
+
+  function showDetailModal(title, releaseDate, summary, thumbnail, type){
+    // 모달 텍스트 설정
     document.getElementById('modalTitle').textContent = title;
-    document.getElementById('modalYear').textContent = releaseDate.split('-')[0] || releaseDate;
-    // document.getElementById('singer').textContent = singer;
-    // document.getElementById('auther').textContent = author;
+    document.getElementById('modalYear').textContent  = releaseDate.split('-')[0] || releaseDate;
     document.getElementById('modalSummary').textContent = summary;
-    document.getElementById('modalBg').src = thumbnail;
+
+    // 썸네일 이미지
+    const img = document.getElementById('modalBg');
+    img.src = thumbnail;
+
+    /* === 카테고리별 크기 조정 === */
+    img.classList.remove('music');     // 일단 제거
+    if(type === 'music'){              // 음악이면 붙이기
+      img.classList.add('music');
+    }
+
+    /* === 카테고리별 크기 조정 === */
+    img.classList.remove('book');     // 일단 제거
+    if(type === 'book'){              // 음악이면 붙이기
+      img.classList.add('book');
+    }
+
+    // 모달 열기
     document.getElementById('detailModal').classList.add('active');
   }
 
