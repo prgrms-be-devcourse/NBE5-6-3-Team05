@@ -22,47 +22,57 @@
 ##  ✨ 기능
 <table>
   <tr>
+    <td align="center"><b>LLM 추천 키워드</b></td>
+    <td align="center"><b>추천 결과</b></td>
+  </tr>
+  <tr>
     <td align="center">
-      <b>LLM 추천 키워드</b><br/>
       <img src="readmeresource/llm_recommend.gif" width="380"/>
     </td>
     <td align="center">
-      <b>추천 결과</b><br/>
       <img src="readmeresource/recommend_result.gif" width="380"/>
     </td>
   </tr>
+
+  <tr>
+    <td align="center"><b>오늘의 운세</b></td>
+    <td align="center"><b>통합 검색(전체)</b></td>
+  </tr>
   <tr>
     <td align="center">
-      <b>오늘의 운세</b><br/>
       <img src="readmeresource/fortune.gif" width="380"/>
     </td>
     <td align="center">
-      <b>통합 검색(전체)</b><br/>
       <img src="readmeresource/main_all_search.gif" width="380"/>
     </td>
   </tr>
+
   <tr>
-    <td align="center">
-      <b>통합 검색(카테고리)</b><br/>
-      <img src="readmeresource/main_search.gif" width="380"/>
-    </td>
-    <td align="center">
-      <b>마이페이지</b><br/>
-      <img src="readmeresource/mypage.gif" width="380"/>
-    </td>
+    <td align="center"><b>통합 검색(카테고리)</b></td>
+    <td align="center"><b>마이페이지</b></td>
   </tr>
   <tr>
     <td align="center">
-      <b>관리자 페이지 – 추가</b><br/>
+      <img src="readmeresource/main_search.gif" width="380"/>
+    </td>
+    <td align="center">
+      <img src="readmeresource/mypage.gif" width="380"/>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center"><b>관리자 페이지 – 추가</b></td>
+    <td align="center"><b>관리자 페이지 – 조회·수정</b></td>
+  </tr>
+  <tr>
+    <td align="center">
       <img src="readmeresource/admin_add.gif" width="380"/>
     </td>
     <td align="center">
-      <b>관리자 페이지 – 조회·수정</b><br/>
       <img src="readmeresource/admin_modify.gif" width="380"/>
     </td>
   </tr>
 </table>
-
 
 ## 🧑‍💻 팀원 소개
 
