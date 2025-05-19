@@ -10,6 +10,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class MovieDetailsDto {
+
     private String id;
     private String name;
     private List<String> genre;
@@ -28,11 +29,11 @@ public class MovieDetailsDto {
         this.description = description;
         this.releaseDate = releaseDate;
         this.movieImg = movieImg;
-        this.externalLink = "https://www.google.com/search?q="+name;
+        this.externalLink = "https://www.google.com/search?q=" + name;
         this.status = false;
     }
 
-    public static MovieDetailsDto from(MovieInfoDto movieInfoDto){
+    public static MovieDetailsDto from(MovieInfoDto movieInfoDto) {
         List<String> genreNames = movieInfoDto.getGenres()
             .stream()
             .map(Genre::getName)

@@ -17,6 +17,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "user")
 public class Member {
+
     @Id
     private String id;
     private String password;

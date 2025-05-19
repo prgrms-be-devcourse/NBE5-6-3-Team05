@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookSimpleDto {
+
     private String id;
     private String name;
     private String imgUrl;
@@ -19,11 +20,11 @@ public class BookSimpleDto {
         this.id = id;
         this.name = name;
         this.imgUrl = imgUrl;
-        this.status =false;
-        this.externalLink = "https://www.google.com/search?q="+name;
+        this.status = false;
+        this.externalLink = "https://www.google.com/search?q=" + name;
     }
 
-    public static BookSimpleDto from(BookDto book)
-    { return new BookSimpleDto(book.getIsbn(), book.getTitle(), book.getImage());
+    public static BookSimpleDto from(BookDto book) {
+        return new BookSimpleDto(book.getIsbn(), book.getTitle(), book.getImage());
     }
 }

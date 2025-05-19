@@ -32,17 +32,17 @@
     }
 
     .label-left {
-      font-size: 26px;         /* 글자 크기 ↑ */
+      font-size: 26px; /* 글자 크기 ↑ */
       font-weight: bold;
       color: white;
       padding: 4px 0;
       display: flex;
-      align-items: center;     /* 세로 정렬 */
+      align-items: center; /* 세로 정렬 */
     }
 
     .label-right {
       display: flex;
-      align-items: center;     /* 버튼과 높이 맞추기 */
+      align-items: center; /* 버튼과 높이 맞추기 */
     }
 
     /* 아래 선 */
@@ -274,9 +274,19 @@
 
     /* 모달 스타일 */
 
-    detailModalResult{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.75);
-      justify-content:center;align-items:center}
-    detailModalResult.active{display:flex}
+    detailModalResult {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, .75);
+      justify-content: center;
+      align-items: center
+    }
+
+    detailModalResult.active {
+      display: flex
+    }
 
     /* 전체 모달 배경 (검은 반투명 배경) */
     .custom-modal {

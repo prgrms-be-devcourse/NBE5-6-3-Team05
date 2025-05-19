@@ -4,7 +4,6 @@ import com.grepp.moodlink.app.controller.web.member.payload.LikeGenreResponse;
 import com.grepp.moodlink.app.controller.web.member.payload.ModifyRequest;
 import com.grepp.moodlink.app.model.auth.domain.Principal;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
-import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.home.HomeService;
@@ -78,9 +77,7 @@ public class MemberController {
         List<LikeGenreResponse> likeMusicGenre = likeService.getPersonalLikeMusicGenre(userId);
         List<LikeGenreResponse> likeMovieGenre = likeService.getPersonalLikeMovieGenre(userId);
 
-
         log.info("영화 좋아요 수: {}", likeMovieGenre.size());
-
 
         model.addAttribute("LikeBookGenre", likeBookGenre);
         model.addAttribute("LikeMusicGenre", likeMusicGenre);
@@ -170,9 +167,12 @@ public class MemberController {
 
         String userId = principal.getUsername();
 
-        Pageable bookPageable = PageRequest.of(bookPage, size,Sort.by(Sort.Direction.DESC, "createdAt"));
-        Pageable musicPageable = PageRequest.of(musicPage, size,Sort.by(Sort.Direction.DESC, "createdAt"));
-        Pageable moviePageable = PageRequest.of(moviePage, size,Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable bookPageable = PageRequest.of(bookPage, size,
+            Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable musicPageable = PageRequest.of(musicPage, size,
+            Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable moviePageable = PageRequest.of(moviePage, size,
+            Sort.by(Sort.Direction.DESC, "createdAt"));
 
         System.out.println("Book Page: " + bookPage);
         System.out.println("북페이지 크기: " + size);
@@ -182,9 +182,8 @@ public class MemberController {
 
         Page<BookDto> likedBooksPage = likeService.getUserLikedBooksPaged(userId, bookPageable);
         Page<MusicDto> likedMusicsPage = likeService.getUserLikedMusicsPaged(userId, musicPageable);
-        Page<MovieInfoDto> likedMoviesPage = likeService.getUserLikedMoviesPaged(userId, moviePageable);
-
-
+        Page<MovieInfoDto> likedMoviesPage = likeService.getUserLikedMoviesPaged(userId,
+            moviePageable);
 
         System.out.println("총 도서 좋아요 수: " + likedBooksPage.getTotalElements());
         System.out.println("총 페이지 수: " + likedBooksPage.getTotalPages());
@@ -193,11 +192,10 @@ public class MemberController {
         System.out.println("총 음악 좋아요 수: " + likedMusicsPage.getTotalElements());
         System.out.println("총 페이지 수: " + likedMusicsPage.getTotalPages());
 
-
-
         PageResponse<BookDto> bookResponse = new PageResponse<>("users/like", likedBooksPage, 5);
         PageResponse<MusicDto> musicResponse = new PageResponse<>("users/like", likedMusicsPage, 5);
-        PageResponse<MovieInfoDto> movieResponse = new PageResponse<>("users/like", likedMoviesPage, 5);
+        PageResponse<MovieInfoDto> movieResponse = new PageResponse<>("users/like", likedMoviesPage,
+            5);
 
         model.addAttribute("likedbooks", bookResponse);
         model.addAttribute("likedmusics", musicResponse);

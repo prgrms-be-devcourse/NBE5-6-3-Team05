@@ -5,10 +5,12 @@ import lombok.Data;
 
 @Data
 public class ImgbbUploadResponse {
+
     private JsonData data;
 
     @Data
     public static class JsonData {
+
         @JsonProperty("display_url")
         private String displayUrl;
     }

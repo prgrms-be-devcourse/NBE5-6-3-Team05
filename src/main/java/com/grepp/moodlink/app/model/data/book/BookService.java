@@ -42,7 +42,9 @@ public class BookService {
 
     public List<String> parseRecommend(String movieResult) {
         List<String> result = new ArrayList<>();
-        if (movieResult == null || movieResult.isBlank()) return result;
+        if (movieResult == null || movieResult.isBlank()) {
+            return result;
+        }
 
         String line = movieResult.trim().replaceFirst("^[가-힣a-zA-Z0-9\\s:]+", "");
 
@@ -50,7 +52,7 @@ public class BookService {
         while (m.find()) {
             String title = m.group(1).trim();
             if (title.startsWith("[") && title.endsWith("]")) {
-                title = title.substring(1, title.length()-1).trim();
+                title = title.substring(1, title.length() - 1).trim();
             }
             result.add(title);
         }
@@ -67,16 +69,16 @@ public class BookService {
     }
 
     @Transactional
-    public void incrementLikeCount(String isbn){
+    public void incrementLikeCount(String isbn) {
         Book book = bookRepository.findByIsbn(isbn);
         Long currentCount = book.getLikeCount();
-        book.setLikeCount(currentCount+1);
+        book.setLikeCount(currentCount + 1);
     }
 
     @Transactional
     public void decreaseLikeCount(String isbn) {
         Book book = bookRepository.findByIsbn(isbn);
         Long currentCount = book.getLikeCount();
-        book.setLikeCount(currentCount-1);
+        book.setLikeCount(currentCount - 1);
     }
 }

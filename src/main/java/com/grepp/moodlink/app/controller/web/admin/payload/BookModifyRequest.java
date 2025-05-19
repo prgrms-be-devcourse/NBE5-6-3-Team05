@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class BookModifyRequest {
+
     private List<MultipartFile> image;
     @NotBlank
     private String genre;
@@ -22,8 +23,8 @@ public class BookModifyRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate publishedDate;
 
-    public BookDto toDto(){
-        BookDto bookDto= new BookDto();
+    public BookDto toDto() {
+        BookDto bookDto = new BookDto();
         bookDto.setGenre(genre);
         bookDto.setPublisher(publisher);
         bookDto.setDescription(description);

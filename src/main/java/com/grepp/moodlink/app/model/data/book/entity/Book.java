@@ -31,7 +31,8 @@ public class Book extends BaseEntity {
     private String description;
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    private LocalDate createdAt;    @Column(columnDefinition = "TEXT")
+    private LocalDate createdAt;
+    @Column(columnDefinition = "TEXT")
     private String summary;
     @Column(columnDefinition = "BLOB")
     private byte[] embedding;
@@ -40,5 +41,5 @@ public class Book extends BaseEntity {
     private Long likeCount;
     // 정렬을 위해 일단 임시로...
     @LastModifiedDate
-    protected LocalDate modifiedAt=LocalDate.now();
+    protected LocalDate modifiedAt = LocalDate.now();
 }

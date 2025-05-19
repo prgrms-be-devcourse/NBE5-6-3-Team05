@@ -32,21 +32,22 @@ public class AdminMovieService {
     private final ImgUploadTemplate imgUploadTemplate;
 
     // 페이지네이션으로 모든 영화를 가져옴
-    public Page<MovieInfoDto> findPaged(Pageable pageable){
+    public Page<MovieInfoDto> findPaged(Pageable pageable) {
         return movieRepository.findPaged(pageable)
             .map(MovieInfoDto::toDto);
     }
 
     // 모든 장르를 가져옴
     public List<GenreDto> findAllGenre() {
-        return genreRepository.findAll().stream().map(e-> mapper.map(e, GenreDto.class)).toList();
+        return genreRepository.findAll().stream().map(e -> mapper.map(e, GenreDto.class)).toList();
     }
 
     // 영화를 추가함
     public void addMovie(List<MultipartFile> thumbnail, MovieInfoDto dto) {
 
-        if(movieRepository.existsByTitleAndReleaseDate(dto.getTitle(), dto.getReleaseDate()))
+        if (movieRepository.existsByTitleAndReleaseDate(dto.getTitle(), dto.getReleaseDate())) {
             throw new CommonException(ResponseCode.DUPLICATED_DATA);
+        }
 
         try {
 
@@ -54,9 +55,9 @@ public class AdminMovieService {
             Movie movie = mapper.map(dto, Movie.class);
 
             long count = movieRepository.count();
-            movie.setId("M"+count);
+            movie.setId("M" + count);
 
-            log.info("{}",movie);
+            log.info("{}", movie);
 
             movie.setCreatedAt(LocalDate.now());
 
@@ -71,8 +72,8 @@ public class AdminMovieService {
 
     // 추가 및 수정 시 이미지 업로드
     private void uploadImage(List<MultipartFile> thumbnail, MovieInfoDto dto) throws IOException {
-        if(thumbnail != null){
-            MultipartFile file =  thumbnail.getFirst();
+        if (thumbnail != null) {
+            MultipartFile file = thumbnail.getFirst();
             String originFileName = file.getOriginalFilename();
             if (originFileName != null && originFileName.contains(".")) {
                 String ext = originFileName.substring(originFileName.lastIndexOf("."));
@@ -97,7 +98,7 @@ public class AdminMovieService {
             // 업데이트
             movieRepository.updateBook(dto);
             embeddingService.generateEmbeddingsMovie();
-            log.info("{}",dto);
+            log.info("{}", dto);
 
 
         } catch (IOException e) {

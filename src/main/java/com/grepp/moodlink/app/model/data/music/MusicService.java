@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -46,7 +45,9 @@ public class MusicService {
 
     public List<String> parseRecommend(String musicResult) {
         List<String> result = new ArrayList<>();
-        if (musicResult == null || musicResult.isBlank()) return result;
+        if (musicResult == null || musicResult.isBlank()) {
+            return result;
+        }
 
         String line = musicResult.trim().replaceFirst("^[가-힣a-zA-Z0-9\\s:]+", "");
 
@@ -54,16 +55,16 @@ public class MusicService {
         while (m.find()) {
             String title = m.group(1).trim();
             if (title.startsWith("[") && title.endsWith("]")) {
-                title = title.substring(1, title.length()-1).trim();
+                title = title.substring(1, title.length() - 1).trim();
             }
             result.add(title);
         }
         return result.stream()
-                .map(musicRepository::findIdByTitle)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .distinct()
-                .collect(Collectors.toList());
+            .map(musicRepository::findIdByTitle)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .distinct()
+            .collect(Collectors.toList());
     }
 
     public MusicDto findById(String id) {
@@ -71,16 +72,16 @@ public class MusicService {
     }
 
     @Transactional
-    public void incrementLikeCount(String id){
+    public void incrementLikeCount(String id) {
         Music music = musicRepository.findById(id).orElseThrow();
         Long currentCount = music.getLikeCount();
-        music.setLikeCount(currentCount+1);
+        music.setLikeCount(currentCount + 1);
     }
 
     @Transactional
     public void decreaseLikeCount(String id) {
         Music music = musicRepository.findById(id).orElseThrow();
         Long currentCount = music.getLikeCount();
-        music.setLikeCount(currentCount-1);
+        music.setLikeCount(currentCount - 1);
     }
 }

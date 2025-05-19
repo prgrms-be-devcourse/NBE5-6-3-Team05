@@ -33,7 +33,7 @@ body {
   margin-bottom: 1rem;
   color: white;
   font-weight: bold;
-  width:150px;
+  width: 150px;
   text-decoration: none;
   text-align: center;
   font-size: 1.3rem;
@@ -55,7 +55,7 @@ body {
   gap: 0.5rem;
 }
 
-.helper-text{
+.helper-text {
   color: white;
 }
 
@@ -74,7 +74,7 @@ body {
 }
 
 .pagination li.active {
-   background-color: transparent;
+  background-color: transparent;
 }
 
 .active a {
@@ -85,6 +85,7 @@ body {
   color: white;
   text-decoration: none;
 }
+
 .empty-message {
   text-align: center;
   padding: 3rem;

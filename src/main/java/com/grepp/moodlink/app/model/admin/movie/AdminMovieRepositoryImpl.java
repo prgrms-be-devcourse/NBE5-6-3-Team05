@@ -76,10 +76,10 @@ public class AdminMovieRepositoryImpl implements AdminMovieRepositoryCustom {
 
         assert entity != null;
         entity.setGenres(dto.getGenres());
-        if(dto.getThumbnail()!=null){
+        if (dto.getThumbnail() != null) {
             entity.setThumbnail(dto.getThumbnail());
         }
-        if(!entity.getDescription().equals(dto.getDescription())){
+        if (!entity.getDescription().equals(dto.getDescription())) {
             entity.setDescription(dto.getDescription());
             // 변경된 설명에 대한 embedding 값을 넣기 위해 null 값 넣기
             entity.setEmbedding(null);

@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class SongDetailsDto {
+
     private String id;
     private String name;
     private String artist;
@@ -32,10 +33,10 @@ public class SongDetailsDto {
         this.lyrics = lyrics;
         this.summary = summary;
         this.status = false;
-        this.externalLink = "https://www.google.com/search?q="+name;
+        this.externalLink = "https://www.google.com/search?q=" + name;
     }
 
-    public static SongDetailsDto from(MusicDto music){
+    public static SongDetailsDto from(MusicDto music) {
         return new SongDetailsDto(
             music.getId(),
             music.getTitle(),

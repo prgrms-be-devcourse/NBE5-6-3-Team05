@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @Data
 public class ToggleResponse {
+
     private boolean status;
 
     public ToggleResponse(boolean status) {
