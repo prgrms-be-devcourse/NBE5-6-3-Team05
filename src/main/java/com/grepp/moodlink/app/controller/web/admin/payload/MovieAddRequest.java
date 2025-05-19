@@ -16,12 +16,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class MovieAddRequest {
 
     private List<MultipartFile> thumbnail;
-    @NotBlank
+    @NotBlank (message = "제목을 입력해주세요")
     private String title;
-    @NotBlank
+    @NotBlank (message = "장르를 선택해주세요")
     private String genres;
+    @NotBlank
     private String description;
-    @NotNull
+    @NotNull(message = "개봉일을 입력해주세요")
     private LocalDate releaseDate;
 
     public MovieInfoDto toDto(){

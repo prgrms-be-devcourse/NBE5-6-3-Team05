@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>관리자 페이지 - 영화 수정</title>
+  <link rel="stylesheet" th:href="@{/css/admin/contents-add.css}">
+
+</head>
+<main layout:fragment="content">
+  <!-- 돌아가기 버튼 -->
+  <a class="back-btn" th:href="@{/admin/movies}">← 돌아가기</a>
+
+  <!-- 중앙 배치 form -->
+  <div class="main-area">
+      <form th:action="@{'/admin/movies/modify/'+${movie.getId()}}" th:object="${movieModifyRequest}" method="post" enctype="multipart/form-data">
+    <div class="form-section">
+      <h3>영화 정보를 입력해주세요.</h3>
+
+        <div class="info-group">
+          <div class="image-upload">
+            <div id="preview" class="image-preview"
+                 th:style="'background-image: url(' + ${movie.thumbnail} + ');'"></div>
+            <input type="file" id="image-input" name="thumbnail" style="display:none"/>
+            <div id="sizeInfo"></div>
+            <button class="img-btn" type="button" onclick="document.getElementById('image-input').click()">이미지 추가</button>
+          </div>
+
+          <div>
+            <div class="form-row"><label>제목</label><div th:text="${movie.getTitle()}"></div> <a class="delete-btn" th:attr="data-id=${movie.getId()}">삭제</a> </div>
+            <div class="form-row"><label>개봉일</label><div th:text="${movie.getReleaseDate()}"></div></div>
+          </div>
+        </div>
+
+        <div class="form-row" style="flex-direction: column; align-items: flex-start;">
+          <label style="margin-bottom: 0.3rem;">장르</label>
+          <div class="selected-genres" id="selected-genres">선택된 장르 없음</div>
+          <span class="helper-text form-row" th:if="${fieldErrors != null and fieldErrors.containsKey('genres')}" th:text="${fieldErrors.genres}"></span>
+          <div class="genre-list" th:attr="data-selected-genre=${selectedGenre}">
+
+            <!--            임시로 -->
+            <div th:each="gen : ${genreList}">
+              <a class="genre-btn" type="button" th:attr="data-genre-id=${gen.getId()}" th:text="${gen.getName()}">코미디</a>
+            </div>
+          </div>
+          <input th:field="*{genres}" type="hidden" id="genre-input" />
+        </div>
+
+        <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
+          <label>설명</label>
+          <textarea th:field="*{description}" class="textarea"></textarea>
+          <span class="helper-text form-row" th:if="${fieldErrors != null and fieldErrors.containsKey('description')}" th:text="${fieldErrors.description}"></span>
+        </div>
+
+        <button class="submit-btn" type="submit">등록</button>
+    </div>
+      </form>
+  </div>
+</main>
+<div layout:fragment="scripts">
+<script>
+  // 이미지 미리보기
+  const input = document.getElementById('image-input');
+  const preview = document.getElementById('preview');
+  input.addEventListener('change', function () {
+    let totalSize = 0;
+    const file = this.files[0];
+    if (file) {
+      totalSize += file.size;
+
+      const sizeInMB = (totalSize / (1024 * 1024)).toFixed(2);
+      document.getElementById("sizeInfo").innerText = `총 파일 용량: ${sizeInMB} MB`;
+
+      if (totalSize > 32 * 1024 * 1024) {
+        alert("이미지 총 용량은 32MB를 초과할 수 없습니다.");
+        this.value = ""; // 파일 초기화
+      }
+
+      const reader = new FileReader();
+      reader.onload = e => preview.style.backgroundImage = `url(${e.target.result})`;
+      reader.readAsDataURL(file);
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // ✅ 초기 선택된 ID 세팅
+    const selectedRaw = document.querySelector(".genre-list").dataset.selectedGenre;
+    const selectedIds = selectedRaw ? selectedRaw.split(",").map(id => id.trim()) : [];
+    console.log(selectedRaw);
+    console.log(selectedIds);
+
+    // ✅ .selected 클래스 추가
+    document.querySelectorAll(".genre-btn").forEach(btn => {
+      if (selectedIds.includes(btn.dataset.genreId)) {
+        btn.classList.add("selected");
+      }
+    });
+
+    // ✅ 초기 UI 업데이트
+    updateGenreSelection();
+
+    // ✅ 클릭 이벤트 등록
+    document.querySelectorAll(".genre-btn").forEach(btn => {
+      btn.addEventListener("click", function () {
+        btn.classList.toggle("selected");
+        updateGenreSelection();
+      });
+    });
+
+    // ✅ 선택된 장르 UI + input 동기화
+    function updateGenreSelection() {
+      const selectedButtons = [...document.querySelectorAll(".genre-btn.selected")];
+      const selectedId = selectedButtons.map(b => b.dataset.genreId);
+      const selectedName = selectedButtons.map(b => b.textContent.trim());
+
+      document.getElementById("selected-genres").textContent = selectedName.length
+          ? selectedName.join(", ")
+          : "선택된 장르 없음";
+
+      document.getElementById("genre-input").value =
+          selectedId.map((id, i) => `${id}:${selectedName[i]}`).join(",");
+      console.log(document.getElementById("genre-input").value);
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".delete-btn")
+    .forEach((btn) => {
+      btn.addEventListener("click", async function (event) {
+        event.preventDefault();
+
+        const confirmed = confirm("정말 삭제하시겠습니까?");
+
+        if(confirmed){
+
+          const id = btn.dataset.id;
+          const url = `http://localhost:8080/api/admin/movies/delete/${id}`;
+          const response = await fetch(
+              url, {
+                method: 'DELETE'
+              });
+
+          if (response) {
+            alert("정상적으로 삭제되었습니다.");
+            window.location.href = "/admin/movies";
+          } else {
+            alert("문제가 발생하였습니다.")
+          }
+        }
+      });
+    });
+  });
+</script>
+</div>
+</html>

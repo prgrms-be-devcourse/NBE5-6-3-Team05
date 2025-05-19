@@ -14,7 +14,7 @@ public class MovieModifyRequest {
     private List<MultipartFile> thumbnail;
     @NotBlank
     private String genres;
-
+    @NotBlank
     private String description;
 
     public MovieInfoDto toDto(){
