@@ -30,18 +30,18 @@ public class DetailsService {
     public BookDetailsDto getBookDetails(String userId, String id) {
         BookDetailsDto bookDetailsDto = BookDetailsDto.from(bookService.findByIsbn(id));
         // 비회원 시 Like테이블 조회 없이 바로 반환
-        if (userId.isEmpty()){
+        if (userId.isEmpty()) {
             return bookDetailsDto;
         }
 
         // User의 Like 목록이 없다면 해당 컨텐츠의 상태를 false로 return
         List<Likes> likes = likeService.getLikeInfo(userId);
-        if (likes.isEmpty()){
+        if (likes.isEmpty()) {
             return bookDetailsDto;
         }
 
         // Like테이블 조회 후 현재 상세정보를 확인하는 컨텐츠와 같은 id의 컨텐츠가 있으면 status를 true로 변환
-        if(likeService.existInLikeDetailBook(likes.getFirst().getId(),id)){
+        if (likeService.existInLikeDetailBook(likes.getFirst().getId(), id)) {
             bookDetailsDto.setStatus(true);
         }
         System.out.println(bookDetailsDto);
@@ -52,18 +52,18 @@ public class DetailsService {
         SongDetailsDto songDetailsDto = SongDetailsDto.from(musicService.findById(id));
 
         // 비회원 시 Like테이블 조회 없이 바로 반환
-        if (userId.isEmpty()){
+        if (userId.isEmpty()) {
             return songDetailsDto;
         }
 
         // User의 Like 목록이 없다면 해당 컨텐츠의 상태를 false로 return
         List<Likes> likes = likeService.getLikeInfo(userId);
-        if (likes.isEmpty()){
+        if (likes.isEmpty()) {
             return songDetailsDto;
         }
 
         // Like테이블 조회 후 현재 상세정보를 확인하는 컨텐츠와 같은 id의 컨텐츠가 있으면 status를 true로 변환
-        if(likeService.existInLikeDetailMusic(likes.getFirst().getId(),id)){
+        if (likeService.existInLikeDetailMusic(likes.getFirst().getId(), id)) {
             songDetailsDto.setStatus(true);
         }
 
@@ -75,18 +75,18 @@ public class DetailsService {
         MovieDetailsDto movieDetailsDto = MovieDetailsDto.from(movieService.findById(id));
 
         // 비회원 시 Like테이블 조회 없이 바로 반환
-        if (userId.isEmpty()){
+        if (userId.isEmpty()) {
             return movieDetailsDto;
         }
 
         // User의 Like 목록이 없다면 해당 컨텐츠의 상태를 false로 return
         List<Likes> likes = likeService.getLikeInfo(userId);
-        if (likes.isEmpty()){
+        if (likes.isEmpty()) {
             return movieDetailsDto;
         }
 
         // Like테이블 조회 후 현재 상세정보를 확인하는 컨텐츠와 같은 id의 컨텐츠가 있으면 status를 true로 변환
-        if(likeService.existInLikeDetailMovie(likes.getFirst().getId(),id)){
+        if (likeService.existInLikeDetailMovie(likes.getFirst().getId(), id)) {
             movieDetailsDto.setStatus(true);
         }
 

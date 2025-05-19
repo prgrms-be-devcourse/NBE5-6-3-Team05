@@ -16,10 +16,12 @@ import org.springframework.stereotype.Repository;
 public interface LikeDetailBooksRepository extends JpaRepository<LikeDetailBooks, Long> {
 
     List<LikeDetailBooks> findAllByLikesIdIn(Collection<Long> likesIds);
-    @Query("SELECT l FROM LikeDetailBooks l WHERE l.likesId IN :likesIds")
-    Page<LikeDetailBooks> findAllByLikesIdInPagination(@Param("likesIds") Collection<Long> likesIds, Pageable pageable);
-    List<LikeDetailBooks> findByLikesId(Long likeId);
 
+    @Query("SELECT l FROM LikeDetailBooks l WHERE l.likesId IN :likesIds")
+    Page<LikeDetailBooks> findAllByLikesIdInPagination(@Param("likesIds") Collection<Long> likesIds,
+        Pageable pageable);
+
+    List<LikeDetailBooks> findByLikesId(Long likeId);
 
 
     @Modifying

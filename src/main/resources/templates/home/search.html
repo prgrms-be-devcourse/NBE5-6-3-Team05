@@ -82,7 +82,8 @@
   </div>
 
   <!-- 모달 -->
-  <div id="detailModal" onclick="if(event.target===this) closeModal()">
+  <div id="detailModal" onclick="if(event.target===this){closeModal()
+}">
     <div class="search-modal-content">
       <img id="modalBg" class="modal-bg" src="" alt="배경"/>
       <div class="modal-info">
@@ -90,12 +91,12 @@
         <h1 id="modalTitle" class="modal-title"></h1>
         <ul class="modal-badges">
           <li id="modalYear"></li>
-<!--          <li id="singer"></li>-->
-<!--          <li id="author"></li>-->
-<!--          연령, 장르 등 정보 3차 플젝 때 추가 예정-->
-<!--          <li>12+</li>-->
-<!--          <li id="modalSeries">콘텐츠</li>-->
-<!--          <li id="modalGenre">장르</li>-->
+          <!--          <li id="singer"></li>-->
+          <!--          <li id="author"></li>-->
+          <!--          연령, 장르 등 정보 3차 플젝 때 추가 예정-->
+          <!--          <li>12+</li>-->
+          <!--          <li id="modalSeries">콘텐츠</li>-->
+          <!--          <li id="modalGenre">장르</li>-->
         </ul>
         <p id="modalSummary" class="modal-summary"></p>
         <button id="modalSearchBtn" class="modal-play" disabled>검색하기 ➜</button>
@@ -109,15 +110,16 @@
 
 <script>
   /* 카테고리 토글 */
-  function showCategory(id){
-    document.querySelectorAll('.category').forEach(c=>c.style.display='none');
-    document.getElementById(id).style.display='block';
+  function showCategory(id) {
+    document.querySelectorAll('.category').forEach(c => c.style.display = 'none');
+    document.getElementById(id).style.display = 'block';
   }
-  document.addEventListener('DOMContentLoaded',()=>showCategory('movie'));
 
-  function showDetailModal(title, releaseDate, summary, thumbnail, type){
+  document.addEventListener('DOMContentLoaded', () => showCategory('movie'));
+
+  function showDetailModal(title, releaseDate, summary, thumbnail, type) {
     document.getElementById('modalTitle').textContent = title;
-    document.getElementById('modalYear').textContent  = releaseDate.split('-')[0] || releaseDate;
+    document.getElementById('modalYear').textContent = releaseDate.split('-')[0] || releaseDate;
 
     // 줄바꿈과 [괄호] 앞뒤 br 처리
     const processedSummary = summary
@@ -130,10 +132,14 @@
     img.src = thumbnail;
 
     img.classList.remove('music');
-    if(type === 'music'){ img.classList.add('music'); }
+    if (type === 'music') {
+      img.classList.add('music');
+    }
 
     img.classList.remove('book');
-    if(type === 'book'){ img.classList.add('book'); }
+    if (type === 'book') {
+      img.classList.add('book');
+    }
 
     // 모달 열기
     document.getElementById('detailModal').classList.add('active');
@@ -141,7 +147,7 @@
     // 검색 버튼 활성화 및 클릭 이벤트 등록
     const searchBtn = document.getElementById('modalSearchBtn');
     searchBtn.disabled = false;
-    searchBtn.onclick = function() {
+    searchBtn.onclick = function () {
       const query = encodeURIComponent(title);
       const url = `https://www.google.com/search?q=${query}`;
       window.open(url, '_blank');
@@ -149,7 +155,7 @@
   }
 
   /* 모달 닫기 */
-  function closeModal(){
+  function closeModal() {
     document.getElementById('detailModal').classList.remove('active');
     const searchBtn = document.getElementById('modalSearchBtn');
     searchBtn.disabled = true;

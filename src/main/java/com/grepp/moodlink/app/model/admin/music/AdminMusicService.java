@@ -38,8 +38,9 @@ public class AdminMusicService {
     @Transactional
     public void addMusic(List<MultipartFile> thumbnail, MusicDto dto) {
 
-        if(musicRepository.existsByTitleAndSinger(dto.getTitle(),dto.getSinger()))
+        if (musicRepository.existsByTitleAndSinger(dto.getTitle(), dto.getSinger())) {
             throw new CommonException(ResponseCode.DUPLICATED_DATA);
+        }
 
         try {
 
@@ -47,9 +48,9 @@ public class AdminMusicService {
             Music music = mapper.map(dto, Music.class);
 
             long count = musicRepository.count();
-            music.setId("S"+count);
+            music.setId("S" + count);
 
-            log.info("{}",music);
+            log.info("{}", music);
 
             // 입력한 데이터 추가
             musicRepository.save(music);
@@ -62,8 +63,8 @@ public class AdminMusicService {
 
     // 추가, 수정 시에 이미지를 업로드 하는 메소드
     private void uploadImage(List<MultipartFile> thumbnail, MusicDto dto) throws IOException {
-        if(thumbnail != null){
-            MultipartFile file =  thumbnail.getFirst();
+        if (thumbnail != null) {
+            MultipartFile file = thumbnail.getFirst();
             String originFileName = file.getOriginalFilename();
             if (originFileName != null && originFileName.contains(".")) {
                 String ext = originFileName.substring(originFileName.lastIndexOf("."));
@@ -85,11 +86,11 @@ public class AdminMusicService {
     public void updateMusic(List<MultipartFile> thumbnail, MusicDto dto) {
 
         try {
-           uploadImage(thumbnail,dto);
+            uploadImage(thumbnail, dto);
             // 업데이트
             musicRepository.updateBook(dto);
             embeddingService.generateEmbeddingsMusic();
-            log.info("{}",dto);
+            log.info("{}", dto);
 
 
         } catch (IOException e) {

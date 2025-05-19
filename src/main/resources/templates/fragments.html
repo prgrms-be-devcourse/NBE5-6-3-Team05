@@ -218,28 +218,43 @@
       /*운세 모달*/
 
       /* ───── 모달 배경 그대로 ───── */
-      .fortune-modal{
-        display:none;
-        position:fixed; inset:0; z-index:9999;
-        background:rgba(0,0,0,.45);
-        overflow:hidden;
+      .fortune-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: rgba(0, 0, 0, .45);
+        overflow: hidden;
       }
-      .fortune-modal.active{display:flex;justify-content:center;align-items:center}
+
+      .fortune-modal.active {
+        display: flex;
+        justify-content: center;
+        align-items: center
+      }
 
       /* ───── 파티클(별빛) ───── */
-      .fortune-modal::before{
-        content:''; position:absolute; inset:-50%;
-        background:radial-gradient(white 1px,transparent 1px);
-        background-size:20px 20px;
-        opacity:.07; animation:twinkle 8s linear infinite;
+      .fortune-modal::before {
+        content: '';
+        position: absolute;
+        inset: -50%;
+        background: radial-gradient(white 1px, transparent 1px);
+        background-size: 20px 20px;
+        opacity: .07;
+        animation: twinkle 8s linear infinite;
       }
-      @keyframes twinkle{
-        from{transform:translate3d(0,0,0)}
-        to  {transform:translate3d(50px,50px,0)}
+
+      @keyframes twinkle {
+        from {
+          transform: translate3d(0, 0, 0)
+        }
+        to {
+          transform: translate3d(50px, 50px, 0)
+        }
       }
 
       /* ───── 모달 박스 ───── */
-      .fortune-modal-content{
+      .fortune-modal-content {
         overflow: hidden; /* 모달 밖으로 넘치는 글씨 숨기기 */
         position: relative;
         /* 기존 스타일 유지 */
@@ -255,25 +270,43 @@
 
       .scrolling-wrapper {
         overflow: hidden; /* 글씨가 넘치면 숨김 */
-        width: 100%;      /* 모달 너비에 맞춤 */
+        width: 100%; /* 모달 너비에 맞춤 */
         box-sizing: border-box;
       }
+
       /* 빛나는 오라 */
-      .fortune-modal-content::after{
-        content:''; position:absolute; inset:-40%;
-        background:conic-gradient(from 0deg,#ffcc66 0 10%, transparent 40% 60%, #6699ff 85% 100%);
-        filter:blur(45px); opacity:.18; animation:rotate 6s linear infinite;
-        pointer-events:none;
+      .fortune-modal-content::after {
+        content: '';
+        position: absolute;
+        inset: -40%;
+        background: conic-gradient(from 0deg, #ffcc66 0 10%, transparent 40% 60%, #6699ff 85% 100%);
+        filter: blur(45px);
+        opacity: .18;
+        animation: rotate 6s linear infinite;
+        pointer-events: none;
       }
 
-      @keyframes dropIn{
-        0%  {transform:translateY(-120px) scale(.8); opacity:0}
-        80% {transform:translateY(10px)  scale(1);   opacity:1}
-        100%{transform:translateY(0)     scale(1)}
+      @keyframes dropIn {
+        0% {
+          transform: translateY(-120px) scale(.8);
+          opacity: 0
+        }
+        80% {
+          transform: translateY(10px) scale(1);
+          opacity: 1
+        }
+        100% {
+          transform: translateY(0) scale(1)
+        }
       }
-      @keyframes rotate{to{transform:rotate(360deg)}}
 
-      .fortune-result{
+      @keyframes rotate {
+        to {
+          transform: rotate(360deg)
+        }
+      }
+
+      .fortune-result {
         white-space: nowrap;
         width: max-content; /* 텍스트 길이에 맞게 넓이 조절 */
         position: relative;
@@ -408,13 +441,23 @@
       }
 
       @keyframes fadeIn {
-        0% { opacity: 0; transform: translateY(10px); }
-        100% { opacity: 1; transform: translateY(0); }
+        0% {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       @keyframes typewriter {
-        0% { width: 0; }
-        100% { width: 100%; }
+        0% {
+          width: 0;
+        }
+        100% {
+          width: 100%;
+        }
       }
 
       .fortune-result {
@@ -433,8 +476,12 @@
       }
 
       @keyframes blink-caret {
-        0%, 100% { border-right-color: transparent; }
-        50% { border-right-color: #ff8c00; }
+        0%, 100% {
+          border-right-color: transparent;
+        }
+        50% {
+          border-right-color: #ff8c00;
+        }
       }
 
       .fortune-result.done {
@@ -516,14 +563,16 @@
 
       /*검색결과 디자인*/
       /* 카드 공통 */
-      .card-container{
-        display:flex;flex-wrap:wrap;gap:16px
+      .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px
       }
 
       /* 공통 호버 효과 */
       .card-container > div:hover {
         transform: scale(1.05);
-        box-shadow: 0 8px 16px rgba(0,0,0,.4);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, .4);
       }
 
       /* 부드러운 애니메이션 */
@@ -532,90 +581,172 @@
       }
 
       /* 영화 */
-      .card-movie{
-        width:300px;
-        border:4px solid;
-        border-image:linear-gradient(to right,#FF512F,#DD2476) 1;
-        border-radius:6px;
-        cursor:pointer;
-        box-sizing:border-box;
-        background:#000;
+      .card-movie {
+        width: 300px;
+        border: 4px solid;
+        border-image: linear-gradient(to right, #FF512F, #DD2476) 1;
+        border-radius: 6px;
+        cursor: pointer;
+        box-sizing: border-box;
+        background: #000;
       }
-      .card-movie .card-thumbnail{width:100%;border-radius:4px;display:block}
+
+      .card-movie .card-thumbnail {
+        width: 100%;
+        border-radius: 4px;
+        display: block
+      }
 
       /* 음악 */
-      .card-music{
-        width:210px;
-        border:4px solid;
-        border-image:linear-gradient(to right,#1FA2FF,#12D8FA,#A6FFCB) 1;
-        border-radius:6px;
-        cursor:pointer;
-        box-sizing:border-box;
-        background:#000;
+      .card-music {
+        width: 210px;
+        border: 4px solid;
+        border-image: linear-gradient(to right, #1FA2FF, #12D8FA, #A6FFCB) 1;
+        border-radius: 6px;
+        cursor: pointer;
+        box-sizing: border-box;
+        background: #000;
       }
-      .card-music .card-thumbnail{width:100%;border-radius:4px;display:block}
+
+      .card-music .card-thumbnail {
+        width: 100%;
+        border-radius: 4px;
+        display: block
+      }
 
 
       /* 도서 */
-      .card-book{
-        flex:0 0 calc(25% - 16px); /* 4개 = 100 / 4, gap 보정 */
-        max-width:250px;           /* 250px 이상 커지지 않도록 */
-        border:4px solid;
-        border-image:linear-gradient(to right,#a34dff,#2ebf91) 1;
-        border-radius:6px;
-        cursor:pointer;
-        box-sizing:border-box;
-        background:#000;
+      .card-book {
+        flex: 0 0 calc(25% - 16px); /* 4개 = 100 / 4, gap 보정 */
+        max-width: 250px; /* 250px 이상 커지지 않도록 */
+        border: 4px solid;
+        border-image: linear-gradient(to right, #a34dff, #2ebf91) 1;
+        border-radius: 6px;
+        cursor: pointer;
+        box-sizing: border-box;
+        background: #000;
       }
 
-      .card-book .card-thumbnail{
-        width:100%;
-        border-radius:4px;
-        display:block;
+      .card-book .card-thumbnail {
+        width: 100%;
+        border-radius: 4px;
+        display: block;
       }
 
       /*검색 모달*/
 
       /* 모달 배경 */
-      #detailModal{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.75);
-        justify-content:center;align-items:center}
-      #detailModal.active{display:flex}
+      #detailModal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(0, 0, 0, .75);
+        justify-content: center;
+        align-items: center
+      }
+
+      #detailModal.active {
+        display: flex
+      }
 
       /* 모달 내용 */
-      .search-modal-content{display:flex;max-width:900px;width:90%;height:70vh;overflow:hidden;border-radius:8px}
-      .modal-bg{flex:1 1 55%;object-fit:cover}
-      .modal-info{flex:1 1 45%;background:#000;color:#fff;padding:40px 50px;position:relative;
-        display:flex;flex-direction:column;gap:20px;overflow-y:auto}
-      .modal-close{position:absolute;top:20px;right:25px;font-size:28px;cursor:pointer}
-      .modal-title{font-size:40px;font-weight:700;margin:0}
-      .modal-badges{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;  justify-content: center;}
-      .modal-badges li{list-style:none;font-size:14px;font-weight:600;background:#444;
-        padding:4px 10px;border-radius:4px}
-      .modal-summary{line-height:1.5;font-size:16px}
-      .modal-play{align-self:center;padding:12px 28px;font-size:18px;font-weight:600;
-        border:none;border-radius:4px;background: #632e9c;color:#fff;cursor:pointer}
-
-      .modal-bg.music{
-        flex:1 1 55%;   /* 가로폭 축소 – 숫자는 취향껏 조정 */
-        max-height:60vh; /* 가로·세로 비율 그대로 축소 */
-        max-width:30vw;
+      .search-modal-content {
+        display: flex;
+        max-width: 900px;
+        width: 90%;
+        height: 70vh;
+        overflow: hidden;
+        border-radius: 8px
       }
 
-      .modal-bg.book{
-        flex:1 1 35%;   /* 가로폭 축소 – 숫자는 취향껏 조정 */
-        max-height:60vh; /* 가로·세로 비율 그대로 축소 */
+      .modal-bg {
+        flex: 1 1 55%;
+        object-fit: cover
       }
 
-      .highlight{
-        color: #a3cf22;   /* 포인트 색상 */
-        font-weight:700; /* 굵게(선택) */
+      .modal-info {
+        flex: 1 1 45%;
+        background: #000;
+        color: #fff;
+        padding: 40px 50px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        overflow-y: auto
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 20px;
+        right: 25px;
+        font-size: 28px;
+        cursor: pointer
+      }
+
+      .modal-title {
+        font-size: 40px;
+        font-weight: 700;
+        margin: 0
+      }
+
+      .modal-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        justify-content: center;
+      }
+
+      .modal-badges li {
+        list-style: none;
+        font-size: 14px;
+        font-weight: 600;
+        background: #444;
+        padding: 4px 10px;
+        border-radius: 4px
+      }
+
+      .modal-summary {
+        line-height: 1.5;
+        font-size: 16px
+      }
+
+      .modal-play {
+        align-self: center;
+        padding: 12px 28px;
+        font-size: 18px;
+        font-weight: 600;
+        border: none;
+        border-radius: 4px;
+        background: #632e9c;
+        color: #fff;
+        cursor: pointer
+      }
+
+      .modal-bg.music {
+        flex: 1 1 55%; /* 가로폭 축소 – 숫자는 취향껏 조정 */
+        max-height: 60vh; /* 가로·세로 비율 그대로 축소 */
+        max-width: 30vw;
+      }
+
+      .modal-bg.book {
+        flex: 1 1 35%; /* 가로폭 축소 – 숫자는 취향껏 조정 */
+        max-height: 60vh; /* 가로·세로 비율 그대로 축소 */
+      }
+
+      .highlight {
+        color: #a3cf22; /* 포인트 색상 */
+        font-weight: 700; /* 굵게(선택) */
       }
 
       /* 간단한 강조 스타일 */
-      .error-msg{
-        margin-top:8px;
-        color:#ff5555;
-        font-weight:600;
+      .error-msg {
+        margin-top: 8px;
+        color: #ff5555;
+        font-weight: 600;
       }
     </style>
 
@@ -646,15 +777,17 @@
 
 </th:block>
 <!-- pagination -->
-  <ul class="pagination" th:fragment="frg_pagination">
-    <li class="waves-effect">
-      <a th:href="@{${page.url()}(page=${page.prevPage()})}"><i class="material-icons">chevron_left</i></a></li>
-    <li th:each="num : ${#numbers.sequence(page.startNumber(), page.endNumber())}"
-        th:classappend="${num == page.currentNumber()} ? 'active white-text' : 'waves-effect'">
+<ul class="pagination" th:fragment="frg_pagination">
+  <li class="waves-effect">
+    <a th:href="@{${page.url()}(page=${page.prevPage()})}"><i
+        class="material-icons">chevron_left</i></a></li>
+  <li th:each="num : ${#numbers.sequence(page.startNumber(), page.endNumber())}"
+      th:classappend="${num == page.currentNumber()} ? 'active white-text' : 'waves-effect'">
     <a th:href="@{${page.url()}(page=${num})}" th:text="${num}">1</a>
-    </li>
-    <li class="waves-effect">
-      <a th:href="@{${page.url()}(page=${page.nextPage()})}"><i class="material-icons">chevron_right</i></a></li>
-  </ul>
+  </li>
+  <li class="waves-effect">
+    <a th:href="@{${page.url()}(page=${page.nextPage()})}"><i
+        class="material-icons">chevron_right</i></a></li>
+</ul>
 </body>
 </html>

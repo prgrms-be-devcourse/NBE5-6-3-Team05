@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CuratingDetailIdDto {
+
     private String movieId;
     private String songId;
     private String bookId;

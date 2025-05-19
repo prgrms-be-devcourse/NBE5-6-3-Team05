@@ -58,9 +58,9 @@ public class FileUtil {
     private String createSavePath(String depth) {
         LocalDate now = LocalDate.now();
         return depth + "/" +
-                   now.getYear() + "/" +
-                   now.getMonth() + "/" +
-                   now.getDayOfMonth() + "/";
+            now.getYear() + "/" +
+            now.getMonth() + "/" +
+            now.getDayOfMonth() + "/";
     }
 
 }

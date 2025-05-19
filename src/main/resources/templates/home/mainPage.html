@@ -69,21 +69,25 @@
       <div id="fortuneModal" class="fortune-modal" onclick="closeModal(event)">
         <div class="fortune-modal-content" onclick="event.stopPropagation()">
           <div class="scrolling-wrapper">
-          <span class="close-btn" onclick="closeModal()">&times;</span>
-          <h4 style="color: #814700 ; margin-bottom: 20px;">오늘의 운세</h4>
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h4 style="color: #814700 ; margin-bottom: 20px;">오늘의 운세</h4>
 
-          <div id="fortuneText">
-            <p id="fortuneMsg1" class="fortune-message" style="display: none;">당신의 오늘을 위한 짧은 안내서입니다.</p>
-            <p id="fortuneMsg2" class="fortune-message" style="display: none;">이 운세가 당신의 하루에 작은 방향이 되길 바랍니다.</p>
-            <p id="fortuneResult" class="fortune-result  scrolling-text" style="display: none;"></p>
+            <div id="fortuneText">
+              <p id="fortuneMsg1" class="fortune-message" style="display: none;">당신의 오늘을 위한 짧은
+                안내서입니다.</p>
+              <p id="fortuneMsg2" class="fortune-message" style="display: none;">이 운세가 당신의 하루에 작은
+                방향이 되길 바랍니다.</p>
+              <p id="fortuneResult" class="fortune-result  scrolling-text"
+                 style="display: none;"></p>
 
-          </div>
+            </div>
 
-          <div style="margin-top: 20px; text-align: center;">
-            <button id="retryFortuneBtn" class="fancy-button blue-button" onclick="retryFortune()">
-              다시 추천받기
-            </button>
-          </div>
+            <div style="margin-top: 20px; text-align: center;">
+              <button id="retryFortuneBtn" class="fancy-button blue-button"
+                      onclick="retryFortune()">
+                다시 추천받기
+              </button>
+            </div>
           </div>
         </div>
       </div>

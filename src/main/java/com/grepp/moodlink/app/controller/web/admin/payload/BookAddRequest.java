@@ -25,8 +25,8 @@ public class BookAddRequest {
     //front에서 LocalDate로 넘어옴
     private LocalDate publishedDate;
 
-    public BookDto toDto(){
-        BookDto bookDto= new BookDto();
+    public BookDto toDto() {
+        BookDto bookDto = new BookDto();
         bookDto.setTitle(title);
         bookDto.setAuthor(author);
         bookDto.setGenre(genre);

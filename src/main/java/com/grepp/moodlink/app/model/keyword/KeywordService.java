@@ -11,7 +11,7 @@ public class KeywordService {
     private final KeywordRepository keywordRepository;
 
     public void generateKeywordSelection(String userId) {
-        if(keywordRepository.findByUserId(userId) != null){
+        if (keywordRepository.findByUserId(userId) != null) {
             return;
         }
 

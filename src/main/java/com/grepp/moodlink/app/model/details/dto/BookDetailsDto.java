@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class BookDetailsDto {
+
     private String id;
     private String name;
     private String author;
@@ -20,7 +21,8 @@ public class BookDetailsDto {
     private String publisher;
     private String summary;
 
-    public BookDetailsDto(String id, String name, String author, LocalDate publishedAt, String description,
+    public BookDetailsDto(String id, String name, String author, LocalDate publishedAt,
+        String description,
         String bookImg, String genre, String publisher, String summary) {
         this.id = id;
         this.name = name;
@@ -32,10 +34,10 @@ public class BookDetailsDto {
         this.publisher = publisher;
         this.summary = summary;
         this.status = false;
-        this.externalLink = "https://www.google.com/search?q="+name;
+        this.externalLink = "https://www.google.com/search?q=" + name;
     }
 
-    public static BookDetailsDto from(BookDto book){
+    public static BookDetailsDto from(BookDto book) {
         return new BookDetailsDto(
             book.getIsbn(),
             book.getTitle(),

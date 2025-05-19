@@ -13,9 +13,10 @@
 
   <!-- 중앙 배치 form -->
   <div class="main-area">
-      <form th:action="@{'/admin/books/modify/'+${book.isbn}}" th:object="${bookModifyRequest}" method="post" enctype="multipart/form-data">
-    <div class="form-section">
-      <h3>도서 정보를 입력해주세요.</h3>
+    <form th:action="@{'/admin/books/modify/'+${book.isbn}}" th:object="${bookModifyRequest}"
+          method="post" enctype="multipart/form-data">
+      <div class="form-section">
+        <h3>도서 정보를 입력해주세요.</h3>
 
         <div class="info-group">
           <div class="image-upload">
@@ -23,15 +24,24 @@
                  th:style="'background-image: url(' + ${book.image} + ');'"></div>
             <input type="file" id="image-input" name="image" style="display:none"/>
             <div id="sizeInfo"></div>
-            <button class="img-btn" type="button" onclick="document.getElementById('image-input').click()">이미지 추가</button>
+            <button class="img-btn" type="button"
+                    onclick="document.getElementById('image-input').click()">이미지 추가
+            </button>
           </div>
 
 
           <div>
-            <div class="form-row"><label>제목</label><div th:text="${book.title}"></div> <a class="delete-btn" th:attr="data-isbn=${book.isbn}">삭제</a> </div>
-            <div class="form-row"><label>작가</label><div th:text="${book.author}"></div></div>
-            <div class="form-row"><label>발행일</label><input th:field="*{publishedDate}" th:value="${#temporals.format(publishedDate, 'yyyy-MM-dd')}"  class="input-line" type="date"/></div>
-            <div class="form-row"><label>출판사</label><input th:field="*{publisher}" class="input-line" type="text" /></div>
+            <div class="form-row"><label>제목</label>
+              <div th:text="${book.title}"></div>
+              <a class="delete-btn" th:attr="data-isbn=${book.isbn}">삭제</a></div>
+            <div class="form-row"><label>작가</label>
+              <div th:text="${book.author}"></div>
+            </div>
+            <div class="form-row"><label>발행일</label><input th:field="*{publishedDate}"
+                                                           th:value="${#temporals.format(publishedDate, 'yyyy-MM-dd')}"
+                                                           class="input-line" type="date"/></div>
+            <div class="form-row"><label>출판사</label><input th:field="*{publisher}"
+                                                           class="input-line" type="text"/></div>
           </div>
         </div>
 
@@ -49,12 +59,14 @@
         <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
           <label>설명</label>
           <textarea th:field="*{description}" class="textarea"></textarea>
-          <span class="helper-text form-row" th:if="${fieldErrors != null and fieldErrors.containsKey('description')}" th:text="${fieldErrors.description}"></span>
+          <span class="helper-text form-row"
+                th:if="${fieldErrors != null and fieldErrors.containsKey('description')}"
+                th:text="${fieldErrors.description}"></span>
         </div>
 
         <button class="submit-btn" type="submit" name="action">등록</button>
-    </div>
-      </form>
+      </div>
+    </form>
   </div>
 </main>
 <div layout:fragment="scripts">
@@ -89,7 +101,7 @@
 
           const confirmed = confirm("정말 삭제하시겠습니까?");
 
-          if(confirmed){
+          if (confirmed) {
 
             const isbn = btn.dataset.isbn;
             const url = `http://localhost:8080/api/admin/books/delete/${isbn}`;
