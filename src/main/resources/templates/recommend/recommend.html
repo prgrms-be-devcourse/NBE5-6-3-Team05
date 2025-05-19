@@ -6,12 +6,11 @@
 <head>
   <title>Index</title>
   <style>
-    body {
+    body{
       background-attachment: fixed;
       background-position: center;
       margin: 0;
     }
-
     .center-container {
       margin-top: -40px;
       min-height: 100vh;
@@ -20,7 +19,6 @@
       justify-content: center;
       align-items: center;
     }
-
     .recommend-form-wrapper {
       background: rgba(255, 255, 255, 0.05);
       border-radius: 16px;
@@ -31,11 +29,9 @@
       width: 100%;
       margin: 40px auto;
     }
-
-    textarea {
+    textarea{
       justify-self: center;
     }
-
     .select-group {
       margin-bottom: 24px;
       display: flex;
@@ -43,7 +39,6 @@
       gap: 16px;
       justify-content: center;
     }
-
     select {
       display: block !important;
       max-width: 120px;
@@ -53,7 +48,6 @@
       border: 1px solid #bbb;
       padding: 4px 8px;
     }
-
     .section h3 {
       font-size: 2em;
       margin-bottom: 12px;
@@ -61,14 +55,12 @@
       color: #ffffff;
       font-weight: 600;
     }
-
     .card-grid {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
       justify-content: center;
     }
-
     .card {
       background-color: #e0e0e0;
       color: #222;
@@ -83,18 +75,15 @@
       font-weight: 500;
       box-sizing: border-box;
     }
-
     .card:hover {
       background-color: #dadada;
     }
-
     .card.selected {
       border-color: #a64dff;
       background: #f5ebff;
       color: #7c4dff;
       font-weight: 700;
     }
-
     .additional-input {
       display: block;
       width: 80%;
@@ -107,7 +96,6 @@
       margin-right: auto;
       color: white;
     }
-
     .submit-button {
       margin-top: 32px;
       padding: 12px 32px;
@@ -121,10 +109,9 @@
       margin-left: auto;
       margin-right: auto;
       font-size: 16px;
-      box-shadow: 0 2px 8px rgba(124, 77, 255, 0.07);
+      box-shadow: 0 2px 8px rgba(124,77,255,0.07);
       transition: background 0.2s, opacity 0.2s;
     }
-
     button:disabled {
       opacity: 0.5;
       cursor: not-allowed;
@@ -140,11 +127,12 @@
     <div class="select-group">
       영화 장르
       <label>
-        <select name="genre">
-          <option value="">전체</option>
+        <select name="genre" >
+          <option value="" th:selected="${userGenre == ''}">전체</option>
           <option th:each="genre : ${genres}"
                   th:value="${genre.name}"
-                  th:text="${genre.name}"></option>
+                  th:text="${genre.name}"
+                  th:selected="${genre.name == userGenre}"></option>
         </select>
       </label>
       <span>국가 : 대한민국</span>
@@ -210,8 +198,7 @@
 
     <div class="section">
       <h3>추가로 입력하고 싶은 내용을 자유롭게 입력해주세요.</h3>
-      <textarea class="additional-input" id="additionalText"
-                placeholder="추가로 원하는 사항을 자유롭게 입력하세요"></textarea>
+      <textarea class="additional-input" id="additionalText" placeholder="추가로 원하는 사항을 자유롭게 입력하세요"></textarea>
     </div>
 
     <button type="submit" class="submit-button" id="submitBtn" disabled>추천받기</button>
@@ -276,22 +263,21 @@
     function updateKeywords() {
       const additional = document.getElementById('additionalText').value.trim();
       const finalKeywords = Object.entries(questionToKeywords)
-      .map(([question, keywords]) => `${question}=${Array.from(keywords).join(',')}`)
-      .concat(additional ? [`추가사항=${additional}`] : [])
-      .join('이야.');
+        .map(([question, keywords]) => `${question}=${Array.from(keywords).join(',')}`)
+        .concat(additional ? [`추가사항=${additional}`] : [])
+        .join('이야.');
       document.getElementById('selectedKeywords').value = finalKeywords;
     }
 
     // 필수 항목 체크
     function validateForm() {
       const isValid = requiredQuestions.every(q =>
-          questionToKeywords[q] && questionToKeywords[q].size > 0
+        questionToKeywords[q] && questionToKeywords[q].size > 0
       );
       document.getElementById('submitBtn').disabled = !isValid;
     }
 
-    // 폼 제출 전 최종 검증
-    document.getElementById('recommendForm').addEventListener('submit', function (e) {
+    document.getElementById('recommendForm').addEventListener('submit', function(e) {
       validateForm();
       if (document.getElementById('submitBtn').disabled) {
         e.preventDefault();

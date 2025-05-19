@@ -80,4 +80,9 @@ public class MemberService {
         member.setRole(Role.ROLE_USER);
         memberRepository.save(member);
     }
+
+    public Optional<Member> findGenre(String userId) {
+        System.out.println(memberRepository.findById(userId));
+        return memberRepository.findById(userId);
+    }
 }

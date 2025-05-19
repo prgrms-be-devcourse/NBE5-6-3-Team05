@@ -9,6 +9,8 @@ import com.grepp.moodlink.app.model.data.music.MusicService;
 import com.grepp.moodlink.app.model.keyword.KeywordService;
 import com.grepp.moodlink.app.model.llm.EmbeddingService;
 import com.grepp.moodlink.app.model.llm.LlmService;
+import com.grepp.moodlink.app.model.member.MemberRepository;
+import com.grepp.moodlink.app.model.member.MemberService;
 import com.grepp.moodlink.app.model.result.CuratingDetailRepository;
 import com.grepp.moodlink.app.model.result.dto.CuratingDetailIdDto;
 import jakarta.servlet.http.HttpSession;
@@ -37,11 +39,20 @@ public class RecommendController {
     private final BookService bookService;
     private final MusicService musicService;
     private final LlmService llmService;
-    private final CuratingDetailRepository curatingDetailRepository;
+    private final MemberService memberService;
 
     @GetMapping
     public String selectKeyword() {
         return "/recommend/recommend";
+    }
+
+    @ModelAttribute("userGenre")
+    public String findUserGenre(){
+        String userId = getLoginUserId();
+        if(userId == null){
+            return "";
+        }
+        return memberService.findGenre(userId).orElseThrow().getGenre();
     }
 
     @ModelAttribute("genres")
