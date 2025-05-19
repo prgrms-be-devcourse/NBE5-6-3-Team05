@@ -2,7 +2,6 @@ package com.grepp.moodlink.app.model.data.music;
 
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
-import com.grepp.moodlink.infra.imgbb.ImgUploadTemplate;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +12,8 @@ import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
