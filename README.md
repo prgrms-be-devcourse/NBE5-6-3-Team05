@@ -11,9 +11,7 @@
 
 ---
 
-
-
-# 깃 컨벤션
+# 코드 컨벤션
 - ex ) (feat) sign up complete<br><br>
 
 - feat : 새로운 기능 추가<br>
@@ -69,7 +67,9 @@
 
 ## 📌 프로젝트 소개
 
-<img src="readmeresource/project_intro.png" alt="Project Info" style="max-width: 100%; height: auto;">
+<img src="readmeresource/moodlink_des1.png" alt="Project Info" style="max-width: 100%; height: auto;"> <br>
+<img src="readmeresource/moodlink_des2.png" alt="Project Info" style="max-width: 100%; height: auto;"> <br>
+<img src="readmeresource/moodlink_des3.png" alt="Project Info" style="max-width: 100%; height: auto;">
 
 
 <br/>
@@ -79,7 +79,7 @@
 
 <br/>
 
-## 📊 ERD 설계
+## 📊 ERD
 <div align="center">
 <img src="readmeresource/moodlinkerd.png" alt="ERD" style="max-width: 100%; height: auto;">
 
@@ -87,14 +87,16 @@
 
 <br/>
 
-## 🗂️ ERD 및 테이블 구조
-<img src="readmeresource/moodlinkerd.png" alt="ERD" style="max-width: 100%; height: auto;">
+## 📅 Gantt
+<div align="center">
+<img src="readmeresource/gantt.png" alt="Gantt" style="max-width: 100%; height: auto;">
 
+</div>
 
 <br/>
 
-## 📄API 명세서
-<img src="readmeresource/api.png" alt="Project Info" style="max-width: 100%; height: auto;">
+## ✏️ UI Flow
+<img src="readmeresource/uiflow.png" alt="UI Flow" style="max-width: 100%; height: auto;">
 
 <br/>
 
