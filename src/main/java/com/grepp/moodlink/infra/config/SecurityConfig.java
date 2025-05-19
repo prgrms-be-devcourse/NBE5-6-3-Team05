@@ -50,7 +50,7 @@ public class SecurityConfig {
                         authority.getAuthority().equals("ROLE_ADMIN"));
 
                 if (isAdmin) {
-                    response.sendRedirect("/admin/books");
+                    response.sendRedirect("/admin/movies");
                     return;
                 }
 
