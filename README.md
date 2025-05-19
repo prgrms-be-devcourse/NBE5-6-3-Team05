@@ -60,12 +60,12 @@
 <br/>
 
 ## 🛠️ 기술 스택
-<img src="readmeresource/stack.png" alt="Project Info" style="max-width: 100%; height: auto;">
+<img src="readmeresource/stack.png" alt="stack" style="max-width: 100%; height: auto;">
 
 <br/>
 
 ## 📍 System Architeture
-<img src="readmeresource/system_architeture.jpg" alt="Project Info" style="max-width: 100%; height: auto;">
+<img src="readmeresource/system_architeture.jpg" alt="System Architeture" style="max-width: 100%; height: auto;">
 
 <br/>
 
@@ -85,7 +85,7 @@
 <br/>
 
 ## 🖥️ 주요 화면 (UI)
-<img src="readmeresource/ui.png" alt="Project Info" style="max-width: 100%; height: auto;">
+<img src="readmeresource/ui.png" alt="UI" style="max-width: 100%; height: auto;">
 
 <br/>
 
@@ -96,7 +96,7 @@
 </div>
 
 ## 🛠️ 트러블 슈팅 & 해결 과정
-<img src="readmeresource/trubleshooting.png" alt="Project Info" style="max-width: 100%; height: auto;">
+<img src="readmeresource/Troubleshooting.png" alt="Troubleshooting" style="max-width: 100%; height: auto;">
 
 # 코드 컨벤션
 - ex ) (feat) sign up complete<br><br>
