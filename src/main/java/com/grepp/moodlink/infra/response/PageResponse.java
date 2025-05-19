@@ -42,7 +42,7 @@ public class PageResponse<T> {
         return page.getContent();
     }
 
-    private int calcTotalPage() {
+    public int calcTotalPage() {
         int totalPage = page.getTotalPages();
         return totalPage == 0 ? 1 : totalPage;
     }
