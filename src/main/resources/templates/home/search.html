@@ -26,7 +26,7 @@
 
   <!-- 영화 -->
   <div class="category" id="movie">
-    <h3>영화 검색 결과</h3>
+    <h3><span class="highlight">영화</span> 검색 결과</h3>
     <div th:if="${movie.size() > 0}" class="card-container">
       <div th:each="m : ${movie}" class="card-movie"
            th:attr="onclick=
@@ -45,7 +45,7 @@
 
   <!-- 음악 -->
   <div class="category" id="music">
-    <h3>음악 검색 결과</h3>
+    <h3><span class="highlight">음악</span> 검색 결과</h3>
     <div th:if="${music.size() > 0}" class="card-container">
       <div th:each="m : ${music}" class="card-music"
            th:attr="onclick=
@@ -64,7 +64,7 @@
 
   <!-- 도서 -->
   <div class="category" id="book">
-    <h3>도서 검색 결과</h3>
+    <h3><span class="highlight">도서</span> 검색 결과</h3>
     <div th:if="${book.size() > 0}" class="card-container">
       <div th:each="b : ${book}" class="card-book"
            th:attr="onclick=
