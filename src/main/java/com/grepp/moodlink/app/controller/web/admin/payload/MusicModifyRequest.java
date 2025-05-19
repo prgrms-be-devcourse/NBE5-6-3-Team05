@@ -17,6 +17,7 @@ public class MusicModifyRequest {
     private String genre;
 
     private String description;
+    @NotBlank
     private String lyrics;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")

@@ -12,11 +12,7 @@ public interface BookRepository extends JpaRepository<Book, String>, BookReposit
 
     List<Book> findByEmbeddingIsNull();
 
-    boolean existsByTitleAndAuthor(String title, String author);
-
     Book findByIsbn(String isbn);
-
-    List<Book> findByActivated(Boolean activated);
 
     @Query("SELECT b.isbn FROM Book b where b.title = :title")
     Optional<String> findIsbnByTitle(@Param("title") String title);
