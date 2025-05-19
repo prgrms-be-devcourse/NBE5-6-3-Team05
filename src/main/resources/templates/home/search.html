@@ -81,6 +81,8 @@
         <h1 id="modalTitle" class="modal-title"></h1>
         <ul class="modal-badges">
           <li id="modalYear"></li>
+<!--          <li id="singer"></li>-->
+<!--          <li id="author"></li>-->
 <!--          연령, 장르 등 정보 3차 플젝 때 추가 예정-->
 <!--          <li>12+</li>-->
 <!--          <li id="modalSeries">콘텐츠</li>-->
@@ -108,6 +110,8 @@
   function showDetailModal(title, releaseDate, summary, thumbnail){
     document.getElementById('modalTitle').textContent = title;
     document.getElementById('modalYear').textContent = releaseDate.split('-')[0] || releaseDate;
+    // document.getElementById('singer').textContent = singer;
+    // document.getElementById('auther').textContent = author;
     document.getElementById('modalSummary').textContent = summary;
     document.getElementById('modalBg').src = thumbnail;
     document.getElementById('detailModal').classList.add('active');
