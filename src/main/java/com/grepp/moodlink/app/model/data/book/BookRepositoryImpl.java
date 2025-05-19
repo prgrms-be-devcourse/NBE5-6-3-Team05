@@ -53,44 +53,6 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
     }
 
     @Override
-    @Transactional
-    public void updateBook(BookDto book) {
-        Book entity = em.find(Book.class, book.getIsbn());
-
-        if (entity == null) {
-            log.warn("도서 없음: {}", book.getIsbn());
-        }
-
-        entity.setGenre(book.getGenre());
-        if(book.getImage()!=null){
-            entity.setImage(book.getImage());
-        }
-        entity.setPublisher(book.getPublisher());
-        entity.setPublishedDate(book.getPublishedDate());
-        entity.setDescription(book.getDescription());
-    }
-
-    @Override
-    public Page<Book> findPaged(Pageable pageable) {
-
-        List<Book> content = queryFactory
-            .select(book)
-            .from(book)
-            .where(book.activated)
-            .orderBy(book.modifiedAt.desc())
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .fetch();
-
-        JPAQuery<Long> countQuery = queryFactory
-            .select(book.count())
-            .from(book)
-            .where(book.activated);
-
-        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
-    }
-
-    @Override
     public List<BookDto> searchContent(String contentName) {
         return queryFactory.select(Projections.constructor(BookDto.class,
                 book.title,
