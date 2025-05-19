@@ -15,6 +15,7 @@ import com.grepp.moodlink.app.model.recomend.entity.LikeDetailBooks;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMovies;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMusic;
 import com.grepp.moodlink.app.model.recomend.entity.Likes;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -387,6 +388,7 @@ public class LikeService {
             LikeDetailMusic likeDetailMusic1 = new LikeDetailMusic();
             likeDetailMusic1.setLikesId(likes1.getId());
             likeDetailMusic1.setMusicId(id);
+            likeDetailMusic1.setCreatedAt(LocalDateTime.now());
             likeDetailMusicRepository.save(likeDetailMusic1);
             return true;
         }
@@ -402,6 +404,7 @@ public class LikeService {
         LikeDetailMusic newLikeMusic = new LikeDetailMusic();
         newLikeMusic.setMusicId(id);
         newLikeMusic.setLikesId(userLike.getId());
+        newLikeMusic.setCreatedAt(LocalDateTime.now());
         likeDetailMusicRepository.save(newLikeMusic);
         return true;
     }
@@ -456,6 +459,8 @@ public class LikeService {
             LikeDetailMovies likeDetailMovies1 = new LikeDetailMovies();
             likeDetailMovies1.setLikesId(likes1.getId());
             likeDetailMovies1.setMovieId(id);
+            likeDetailMovies1.setCreatedAt(LocalDateTime.now());
+
             likeDetailMoviesRepository.save(likeDetailMovies1);
             return true;
         }
@@ -471,6 +476,7 @@ public class LikeService {
         LikeDetailMovies newLikeMovies = new LikeDetailMovies();
         newLikeMovies.setMovieId(id);
         newLikeMovies.setLikesId(userLike.getId());
+        newLikeMovies.setCreatedAt(LocalDateTime.now());
         likeDetailMoviesRepository.save(newLikeMovies);
         return true;
     }
@@ -529,6 +535,7 @@ public class LikeService {
             LikeDetailBooks likeDetailBooks1 = new LikeDetailBooks();
             likeDetailBooks1.setLikesId(likes1.getId());
             likeDetailBooks1.setBookId(id);
+            likeDetailBooks1.setCreatedAt(LocalDateTime.now());
             likeDetailBooksRepository.save(likeDetailBooks1);
             return true;
         }
@@ -544,6 +551,7 @@ public class LikeService {
         LikeDetailBooks newLikeBooks = new LikeDetailBooks();
         newLikeBooks.setBookId(id);
         newLikeBooks.setLikesId(userLike.getId());
+        newLikeBooks.setCreatedAt(LocalDateTime.now());
         likeDetailBooksRepository.save(newLikeBooks);
         return true;
     }

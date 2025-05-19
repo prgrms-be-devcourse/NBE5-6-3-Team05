@@ -170,9 +170,9 @@ public class MemberController {
 
         String userId = principal.getUsername();
 
-        Pageable bookPageable = PageRequest.of(bookPage, size);
-        Pageable musicPageable = PageRequest.of(musicPage, size);
-        Pageable moviePageable = PageRequest.of(moviePage, size);
+        Pageable bookPageable = PageRequest.of(bookPage, size,Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable musicPageable = PageRequest.of(musicPage, size,Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable moviePageable = PageRequest.of(moviePage, size,Sort.by(Sort.Direction.DESC, "createdAt"));
 
         System.out.println("Book Page: " + bookPage);
         System.out.println("북페이지 크기: " + size);
