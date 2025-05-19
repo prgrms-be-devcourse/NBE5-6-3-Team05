@@ -11,19 +11,14 @@
 
 ---
 
-# 코드 컨벤션
-- ex ) (feat) sign up complete<br><br>
+## 📌 프로젝트 소개
 
-- feat : 새로운 기능 추가<br>
-- fix : 버그 수정<br>
-- docs : 문서 수정<br>
-- style : 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우<br>
-- refactor : 코드 리펙토링<br>
-- test : 테스트 코드, 리펙토링 테스트 코드 추가<br>
-- chore : 빌드 업무 수정, 패키지 매니저 수정<br>
-- merge : 병합 알림 -> ex ) (merge) main   뜻 : main과 병합했음 
+<img src="readmeresource/moodlink_des1.png" alt="Project Info" style="max-width: 100%; height: auto;"> <br>
+<img src="readmeresource/moodlink_des2.png" alt="Project Info" style="max-width: 100%; height: auto;"> <br>
+<img src="readmeresource/moodlink_des3.png" alt="Project Info" style="max-width: 100%; height: auto;">
 
----
+
+<br/>
 
 
 ## 🧑‍💻 팀원 소개
@@ -64,18 +59,13 @@
 
 <br/>
 
-
-## 📌 프로젝트 소개
-
-<img src="readmeresource/moodlink_des1.png" alt="Project Info" style="max-width: 100%; height: auto;"> <br>
-<img src="readmeresource/moodlink_des2.png" alt="Project Info" style="max-width: 100%; height: auto;"> <br>
-<img src="readmeresource/moodlink_des3.png" alt="Project Info" style="max-width: 100%; height: auto;">
-
+## 🛠️ 기술 스택
+<img src="readmeresource/stack.png" alt="Project Info" style="max-width: 100%; height: auto;">
 
 <br/>
 
-## 🛠️ 기술 스택
-<img src="readmeresource/stack.png" alt="Project Info" style="max-width: 100%; height: auto;">
+## 📍 System Architeture
+<img src="readmeresource/system_architeture.jpg" alt="Project Info" style="max-width: 100%; height: auto;">
 
 <br/>
 
@@ -86,12 +76,6 @@
 </div>
 
 <br/>
-
-## 📅 Gantt
-<div align="center">
-<img src="readmeresource/gantt.png" alt="Gantt" style="max-width: 100%; height: auto;">
-
-</div>
 
 <br/>
 
@@ -105,8 +89,28 @@
 
 <br/>
 
+## 📅 Gantt
+<div align="center">
+<img src="readmeresource/gantt.png" alt="Gantt" style="max-width: 100%; height: auto;">
+
+</div>
+
 ## 🛠️ 트러블 슈팅 & 해결 과정
 <img src="readmeresource/trubleshooting.png" alt="Project Info" style="max-width: 100%; height: auto;">
+
+# 코드 컨벤션
+- ex ) (feat) sign up complete<br><br>
+
+- feat : 새로운 기능 추가<br>
+- fix : 버그 수정<br>
+- docs : 문서 수정<br>
+- style : 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우<br>
+- refactor : 코드 리펙토링<br>
+- test : 테스트 코드, 리펙토링 테스트 코드 추가<br>
+- chore : 빌드 업무 수정, 패키지 매니저 수정<br>
+- merge : 병합 알림 -> ex ) (merge) main   뜻 : main과 병합했음
+
+---
 
 [NULL NULL 하게 발표자료 보기](readmeresource/ppt.pdf)
 
