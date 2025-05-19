@@ -8,11 +8,14 @@ import com.grepp.moodlink.app.model.data.music.MusicRepository;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.keyword.KeywordRepository;
 import com.grepp.moodlink.app.model.keyword.entity.KeywordSelection;
+import com.grepp.moodlink.infra.error.LLMServiceUnavailableException;
+import com.grepp.moodlink.infra.response.ResponseCode;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
@@ -54,11 +57,7 @@ public class LlmService {
         try {
             recommendation = chatLanguageModel.chat(prompt);
         } catch (ResourceAccessException e) {
-            try {
-                throw new ServiceUnavailableException("서비스에 접근할 수 없습니다.");
-            } catch (ServiceUnavailableException ex) {
-                throw new RuntimeException(ex);
-            }
+            throw new LLMServiceUnavailableException(ResponseCode.EXTERNAL_API_UNAVAILABLE, e);
         }
         return recommendation;
     }
@@ -67,8 +66,12 @@ public class LlmService {
         KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
         byte[] byteEmbedding = keywordSelection.getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
-
-        List<Movie> rawMovies = movieRepository.findByGenreName(genre);
+        List<Movie> rawMovies;
+        if (genre.isEmpty()){
+            rawMovies = movieRepository.findAll();
+        }else{
+            rawMovies = movieRepository.findByGenreName(genre);
+        }
 
         List<Movie> movies = rawMovies.stream()
                 .peek(m -> {
@@ -167,11 +170,7 @@ public class LlmService {
         try {
             recommendation = chatLanguageModel.chat(prompt);
         } catch (ResourceAccessException e) {
-            try {
-                throw new ServiceUnavailableException("서비스에 접근할 수 없습니다.");
-            } catch (ServiceUnavailableException ex) {
-                throw new RuntimeException(ex);
-            }
+            throw new LLMServiceUnavailableException(ResponseCode.EXTERNAL_API_UNAVAILABLE, e);
         }
         return recommendation;
     }
