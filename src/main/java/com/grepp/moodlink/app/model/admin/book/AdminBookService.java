@@ -33,8 +33,9 @@ public class AdminBookService {
     @Transactional
     public void addBook(List<MultipartFile> thumbnail, BookDto dto) {
 
-        if(adminBookRepository.existsByTitleAndAuthor(dto.getTitle(),dto.getAuthor()))
+        if (adminBookRepository.existsByTitleAndAuthor(dto.getTitle(), dto.getAuthor())) {
             throw new CommonException(ResponseCode.DUPLICATED_DATA);
+        }
 
         try {
             uploadImage(thumbnail, dto);
@@ -42,9 +43,9 @@ public class AdminBookService {
             Book book = mapper.map(dto, Book.class);
 
             long count = adminBookRepository.count();
-            book.setIsbn("B"+count);
+            book.setIsbn("B" + count);
 
-            log.info("{}",book);
+            log.info("{}", book);
 
             // 입력한 데이터 저장
             adminBookRepository.save(book);
@@ -56,8 +57,8 @@ public class AdminBookService {
     }
 
     private void uploadImage(List<MultipartFile> thumbnail, BookDto dto) throws IOException {
-        if(thumbnail != null){
-            MultipartFile file =  thumbnail.getFirst();
+        if (thumbnail != null) {
+            MultipartFile file = thumbnail.getFirst();
             String originFileName = file.getOriginalFilename();
             if (originFileName != null && originFileName.contains(".")) {
                 String ext = originFileName.substring(originFileName.lastIndexOf("."));
@@ -86,7 +87,7 @@ public class AdminBookService {
             // 업데이트
             adminBookRepository.updateBook(dto);
             embeddingService.generateEmbeddingsBook();
-            log.info("{}",dto);
+            log.info("{}", dto);
 
 
         } catch (IOException e) {

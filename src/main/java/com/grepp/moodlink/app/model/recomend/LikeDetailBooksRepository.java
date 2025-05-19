@@ -16,15 +16,19 @@ import org.springframework.stereotype.Repository;
 public interface LikeDetailBooksRepository extends JpaRepository<LikeDetailBooks, Long> {
 
     List<LikeDetailBooks> findAllByLikesIdIn(Collection<Long> likesIds);
-    @Query("SELECT l FROM LikeDetailBooks l WHERE l.likesId IN :likesIds")
-    Page<LikeDetailBooks> findAllByLikesIdInPagination(@Param("likesIds") Collection<Long> likesIds, Pageable pageable);
-    List<LikeDetailBooks> findByLikesId(Long likeId);
 
+    @Query("SELECT l FROM LikeDetailBooks l WHERE l.likesId IN :likesIds")
+    Page<LikeDetailBooks> findAllByLikesIdInPagination(@Param("likesIds") Collection<Long> likesIds,
+        Pageable pageable);
+
+    List<LikeDetailBooks> findByLikesId(Long likeId);
 
 
     @Modifying
     @Transactional
     @Query("DELETE FROM LikeDetailBooks l WHERE l.bookId = :bookId AND l.likesId = :likesId")
     void deleteByBookIdAndLikesId(@Param("bookId") String bookId, @Param("likesId") Long likesId);
+
+    boolean existsByLikesIdAndBookId(Long LikesId, String id);
 }
 

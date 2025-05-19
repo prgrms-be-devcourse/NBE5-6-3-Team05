@@ -26,7 +26,8 @@
           <div class="item-card"
                th:attr="data-isbn=${book.isbn}">
             <div class="item-thumbnail">
-              <img th:src="${book.image}" alt="썸네일" style="width: 100%; height: 100%; object-fit: cover;"/>
+              <img th:src="${book.image}" alt="썸네일"
+                   style="width: 100%; height: 100%; object-fit: cover;"/>
             </div>
             <div class="item-details">
               <div class="item-title" th:text="${book.title}">제목</div>

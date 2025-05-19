@@ -32,17 +32,17 @@
     }
 
     .label-left {
-      font-size: 26px;         /* 글자 크기 ↑ */
+      font-size: 26px; /* 글자 크기 ↑ */
       font-weight: bold;
       color: white;
       padding: 4px 0;
       display: flex;
-      align-items: center;     /* 세로 정렬 */
+      align-items: center; /* 세로 정렬 */
     }
 
     .label-right {
       display: flex;
-      align-items: center;     /* 버튼과 높이 맞추기 */
+      align-items: center; /* 버튼과 높이 맞추기 */
     }
 
     /* 아래 선 */
@@ -273,6 +273,21 @@
     }
 
     /* 모달 스타일 */
+
+    detailModalResult {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, .75);
+      justify-content: center;
+      align-items: center
+    }
+
+    detailModalResult.active {
+      display: flex
+    }
+
     /* 전체 모달 배경 (검은 반투명 배경) */
     .custom-modal {
       display: flex; /* 기본 display는 JS에서 hidden 클래스로 토글 관리 */
@@ -538,7 +553,7 @@
   </div>
 
   <!-- 모달창 HTML -->
-  <div id="detailModal" class="custom-modal hidden">
+  <div id="detailModalResult" class="custom-modal hidden">
     <div class="custom-modal-content">
       <span class="custom-close-btn" onclick="closeModal()">&times;</span>
 
@@ -633,7 +648,7 @@
     });
 
     function openModal(type, data) {
-      const modal = document.getElementById("detailModal");
+      const modal = document.getElementById("detailModalResult");
       const body = document.getElementById("modal-body");
       const meta = document.getElementById("custom-modal-meta");
       const likeBtn = document.getElementById("modal-like-btn");
@@ -666,6 +681,7 @@
         details += `<p><strong>개봉일:</strong> ${data.releaseDate}</p>`;
       } else if (type === "song") {
         details += `<p><strong>아티스트:</strong> ${data.artist}</p>`;
+        details += `<p><strong>장르:</strong> ${data.genre}</p>`;
         details += `<p><strong>발매일:</strong> ${data.releasedAt}</p>`;
         details += `<p><strong>요약:</strong> ${buildExpandable(data.summary, "summary")}</p>`;
         details += `<p><strong>가사:</strong> ${buildExpandable(data.lyrics, "lyrics")}</p>`;
@@ -686,7 +702,7 @@
     }
 
     function closeModal() {
-      document.getElementById("detailModal").classList.add("hidden");
+      document.getElementById("detailModalResult").classList.add("hidden");
     }
 
     //모달 창의 텍스트 줄여서 보기

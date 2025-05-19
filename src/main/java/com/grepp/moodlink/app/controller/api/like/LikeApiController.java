@@ -21,16 +21,15 @@ public class LikeApiController {
     private final LikeService likeService;
 
     @PostMapping("/book/toggle")
-    public ResponseEntity<ToggleResponse> toggleBook(@RequestBody ToggleRequest request, Authentication authentication) {
+    public ResponseEntity<ToggleResponse> toggleBook(@RequestBody ToggleRequest request,
+        Authentication authentication) {
 
         String userId;
-        userId = "";
-        if (authentication != null){
+        if (authentication != null) {
             userId = authentication.getName();
         }
-
         // 비회원 시 바로 false를 반환(좋아요 비활성화 유지)
-        if (userId.isEmpty()){
+        else {
             return ResponseEntity.ok(new ToggleResponse(false));
         }
 
@@ -39,15 +38,15 @@ public class LikeApiController {
     }
 
     @PostMapping("/song/toggle")
-    public ResponseEntity<ToggleResponse> toggleSong(@RequestBody ToggleRequest request, Authentication authentication) {
+    public ResponseEntity<ToggleResponse> toggleSong(@RequestBody ToggleRequest request,
+        Authentication authentication) {
+
         String userId;
-        userId = "";
-        if (authentication != null){
+        if (authentication != null) {
             userId = authentication.getName();
         }
-
         // 비회원 시 바로 false를 반환(좋아요 비활성화 유지)
-        if (userId.isEmpty()){
+        else {
             return ResponseEntity.ok(new ToggleResponse(false));
         }
 
@@ -56,19 +55,18 @@ public class LikeApiController {
     }
 
     @PostMapping("/movie/toggle")
-    public ResponseEntity<ToggleResponse> toggleMovie(@RequestBody ToggleRequest request, Authentication authentication) {
+    public ResponseEntity<ToggleResponse> toggleMovie(@RequestBody ToggleRequest request,
+        Authentication authentication) {
         String userId;
-        userId = "";
-        if (authentication != null){
+        if (authentication != null) {
             userId = authentication.getName();
         }
-
         // 비회원 시 바로 false를 반환(좋아요 비활성화 유지)
-        if (userId.isEmpty()){
+        else {
             return ResponseEntity.ok(new ToggleResponse(false));
         }
 
-        boolean updated = likeService.toggleLikeMovie(userId,request.getId());
+        boolean updated = likeService.toggleLikeMovie(userId, request.getId());
         return ResponseEntity.ok(new ToggleResponse(updated));
     }
 }

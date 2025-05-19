@@ -62,7 +62,7 @@ public class AdminController {
         Pageable pageable = PageRequest.of(param.getPage() - 1, param.getSize());
         Page<MovieInfoDto> page = movieService.findPaged(pageable);
 
-        if(param.getPage() != 1 && page.getContent().isEmpty()){
+        if (param.getPage() != 1 && page.getContent().isEmpty()) {
             throw new CommonException(ResponseCode.BAD_REQUEST);
         }
 
@@ -74,7 +74,7 @@ public class AdminController {
 
     // 음악 리스트를 보여주는 화면
     @GetMapping("music")
-    public String music(Model model, @Valid PageParam param, BindingResult bindingResult){
+    public String music(Model model, @Valid PageParam param, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             throw new CommonException(ResponseCode.BAD_REQUEST);
@@ -83,7 +83,7 @@ public class AdminController {
         Pageable pageable = PageRequest.of(param.getPage() - 1, param.getSize());
         Page<MusicDto> page = musicService.findPaged(pageable);
 
-        if(param.getPage() != 1 && page.getContent().isEmpty()){
+        if (param.getPage() != 1 && page.getContent().isEmpty()) {
             throw new CommonException(ResponseCode.BAD_REQUEST);
         }
 
@@ -94,7 +94,7 @@ public class AdminController {
 
     // 도서 리스트를 보여주는 화면
     @GetMapping("books")
-    public String books(Model model, @Valid PageParam param, BindingResult bindingResult){
+    public String books(Model model, @Valid PageParam param, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             throw new CommonException(ResponseCode.BAD_REQUEST);
@@ -103,7 +103,7 @@ public class AdminController {
         Pageable pageable = PageRequest.of(param.getPage() - 1, param.getSize());
         Page<BookDto> page = adminBookService.findPaged(pageable);
 
-        if(param.getPage() != 1 && page.getContent().isEmpty()){
+        if (param.getPage() != 1 && page.getContent().isEmpty()) {
             throw new CommonException(ResponseCode.BAD_REQUEST);
         }
 
@@ -114,7 +114,8 @@ public class AdminController {
 
     // 영화 추가 화면
     @GetMapping("movies/add")
-    public String addMovie(@ModelAttribute("movieAddRequest") MovieAddRequest movieAddRequest, Model model) {
+    public String addMovie(@ModelAttribute("movieAddRequest") MovieAddRequest movieAddRequest,
+        Model model) {
         model.addAttribute("genreList", movieService.findAllGenre());
         return "admin/contents/movies-add";
     }
@@ -150,14 +151,16 @@ public class AdminController {
 
     // 음악 추가 화면
     @GetMapping("music/add")
-    public String addMusic(@ModelAttribute("musicAddRequest") MusicAddRequest musicAddRequest, Model model){
+    public String addMusic(@ModelAttribute("musicAddRequest") MusicAddRequest musicAddRequest,
+        Model model) {
         model.addAttribute("genres", MusicGenre.values());
         return "admin/contents/music-add";
     }
 
     // 음악 추가 화면
     @PostMapping("music/add")
-    public String addMusic(@Valid MusicAddRequest musicAddRequest, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+    public String addMusic(@Valid MusicAddRequest musicAddRequest, BindingResult bindingResult,
+        RedirectAttributes redirectAttributes) {
         // redirect 시에 오류 메시지를 보내기 위해
         if (bindingResult.hasErrors()) {
             Map<String, String> fieldErrors = new HashMap<>();
@@ -169,9 +172,9 @@ public class AdminController {
             return "redirect:/admin/music/add";
         }
 
-        try{
+        try {
             musicService.addMusic(musicAddRequest.getThumbnail(), musicAddRequest.toDto());
-        }catch(CommonException e){
+        } catch (CommonException e) {
             log.info(e.code().message());
             redirectAttributes.addFlashAttribute("errorMessage", e.code().message());
             redirectAttributes.addFlashAttribute("musicAddRequest", musicAddRequest);
@@ -183,14 +186,16 @@ public class AdminController {
 
     // 도서 추가 화면
     @GetMapping("books/add")
-    public String addBooks(@ModelAttribute("bookAddRequest") BookAddRequest bookAddRequest, Model model){
+    public String addBooks(@ModelAttribute("bookAddRequest") BookAddRequest bookAddRequest,
+        Model model) {
         model.addAttribute("genres", BookGenre.values());
         return "admin/contents/books-add";
     }
 
     // 도서 추가 화면
     @PostMapping("books/add")
-    public String addBooks(@Valid BookAddRequest bookAddRequest, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+    public String addBooks(@Valid BookAddRequest bookAddRequest, BindingResult bindingResult,
+        RedirectAttributes redirectAttributes) {
         // redirect 시에 오류 메시지를 보내기 위해
         if (bindingResult.hasErrors()) {
             Map<String, String> fieldErrors = new HashMap<>();
@@ -202,9 +207,9 @@ public class AdminController {
             return "redirect:/admin/books/add";
         }
 
-        try{
+        try {
             adminBookService.addBook(bookAddRequest.getImage(), bookAddRequest.toDto());
-        }catch(CommonException e){
+        } catch (CommonException e) {
             log.info(e.code().message());
             redirectAttributes.addFlashAttribute("errorMessage", e.code().message());
             return "redirect:/admin/books/add";
@@ -215,26 +220,25 @@ public class AdminController {
 
     // 영화 수정 화면
     @GetMapping("movies/modify/{id}")
-    public String modifyMovies(MovieModifyRequest movieModifyRequest, @PathVariable String id, Model model){
+    public String modifyMovies(MovieModifyRequest movieModifyRequest, @PathVariable String id,
+        Model model) {
 
         // title releasedDate 기록 가져오기
         MovieInfoDto movie = movieService.findById(id);
-        model.addAttribute("movie",movie);
-
+        model.addAttribute("movie", movie);
 
         // movieModifyRequest 기존에 저장된 데이터 값 넣어두기
         movieModifyRequest.setDescription(movie.getDescription());
         String selectedGenre = "";
-        for(Genre genre : movie.getGenres()){
-            selectedGenre=selectedGenre.concat(genre.getId()+",");
+        for (Genre genre : movie.getGenres()) {
+            selectedGenre = selectedGenre.concat(genre.getId() + ",");
         }
-        selectedGenre = selectedGenre.substring(0, selectedGenre.length()-1);
+        selectedGenre = selectedGenre.substring(0, selectedGenre.length() - 1);
         log.info(selectedGenre);
-        model.addAttribute("selectedGenre",selectedGenre);
-
+        model.addAttribute("selectedGenre", selectedGenre);
 
         // 미리 값을 저장해둔 request 넘기기
-        model.addAttribute("movieModifyRequest",movieModifyRequest);
+        model.addAttribute("movieModifyRequest", movieModifyRequest);
         // 장르 데이터 넘기기
         model.addAttribute("genreList", movieService.findAllGenre());
 
@@ -246,7 +250,7 @@ public class AdminController {
     public String modifyMovies(
         @PathVariable String id,
         @Valid MovieModifyRequest movieModifyRequest,
-        BindingResult bindingResult, RedirectAttributes redirectAttributes){
+        BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         // redirect 시에 오류 메시지를 보내기 위해
         if (bindingResult.hasErrors()) {
@@ -271,12 +275,13 @@ public class AdminController {
 
     // 도서 수정 화면
     @GetMapping("books/modify/{isbn}")
-    public String modifyBooks(BookModifyRequest bookModifyRequest, @PathVariable String isbn, Model model){
+    public String modifyBooks(BookModifyRequest bookModifyRequest, @PathVariable String isbn,
+        Model model) {
 
         // title author 기록 가져오기
         BookDto book = adminBookService.findByIsbn(isbn);
 
-        model.addAttribute("book",book);
+        model.addAttribute("book", book);
 
         // bookModifyRequest에 기존에 저장된 데이터 값 넣어두기
         bookModifyRequest.setDescription(book.getDescription());
@@ -284,9 +289,8 @@ public class AdminController {
         bookModifyRequest.setGenre(book.getGenre());
         bookModifyRequest.setPublishedDate(book.getPublishedDate());
 
-
         // 미리 값을 저장해둔 request 넘기기
-        model.addAttribute("bookModifyRequest",bookModifyRequest);
+        model.addAttribute("bookModifyRequest", bookModifyRequest);
         // 장르 데이터 넘기기
         model.addAttribute("genres", BookGenre.values());
         return "admin/contents/books-modify";
@@ -297,7 +301,7 @@ public class AdminController {
     public String modifyBooks(
         @PathVariable String isbn,
         @Valid BookModifyRequest bookModifyRequest,
-        BindingResult bindingResult, RedirectAttributes redirectAttributes){
+        BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         // redirect 시에 오류 메시지를 보내기 위해
         if (bindingResult.hasErrors()) {
             Map<String, String> fieldErrors = new HashMap<>();
@@ -322,12 +326,13 @@ public class AdminController {
 
     // 음악 수정 화면
     @GetMapping("music/modify/{id}")
-    public String modifyMusic(MusicModifyRequest musicModifyRequest, @PathVariable String id, Model model){
+    public String modifyMusic(MusicModifyRequest musicModifyRequest, @PathVariable String id,
+        Model model) {
 
         // title author 기록 가져오기
         MusicDto music = musicService.findById(id);
 
-        model.addAttribute("music",music);
+        model.addAttribute("music", music);
 
         // bookModifyRequest에 기존에 저장된 데이터 값 넣어두기
         musicModifyRequest.setReleaseDate(music.getReleaseDate());
@@ -336,9 +341,8 @@ public class AdminController {
         musicModifyRequest.setLyrics(music.getLyrics());
         // 이미지는 파일 형식이 달라서 더 고민해보기
 
-
         // 미리 값을 저장해둔 request 넘기기
-        model.addAttribute("musicModifyRequest",musicModifyRequest);
+        model.addAttribute("musicModifyRequest", musicModifyRequest);
         // 장르 데이터 넘기기
         model.addAttribute("genres", MusicGenre.values());
         return "admin/contents/music-modify";
@@ -349,7 +353,7 @@ public class AdminController {
     public String modifyMusic(
         @PathVariable String id,
         @Valid MusicModifyRequest musicModifyRequest,
-        BindingResult bindingResult, RedirectAttributes redirectAttributes){
+        BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         // redirect 시에 오류 메시지를 보내기 위해
         if (bindingResult.hasErrors()) {

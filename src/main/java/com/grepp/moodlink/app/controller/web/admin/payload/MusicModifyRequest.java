@@ -23,7 +23,7 @@ public class MusicModifyRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate releaseDate;
 
-    public MusicDto toDto(){
+    public MusicDto toDto() {
         MusicDto dto = new MusicDto();
         dto.setGenre(genre);
         dto.setDescription(description);

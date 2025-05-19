@@ -231,7 +231,8 @@
     <button class="action-btn" th:onclick="'location.href=\'' + @{/users/modify} + '\''">
       정보 수정하기
     </button>
-    <button class="action-btn action-btn-outline" th:onclick="'location.href=\'' + @{/users/like} + '\''">
+    <button class="action-btn action-btn-outline"
+            th:onclick="'location.href=\'' + @{/users/like} + '\''">
       좋아요 목록조회
     </button>
   </div>
@@ -306,7 +307,9 @@
     const mostLikeBookGenre = /*[[${mostLikeBookGenre}]]*/ [];
 
     function extractData(list) {
-      if (!Array.isArray(list)) return { labels: [], values: [] };
+      if (!Array.isArray(list)) {
+        return {labels: [], values: []};
+      }
       return {
         labels: list.map(item => item.genre),
         values: list.map(item => item.count)
@@ -317,9 +320,11 @@
       if (data?.labels?.length === 0 && data?.values?.length === 0) {
         return data;
       }
-      const { labels, values } = data;
+      const {labels, values} = data;
 
-      if (labels.length >= maxCount) return data;
+      if (labels.length >= maxCount) {
+        return data;
+      }
 
       const existingGenres = new Set(labels);
 
@@ -338,7 +343,9 @@
           values.push(0);
           existingGenres.add(item.genre);
         }
-        if (labels.length === maxCount) break;
+        if (labels.length === maxCount) {
+          break;
+        }
       }
 
       // 부족하면 '기타'로 채우기
@@ -347,7 +354,7 @@
         values.push(0);
       }
 
-      return { labels, values };
+      return {labels, values};
     }
 
     const musicData = extractData(likeMusicGenre);
@@ -396,7 +403,9 @@
 
     function makeRadarChart(canvasId, label, data, color) {
       const ctx = document.getElementById(canvasId)?.getContext('2d');
-      if (!ctx || data.labels.length === 0) return;
+      if (!ctx || data.labels.length === 0) {
+        return;
+      }
 
       return new Chart(ctx, {
         type: 'radar',

@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.Base64;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,7 +36,7 @@ public class ImgUploadTemplate {
     public String uploadImage(MultipartFile file, String name) throws IOException {
         String base64Image = Base64.getEncoder().encodeToString(file.getBytes());
 
-        String response =  webClient.post()
+        String response = webClient.post()
             .uri(uriBuilder -> uriBuilder.queryParam("key", apiKey).build())
             .contentType(MediaType.MULTIPART_FORM_DATA)
             .body(BodyInserters

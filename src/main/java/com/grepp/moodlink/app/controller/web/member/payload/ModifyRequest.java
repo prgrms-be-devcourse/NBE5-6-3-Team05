@@ -17,9 +17,8 @@ public class ModifyRequest {
     private String countries;
 
 
-
     public ModifyDto toDto() {
-        return new ModifyDto(username, currentPassword, newPassword,genre,periods,countries );
+        return new ModifyDto(username, currentPassword, newPassword, genre, periods, countries);
     }
 
 }

@@ -5,8 +5,6 @@ import com.grepp.moodlink.app.model.member.dto.MemberDto;
 import com.grepp.moodlink.app.model.member.dto.MemberInfoDto;
 import com.grepp.moodlink.app.model.member.dto.ModifyDto;
 import com.grepp.moodlink.app.model.member.entity.Member;
-import com.grepp.moodlink.infra.error.exceptions.CommonException;
-import com.grepp.moodlink.infra.response.ResponseCode;
 import java.time.LocalDate;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -81,5 +79,10 @@ public class MemberService {
         member.setPassword(encodedPassword);
         member.setRole(Role.ROLE_USER);
         memberRepository.save(member);
+    }
+
+    public Optional<Member> findGenre(String userId) {
+        System.out.println(memberRepository.findById(userId));
+        return memberRepository.findById(userId);
     }
 }

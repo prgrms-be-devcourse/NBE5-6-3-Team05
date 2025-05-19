@@ -17,13 +17,18 @@ public interface LikeDetailMoviesRepository extends JpaRepository<LikeDetailMovi
 
 
     List<LikeDetailMovies> findAllByLikesIdIn(Collection<Long> likesIds);
+
     @Query("SELECT l FROM LikeDetailMovies l WHERE l.likesId IN :likesIds")
-    Page<LikeDetailMovies> findAllByLikesIdInPagination(@Param("likesIds") Collection<Long> likesIds, Pageable pageable);
+    Page<LikeDetailMovies> findAllByLikesIdInPagination(
+        @Param("likesIds") Collection<Long> likesIds, Pageable pageable);
 
     List<LikeDetailMovies> findByLikesId(Long likeId);
 
     @Modifying
     @Transactional
     @Query("DELETE FROM LikeDetailMovies l WHERE l.movieId = :movieId AND l.likesId = :likesId")
-    void deleteByMovieIdAndLikesId(@Param("movieId")String movieId,@Param("likesId") Long likesId);
+    void deleteByMovieIdAndLikesId(@Param("movieId") String movieId,
+        @Param("likesId") Long likesId);
+
+    boolean existsByLikesIdAndMovieId(Long likesId, String movieId);
 }

@@ -16,6 +16,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookDto implements ContentDto {
+
     private String type = "book";
 
     @JsonProperty("ISBN")
@@ -29,6 +30,7 @@ public class BookDto implements ContentDto {
     private String description;
     private String genre;
     private Boolean activated;
+    private String summary;
 
     public static BookDto toDto(Book book) {
         BookDto dto = new BookDto();
@@ -44,7 +46,8 @@ public class BookDto implements ContentDto {
         return dto;
     }
 
-    public BookDto(String title, String description, LocalDate publishedDate, String publisher, String image){
+    public BookDto(String title, String description, LocalDate publishedDate, String publisher,
+        String image) {
         this.title = title;
         this.description = description;
         this.publishedDate = publishedDate;

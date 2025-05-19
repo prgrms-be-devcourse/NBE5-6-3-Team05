@@ -1,12 +1,15 @@
 package com.grepp.moodlink.app.model.data.movie;
 
 import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
+import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import com.grepp.moodlink.app.model.data.movie.entity.QMovie;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -47,5 +50,20 @@ public class MovieRepositoryImpl implements MovieRepositoryCustom {
                 movie.thumbnail))
             .from(movie)
             .where(movie.title.lower().like("%" + contentName.toLowerCase() + "%")).fetch();
+    }
+
+    @Override
+    public Optional<Movie> findByIdWithGenre(String id) {
+
+        JPAQuery<Movie> content = queryFactory
+            .select(movie)
+            .from(movie)
+            .leftJoin(movie.genres).fetchJoin()
+            .where(
+                movie.id.eq(id),
+                movie.activated
+            );
+
+        return Optional.ofNullable(content.fetchOne());
     }
 }

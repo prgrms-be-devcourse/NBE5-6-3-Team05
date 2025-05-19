@@ -13,24 +13,33 @@
 
   <!-- 중앙 배치 form -->
   <div class="main-area">
-      <form th:action="@{'/admin/music/modify/'+${music.id}}" th:object="${musicModifyRequest}" method="post" enctype="multipart/form-data">
-    <div class="form-section">
-      <h3>음악 정보를 입력해주세요.</h3>
+    <form th:action="@{'/admin/music/modify/'+${music.id}}" th:object="${musicModifyRequest}"
+          method="post" enctype="multipart/form-data">
+      <div class="form-section">
+        <h3>음악 정보를 입력해주세요.</h3>
 
         <div class="info-group">
-            <div class="image-upload">
-              <div id="preview" class="image-preview"
-                   th:style="'background-image: url(' + ${music.thumbnail} + ');'"></div>
-              <input type="file" id="image-input" name="thumbnail" style="display:none"/>
-              <div id="sizeInfo"></div>
-              <button class="img-btn" type="button" onclick="document.getElementById('image-input').click()">이미지 추가</button>
-            </div>
+          <div class="image-upload">
+            <div id="preview" class="image-preview"
+                 th:style="'background-image: url(' + ${music.thumbnail} + ');'"></div>
+            <input type="file" id="image-input" name="thumbnail" style="display:none"/>
+            <div id="sizeInfo"></div>
+            <button class="img-btn" type="button"
+                    onclick="document.getElementById('image-input').click()">이미지 추가
+            </button>
+          </div>
 
 
           <div>
-            <div class="form-row"><label>제목</label><div th:text="${music.title}"></div> <a class="delete-btn" th:attr="data-id=${music.getId()}">삭제</a> </div>
-            <div class="form-row"><label>가사</label><div th:text="${music.singer}"></div></div>
-            <div class="form-row"><label>발행일</label><input th:field="*{releaseDate}" th:value="${#temporals.format(releaseDate, 'yyyy-MM-dd')}"  class="input-line" type="date"/></div>
+            <div class="form-row"><label>제목</label>
+              <div th:text="${music.title}"></div>
+              <a class="delete-btn" th:attr="data-id=${music.getId()}">삭제</a></div>
+            <div class="form-row"><label>가사</label>
+              <div th:text="${music.singer}"></div>
+            </div>
+            <div class="form-row"><label>발행일</label><input th:field="*{releaseDate}"
+                                                           th:value="${#temporals.format(releaseDate, 'yyyy-MM-dd')}"
+                                                           class="input-line" type="date"/></div>
           </div>
         </div>
 
@@ -52,12 +61,14 @@
         <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
           <label>가사</label>
           <textarea th:field="*{lyrics}" class="textarea"></textarea>
-          <span class="helper-text form-row" th:if="${fieldErrors != null and fieldErrors.containsKey('lyrics')}" th:text="${fieldErrors.lyrics}"></span>
+          <span class="helper-text form-row"
+                th:if="${fieldErrors != null and fieldErrors.containsKey('lyrics')}"
+                th:text="${fieldErrors.lyrics}"></span>
         </div>
 
         <button class="submit-btn" type="submit" name="action">등록</button>
-    </div>
-      </form>
+      </div>
+    </form>
   </div>
 </main>
 <div layout:fragment="scripts">
@@ -93,7 +104,7 @@
 
           const confirmed = confirm("정말 삭제하시겠습니까?");
 
-          if(confirmed){
+          if (confirmed) {
 
             const isbn = btn.dataset.isbn;
             const url = `http://localhost:8080/api/admin/music/delete/${isbn}`;

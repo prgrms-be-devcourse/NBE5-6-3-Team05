@@ -125,13 +125,14 @@
     <input type="hidden" name="genre" id="selectedGenre"/>
 
     <div class="select-group">
-      장르
+      영화 장르
       <label>
         <select name="genre" >
-          <option value="">전체</option>
+          <option value="" th:selected="${userGenre == ''}">전체</option>
           <option th:each="genre : ${genres}"
                   th:value="${genre.name}"
-                  th:text="${genre.name}"></option>
+                  th:text="${genre.name}"
+                  th:selected="${genre.name == userGenre}"></option>
         </select>
       </label>
       <span>국가 : 대한민국</span>
@@ -276,7 +277,6 @@
       document.getElementById('submitBtn').disabled = !isValid;
     }
 
-    // 폼 제출 전 최종 검증
     document.getElementById('recommendForm').addEventListener('submit', function(e) {
       validateForm();
       if (document.getElementById('submitBtn').disabled) {

@@ -1,6 +1,7 @@
 package com.grepp.moodlink.app.model.llm;
 
 public class CosineSimilarity {
+
     public static float compute(float[] vectorA, float[] vectorB) {
         if (vectorA.length != vectorB.length) {
             throw new IllegalArgumentException("벡터 길이가 일치하지 않습니다.");

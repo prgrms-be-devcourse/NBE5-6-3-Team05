@@ -11,26 +11,22 @@ import com.grepp.moodlink.app.model.keyword.entity.KeywordSelection;
 import com.grepp.moodlink.infra.error.LLMServiceUnavailableException;
 import com.grepp.moodlink.infra.response.ResponseCode;
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.embedding.EmbeddingModel;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
-
-import javax.naming.ServiceUnavailableException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class LlmService {
+
     private final MovieRepository movieRepository;
     private final BookRepository bookRepository;
     private final MusicRepository musicRepository;
@@ -41,18 +37,18 @@ public class LlmService {
         KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
 
         String prompt = String.format("""
-                [시스템]
-                - 당신은 컨텐츠 추천 이유 전문가입니다.
-                - 키워드를 바탕으로 어떤 컨텐츠를 추천해야하는지 이유를 말해주세요.
-                - 하나의 이유만 추천하세요.
-                - 절대 컨텐츠 종류나 이름을 직접 언급하지 마세요.
-                - 출력 예시:
-                    오늘 해고당해서 우울한 당신! 고단한 하루를 달래줄 명작을 소개해드릴게요.
-                    다음 작품들은 위로가 될 거예요!
-                
-                [키워드]: %s
-                
-                """, keywordSelection.getKeywords());
+            [시스템]
+            - 당신은 컨텐츠 추천 이유 전문가입니다.
+            - 키워드를 바탕으로 어떤 컨텐츠를 추천해야하는지 이유를 말해주세요.
+            - 하나의 이유만 추천하세요.
+            - 절대 컨텐츠 종류나 이름을 직접 언급하지 마세요.
+            - 출력 예시:
+                오늘 해고당해서 우울한 당신! 고단한 하루를 달래줄 명작을 소개해드릴게요.
+                다음 작품들은 위로가 될 거예요!
+            
+            [키워드]: %s
+            
+            """, keywordSelection.getKeywords());
         String recommendation;
         try {
             recommendation = chatLanguageModel.chat(prompt);
@@ -67,30 +63,30 @@ public class LlmService {
         byte[] byteEmbedding = keywordSelection.getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
         List<Movie> rawMovies;
-        if (genre.isEmpty()){
+        if (genre.isEmpty()) {
             rawMovies = movieRepository.findAll();
-        }else{
+        } else {
             rawMovies = movieRepository.findByGenreName(genre);
         }
 
         List<Movie> movies = rawMovies.stream()
-                .peek(m -> {
-                })
-                .map(movie -> {
-                    float similarity = CosineSimilarity.compute(
-                            floatEmbedding,
-                            toFloatArray(movie.getEmbedding())
-                    );
-                    return new AbstractMap.SimpleEntry<>(movie, similarity);
-                })
-                .sorted((a, b) -> Float.compare(b.getValue(), a.getValue()))
-                .limit(10)
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+            .peek(m -> {
+            })
+            .map(movie -> {
+                float similarity = CosineSimilarity.compute(
+                    floatEmbedding,
+                    toFloatArray(movie.getEmbedding())
+                );
+                return new AbstractMap.SimpleEntry<>(movie, similarity);
+            })
+            .sorted((a, b) -> Float.compare(b.getValue(), a.getValue()))
+            .limit(10)
+            .map(Map.Entry::getKey)
+            .collect(Collectors.toList());
 
         String context = movies.stream()
-                .map(m -> String.format("제목: %s\n영화소개: %s", m.getTitle(), m.getSummary()))
-                .collect(Collectors.joining("\n\n"));
+            .map(m -> String.format("제목: %s\n영화소개: %s", m.getTitle(), m.getSummary()))
+            .collect(Collectors.joining("\n\n"));
 
         String result = llmRecommend("영화", keywordSelection.getKeywords(), context);
 
@@ -104,44 +100,45 @@ public class LlmService {
         byte[] byteEmbedding = keywordSelection.getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
         List<Book> books = bookRepository.findAll().stream().map(book -> {
-                    float similarity = CosineSimilarity.compute(
-                            floatEmbedding,
-                            toFloatArray(book.getEmbedding())
-                    );
-                    return new AbstractMap.SimpleEntry<>(book, similarity);
-                }).sorted((a, b) -> Float.compare(b.getValue(), a.getValue()))
-                .limit(10)
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+                float similarity = CosineSimilarity.compute(
+                    floatEmbedding,
+                    toFloatArray(book.getEmbedding())
+                );
+                return new AbstractMap.SimpleEntry<>(book, similarity);
+            }).sorted((a, b) -> Float.compare(b.getValue(), a.getValue()))
+            .limit(10)
+            .map(Map.Entry::getKey)
+            .collect(Collectors.toList());
 
         String context = books.stream()
-                .map(b -> String.format("제목: %s\n책소개: %s", b.getTitle(), b.getSummary()))
-                .collect(Collectors.joining("\n\n"));
+            .map(b -> String.format("제목: %s\n책소개: %s", b.getTitle(), b.getSummary()))
+            .collect(Collectors.joining("\n\n"));
 
         String result = llmRecommend("도서", keywordSelection.getKeywords(), context);
 
         System.out.println("도서" + result);
 
-        return result;    }
+        return result;
+    }
 
     public String recommendMusic(String userId) {
         KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
         byte[] byteEmbedding = keywordSelection.getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
         List<Music> musics = musicRepository.findAll().stream().map(music -> {
-                    float similarity = CosineSimilarity.compute(
-                            floatEmbedding,
-                            toFloatArray(music.getEmbedding())
-                    );
-                    return new AbstractMap.SimpleEntry<>(music, similarity);
-                }).sorted((a, b) -> Float.compare(b.getValue(), a.getValue()))
-                .limit(10)
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+                float similarity = CosineSimilarity.compute(
+                    floatEmbedding,
+                    toFloatArray(music.getEmbedding())
+                );
+                return new AbstractMap.SimpleEntry<>(music, similarity);
+            }).sorted((a, b) -> Float.compare(b.getValue(), a.getValue()))
+            .limit(10)
+            .map(Map.Entry::getKey)
+            .collect(Collectors.toList());
 
         String context = musics.stream()
-                .map(m -> String.format("제목: %s\n노래소개: %s", m.getTitle(), m.getSummary()))
-                .collect(Collectors.joining("\n\n"));
+            .map(m -> String.format("제목: %s\n노래소개: %s", m.getTitle(), m.getSummary()))
+            .collect(Collectors.joining("\n\n"));
 
         String result = llmRecommend("노래", keywordSelection.getKeywords(), context);
 
@@ -152,20 +149,20 @@ public class LlmService {
 
     private String llmRecommend(String category, String keywords, String context) {
         String prompt = String.format("""
-                [시스템]
-                - 당신은 %s 추천 전문가입니다.
-                - 반드시 제공된 목록에서만 추천하세요.
-                - 한국어로만 답변하고, 4개를 추천하세요.
-                - 제공된 목록에서 제목만 출력하세요.
-                - 각 제목은 '"'로 감싸져있고, ','로 구분하여 출력하세요.
-                - 출력 형식:
-                    "[%s 제목]", "[%s 제목]", "[%s 제목]", "[%s 제목]"
-                
-                [키워드]: %s
-                
-                [%s 목록]:
-                %s
-                """, category, category, category, category, category, keywords, category, context);
+            [시스템]
+            - 당신은 %s 추천 전문가입니다.
+            - 반드시 제공된 목록에서만 추천하세요.
+            - 한국어로만 답변하고, 4개를 추천하세요.
+            - 제공된 목록에서 제목만 출력하세요.
+            - 각 제목은 '"'로 감싸져있고, ','로 구분하여 출력하세요.
+            - 출력 형식:
+                "[%s 제목]", "[%s 제목]", "[%s 제목]", "[%s 제목]"
+            
+            [키워드]: %s
+            
+            [%s 목록]:
+            %s
+            """, category, category, category, category, category, keywords, category, context);
         String recommendation;
         try {
             recommendation = chatLanguageModel.chat(prompt);

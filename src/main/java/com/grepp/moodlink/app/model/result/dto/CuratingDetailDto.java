@@ -5,11 +5,12 @@ import lombok.Data;
 
 @Data
 public class CuratingDetailDto {
-    private BookDto book;
-    private MovieDto movie;
-    private SongDto song;
 
-    public CuratingDetailDto(BookDto book, SongDto song, MovieDto movie) {
+    private BookSimpleDto book;
+    private MovieSimpleDto movie;
+    private SongSimpleDto song;
+
+    public CuratingDetailDto(BookSimpleDto book, SongSimpleDto song, MovieSimpleDto movie) {
         this.book = book;
         this.movie = movie;
         this.song = song;

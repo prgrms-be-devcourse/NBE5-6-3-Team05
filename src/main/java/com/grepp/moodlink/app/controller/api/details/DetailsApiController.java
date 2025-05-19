@@ -18,13 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("api/details")
 public class DetailsApiController {
+
     private final DetailsService detailsService;
 
     @GetMapping("/book/{id}")
-    public ResponseEntity<BookDetailsDto> getBookDetails(@PathVariable String id, Authentication authentication) {
+    public ResponseEntity<BookDetailsDto> getBookDetails(@PathVariable String id,
+        Authentication authentication) {
         String userId;
         userId = "";
-        if (authentication != null){
+        if (authentication != null) {
             userId = authentication.getName();
         }
 
@@ -33,10 +35,11 @@ public class DetailsApiController {
     }
 
     @GetMapping("/song/{id}")
-    public ResponseEntity<SongDetailsDto> getSongDetails(@PathVariable String id, Authentication authentication) {
+    public ResponseEntity<SongDetailsDto> getSongDetails(@PathVariable String id,
+        Authentication authentication) {
         String userId;
         userId = "";
-        if (authentication != null){
+        if (authentication != null) {
             userId = authentication.getName();
         }
         SongDetailsDto dto = detailsService.getSongDetails(userId, id);
@@ -44,10 +47,11 @@ public class DetailsApiController {
     }
 
     @GetMapping("/movie/{id}")
-    public ResponseEntity<MovieDetailsDto> getMovieDetails(@PathVariable String id, Authentication authentication) {
+    public ResponseEntity<MovieDetailsDto> getMovieDetails(@PathVariable String id,
+        Authentication authentication) {
         String userId;
         userId = "";
-        if (authentication != null){
+        if (authentication != null) {
             userId = authentication.getName();
         }
         MovieDetailsDto dto = detailsService.getMovieDetails(userId, id);
