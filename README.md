@@ -5,8 +5,7 @@
 <div align="center">
   <img src="readmeresource/project_info.png" alt="Project Info" style="max-width: 100%; height: auto;">
 
-[NULL NULL 하게 팀 2차 프로젝트 일정 관리 (Trello 보드 바로가기)](https://trello.com/invite/b/6811b337d5d7ce2d450d478c/ATTIeca7861455dcaf3f28360d213a4a04c45ADC8408/nbe5-6-2-null-null-하게)
-
+[NULL NULL 하게 팀 2차 프로젝트 일정 관리 (Trello 보드 바로가기)](https://trello.com/invite/b/6811b337d5d7ce2d450d478c/ATTIeca7861455dcaf3f28360d213a4a04c45ADC8408/nbe5-6-2-null-null-하게)<br>
 </div>
 
 ---
@@ -112,5 +111,7 @@
 
 ---
 
-[NULL NULL 하게 발표자료 보기](readmeresource/ppt.pdf)
+[NULL NULL 하게 발표자료 보기](readmeresource/ppt.pdf)<br>
+[NULL NULL 하게 팀 2차 프로젝트 WBS_Apr](readmeresource/wbs_timeline_Apr.pdf)<br>
+[NULL NULL 하게 팀 2차 프로젝트 WBS_May](readmeresource/wbs_timeline_may.pdf)<br>
 
