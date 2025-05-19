@@ -61,6 +61,7 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
             log.warn("도서 없음: {}", book.getIsbn());
         }
 
+        assert entity != null;
         entity.setGenre(book.getGenre());
         if(book.getImage()!=null){
             entity.setImage(book.getImage());

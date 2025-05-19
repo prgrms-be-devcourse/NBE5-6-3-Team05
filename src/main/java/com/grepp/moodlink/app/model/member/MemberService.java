@@ -46,7 +46,7 @@ public class MemberService {
             throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
         }
 
-        if ( passwordEncoder.matches(dto.getNewPassword() ,member.getPassword())) {
+        if (passwordEncoder.matches(dto.getNewPassword(), member.getPassword())) {
             throw new IllegalArgumentException("비밀번호는 현재 비밀번호와 같을 수 없습니다.");
         }
 
@@ -76,7 +76,7 @@ public class MemberService {
     @Transactional
     public void signup(MemberDto dto) {
         if (memberRepository.existsById(dto.getUserId())) {
-            throw new CommonException(ResponseCode.BAD_REQUEST);
+            throw new IllegalArgumentException("이미 존재하는 회원입니다.");
         }
 
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
@@ -85,15 +85,5 @@ public class MemberService {
         member.setPassword(encodedPassword);
         member.setRole(Role.ROLE_USER);
         memberRepository.save(member);
-    }
-
-    public Boolean isDuplicatedId(String id) {
-        return memberRepository.existsById(id);
-    }
-
-    public MemberDto findById(String userId) {
-        Member user = memberRepository.findById(userId)
-            .orElseThrow(() -> new CommonException(ResponseCode.BAD_REQUEST));
-        return mapper.map(user, MemberDto.class);
     }
 }
