@@ -15,8 +15,6 @@ import com.grepp.moodlink.app.model.recomend.entity.LikeDetailBooks;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMovies;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMusic;
 import com.grepp.moodlink.app.model.recomend.entity.Likes;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +24,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -46,9 +43,6 @@ public class LikeService {
     private final BookRepository bookRepository;
     private final MusicRepository musicRepository;
     private final MovieRepository movieRepository;
-    private final ModelMapper mapper;
-    @PersistenceContext
-    private EntityManager em;
 
 
     public List<Likes> getLikeInfo(String userId) {
@@ -170,9 +164,7 @@ public class LikeService {
     @Transactional
     public List<BookDto> getUserLikedBooks(String userId) {
         List<Likes> likes = getLikeInfo(userId);
-        log.info("likes: {}", likes);
         List<LikeDetailBooks> likeDetailBooks = getLikeDetailBook(likes);
-        log.info("likedetailBooks: {}", likeDetailBooks);
         return getBookList(likeDetailBooks);
     }
 
