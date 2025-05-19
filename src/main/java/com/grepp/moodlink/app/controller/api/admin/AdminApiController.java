@@ -1,10 +1,8 @@
 package com.grepp.moodlink.app.controller.api.admin;
 
-import com.grepp.moodlink.app.model.data.book.BookService;
-import com.grepp.moodlink.app.model.data.movie.MovieRepository;
-import com.grepp.moodlink.app.model.data.movie.MovieService;
-import com.grepp.moodlink.app.model.data.music.MusicService;
-import com.grepp.moodlink.infra.response.ApiResponse;
+import com.grepp.moodlink.app.model.admin.book.AdminBookService;
+import com.grepp.moodlink.app.model.admin.movie.AdminMovieService;
+import com.grepp.moodlink.app.model.admin.music.AdminMusicService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,25 +19,21 @@ import org.springframework.web.bind.annotation.RestController;
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminApiController {
 
-    private final BookService bookService;
-    private final MovieService movieService;
-    private final MusicService musicService;
+    private final AdminBookService bookService;
+    private final AdminMovieService movieService;
+    private final AdminMusicService musicService;
 
     // 영화 삭제
     @DeleteMapping("movies/delete/{id}")
     public ResponseEntity<String> deleteMovie(@PathVariable String id) {
-        log.info("삭제합니다!!");
         movieService.deleteMovie(id);
-        log.info("삭제완료~~~~~~~~~~~~");
         return ResponseEntity.ok("정상적으로 삭제되었습니다.");
     }
 
     // 영화 삭제
     @DeleteMapping("music/delete/{id}")
     public ResponseEntity<String> deleteMusic(@PathVariable String id) {
-        log.info("삭제합니다!!");
         musicService.deleteMusic(id);
-        log.info("삭제완료~~~~~~~~~~~~");
         return ResponseEntity.ok("정상적으로 삭제되었습니다.");
     }
 
@@ -47,9 +41,7 @@ public class AdminApiController {
     // 도서 삭제
     @DeleteMapping("books/delete/{isbn}")
     public ResponseEntity<String> deleteBook(@PathVariable String isbn) {
-        log.info("삭제합니다!!");
         bookService.deleteBook(isbn);
-        log.info("삭제완료~~~~~~~~~~~~");
         return ResponseEntity.ok("정상적으로 삭제되었습니다.");
     }
 

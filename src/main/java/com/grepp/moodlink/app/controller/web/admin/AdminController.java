@@ -6,13 +6,13 @@ import com.grepp.moodlink.app.controller.web.admin.payload.MovieAddRequest;
 import com.grepp.moodlink.app.controller.web.admin.payload.MovieModifyRequest;
 import com.grepp.moodlink.app.controller.web.admin.payload.MusicAddRequest;
 import com.grepp.moodlink.app.controller.web.admin.payload.MusicModifyRequest;
-import com.grepp.moodlink.app.model.data.book.BookService;
+import com.grepp.moodlink.app.model.admin.book.AdminBookService;
+import com.grepp.moodlink.app.model.admin.movie.AdminMovieService;
+import com.grepp.moodlink.app.model.admin.music.AdminMusicService;
 import com.grepp.moodlink.app.model.data.book.code.BookGenre;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
-import com.grepp.moodlink.app.model.data.movie.MovieService;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.movie.entity.Genre;
-import com.grepp.moodlink.app.model.data.music.MusicService;
 import com.grepp.moodlink.app.model.data.music.code.MusicGenre;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
@@ -46,9 +46,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
-    private final BookService bookService;
-    private final MovieService movieService;
-    private final MusicService musicService;
+    private final AdminBookService adminBookService;
+    private final AdminMovieService movieService;
+    private final AdminMusicService musicService;
 
     // 영화 리스트를 모두 보여주는 화면
     // 관리자 페이지의 기본화면
@@ -101,7 +101,7 @@ public class AdminController {
         }
 
         Pageable pageable = PageRequest.of(param.getPage() - 1, param.getSize());
-        Page<BookDto> page = bookService.findPaged(pageable);
+        Page<BookDto> page = adminBookService.findPaged(pageable);
 
         if(param.getPage() != 1 && page.getContent().isEmpty()){
             throw new CommonException(ResponseCode.BAD_REQUEST);
@@ -203,7 +203,7 @@ public class AdminController {
         }
 
         try{
-            bookService.addBook(bookAddRequest.getImage(), bookAddRequest.toDto());
+            adminBookService.addBook(bookAddRequest.getImage(), bookAddRequest.toDto());
         }catch(CommonException e){
             log.info(e.code().message());
             redirectAttributes.addFlashAttribute("errorMessage", e.code().message());
@@ -274,7 +274,7 @@ public class AdminController {
     public String modifyBooks(BookModifyRequest bookModifyRequest, @PathVariable String isbn, Model model){
 
         // title author 기록 가져오기
-        BookDto book = bookService.findByIsbn(isbn);
+        BookDto book = adminBookService.findByIsbn(isbn);
 
         model.addAttribute("book",book);
 
@@ -315,7 +315,7 @@ public class AdminController {
         log.info("{}", bookModifyRequest.getImage().isEmpty());
         log.info("{}", bookModifyRequest);
 
-        bookService.updateBook(bookModifyRequest.getImage(), dto);
+        adminBookService.updateBook(bookModifyRequest.getImage(), dto);
 
         return "redirect:/admin/books";
     }
