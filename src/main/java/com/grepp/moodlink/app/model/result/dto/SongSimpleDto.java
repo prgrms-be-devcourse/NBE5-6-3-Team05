@@ -1,6 +1,6 @@
 package com.grepp.moodlink.app.model.result.dto;
 
-import com.grepp.moodlink.app.model.data.music.entity.Music;
+import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SongDto {
+public class SongSimpleDto {
     private String id;
     private String name;
     private String imgUrl;
     private String externalLink;
     private boolean status;
 
-    public SongDto(String id, String name, String imgUrl) {
+    public SongSimpleDto(String id, String name, String imgUrl) {
         this.id = id;
         this.name = name;
         this.imgUrl = imgUrl;
@@ -24,7 +24,7 @@ public class SongDto {
     }
 
 
-    public static SongDto from(Music music){
-        return new SongDto(music.getId(), music.getTitle(), music.getThumbnail());
+    public static SongSimpleDto from(MusicDto music){
+        return new SongSimpleDto(music.getId(), music.getTitle(), music.getThumbnail());
     }
 }

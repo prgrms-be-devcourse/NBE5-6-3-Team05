@@ -1,6 +1,6 @@
 package com.grepp.moodlink.app.model.details.dto;
 
-import com.grepp.moodlink.app.model.data.book.entity.Book;
+import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,7 +35,7 @@ public class BookDetailsDto {
         this.externalLink = "https://www.google.com/search?q="+name;
     }
 
-    public static BookDetailsDto from(Book book){
+    public static BookDetailsDto from(BookDto book){
         return new BookDetailsDto(
             book.getIsbn(),
             book.getTitle(),

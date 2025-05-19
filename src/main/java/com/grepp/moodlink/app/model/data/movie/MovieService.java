@@ -172,4 +172,19 @@ public class MovieService {
                 .distinct()
                 .collect(Collectors.toList());
     }
+
+
+    @Transactional
+    public void incrementLikeCount(String id){
+        Movie movie = movieRepository.findById(id).orElseThrow();
+        Long currentCount = movie.getLikeCount();
+        movie.setLikeCount(currentCount+1);
+    }
+
+    @Transactional
+    public void decreaseLikeCount(String id) {
+        Movie movie = movieRepository.findById(id).orElseThrow();
+        Long currentCount = movie.getLikeCount();
+        movie.setLikeCount(currentCount-1);
+    }
 }

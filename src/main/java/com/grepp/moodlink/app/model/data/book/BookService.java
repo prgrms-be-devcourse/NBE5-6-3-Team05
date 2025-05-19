@@ -2,7 +2,6 @@ package com.grepp.moodlink.app.model.data.book;
 
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
-import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
 import com.grepp.moodlink.infra.imgbb.ImgUploadTemplate;
 import com.grepp.moodlink.infra.response.ResponseCode;
@@ -155,5 +154,20 @@ public class BookService {
                 .map(Optional::get)
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+
+    @Transactional
+    public void incrementLikeCount(String isbn){
+        Book book = bookRepository.findByIsbn(isbn);
+        Long currentCount = book.getLikeCount();
+        book.setLikeCount(currentCount+1);
+    }
+
+    @Transactional
+    public void decreaseLikeCount(String isbn) {
+        Book book = bookRepository.findByIsbn(isbn);
+        Long currentCount = book.getLikeCount();
+        book.setLikeCount(currentCount-1);
     }
 }

@@ -1,6 +1,5 @@
 package com.grepp.moodlink.app.model.data.music;
 
-import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
@@ -142,5 +141,20 @@ public class MusicService {
                 .map(Optional::get)
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+
+    @Transactional
+    public void incrementLikeCount(String id){
+        Music music = musicRepository.findById(id).orElseThrow();
+        Long currentCount = music.getLikeCount();
+        music.setLikeCount(currentCount+1);
+    }
+
+    @Transactional
+    public void decreaseLikeCount(String id) {
+        Music music = musicRepository.findById(id).orElseThrow();
+        Long currentCount = music.getLikeCount();
+        music.setLikeCount(currentCount-1);
     }
 }

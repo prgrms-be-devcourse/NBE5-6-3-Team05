@@ -1,19 +1,16 @@
 package com.grepp.moodlink.app.model.result;
 
 
-import com.grepp.moodlink.app.model.data.book.BookRepository;
-import com.grepp.moodlink.app.model.data.movie.MovieRepository;
-import com.grepp.moodlink.app.model.data.music.MusicRepository;
-import com.grepp.moodlink.app.model.recomend.LikeDetailBooksRepository;
-import com.grepp.moodlink.app.model.recomend.LikeDetailMoviesRepository;
-import com.grepp.moodlink.app.model.recomend.LikeDetailMusicRepository;
-import com.grepp.moodlink.app.model.recomend.LikeRepository;
+import com.grepp.moodlink.app.model.data.book.BookService;
+import com.grepp.moodlink.app.model.data.movie.MovieService;
+import com.grepp.moodlink.app.model.data.music.MusicService;
+import com.grepp.moodlink.app.model.recomend.LikeService;
 import com.grepp.moodlink.app.model.recomend.entity.Likes;
-import com.grepp.moodlink.app.model.result.dto.BookDto;
+import com.grepp.moodlink.app.model.result.dto.BookSimpleDto;
 import com.grepp.moodlink.app.model.result.dto.CuratingDetailDto;
 import com.grepp.moodlink.app.model.result.dto.CuratingDetailIdDto;
-import com.grepp.moodlink.app.model.result.dto.MovieDto;
-import com.grepp.moodlink.app.model.result.dto.SongDto;
+import com.grepp.moodlink.app.model.result.dto.MovieSimpleDto;
+import com.grepp.moodlink.app.model.result.dto.SongSimpleDto;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +23,10 @@ import org.springframework.stereotype.Service;
 public class ResultService {
     private final CuratingRepository curatingRepository;
     private final CuratingDetailRepository curatingDetailRepository;
-    private final BookRepository bookRepository;
-    private final MovieRepository movieRepository;
-    private final MusicRepository musicRepository;
-    private final LikeRepository likeRepository;
-    private final LikeDetailMusicRepository likeDetailMusicRepository;
-    private final LikeDetailBooksRepository likeDetailBooksRepository;
-    private final LikeDetailMoviesRepository likeDetailMoviesRepository;
+    private final BookService bookService;
+    private final MusicService musicService;
+    private final MovieService movieService;
+    private final LikeService likeService;
 
 
     public List<CuratingDetailDto> curatingDetailDtoList(String userId, List<CuratingDetailIdDto> recommendResult){
@@ -45,7 +39,7 @@ public class ResultService {
         }
 
         // User의 Like한 목록이 없다면 각 컨텐츠의 상태를 false로 return
-        List<Likes> likes = likeRepository.findByUserId(userId);
+        List<Likes> likes = likeService.getLikeInfo(userId);
         if (likes.isEmpty()){
             return items;
         }
@@ -66,11 +60,11 @@ public class ResultService {
             String tempSongId = curatingDetail.getSongId();
             String tempMovieId = curatingDetail.getMovieId();
 
-            BookDto bookDto = BookDto.from(bookRepository.findByIsbn(tempBookId));
-            MovieDto movieDto = MovieDto.from(movieRepository.findById(tempMovieId).orElseThrow());
-            SongDto songDto = SongDto.from(musicRepository.findById(tempSongId).orElseThrow());
+            BookSimpleDto bookSimpleDto = BookSimpleDto.from(bookService.findByIsbn(tempBookId));
+            MovieSimpleDto movieSimpleDto = MovieSimpleDto.from(movieService.findById(tempMovieId));
+            SongSimpleDto songSimpleDto = SongSimpleDto.from(musicService.findById(tempSongId));
 
-            items.add(new CuratingDetailDto(bookDto, songDto, movieDto));
+            items.add(new CuratingDetailDto(bookSimpleDto, songSimpleDto, movieSimpleDto));
         }
         return items;
     }
@@ -80,13 +74,13 @@ public class ResultService {
 
         // 좋아요 누른 music에 대해 true로 상태변경
         for(CuratingDetailDto curatingDetailDto: items){
-            if(likeDetailBooksRepository.existsByLikesIdAndBookId(likeId, curatingDetailDto.getBook().getId())){
+            if(likeService.existInLikeDetailBook(likeId, curatingDetailDto.getBook().getId())){
                 curatingDetailDto.getBook().setStatus(true);
             }
-            if(likeDetailMusicRepository.existsByLikesIdAndMusicId(likeId, curatingDetailDto.getSong().getId())){
+            if(likeService.existInLikeDetailMusic(likeId, curatingDetailDto.getSong().getId())){
                 curatingDetailDto.getSong().setStatus(true);
             }
-            if(likeDetailMoviesRepository.existsByLikesIdAndMovieId(likeId, curatingDetailDto.getMovie().getId())){
+            if(likeService.existInLikeDetailMovie(likeId, curatingDetailDto.getMovie().getId())){
                 curatingDetailDto.getMovie().setStatus(true);
             }
         }
