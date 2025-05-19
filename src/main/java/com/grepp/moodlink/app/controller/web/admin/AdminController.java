@@ -255,7 +255,7 @@ public class AdminController {
                 fieldErrors.put(err.getField(), err.getDefaultMessage());
             }
             redirectAttributes.addFlashAttribute("fieldErrors", fieldErrors);
-            return "redirect:/admin/movies/add";
+            return "redirect:/admin/movies/modify/{id}";
         }
 
         // Service로 넘길 dto 만들기
@@ -305,7 +305,7 @@ public class AdminController {
                 fieldErrors.put(err.getField(), err.getDefaultMessage());
             }
             redirectAttributes.addFlashAttribute("fieldErrors", fieldErrors);
-            return "redirect:/admin/books/add";
+            return "redirect:/admin/books/modify/{isbn}";
         }
 
         // Service로 넘길 dto 만들기
@@ -358,7 +358,7 @@ public class AdminController {
                 fieldErrors.put(err.getField(), err.getDefaultMessage());
             }
             redirectAttributes.addFlashAttribute("fieldErrors", fieldErrors);
-            return "redirect:/admin/muscic/add";
+            return "redirect:/admin/music/modify/{id}";
         }
 
         // Service로 넘길 dto 만들기
