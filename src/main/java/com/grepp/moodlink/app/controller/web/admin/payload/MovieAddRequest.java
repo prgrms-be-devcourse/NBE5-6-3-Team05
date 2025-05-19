@@ -20,6 +20,7 @@ public class MovieAddRequest {
     private String title;
     @NotBlank (message = "장르를 선택해주세요")
     private String genres;
+    @NotBlank
     private String description;
     @NotNull(message = "개봉일을 입력해주세요")
     private LocalDate releaseDate;

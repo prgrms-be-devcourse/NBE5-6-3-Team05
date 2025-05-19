@@ -54,6 +54,7 @@
         <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
           <label>가사</label>
           <textarea th:field="*{lyrics}" class="textarea"></textarea>
+          <span class="helper-text form-row" th:if="${fieldErrors != null and fieldErrors.containsKey('lyrics')}" th:text="${fieldErrors.lyrics}"></span>
         </div>
 
 

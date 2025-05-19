@@ -20,6 +20,7 @@ public class MusicAddRequest {
     private String genre;
 
     private String description;
+    @NotBlank
     private String lyrics;
 
     private LocalDate releaseDate;

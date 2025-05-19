@@ -49,6 +49,7 @@
         <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
           <label>설명</label>
           <textarea th:field="*{description}" class="textarea"></textarea>
+          <span class="helper-text form-row" th:if="${fieldErrors != null and fieldErrors.containsKey('description')}" th:text="${fieldErrors.description}"></span>
         </div>
 
         <button class="submit-btn" type="submit">등록</button>

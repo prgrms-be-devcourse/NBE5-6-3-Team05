@@ -19,7 +19,7 @@ public class BookAddRequest {
     private String genre;
 
     private String publisher;
-
+    @NotBlank
     private String description;
 
     //front에서 LocalDate로 넘어옴
