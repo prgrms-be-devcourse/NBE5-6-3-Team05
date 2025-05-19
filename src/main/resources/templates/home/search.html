@@ -9,7 +9,13 @@
 <body>
 <main layout:fragment="content" class="search-result-container">
 
-  <h4 th:text="'&quot;' + ${contentName} + '&quot; 검색결과 입니다.'"></h4>
+  <!-- contentName 이 비었을 때 -->
+  <h4 th:if="${#strings.isEmpty(contentName)}">전체 검색결과입니다.</h4>
+
+  <!-- contentName 이 있을 때 -->
+  <h4 th:unless="${#strings.isEmpty(contentName)}">
+    "<span th:text="${contentName}"></span>" 검색결과입니다.
+  </h4>
 
   <!-- 카테고리 메뉴 -->
   <div class="menu">

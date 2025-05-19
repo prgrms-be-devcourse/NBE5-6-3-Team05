@@ -74,14 +74,14 @@
 
 ## 📊 ERD 설계
 <div align="center">
-<img src="readmeresource/erd.png" alt="Project Info" style="max-width: 100%; height: auto;">
+<img src="readmeresource/moodlinkerd.png" alt="ERD" style="max-width: 100%; height: auto;">
 
 </div>
 
 <br/>
 
 ## 🗂️ ERD 및 테이블 구조
-<img src="readmeresource/db_detail.png" alt="Project Info" style="max-width: 100%; height: auto;">
+<img src="readmeresource/moodlinkerd.png" alt="ERD" style="max-width: 100%; height: auto;">
 
 
 <br/>
