@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <th:block th:fragment="frg_static">
     <link rel="stylesheet"
@@ -763,8 +763,11 @@
     <div class="header-right">
       <span th:if="${isAuthenticated}" th:text="'안녕하세요, ' + ${username} + '님!'"></span>
       <div class="header-buttons">
-        <button class="mypage-btn" th:if="${isAuthenticated}"
+        <button class="mypage-btn" sec:authorize="hasRole('USER')"
                 th:onclick="|location.href='@{/users}'|">마이페이지
+        </button>
+        <button class="mypage-btn" sec:authorize="hasRole('ADMIN')"
+                th:onclick="|location.href='@{/admin/movies}'|">관리자페이지
         </button>
         <form th:action="@{/logout}" method="post">
           <button class="logout-btn" th:if="${isAuthenticated}">로그아웃</button>
