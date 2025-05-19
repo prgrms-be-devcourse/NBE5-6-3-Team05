@@ -4,6 +4,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,4 +20,5 @@ public abstract class LikeDetailBase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long likesId;
+    private LocalDateTime createdAt;
 }
