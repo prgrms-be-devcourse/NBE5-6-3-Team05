@@ -17,7 +17,7 @@ public interface MusicRepository extends JpaRepository<Music, String>, MusicRepo
 
     @Query("SELECT m.id FROM Music m where m.title = :title")
     Optional<String> findIdByTitle(@Param("title")String s);
-    boolean existsByTitleAndSinger(String title, String singer);
+
 
     List<Music> findAllByIdIn(List<String> id);
 }

@@ -3,37 +3,35 @@
       layout:decorate="~{layout}">
 <head>
   <meta charset="UTF-8">
-  <title>관리자 페이지 - 음악 추가</title>
+  <title>관리자 페이지 - 도서 추가</title>
   <link rel="stylesheet" th:href="@{/css/admin/contents-add.css}">
 
 </head>
 <main layout:fragment="content">
   <!-- 돌아가기 버튼 -->
-  <a class="back-btn" th:href="@{/admin/music}">← 돌아가기</a>
+  <a class="back-btn" th:href="@{/admin/books}">← 돌아가기</a>
 
   <!-- 중앙 배치 form -->
   <div class="main-area">
-      <form th:action="@{/admin/music/add}" th:object="${musicAddRequest}" method="post" enctype="multipart/form-data">
+      <form th:action="@{/admin/books/add}" th:object="${bookAddRequest}" method="post" enctype="multipart/form-data">
     <div class="form-section">
-      <h3>음악 정보를 입력해주세요.</h3>
+      <h3>도서 정보를 입력해주세요.</h3>
 
         <div class="info-group">
           <div class="image-upload">
             <div id="preview" class="image-preview"></div>
-            <input type="file" id="image-input" name="thumbnail" style="display:none"/>
+            <input type="file" id="image-input" name="image" style="display:none"/>
             <div id="sizeInfo"></div>
             <button class="img-btn" type="button" onclick="document.getElementById('image-input').click()">이미지 추가</button>
           </div>
 
-
           <div>
             <div class="form-row"><label>제목</label><input th:field="*{title}" class="input-line"/></div>
-            <span th:errors="*{title}" class="form-row" style="margin-left: 1.5rem" ></span>
-            <span th:if="${errorMessage}" class="form-row" style="margin-left: 1.5rem" th:text="${errorMessage}"></span>
-            <div class="form-row"><label>가수</label><input th:field="*{singer}" class="input-line" type="text" /></div>
-            <span th:errors="*{singer}" class="form-row" style="margin-left: 1.5rem"></span>
-            <span th:if="${errorMessage}" class="form-row" style="margin-left: 1.5rem" th:text="${errorMessage}"></span>
-              <div class="form-row"><label>발매일</label><input th:field="*{releaseDate}" class="input-line" type="date"/></div>
+            <span class="helper-text form-row" th:if="${fieldErrors != null and fieldErrors.containsKey('title')}" th:text="${fieldErrors.title}"></span>
+            <div class="form-row"><label>작가</label><input th:field="*{author}" class="input-line" type="text" /></div>
+            <span class="helper-text form-row" th:if="${fieldErrors != null and fieldErrors.containsKey('author')}" th:text="${fieldErrors.author}"></span>
+              <div class="form-row"><label>발행일</label><input th:field="*{publishedDate}" class="input-line" type="date"/></div>
+            <div class="form-row"><label>출판사</label><input th:field="*{publisher}" class="input-line" type="text" /></div>
           </div>
         </div>
 
@@ -46,17 +44,14 @@
                     th:text="${gen.name}">
             </option>
           </select>
+          <span class="helper-text form-row" th:if="${fieldErrors != null and fieldErrors.containsKey('genre')}" th:text="${fieldErrors.genre}"></span>
         </div>
 
         <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
           <label>설명</label>
           <textarea th:field="*{description}" class="textarea"></textarea>
+          <span class="helper-text form-row" th:if="${fieldErrors != null and fieldErrors.containsKey('description')}" th:text="${fieldErrors.description}"></span>
         </div>
-        <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
-          <label>가사</label>
-          <textarea th:field="*{lyrics}" class="textarea"></textarea>
-        </div>
-
 
         <button class="submit-btn" type="submit" name="action">등록</button>
     </div>

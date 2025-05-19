@@ -1,4 +1,4 @@
-package com.grepp.moodlink.app.model.data.music;
+package com.grepp.moodlink.app.model.admin.music;
 
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
@@ -8,13 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MusicRepositoryCustom {
+public interface AdminMusicRepositoryCustom {
 
-    String findTopThumbnail();
+    Page<Music> findPaged(Pageable pageable);
 
-    String findPeople();
-
-    String findTitle();
-
-    List<MusicDto> searchContent(String contentName);
+    void updateBook(MusicDto dto);
 }

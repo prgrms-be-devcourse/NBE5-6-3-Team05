@@ -1,4 +1,4 @@
-package com.grepp.moodlink.app.model.data.book;
+package com.grepp.moodlink.app.model.admin.book;
 
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
@@ -8,13 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BookRepositoryCustom {
+public interface AdminBookRepositoryCustom {
 
-    String findTopThumbnail();
+    void updateBook(BookDto book);
 
-    String findPeople();
-
-    String findTitle();
-
-    List<BookDto> searchContent(String contentName);
+    Page<Book> findPaged(Pageable pageable);
 }
