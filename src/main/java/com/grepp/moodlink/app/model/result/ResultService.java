@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ResultService {
+
     private final CuratingRepository curatingRepository;
     private final CuratingDetailRepository curatingDetailRepository;
     private final BookService bookService;
@@ -29,18 +30,19 @@ public class ResultService {
     private final LikeService likeService;
 
 
-    public List<CuratingDetailDto> curatingDetailDtoList(String userId, List<CuratingDetailIdDto> recommendResult){
+    public List<CuratingDetailDto> curatingDetailDtoList(String userId,
+        List<CuratingDetailIdDto> recommendResult) {
         // db에서 curating 값 가져오기
         List<CuratingDetailDto> items = getItems(recommendResult);
 
         // User가 비회원이면 각 컨텐츠의 상태를 false로 return
-        if (userId.isEmpty()){
+        if (userId.isEmpty()) {
             return items;
         }
 
         // User의 Like한 목록이 없다면 각 컨텐츠의 상태를 false로 return
         List<Likes> likes = likeService.getLikeInfo(userId);
-        if (likes.isEmpty()){
+        if (likes.isEmpty()) {
             return items;
         }
 
@@ -51,11 +53,11 @@ public class ResultService {
         return items;
     }
 
-    public List<CuratingDetailDto> getItems(List<CuratingDetailIdDto> recommendResult){
+    public List<CuratingDetailDto> getItems(List<CuratingDetailIdDto> recommendResult) {
         List<CuratingDetailDto> items = new ArrayList<>();
 
         // db에서 curating의 각 컨텐츠(책, 노래, 영화)들 가져오기
-        for(CuratingDetailIdDto curatingDetail: recommendResult) {
+        for (CuratingDetailIdDto curatingDetail : recommendResult) {
             String tempBookId = curatingDetail.getBookId();
             String tempSongId = curatingDetail.getSongId();
             String tempMovieId = curatingDetail.getMovieId();
@@ -69,18 +71,18 @@ public class ResultService {
         return items;
     }
 
-    public void updateStatus(List<Likes> likes, List<CuratingDetailDto> items){
+    public void updateStatus(List<Likes> likes, List<CuratingDetailDto> items) {
         Long likeId = likes.getFirst().getId();
 
         // 좋아요 누른 music에 대해 true로 상태변경
-        for(CuratingDetailDto curatingDetailDto: items){
-            if(likeService.existInLikeDetailBook(likeId, curatingDetailDto.getBook().getId())){
+        for (CuratingDetailDto curatingDetailDto : items) {
+            if (likeService.existInLikeDetailBook(likeId, curatingDetailDto.getBook().getId())) {
                 curatingDetailDto.getBook().setStatus(true);
             }
-            if(likeService.existInLikeDetailMusic(likeId, curatingDetailDto.getSong().getId())){
+            if (likeService.existInLikeDetailMusic(likeId, curatingDetailDto.getSong().getId())) {
                 curatingDetailDto.getSong().setStatus(true);
             }
-            if(likeService.existInLikeDetailMovie(likeId, curatingDetailDto.getMovie().getId())){
+            if (likeService.existInLikeDetailMovie(likeId, curatingDetailDto.getMovie().getId())) {
                 curatingDetailDto.getMovie().setStatus(true);
             }
         }

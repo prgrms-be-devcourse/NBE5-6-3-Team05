@@ -49,7 +49,7 @@ public class Movie extends BaseEntity {
     private LocalDate createdAt;
     @Column(columnDefinition = "TEXT")
     private String thumbnail;
-    @Column(nullable = false,columnDefinition = "BIGINT DEFAULT 0" )
+    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
     private Long likeCount;
 
     private Boolean activated = true;

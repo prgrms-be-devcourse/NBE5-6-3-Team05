@@ -5,7 +5,6 @@ import com.grepp.moodlink.app.model.result.ResultService;
 import com.grepp.moodlink.app.model.result.dto.CuratingDetailDto;
 import com.grepp.moodlink.app.model.result.dto.CuratingDetailIdDto;
 import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +24,8 @@ public class ResultController {
 
     @GetMapping
     public String result(Model model, Authentication authentication, HttpSession session) {
-        String userId ="";
-        if (authentication != null){
+        String userId = "";
+        if (authentication != null) {
             userId = authentication.getName();
         }
 
@@ -36,11 +35,12 @@ public class ResultController {
         }
 
         String reason = (String) session.getAttribute("reason");
-        if (reason == null){
+        if (reason == null) {
             reason = "기본 이유입니다.아이유";
         }
 
-        List<CuratingDetailDto> tempList = resultService.curatingDetailDtoList(userId, recommendResult);
+        List<CuratingDetailDto> tempList = resultService.curatingDetailDtoList(userId,
+            recommendResult);
 
         model.addAttribute("curatingReason", reason);
         model.addAttribute("items", tempList);

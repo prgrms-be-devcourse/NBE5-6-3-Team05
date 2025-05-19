@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MovieSimpleDto {
+
     private String id;
     private String name;
     private String imgUrl;
@@ -19,11 +20,11 @@ public class MovieSimpleDto {
         this.id = id;
         this.name = name;
         this.imgUrl = imgUrl;
-        this.status =false;
-        this.externalLink = "https://www.google.com/search?q="+name;
+        this.status = false;
+        this.externalLink = "https://www.google.com/search?q=" + name;
     }
 
-    public static MovieSimpleDto from(MovieInfoDto movie){
+    public static MovieSimpleDto from(MovieInfoDto movie) {
         return new MovieSimpleDto(movie.getId(), movie.getTitle(), movie.getThumbnail());
     }
 

@@ -10,6 +10,7 @@ import lombok.Setter;
 @Entity
 @Setter
 public class Fortune {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

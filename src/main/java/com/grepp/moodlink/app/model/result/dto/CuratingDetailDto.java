@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class CuratingDetailDto {
+
     private BookSimpleDto book;
     private MovieSimpleDto movie;
     private SongSimpleDto song;

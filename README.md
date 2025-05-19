@@ -1,7 +1,17 @@
-# NBE5-6-2-Team05 
-프로그래머스 백엔드 데브코스 5기 6회차 5팀 2차 프로젝트입니다.
+# NBE5-6-2-Team05
+
+<hr/>
+
+<div align="center">
+  <img src="readmeresource/project_info.png" alt="Project Info" style="max-width: 100%; height: auto;">
+
+[NULL NULL 하게 팀 2차 프로젝트 일정 관리 (Trello 보드 바로가기)](https://trello.com/invite/b/6811b337d5d7ce2d450d478c/ATTIeca7861455dcaf3f28360d213a4a04c45ADC8408/nbe5-6-2-null-null-하게)
+
+</div>
 
 ---
+
+
 
 # 깃 컨벤션
 - ex ) (feat) sign up complete<br><br>
@@ -14,3 +24,87 @@
 - test : 테스트 코드, 리펙토링 테스트 코드 추가<br>
 - chore : 빌드 업무 수정, 패키지 매니저 수정<br>
 - merge : 병합 알림 -> ex ) (merge) main   뜻 : main과 병합했음 
+
+---
+
+
+## 🧑‍💻 팀원 소개
+
+  <table >
+    <tbody>
+      <tr>
+        <td align="center"><b>이강현</b></td>
+        <td align="center"><b>강민서</b></td>
+        <td align="center"><b>강대겸</b></td>
+        <td align="center"><b>최종우</b></td>
+        <td align="center"><b>안준희</b></td>
+      </tr>
+      <tr>
+        <td align="center"><a href="https://github.com/Leeka99"><img src="https://github.com/Leeka99.png" width="100px;" alt="이강현"/></a></td>
+        <td align="center"><a href="https://github.com/childstone"><img src="https://github.com/childstone.png" width="100px;" alt="강민서"/></a></td>
+        <td align="center"><a href="https://github.com/KangDaegyeom"><img src="https://github.com/KangDaegyeom.png" width="100px;" alt="강대겸"/></a></td>
+        <td align="center"><a href="https://github.com/lnvisibledragon"><img src="https://github.com/lnvisibledragon.png" width="100px;" alt="최종우"/></a></td>
+        <td align="center"><a href="https://github.com/june3780"><img src="https://github.com/june3780.png" width="100px;" alt="안준희"/></a></td>
+      </tr>
+<tr>
+        <td align="center"><sub><b>PM</b></sub></td>
+        <td align="center"><sub><b>TM</b></sub></td>
+        <td align="center"><sub><b>TM</b></sub></td>
+        <td align="center"><sub><b>TM</b></sub></td>
+        <td align="center"><sub><b>TM</b></sub></td>
+      </tr>
+      <tr>
+        <td align="center"><a href="https://github.com/Leeka99"><sub><b>GitHub</b></sub></a></td>
+        <td align="center"><a href="https://github.com/childstone"><sub><b>GitHub</b></sub></a></td>
+        <td align="center"><a href="https://github.com/KangDaegyeom"><sub><b>GitHub</b></sub></a></td>
+        <td align="center"><a href="https://github.com/lnvisibledragon"><sub><b>GitHub</b></sub></a></td>
+        <td align="center"><a href="https://github.com/june3780"><sub><b>GitHub</b></sub></a></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+<br/>
+
+
+## 📌 프로젝트 소개
+
+<img src="readmeresource/project_intro.png" alt="Project Info" style="max-width: 100%; height: auto;">
+
+
+<br/>
+
+## 🛠️ 기술 스택
+<img src="readmeresource/stack.png" alt="Project Info" style="max-width: 100%; height: auto;">
+
+<br/>
+
+## 📊 ERD 설계
+<div align="center">
+<img src="readmeresource/moodlinkerd.png" alt="ERD" style="max-width: 100%; height: auto;">
+
+</div>
+
+<br/>
+
+## 🗂️ ERD 및 테이블 구조
+<img src="readmeresource/moodlinkerd.png" alt="ERD" style="max-width: 100%; height: auto;">
+
+
+<br/>
+
+## 📄API 명세서
+<img src="readmeresource/api.png" alt="Project Info" style="max-width: 100%; height: auto;">
+
+<br/>
+
+## 🖥️ 주요 화면 (UI)
+<img src="readmeresource/ui.png" alt="Project Info" style="max-width: 100%; height: auto;">
+
+<br/>
+
+## 🛠️ 트러블 슈팅 & 해결 과정
+<img src="readmeresource/trubleshooting.png" alt="Project Info" style="max-width: 100%; height: auto;">
+
+[NULL NULL 하게 발표자료 보기](readmeresource/ppt.pdf)
+

@@ -2,29 +2,27 @@ package com.grepp.moodlink.app.controller.web.recommend;
 
 import com.grepp.moodlink.app.model.auth.domain.Principal;
 import com.grepp.moodlink.app.model.data.book.BookService;
-import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.app.model.data.movie.GenreRepository;
 import com.grepp.moodlink.app.model.data.movie.MovieService;
 import com.grepp.moodlink.app.model.data.movie.entity.Genre;
-import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import com.grepp.moodlink.app.model.data.music.MusicService;
-import com.grepp.moodlink.app.model.data.music.entity.Music;
-import com.grepp.moodlink.app.model.llm.EmbeddingService;
 import com.grepp.moodlink.app.model.keyword.KeywordService;
+import com.grepp.moodlink.app.model.llm.EmbeddingService;
 import com.grepp.moodlink.app.model.llm.LlmService;
 import com.grepp.moodlink.app.model.result.CuratingDetailRepository;
-import com.grepp.moodlink.app.model.result.dto.CuratingDetailDto;
 import com.grepp.moodlink.app.model.result.dto.CuratingDetailIdDto;
-import com.grepp.moodlink.app.model.result.entity.CuratingDetail;
 import jakarta.servlet.http.HttpSession;
-import lombok.*;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RequestMapping("/recommend")
@@ -42,7 +40,7 @@ public class RecommendController {
     private final CuratingDetailRepository curatingDetailRepository;
 
     @GetMapping
-    public String selectKeyword(){
+    public String selectKeyword() {
         return "/recommend/recommend";
     }
 
@@ -53,9 +51,9 @@ public class RecommendController {
 
     @PostMapping("result")
     public String selectKeyword(
-            @RequestParam("genre") String genre,
-            @RequestParam("keywords") String keywords,
-            HttpSession session){
+        @RequestParam("genre") String genre,
+        @RequestParam("keywords") String keywords,
+        HttpSession session) {
         genre = genre.substring(1);
 
         String userId = getLoginUserId();
@@ -69,7 +67,6 @@ public class RecommendController {
         System.out.println(items);
         session.setAttribute("items", items);
 
-
         return "redirect:/result";
     }
 
@@ -78,7 +75,7 @@ public class RecommendController {
         List<String> movieIds = getMovieRecommendations(genre, userId);
         List<String> bookIds = getBookRecommendations(userId);
         List<String> musicIds = getMusicRecommendations(userId);
-        for(int i = 0; i < musicIds.size(); i++){
+        for (int i = 0; i < musicIds.size(); i++) {
             CuratingDetailIdDto detail = new CuratingDetailIdDto();
             detail.setMovieId(movieIds.get(i));
             detail.setBookId(bookIds.get(i));
@@ -112,7 +109,8 @@ public class RecommendController {
 
     private String getLoginUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
+        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(
+            auth.getPrincipal())) {
             return null;
         }
         Principal principal = (Principal) auth.getPrincipal();

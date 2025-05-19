@@ -1,10 +1,7 @@
 package com.grepp.moodlink.app.model.data.music;
 
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
-import com.grepp.moodlink.app.model.data.music.entity.Music;
 import java.util.List;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository

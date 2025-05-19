@@ -15,9 +15,11 @@
       height: 100vh;
       margin: 0;
     }
+
     .container {
       text-align: center;
     }
+
     input, select, button {
       display: block;
       margin: 10px auto;
@@ -25,11 +27,13 @@
       border: none;
       border-radius: 5px;
     }
+
     input, select {
       width: 250px;
       background: #333;
       color: white;
     }
+
     button {
       width: 270px;
       background: linear-gradient(to right, #8a2be2, #7f00ff);
@@ -37,10 +41,12 @@
       font-weight: bold;
       cursor: pointer;
     }
+
     a {
       color: #aaa;
       font-size: 0.9em;
     }
+
     .logo {
       color: #8a2be2;
       font-weight: bold;
@@ -60,25 +66,25 @@
 
     <select th:field="*{genre}">
       <option value="" disabled selected>선호하는 장르 선택</option>
-      <option value="action">액션</option>
-      <option value="adventure">모험</option>
-      <option value="animation">애니메이션</option>
-      <option value="comedy">코미디</option>
-      <option value="crime">범죄</option>
-      <option value="documentary">다큐멘터리</option>
-      <option value="drama">드라마</option>
-      <option value="family">가족</option>
-      <option value="fantasy">판타지</option>
-      <option value="history">역사</option>
-      <option value="horror">공포</option>
-      <option value="music">음악</option>
-      <option value="mystery">미스터리</option>
-      <option value="romance">로맨스</option>
-      <option value="science_fiction">SF</option>
-      <option value="tv_movie">TV 영화</option>
-      <option value="thriller">스릴러</option>
-      <option value="war">전쟁</option>
-      <option value="western">서부</option>
+      <option value="액션">액션</option>
+      <option value="모험">모험</option>
+      <option value="애니메이션">애니메이션</option>
+      <option value="코미디">코미디</option>
+      <option value="범죄">범죄</option>
+      <option value="다큐멘터리">다큐멘터리</option>
+      <option value="드라마">드라마</option>
+      <option value="가족">가족</option>
+      <option value="판타지">판타지</option>
+      <option value="역사">역사</option>
+      <option value="공포">공포</option>
+      <option value="음악">음악</option>
+      <option value="미스터리">미스터리</option>
+      <option value="로맨스">로맨스</option>
+      <option value="SF">SF</option>
+      <option value="TV 영화">TV 영화</option>
+      <option value="스릴러">스릴러</option>
+      <option value="전쟁">전쟁</option>
+      <option value="서부">서부</option>
     </select>
 
     <select th:field="*{periods}">

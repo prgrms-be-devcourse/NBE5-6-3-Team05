@@ -11,14 +11,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class MovieModifyRequest {
+
     private List<MultipartFile> thumbnail;
     @NotBlank
     private String genres;
     @NotBlank
     private String description;
 
-    public MovieInfoDto toDto(){
-        MovieInfoDto movieInfoDto= new MovieInfoDto();
+    public MovieInfoDto toDto() {
+        MovieInfoDto movieInfoDto = new MovieInfoDto();
         Set<Genre> genres = new HashSet<>();
 
         //genres를 ,를 기준으로 잘라서 만들기
@@ -27,7 +28,7 @@ public class MovieModifyRequest {
         for (String genre : splitGenres) {
             // : 를 기준으로 id와 name을 자르기
             String[] splitIdName = genre.split(":");
-            genres.add(new Genre(Integer.parseInt(splitIdName[0]),splitIdName[1]));
+            genres.add(new Genre(Integer.parseInt(splitIdName[0]), splitIdName[1]));
         }
 
         movieInfoDto.setGenres(genres);

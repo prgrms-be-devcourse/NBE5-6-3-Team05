@@ -22,15 +22,16 @@ public class MemberApiController {
     private final LikeService likeService;
 
     @PostMapping("/like/book")
-    public ResponseEntity<ToggleResponse> toggleBook(@RequestBody ToggleRequest request, Authentication authentication) {
+    public ResponseEntity<ToggleResponse> toggleBook(@RequestBody ToggleRequest request,
+        Authentication authentication) {
 
         //TODO: 비회원 시 바로 return
         String userId;
         userId = "anonymous";
-        if (authentication != null){
+        if (authentication != null) {
             userId = authentication.getName();
         }
-        if (userId.equals("anonymous")){
+        if (userId.equals("anonymous")) {
             return ResponseEntity.ok(new ToggleResponse(false));
         }
 
@@ -39,14 +40,15 @@ public class MemberApiController {
     }
 
     @PostMapping("/like/music")
-    public ResponseEntity<ToggleResponse> toggleSong(@RequestBody ToggleRequest request, Authentication authentication) {
+    public ResponseEntity<ToggleResponse> toggleSong(@RequestBody ToggleRequest request,
+        Authentication authentication) {
         //TODO: 비회원 시 바로 return
         String userId;
         userId = "anonymous";
-        if (authentication != null){
+        if (authentication != null) {
             userId = authentication.getName();
         }
-        if (userId.equals("anonoymous")){
+        if (userId.equals("anonoymous")) {
             return ResponseEntity.ok(new ToggleResponse(false));
         }
 
@@ -55,18 +57,19 @@ public class MemberApiController {
     }
 
     @PostMapping("/like/movie")
-    public ResponseEntity<ToggleResponse> toggleMovie(@RequestBody ToggleRequest request, Authentication authentication) {
+    public ResponseEntity<ToggleResponse> toggleMovie(@RequestBody ToggleRequest request,
+        Authentication authentication) {
         //TODO: 비회원 시 바로 return
         String userId;
         userId = "anonymous";
-        if (authentication != null){
+        if (authentication != null) {
             userId = authentication.getName();
         }
-        if (userId.equals("anonoymous")){
+        if (userId.equals("anonoymous")) {
             return ResponseEntity.ok(new ToggleResponse(false));
         }
 
-        boolean updated = likeService.toggleLikeMovie(userId,request.getId());
+        boolean updated = likeService.toggleLikeMovie(userId, request.getId());
         return ResponseEntity.ok(new ToggleResponse(updated));
     }
 }

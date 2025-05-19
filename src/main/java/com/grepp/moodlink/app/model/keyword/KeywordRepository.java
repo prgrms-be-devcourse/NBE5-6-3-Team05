@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface KeywordRepository extends JpaRepository<KeywordSelection, Long> {
+
     KeywordSelection findByUserId(String userId);
 }

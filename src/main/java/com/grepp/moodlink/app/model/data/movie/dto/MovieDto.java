@@ -14,6 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MovieDto implements ContentDto {
+
     private String type = "movie";
 
     private boolean adult;

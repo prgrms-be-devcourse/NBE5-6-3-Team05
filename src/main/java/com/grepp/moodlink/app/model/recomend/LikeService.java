@@ -63,11 +63,12 @@ public class LikeService {
         return likeDetailBooksRepository.findAllByLikesIdIn(likeIds);
 
     }
-    public Page<LikeDetailBooks> getLikeDetailBookPaged(List<Likes> likes,Pageable pageable) {
+
+    public Page<LikeDetailBooks> getLikeDetailBookPaged(List<Likes> likes, Pageable pageable) {
         List<Long> likeIds = likes.stream()
             .map(Likes::getId)
             .collect(Collectors.toList());
-        return likeDetailBooksRepository.findAllByLikesIdInPagination(likeIds,pageable);
+        return likeDetailBooksRepository.findAllByLikesIdInPagination(likeIds, pageable);
 
     }
 
@@ -80,7 +81,6 @@ public class LikeService {
 
         Map<String, Book> bookMap = books.stream()
             .collect(Collectors.toMap(Book::getIsbn, b -> b));
-
 
         return bookIds.stream()
             .map(bookMap::get)
@@ -98,11 +98,12 @@ public class LikeService {
         return likeDetailMusicRepository.findAllByLikesIdIn(likeIds);
 
     }
-    public Page<LikeDetailMusic> getLikeDetailMusicPaged(List<Likes> likes,Pageable pageable) {
+
+    public Page<LikeDetailMusic> getLikeDetailMusicPaged(List<Likes> likes, Pageable pageable) {
         List<Long> likeIds = likes.stream()
             .map(Likes::getId)
             .collect(Collectors.toList());
-        return likeDetailMusicRepository.findAllByLikesIdInPagination(likeIds,pageable);
+        return likeDetailMusicRepository.findAllByLikesIdInPagination(likeIds, pageable);
 
     }
 
@@ -133,12 +134,12 @@ public class LikeService {
 
     }
 
-    public Page<LikeDetailMovies> getLikeDetailMoviePaged(List<Likes> likes,Pageable pageable) {
+    public Page<LikeDetailMovies> getLikeDetailMoviePaged(List<Likes> likes, Pageable pageable) {
         List<Long> likeIds = likes.stream()
             .map((Likes::getId))
             .collect(Collectors.toList());
 
-        return likeDetailMoviesRepository.findAllByLikesIdInPagination(likeIds,pageable);
+        return likeDetailMoviesRepository.findAllByLikesIdInPagination(likeIds, pageable);
 
     }
 
@@ -317,7 +318,7 @@ public class LikeService {
     @Transactional
     public Page<BookDto> getUserLikedBooksPaged(String userId, Pageable pageable) {
         List<Likes> likes = getLikeInfo(userId);
-        Page<LikeDetailBooks> likeDetailBooks = getLikeDetailBookPaged(likes,pageable);
+        Page<LikeDetailBooks> likeDetailBooks = getLikeDetailBookPaged(likes, pageable);
 
         System.out.println("좋아요 세부 정보 개수: " + likeDetailBooks.getContent());
         List<BookDto> Books = getBookList(likeDetailBooks.getContent());
@@ -329,26 +330,28 @@ public class LikeService {
     @Transactional
     public Page<MusicDto> getUserLikedMusicsPaged(String userId, Pageable pageable) {
         List<Likes> likes = getLikeInfo(userId);
-        Page<LikeDetailMusic> likeDetailMusics = getLikeDetailMusicPaged(likes,pageable);
+        Page<LikeDetailMusic> likeDetailMusics = getLikeDetailMusicPaged(likes, pageable);
         List<MusicDto> Musics = getMusicList(likeDetailMusics.getContent());
 
         return new PageImpl<>(Musics, pageable, likeDetailMusics.getTotalElements());
-    }@Transactional
+    }
+
+    @Transactional
     public Page<MovieInfoDto> getUserLikedMoviesPaged(String userId, Pageable pageable) {
         List<Likes> likes = getLikeInfo(userId);
-        Page<LikeDetailMovies> likeDetailMovies = getLikeDetailMoviePaged(likes,pageable);
+        Page<LikeDetailMovies> likeDetailMovies = getLikeDetailMoviePaged(likes, pageable);
         List<MovieInfoDto> Movies = getMovieList(likeDetailMovies.getContent());
 
         return new PageImpl<>(Movies, pageable, likeDetailMovies.getTotalElements());
     }
 
 
-    public void updateLikeIncrement(Likes likes){
+    public void updateLikeIncrement(Likes likes) {
         Long likeCount = likes.getTotalCount();
-        likes.setTotalCount(likeCount+1);
+        likes.setTotalCount(likeCount + 1);
     }
 
-    public Likes createLike(String userId){
+    public Likes createLike(String userId) {
         Likes likes1 = new Likes();
         likes1.setTotalCount(0L);
         likes1.setUserId(userId);
@@ -357,7 +360,7 @@ public class LikeService {
         return likes1;
     }
 
-    public void createLikeDetailMusic(Long likeId, String id){
+    public void createLikeDetailMusic(Long likeId, String id) {
         // like_detail_musics에 행 추가
         LikeDetailMusic likeDetailMusic1 = new LikeDetailMusic();
         likeDetailMusic1.setLikesId(likeId);
@@ -368,14 +371,14 @@ public class LikeService {
         musicService.incrementLikeCount(id);
     }
 
-    public void deleteLikeDetailMusic(Likes likes, String id){
+    public void deleteLikeDetailMusic(Likes likes, String id) {
         likeDetailMusicRepository.deleteByMusicIdAndLikesId(id, likes.getId());
-        likes.setTotalCount(likes.getTotalCount()-1);
+        likes.setTotalCount(likes.getTotalCount() - 1);
         // 컨텐츠의 likeCount 값 감소
         musicService.decreaseLikeCount(id);
     }
 
-    public void createLikeDetailMovie(Long likeId, String id){
+    public void createLikeDetailMovie(Long likeId, String id) {
         // like_detail_movie에 행 추가
         LikeDetailMovies likeDetailMovies1 = new LikeDetailMovies();
         likeDetailMovies1.setLikesId(likeId);
@@ -386,14 +389,14 @@ public class LikeService {
         movieService.incrementLikeCount(id);
     }
 
-    public void deleteLikeDetailMovie(Likes likes, String id){
+    public void deleteLikeDetailMovie(Likes likes, String id) {
         likeDetailMoviesRepository.deleteByMovieIdAndLikesId(id, likes.getId());
-        likes.setTotalCount(likes.getTotalCount()-1);
+        likes.setTotalCount(likes.getTotalCount() - 1);
         // 컨텐츠의 likeCount 값 감소
         movieService.decreaseLikeCount(id);
     }
 
-    public void createLikeDetailBook(Long likeId, String id){
+    public void createLikeDetailBook(Long likeId, String id) {
         // like_detail_book에 행 추가
         LikeDetailBooks likeDetailBooks1 = new LikeDetailBooks();
         likeDetailBooks1.setLikesId(likeId);
@@ -404,37 +407,37 @@ public class LikeService {
         bookService.incrementLikeCount(id);
     }
 
-    public void deleteLikeDetailBook(Likes likes, String id){
+    public void deleteLikeDetailBook(Likes likes, String id) {
         likeDetailBooksRepository.deleteByBookIdAndLikesId(id, likes.getId());
-        likes.setTotalCount(likes.getTotalCount()-1);
+        likes.setTotalCount(likes.getTotalCount() - 1);
         // 컨텐츠의 likeCount 값 감소
         bookService.decreaseLikeCount(id);
     }
 
-    public boolean existInLikeDetailMusic(Long likeId, String id){
-        return likeDetailMusicRepository.existsByLikesIdAndMusicId(likeId,id);
+    public boolean existInLikeDetailMusic(Long likeId, String id) {
+        return likeDetailMusicRepository.existsByLikesIdAndMusicId(likeId, id);
     }
 
-    public boolean existInLikeDetailMovie(Long likeId, String id){
-        return likeDetailMoviesRepository.existsByLikesIdAndMovieId(likeId,id);
+    public boolean existInLikeDetailMovie(Long likeId, String id) {
+        return likeDetailMoviesRepository.existsByLikesIdAndMovieId(likeId, id);
     }
 
-    public boolean existInLikeDetailBook(Long likeId, String id){
-        return likeDetailBooksRepository.existsByLikesIdAndBookId(likeId,id);
+    public boolean existInLikeDetailBook(Long likeId, String id) {
+        return likeDetailBooksRepository.existsByLikesIdAndBookId(likeId, id);
     }
 
     @Transactional
-    public boolean toggleLikeMusic(String userId, String id){
+    public boolean toggleLikeMusic(String userId, String id) {
         List<Likes> likes = getLikeInfo(userId);
         // 좋아요 목록 없음 -> like 행 추가, likeDetailMusic 행 추가
-        if (likes.isEmpty()){
+        if (likes.isEmpty()) {
             Likes likes1 = createLike(userId);
             createLikeDetailMusic(likes1.getId(), id);
             return true;
         }
         // 좋아요 목록은 있지만, likeDetailMusic에 해당 id의 music이 없음 -> like 행 업데이트, likeDetailMusic 행 추가
         Likes likes1 = likes.getFirst();
-        if(!existInLikeDetailMusic(likes1.getId(), id)){
+        if (!existInLikeDetailMusic(likes1.getId(), id)) {
             updateLikeIncrement(likes1);
             createLikeDetailMusic(likes1.getId(), id);
             return true;
@@ -444,7 +447,7 @@ public class LikeService {
         deleteLikeDetailMusic(likes1, id);
 
         // like의 totalCount값이 0이면 like테이블에서 삭제
-        if (likes1.getTotalCount() == 0){
+        if (likes1.getTotalCount() == 0) {
             likeRepository.deleteById(likes1.getId());
         }
         return false;
@@ -454,14 +457,14 @@ public class LikeService {
     public boolean toggleLikeMovie(String userId, String id) {
         List<Likes> likes = getLikeInfo(userId);
         // 좋아요 목록 없음 -> like 행 추가, likeDetailMovie 행 추가
-        if (likes.isEmpty()){
+        if (likes.isEmpty()) {
             Likes likes1 = createLike(userId);
             createLikeDetailMovie(likes1.getId(), id);
             return true;
         }
         // 좋아요 목록은 있지만, likeDetailMovie에 해당 id의 movie이 없음 -> like 행 업데이트, likeDetailMovie 행 추가
         Likes likes1 = likes.getFirst();
-        if(!existInLikeDetailMovie(likes1.getId(),id)){
+        if (!existInLikeDetailMovie(likes1.getId(), id)) {
             updateLikeIncrement(likes1);
             createLikeDetailMovie(likes1.getId(), id);
             return true;
@@ -471,7 +474,7 @@ public class LikeService {
         deleteLikeDetailMovie(likes1, id);
 
         // like의 totalCount값이 0이면 like테이블에서 삭제
-        if (likes1.getTotalCount() == 0){
+        if (likes1.getTotalCount() == 0) {
             likeRepository.deleteById(likes1.getId());
         }
         return false;
@@ -481,14 +484,14 @@ public class LikeService {
     public boolean toggleLikeBook(String userId, String id) {
         List<Likes> likes = getLikeInfo(userId);
         // 좋아요 목록 없음 -> like 행 추가, likeDetailBook 행 추가
-        if (likes.isEmpty()){
+        if (likes.isEmpty()) {
             Likes likes1 = createLike(userId);
             createLikeDetailBook(likes1.getId(), id);
             return true;
         }
         // 좋아요 목록은 있지만, likeDetailBook에 해당 id의 book이 없음 -> like 행 업데이트, likeDetailBook 행 추가
         Likes likes1 = likes.getFirst();
-        if(!existInLikeDetailBook(likes1.getId(),id)){
+        if (!existInLikeDetailBook(likes1.getId(), id)) {
             updateLikeIncrement(likes1);
             createLikeDetailBook(likes1.getId(), id);
             return true;
@@ -498,7 +501,7 @@ public class LikeService {
         deleteLikeDetailBook(likes1, id);
 
         // like의 totalCount값이 0이면 like테이블에서 삭제
-        if (likes1.getTotalCount() == 0){
+        if (likes1.getTotalCount() == 0) {
             likeRepository.deleteById(likes1.getId());
         }
         return false;

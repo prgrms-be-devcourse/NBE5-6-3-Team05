@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SongSimpleDto {
+
     private String id;
     private String name;
     private String imgUrl;
@@ -19,12 +20,12 @@ public class SongSimpleDto {
         this.id = id;
         this.name = name;
         this.imgUrl = imgUrl;
-        this.status =false;
-        this.externalLink = "https://www.google.com/search?q="+name;
+        this.status = false;
+        this.externalLink = "https://www.google.com/search?q=" + name;
     }
 
 
-    public static SongSimpleDto from(MusicDto music){
+    public static SongSimpleDto from(MusicDto music) {
         return new SongSimpleDto(music.getId(), music.getTitle(), music.getThumbnail());
     }
 }
