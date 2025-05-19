@@ -48,7 +48,7 @@
   </tr>
 
   <tr>
-    <td align="center"><b>통합 검색(카테고리)</b></td>
+    <td align="center"><b>통합 검색(키워드)</b></td>
     <td align="center"><b>마이페이지</b></td>
   </tr>
   <tr>
