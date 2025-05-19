@@ -33,10 +33,6 @@ public class MemberService {
 
     }
 
-    public String GetUsername(String userId) {
-        return memberRepository.findByUsernameById(userId);
-    }
-
     @Transactional
     public void modifyProfile(String userId, ModifyDto dto) {
         Member member = memberRepository.findById(userId)
