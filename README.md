@@ -137,11 +137,6 @@
 
 <br/>
 
-## 🖥️ 주요 화면 (UI)
-<img src="readmeresource/ui.png" alt="UI" style="max-width: 100%; height: auto;">
-
-<br/>
-
 ## 🛠️ 트러블 슈팅 & 해결 과정
 <img src="readmeresource/Troubleshooting.png" alt="Troubleshooting" style="max-width: 100%; height: auto;">
 
