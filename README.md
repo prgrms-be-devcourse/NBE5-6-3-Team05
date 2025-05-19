@@ -88,12 +88,6 @@
 
 <br/>
 
-## 📅 Gantt
-<div align="center">
-<img src="readmeresource/gantt.png" alt="Gantt" style="max-width: 100%; height: auto;">
-
-</div>
-
 ## 🛠️ 트러블 슈팅 & 해결 과정
 <img src="readmeresource/Troubleshooting.png" alt="Troubleshooting" style="max-width: 100%; height: auto;">
 
@@ -112,6 +106,5 @@
 ---
 
 [NULL NULL 하게 발표자료 보기](readmeresource/ppt.pdf)<br>
-[NULL NULL 하게 팀 2차 프로젝트 WBS_Apr](readmeresource/wbs_timeline_Apr.pdf)<br>
-[NULL NULL 하게 팀 2차 프로젝트 WBS_May](readmeresource/wbs_timeline_may.pdf)<br>
+[NULL NULL 하게 팀 2차 프로젝트 WBS(Gantt)](readmeresource/wbs_timeline.pdf)<br>
 
