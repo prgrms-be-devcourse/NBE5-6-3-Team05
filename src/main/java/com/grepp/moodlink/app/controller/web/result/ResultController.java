@@ -29,23 +29,11 @@ public class ResultController {
             userId = authentication.getName();
         }
 
-        //        CuratingDetailIdDto curatingDetailIdDto1 = new CuratingDetailIdDto("M51", "S51", "B51");
-        //        CuratingDetailIdDto curatingDetailIdDto2 = new CuratingDetailIdDto("M52", "S52", "B52");
-        //        CuratingDetailIdDto curatingDetailIdDto3 = new CuratingDetailIdDto("M53", "S53", "B53");
-        //        CuratingDetailIdDto curatingDetailIdDto4 = new CuratingDetailIdDto("M54", "S54", "B54");
-        //
-        //        List<CuratingDetailIdDto> recommendResult = new ArrayList<>();
-
-        List<CuratingDetailIdDto> recommendResult = (List<CuratingDetailIdDto>) session.getAttribute(
-            "items");
-        if (recommendResult == null) {
+        List<CuratingDetailIdDto> recommendResult = (List<CuratingDetailIdDto>) session.getAttribute("items");
+        if (recommendResult == null){
             recommendResult = List.of();
         }
 
-        //        recommendResult.add(curatingDetailIdDto1);
-        //        recommendResult.add(curatingDetailIdDto2);
-        //        recommendResult.add(curatingDetailIdDto3);
-        //        recommendResult.add(curatingDetailIdDto4);
         String reason = (String) session.getAttribute("reason");
         if (reason == null) {
             reason = "기본 이유입니다.아이유";
