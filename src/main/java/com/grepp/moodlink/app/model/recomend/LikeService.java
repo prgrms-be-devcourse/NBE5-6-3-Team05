@@ -19,7 +19,6 @@ import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMovies;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMusic;
 import com.grepp.moodlink.app.model.recomend.entity.Likes;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -363,6 +362,7 @@ public class LikeService {
         LikeDetailMusic likeDetailMusic1 = new LikeDetailMusic();
         likeDetailMusic1.setLikesId(likeId);
         likeDetailMusic1.setMusicId(id);
+        likeDetailMusic1.setCreatedAt(LocalDateTime.now());
         likeDetailMusicRepository.save(likeDetailMusic1);
         // 컨텐츠의 likeCount 값 증가
         musicService.incrementLikeCount(id);
@@ -380,6 +380,7 @@ public class LikeService {
         LikeDetailMovies likeDetailMovies1 = new LikeDetailMovies();
         likeDetailMovies1.setLikesId(likeId);
         likeDetailMovies1.setMovieId(id);
+        likeDetailMovies1.setCreatedAt(LocalDateTime.now());
         likeDetailMoviesRepository.save(likeDetailMovies1);
         // 컨텐츠의 likeCount 값 증가
         movieService.incrementLikeCount(id);
@@ -397,6 +398,7 @@ public class LikeService {
         LikeDetailBooks likeDetailBooks1 = new LikeDetailBooks();
         likeDetailBooks1.setLikesId(likeId);
         likeDetailBooks1.setBookId(id);
+        likeDetailBooks1.setCreatedAt(LocalDateTime.now());
         likeDetailBooksRepository.save(likeDetailBooks1);
         // 컨텐츠의 likeCount 값 증가
         bookService.incrementLikeCount(id);
