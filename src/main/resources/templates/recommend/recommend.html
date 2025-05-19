@@ -128,6 +128,7 @@
       영화 장르
       <label>
         <select name="genre" >
+          <option th:value="${userGenre}" th:text="${userGenre}"></option>
           <option value="">전체</option>
           <option th:each="genre : ${genres}"
                   th:value="${genre.name}"
