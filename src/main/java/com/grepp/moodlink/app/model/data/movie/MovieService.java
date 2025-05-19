@@ -1,14 +1,9 @@
 package com.grepp.moodlink.app.model.data.movie;
 
-import com.grepp.moodlink.app.model.data.movie.dto.GenreDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.movie.entity.Genre;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
-import com.grepp.moodlink.infra.error.exceptions.CommonException;
-import com.grepp.moodlink.infra.imgbb.ImgUploadTemplate;
-import com.grepp.moodlink.infra.response.ResponseCode;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -90,6 +85,9 @@ public class MovieService {
                 .collect(Collectors.toList());
     }
 
+    public MovieInfoDto findById(String id) {
+        return movieRepository.findByIdWithGenre(id).map(MovieInfoDto::toDto).orElse(null);
+    }
 
     @Transactional
     public void incrementLikeCount(String id){

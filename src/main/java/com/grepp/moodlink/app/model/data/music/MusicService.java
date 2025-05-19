@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MusicService {
 
     private final MusicRepository musicRepository;
+    private final ModelMapper mapper;
 
     public void saveMusic(List<MusicDto> musicDtos) {
 
@@ -64,6 +66,9 @@ public class MusicService {
                 .collect(Collectors.toList());
     }
 
+    public MusicDto findById(String id) {
+        return musicRepository.findById(id).map(e -> mapper.map(e, MusicDto.class)).orElse(null);
+    }
 
     @Transactional
     public void incrementLikeCount(String id){

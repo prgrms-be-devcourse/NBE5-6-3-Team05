@@ -671,6 +671,7 @@
         details += `<p><strong>개봉일:</strong> ${data.releaseDate}</p>`;
       } else if (type === "song") {
         details += `<p><strong>아티스트:</strong> ${data.artist}</p>`;
+        details += `<p><strong>장르:</strong> ${data.genre}</p>`;
         details += `<p><strong>발매일:</strong> ${data.releasedAt}</p>`;
         details += `<p><strong>요약:</strong> ${buildExpandable(data.summary, "summary")}</p>`;
         details += `<p><strong>가사:</strong> ${buildExpandable(data.lyrics, "lyrics")}</p>`;
