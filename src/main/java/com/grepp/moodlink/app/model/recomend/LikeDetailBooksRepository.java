@@ -26,5 +26,7 @@ public interface LikeDetailBooksRepository extends JpaRepository<LikeDetailBooks
     @Transactional
     @Query("DELETE FROM LikeDetailBooks l WHERE l.bookId = :bookId AND l.likesId = :likesId")
     void deleteByBookIdAndLikesId(@Param("bookId") String bookId, @Param("likesId") Long likesId);
+
+    boolean existsByLikesIdAndBookId(Long LikesId, String id);
 }
 

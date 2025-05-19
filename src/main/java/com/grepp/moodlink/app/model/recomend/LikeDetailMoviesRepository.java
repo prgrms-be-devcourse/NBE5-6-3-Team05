@@ -26,4 +26,6 @@ public interface LikeDetailMoviesRepository extends JpaRepository<LikeDetailMovi
     @Transactional
     @Query("DELETE FROM LikeDetailMovies l WHERE l.movieId = :movieId AND l.likesId = :likesId")
     void deleteByMovieIdAndLikesId(@Param("movieId")String movieId,@Param("likesId") Long likesId);
+
+    boolean existsByLikesIdAndMovieId(Long likesId, String movieId);
 }

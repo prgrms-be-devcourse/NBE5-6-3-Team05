@@ -29,6 +29,7 @@ public class BookDto implements ContentDto {
     private String description;
     private String genre;
     private Boolean activated;
+    private String summary;
 
     public static BookDto toDto(Book book) {
         BookDto dto = new BookDto();

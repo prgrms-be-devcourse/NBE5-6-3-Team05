@@ -1,6 +1,5 @@
 package com.grepp.moodlink.app.model.data.book;
 
-import com.grepp.moodlink.app.model.result.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

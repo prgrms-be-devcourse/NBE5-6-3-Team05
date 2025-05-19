@@ -10,7 +10,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final ModelMapper mapper;
 
     public void saveMusic(List<BookDto> bookDtos) {
 
@@ -57,5 +60,23 @@ public class BookService {
             .map(Optional::get)
             .distinct()
             .collect(Collectors.toList());
+    }
+
+    public BookDto findByIsbn(String isbn) {
+        return mapper.map(bookRepository.findByIsbn(isbn), BookDto.class);
+    }
+
+    @Transactional
+    public void incrementLikeCount(String isbn){
+        Book book = bookRepository.findByIsbn(isbn);
+        Long currentCount = book.getLikeCount();
+        book.setLikeCount(currentCount+1);
+    }
+
+    @Transactional
+    public void decreaseLikeCount(String isbn) {
+        Book book = bookRepository.findByIsbn(isbn);
+        Long currentCount = book.getLikeCount();
+        book.setLikeCount(currentCount-1);
     }
 }

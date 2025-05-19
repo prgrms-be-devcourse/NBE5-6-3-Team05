@@ -21,10 +21,11 @@ public interface LikeDetailMusicRepository extends JpaRepository<LikeDetailMusic
     @Query("SELECT l FROM LikeDetailMusic l WHERE l.likesId IN :likesIds")
     Page<LikeDetailMusic> findAllByLikesIdInPagination(@Param("likesIds") Collection<Long> likesIds, Pageable pageable);
 
-    List<LikeDetailMusic> findByLikesId(Long likeId);
 
     @Modifying
     @Transactional
     @Query("DELETE FROM LikeDetailMusic l WHERE l.musicId = :musicId AND l.likesId = :likesId")
     void deleteByMusicIdAndLikesId(@Param("musicId")String musicId,@Param("likesId") Long likesId);
+
+    boolean existsByLikesIdAndMusicId(Long LikesId, String id);
 }

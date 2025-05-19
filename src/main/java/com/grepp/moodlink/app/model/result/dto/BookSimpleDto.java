@@ -1,6 +1,6 @@
 package com.grepp.moodlink.app.model.result.dto;
 
-import com.grepp.moodlink.app.model.data.book.entity.Book;
+import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,20 +8,22 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookDto {
+public class BookSimpleDto {
     private String id;
     private String name;
     private String imgUrl;
     private String externalLink;
     private boolean status;
 
-    public BookDto(String id, String name, String imgUrl) {
+    public BookSimpleDto(String id, String name, String imgUrl) {
         this.id = id;
         this.name = name;
         this.imgUrl = imgUrl;
+        this.status =false;
+        this.externalLink = "https://www.google.com/search?q="+name;
     }
 
-    public static BookDto from(Book book){
-        return new BookDto(book.getIsbn(), book.getTitle(), book.getImage());
+    public static BookSimpleDto from(BookDto book)
+    { return new BookSimpleDto(book.getIsbn(), book.getTitle(), book.getImage());
     }
 }

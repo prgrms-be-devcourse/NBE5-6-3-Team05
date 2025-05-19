@@ -29,6 +29,7 @@ public class MusicDto implements ContentDto {
     private String thumbnail;
     private Long likeCount;
     private Boolean activated;
+    private String summary;
 
     public MusicDto(String title, String singer, String thumbnail, LocalDate releaseDate, String lyric) {
         this.title = title;
