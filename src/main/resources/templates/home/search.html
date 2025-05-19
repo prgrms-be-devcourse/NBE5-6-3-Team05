@@ -98,7 +98,7 @@
 <!--          <li id="modalGenre">장르</li>-->
         </ul>
         <p id="modalSummary" class="modal-summary"></p>
-        <button disabled class="modal-play">검색하기 ➜</button>
+        <button id="modalSearchBtn" class="modal-play" disabled>검색하기 ➜</button>
       </div>
     </div>
   </div>
@@ -115,45 +115,40 @@
   }
   document.addEventListener('DOMContentLoaded',()=>showCategory('movie'));
 
-  /* 모달 열기 */
-  // function showDetailModal(title, releaseDate, summary, thumbnail){
-  //   document.getElementById('modalTitle').textContent = title;
-  //   document.getElementById('modalYear').textContent = releaseDate.split('-')[0] || releaseDate;
-  //   // document.getElementById('singer').textContent = singer;
-  //   // document.getElementById('auther').textContent = author;
-  //   document.getElementById('modalSummary').textContent = summary;
-  //   document.getElementById('modalBg').src = thumbnail;
-  //   document.getElementById('detailModal').classList.add('active');
-  // }
-
   function showDetailModal(title, releaseDate, summary, thumbnail, type){
-    // 모달 텍스트 설정
     document.getElementById('modalTitle').textContent = title;
     document.getElementById('modalYear').textContent  = releaseDate.split('-')[0] || releaseDate;
     document.getElementById('modalSummary').textContent = summary;
 
-    // 썸네일 이미지
     const img = document.getElementById('modalBg');
     img.src = thumbnail;
 
-    /* === 카테고리별 크기 조정 === */
-    img.classList.remove('music');     // 일단 제거
-    if(type === 'music'){              // 음악이면 붙이기
-      img.classList.add('music');
-    }
+    img.classList.remove('music');
+    if(type === 'music'){ img.classList.add('music'); }
 
-    /* === 카테고리별 크기 조정 === */
-    img.classList.remove('book');     // 일단 제거
-    if(type === 'book'){              // 음악이면 붙이기
-      img.classList.add('book');
-    }
+    img.classList.remove('book');
+    if(type === 'book'){ img.classList.add('book'); }
 
     // 모달 열기
     document.getElementById('detailModal').classList.add('active');
+
+    // 검색 버튼 활성화 및 클릭 이벤트 등록
+    const searchBtn = document.getElementById('modalSearchBtn');
+    searchBtn.disabled = false;
+
+    // 클릭 시 구글 검색 열기
+    searchBtn.onclick = function() {
+      const query = encodeURIComponent(title);
+      const url = `https://www.google.com/search?q=${query}`;
+      window.open(url, '_blank');
+    }
   }
 
   /* 모달 닫기 */
   function closeModal(){
     document.getElementById('detailModal').classList.remove('active');
+    const searchBtn = document.getElementById('modalSearchBtn');
+    searchBtn.disabled = true;
+    searchBtn.onclick = null; // 이벤트 리셋
   }
 </script>
