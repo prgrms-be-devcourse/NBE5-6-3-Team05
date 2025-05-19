@@ -39,7 +39,6 @@ public class RecommendController {
     private final BookService bookService;
     private final MusicService musicService;
     private final LlmService llmService;
-    private final CuratingDetailRepository curatingDetailRepository;
     private final MemberService memberService;
 
     @GetMapping
@@ -50,6 +49,9 @@ public class RecommendController {
     @ModelAttribute("userGenre")
     public String findUserGenre(){
         String userId = getLoginUserId();
+        if(userId == null){
+            return "";
+        }
         return memberService.findGenre(userId).orElseThrow().getGenre();
     }
 

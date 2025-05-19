@@ -128,11 +128,11 @@
       영화 장르
       <label>
         <select name="genre" >
-          <option th:value="${userGenre}" th:text="${userGenre}"></option>
-          <option value="">전체</option>
+          <option value="" th:selected="${userGenre == ''}">전체</option>
           <option th:each="genre : ${genres}"
                   th:value="${genre.name}"
-                  th:text="${genre.name}"></option>
+                  th:text="${genre.name}"
+                  th:selected="${genre.name == userGenre}"></option>
         </select>
       </label>
       <span>국가 : 대한민국</span>
