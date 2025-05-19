@@ -118,40 +118,51 @@
   document.addEventListener('DOMContentLoaded', () => showCategory('movie'));
 
   function showDetailModal(title, releaseDate, summary, thumbnail, type) {
+    /* ===== 제목·연도 ===== */
     document.getElementById('modalTitle').textContent = title;
-    document.getElementById('modalYear').textContent = releaseDate.split('-')[0] || releaseDate;
+    document.getElementById('modalYear').textContent =
+        releaseDate.split('-')[0] || releaseDate;
 
-    // 줄바꿈과 [괄호] 앞뒤 br 처리
+    /* ===== 가사·줄바꿈 처리 ===== */
     const processedSummary = summary
-    .replace(/\n/g, '<br>')
-    .replace(/\[/g, '<br><br>[')   // [ 앞에 <br> 추가
-    .replace(/\]/g, ']<br>');  // ] 뒤에 <br> 추가
+    .replace(/\n/g, '<br>')      // 줄바꿈 → <br>
+    .replace(/\[/g, '<br><br>[') // [ 앞에 <br><br>
+    .replace(/\]/g, ']<br>');    // ] 뒤에 <br>
     document.getElementById('modalSummary').innerHTML = processedSummary;
 
+    /* ===== 썸네일 ===== */
     const img = document.getElementById('modalBg');
     img.src = thumbnail;
 
-    img.classList.remove('music');
+    // 타입별 이미지 크기(class) 조정
+    img.classList.remove('music', 'book');
     if (type === 'music') {
       img.classList.add('music');
     }
-
-    img.classList.remove('book');
     if (type === 'book') {
       img.classList.add('book');
     }
 
-    // 모달 열기
+    /* ===== 모달 표시 ===== */
     document.getElementById('detailModal').classList.add('active');
 
-    // 검색 버튼 활성화 및 클릭 이벤트 등록
+    /* ===== 검색 버튼 ===== */
     const searchBtn = document.getElementById('modalSearchBtn');
+
+    // 타입별 라벨 매핑
+    const labelMap = {
+      movie: '영화 정보 찾아보기 ➜',
+      music: '음악 정보 찾아보기 ➜',
+      book: '책 정보 찾아보기 ➜'
+    };
+    searchBtn.textContent = labelMap[type] || '자세히 보기 ➜';
+
+    // 활성화 + 클릭 이벤트
     searchBtn.disabled = false;
-    searchBtn.onclick = function () {
+    searchBtn.onclick = () => {
       const query = encodeURIComponent(title);
-      const url = `https://www.google.com/search?q=${query}`;
-      window.open(url, '_blank');
-    }
+      window.open(`https://www.google.com/search?q=${query}`, '_blank');
+    };
   }
 
   /* 모달 닫기 */
