@@ -1,6 +1,6 @@
 package com.grepp.moodlink.app.model.details.dto;
 
-import com.grepp.moodlink.app.model.data.music.entity.Music;
+import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +12,6 @@ public class SongDetailsDto {
     private String name;
     private String artist;
     private LocalDate releasedAt;
-    private LocalDate createdAt;
     private String genre;
     private String description;
     private String songImg;
@@ -21,25 +20,27 @@ public class SongDetailsDto {
     private String summary;
     private Boolean status;
 
-    public SongDetailsDto(String name, String artist, LocalDate releasedAt, LocalDate createdAt,
+    public SongDetailsDto(String id, String name, String artist, LocalDate releasedAt,
         String genre, String description, String songImg, String lyrics, String summary) {
+        this.id = id;
         this.name = name;
         this.artist = artist;
         this.releasedAt = releasedAt;
-        this.createdAt = createdAt;
         this.genre = genre;
         this.description = description;
         this.songImg = songImg;
         this.lyrics = lyrics;
         this.summary = summary;
+        this.status = false;
+        this.externalLink = "https://www.google.com/search?q="+name;
     }
 
-    public static SongDetailsDto from(Music music){
+    public static SongDetailsDto from(MusicDto music){
         return new SongDetailsDto(
+            music.getId(),
             music.getTitle(),
             music.getSinger(),
             music.getReleaseDate(),
-            music.getCreatedAt(),
             music.getGenre(),
             music.getDescription(),
             music.getThumbnail(),

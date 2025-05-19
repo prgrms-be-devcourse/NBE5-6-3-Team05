@@ -2,7 +2,6 @@ package com.grepp.moodlink.app.model.data.music;
 
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
-import com.grepp.moodlink.infra.imgbb.ImgUploadTemplate;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class MusicService {
 
     private final MusicRepository musicRepository;
+    private final ModelMapper mapper;
 
     public void saveMusic(List<MusicDto> musicDtos) {
 
@@ -63,5 +64,23 @@ public class MusicService {
                 .map(Optional::get)
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+    public MusicDto findById(String id) {
+        return musicRepository.findById(id).map(e -> mapper.map(e, MusicDto.class)).orElse(null);
+    }
+
+    @Transactional
+    public void incrementLikeCount(String id){
+        Music music = musicRepository.findById(id).orElseThrow();
+        Long currentCount = music.getLikeCount();
+        music.setLikeCount(currentCount+1);
+    }
+
+    @Transactional
+    public void decreaseLikeCount(String id) {
+        Music music = musicRepository.findById(id).orElseThrow();
+        Long currentCount = music.getLikeCount();
+        music.setLikeCount(currentCount-1);
     }
 }
