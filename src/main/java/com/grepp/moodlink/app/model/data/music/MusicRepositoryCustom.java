@@ -16,9 +16,5 @@ public interface MusicRepositoryCustom {
 
     String findTitle();
 
-    Page<Music> findPaged(Pageable pageable);
-
-    void updateBook(MusicDto dto);
-
     List<MusicDto> searchContent(String contentName);
 }

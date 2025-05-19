@@ -16,9 +16,5 @@ public interface BookRepositoryCustom {
 
     String findTitle();
 
-    void updateBook(BookDto book);
-
-    Page<Book> findPaged(Pageable pageable);
-
     List<BookDto> searchContent(String contentName);
 }

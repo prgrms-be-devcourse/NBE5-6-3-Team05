@@ -1,6 +1,6 @@
 package com.grepp.moodlink.app.model.details.dto;
 
-import com.grepp.moodlink.app.model.data.book.entity.Book;
+import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,8 +20,9 @@ public class BookDetailsDto {
     private String publisher;
     private String summary;
 
-    public BookDetailsDto(String name, String author, LocalDate publishedAt, String description,
+    public BookDetailsDto(String id, String name, String author, LocalDate publishedAt, String description,
         String bookImg, String genre, String publisher, String summary) {
+        this.id = id;
         this.name = name;
         this.author = author;
         this.publishedAt = publishedAt;
@@ -30,10 +31,13 @@ public class BookDetailsDto {
         this.genre = genre;
         this.publisher = publisher;
         this.summary = summary;
+        this.status = false;
+        this.externalLink = "https://www.google.com/search?q="+name;
     }
 
-    public static BookDetailsDto from(Book book){
+    public static BookDetailsDto from(BookDto book){
         return new BookDetailsDto(
+            book.getIsbn(),
             book.getTitle(),
             book.getAuthor(),
             book.getPublishedDate(),
@@ -41,6 +45,7 @@ public class BookDetailsDto {
             book.getImage(),
             book.getGenre(),
             book.getPublisher(),
-            book.getSummary());
+            book.getSummary()
+        );
     }
 }

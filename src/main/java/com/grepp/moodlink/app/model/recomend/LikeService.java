@@ -2,28 +2,31 @@ package com.grepp.moodlink.app.model.recomend;
 
 import com.grepp.moodlink.app.controller.web.member.payload.LikeGenreResponse;
 import com.grepp.moodlink.app.model.data.book.BookRepository;
+import com.grepp.moodlink.app.model.data.book.BookService;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.app.model.data.movie.MovieRepository;
+import com.grepp.moodlink.app.model.data.movie.MovieService;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.movie.entity.Genre;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import com.grepp.moodlink.app.model.data.music.MusicRepository;
+import com.grepp.moodlink.app.model.data.music.MusicService;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailBooks;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMovies;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMusic;
 import com.grepp.moodlink.app.model.recomend.entity.Likes;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +46,10 @@ public class LikeService {
     private final BookRepository bookRepository;
     private final MusicRepository musicRepository;
     private final MovieRepository movieRepository;
-    private final ModelMapper mapper;
+    private final BookService bookService;
+    private final MovieService movieService;
+    private final MusicService musicService;
+
 
     public List<Likes> getLikeInfo(String userId) {
         return likeRepository.findByUserId(userId);
@@ -51,32 +57,34 @@ public class LikeService {
 
     public List<LikeDetailBooks> getLikeDetailBook(List<Likes> likes) {
 
-        List<String> likeIds = likes.stream()
-            .map(like -> String.valueOf(like.getId()))
+        List<Long> likeIds = likes.stream()
+            .map(Likes::getId)
             .collect(Collectors.toList());
         return likeDetailBooksRepository.findAllByLikesIdIn(likeIds);
 
     }
     public Page<LikeDetailBooks> getLikeDetailBookPaged(List<Likes> likes,Pageable pageable) {
-
-        List<String> likeIds = likes.stream()
-            .map(like -> String.valueOf(like.getId()))
+        List<Long> likeIds = likes.stream()
+            .map(Likes::getId)
             .collect(Collectors.toList());
         return likeDetailBooksRepository.findAllByLikesIdInPagination(likeIds,pageable);
 
     }
 
     public List<BookDto> getBookList(List<LikeDetailBooks> likeDetailBooks) {
-
         List<String> bookIds = likeDetailBooks.stream()
             .map(LikeDetailBooks::getBookId)
             .collect(Collectors.toList());
 
         List<Book> books = bookRepository.findAllByIsbnIn(bookIds);
 
-        log.info("Books: {}", books);
+        Map<String, Book> bookMap = books.stream()
+            .collect(Collectors.toMap(Book::getIsbn, b -> b));
 
-        return books.stream()
+
+        return bookIds.stream()
+            .map(bookMap::get)
+            .filter(Objects::nonNull)
             .map(BookDto::toDto)
             .collect(Collectors.toList());
     }
@@ -84,37 +92,41 @@ public class LikeService {
 
     public List<LikeDetailMusic> getLikeDetailMusic(List<Likes> likes) {
 
-        List<String> likeIds = likes.stream()
-            .map(like -> String.valueOf(like.getId()))
+        List<Long> likeIds = likes.stream()
+            .map(Likes::getId)
             .collect(Collectors.toList());
         return likeDetailMusicRepository.findAllByLikesIdIn(likeIds);
 
     }
     public Page<LikeDetailMusic> getLikeDetailMusicPaged(List<Likes> likes,Pageable pageable) {
-
-        List<String> likeIds = likes.stream()
-            .map(like -> String.valueOf(like.getId()))
+        List<Long> likeIds = likes.stream()
+            .map(Likes::getId)
             .collect(Collectors.toList());
         return likeDetailMusicRepository.findAllByLikesIdInPagination(likeIds,pageable);
 
     }
 
     public List<MusicDto> getMusicList(List<LikeDetailMusic> likeDetailMusics) {
-
-        List<String> MusicIds = likeDetailMusics.stream()
+        List<String> musicIds = likeDetailMusics.stream()
             .map(LikeDetailMusic::getMusicId)
             .collect(Collectors.toList());
 
-        List<Music> musics = musicRepository.findAllByIdIn(MusicIds);
+        List<Music> musics = musicRepository.findAllByIdIn(musicIds);
 
-        return musics.stream()
+        Map<String, Music> musicMap = musics.stream()
+            .collect(Collectors.toMap(Music::getId, m -> m));
+
+        return musicIds.stream()
+            .map(musicMap::get)
+            .filter(Objects::nonNull)
             .map(MusicDto::toDto)
             .collect(Collectors.toList());
     }
 
+
     public List<LikeDetailMovies> getLikeDetailMovie(List<Likes> likes) {
-        List<String> likeIds = likes.stream()
-            .map(like -> String.valueOf(like.getId()))
+        List<Long> likeIds = likes.stream()
+            .map((Likes::getId))
             .collect(Collectors.toList());
 
         return likeDetailMoviesRepository.findAllByLikesIdIn(likeIds);
@@ -122,8 +134,8 @@ public class LikeService {
     }
 
     public Page<LikeDetailMovies> getLikeDetailMoviePaged(List<Likes> likes,Pageable pageable) {
-        List<String> likeIds = likes.stream()
-            .map(like -> String.valueOf(like.getId()))
+        List<Long> likeIds = likes.stream()
+            .map((Likes::getId))
             .collect(Collectors.toList());
 
         return likeDetailMoviesRepository.findAllByLikesIdInPagination(likeIds,pageable);
@@ -131,13 +143,18 @@ public class LikeService {
     }
 
     public List<MovieInfoDto> getMovieList(List<LikeDetailMovies> likeDetailMovies) {
-        List<String> MovieIds = likeDetailMovies.stream()
+        List<String> movieIds = likeDetailMovies.stream()
             .map(LikeDetailMovies::getMovieId)
             .collect(Collectors.toList());
 
-        List<Movie> movies = movieRepository.findAllByIdIn(MovieIds);
+        List<Movie> movies = movieRepository.findAllByIdIn(movieIds);
 
-        return movies.stream()
+        Map<String, Movie> movieMap = movies.stream()
+            .collect(Collectors.toMap(Movie::getId, m -> m));
+
+        return movieIds.stream()
+            .map(movieMap::get)
+            .filter(Objects::nonNull)
             .map(MovieInfoDto::toDto)
             .collect(Collectors.toList());
     }
@@ -153,9 +170,7 @@ public class LikeService {
     @Transactional
     public List<BookDto> getUserLikedBooks(String userId) {
         List<Likes> likes = getLikeInfo(userId);
-        log.info("likes: {}", likes);
         List<LikeDetailBooks> likeDetailBooks = getLikeDetailBook(likes);
-        log.info("likedetailBooks: {}", likeDetailBooks);
         return getBookList(likeDetailBooks);
     }
 
@@ -163,6 +178,7 @@ public class LikeService {
     public List<MovieInfoDto> getUserLikedMovies(String userId) {
         List<Likes> likes = getLikeInfo(userId);
         List<LikeDetailMovies> likeDetailMovies = getLikeDetailMovie(likes);
+
         return getMovieList(likeDetailMovies);
     }
 
@@ -302,7 +318,10 @@ public class LikeService {
     public Page<BookDto> getUserLikedBooksPaged(String userId, Pageable pageable) {
         List<Likes> likes = getLikeInfo(userId);
         Page<LikeDetailBooks> likeDetailBooks = getLikeDetailBookPaged(likes,pageable);
+
+        System.out.println("좋아요 세부 정보 개수: " + likeDetailBooks.getContent());
         List<BookDto> Books = getBookList(likeDetailBooks.getContent());
+        System.out.println("북리스트 개수: " + Books.size());
 
         return new PageImpl<>(Books, pageable, likeDetailBooks.getTotalElements());
     }
@@ -324,214 +343,164 @@ public class LikeService {
     }
 
 
+    public void updateLikeIncrement(Likes likes){
+        Long likeCount = likes.getTotalCount();
+        likes.setTotalCount(likeCount+1);
+    }
+
+    public Likes createLike(String userId){
+        Likes likes1 = new Likes();
+        likes1.setTotalCount(0L);
+        likes1.setUserId(userId);
+        updateLikeIncrement(likes1);
+        likeRepository.save(likes1);
+        return likes1;
+    }
+
+    public void createLikeDetailMusic(Long likeId, String id){
+        // like_detail_musics에 행 추가
+        LikeDetailMusic likeDetailMusic1 = new LikeDetailMusic();
+        likeDetailMusic1.setLikesId(likeId);
+        likeDetailMusic1.setMusicId(id);
+        likeDetailMusic1.setCreatedAt(LocalDateTime.now());
+        likeDetailMusicRepository.save(likeDetailMusic1);
+        // 컨텐츠의 likeCount 값 증가
+        musicService.incrementLikeCount(id);
+    }
+
+    public void deleteLikeDetailMusic(Likes likes, String id){
+        likeDetailMusicRepository.deleteByMusicIdAndLikesId(id, likes.getId());
+        likes.setTotalCount(likes.getTotalCount()-1);
+        // 컨텐츠의 likeCount 값 감소
+        musicService.decreaseLikeCount(id);
+    }
+
+    public void createLikeDetailMovie(Long likeId, String id){
+        // like_detail_movie에 행 추가
+        LikeDetailMovies likeDetailMovies1 = new LikeDetailMovies();
+        likeDetailMovies1.setLikesId(likeId);
+        likeDetailMovies1.setMovieId(id);
+        likeDetailMovies1.setCreatedAt(LocalDateTime.now());
+        likeDetailMoviesRepository.save(likeDetailMovies1);
+        // 컨텐츠의 likeCount 값 증가
+        movieService.incrementLikeCount(id);
+    }
+
+    public void deleteLikeDetailMovie(Likes likes, String id){
+        likeDetailMoviesRepository.deleteByMovieIdAndLikesId(id, likes.getId());
+        likes.setTotalCount(likes.getTotalCount()-1);
+        // 컨텐츠의 likeCount 값 감소
+        movieService.decreaseLikeCount(id);
+    }
+
+    public void createLikeDetailBook(Long likeId, String id){
+        // like_detail_book에 행 추가
+        LikeDetailBooks likeDetailBooks1 = new LikeDetailBooks();
+        likeDetailBooks1.setLikesId(likeId);
+        likeDetailBooks1.setBookId(id);
+        likeDetailBooks1.setCreatedAt(LocalDateTime.now());
+        likeDetailBooksRepository.save(likeDetailBooks1);
+        // 컨텐츠의 likeCount 값 증가
+        bookService.incrementLikeCount(id);
+    }
+
+    public void deleteLikeDetailBook(Likes likes, String id){
+        likeDetailBooksRepository.deleteByBookIdAndLikesId(id, likes.getId());
+        likes.setTotalCount(likes.getTotalCount()-1);
+        // 컨텐츠의 likeCount 값 감소
+        bookService.decreaseLikeCount(id);
+    }
+
+    public boolean existInLikeDetailMusic(Long likeId, String id){
+        return likeDetailMusicRepository.existsByLikesIdAndMusicId(likeId,id);
+    }
+
+    public boolean existInLikeDetailMovie(Long likeId, String id){
+        return likeDetailMoviesRepository.existsByLikesIdAndMovieId(likeId,id);
+    }
+
+    public boolean existInLikeDetailBook(Long likeId, String id){
+        return likeDetailBooksRepository.existsByLikesIdAndBookId(likeId,id);
+    }
+
     @Transactional
     public boolean toggleLikeMusic(String userId, String id){
-        // user가 좋아요를 누른 likes가져오기, 좋아요 한 컨텐츠가 한 개 이상일 경우 likesExist는 true, 하나도 없으면 false
         List<Likes> likes = getLikeInfo(userId);
-        boolean likesExist = !likes.isEmpty();
-
-        // 유저가 좋아요 누른 music 컨텐츠들
-        List<LikeDetailMusic> likeDetailMusic = new ArrayList<>();
-        if (likesExist){
-            likeDetailMusic = getLikeDetailMusic(likes);
+        // 좋아요 목록 없음 -> like 행 추가, likeDetailMusic 행 추가
+        if (likes.isEmpty()){
+            Likes likes1 = createLike(userId);
+            createLikeDetailMusic(likes1.getId(), id);
+            return true;
         }
-        // 좋아요 증감 할 컨텐츠의 likeCount값 조회
-        Music musicContent = musicRepository.findById(id).orElseThrow();
-        Long musicLikeCount = musicContent.getLikeCount();
-
-        for(LikeDetailMusic music : likeDetailMusic){
-            if(music.getMusicId().equals(id)){
-                // 컨텐츠의 likeCount값 감소
-                musicContent.setLikeCount(musicLikeCount-1);
-
-                // like_detail_musics 테이블에 요소 삭제
-                likeDetailMusicRepository.deleteByMusicIdAndLikesId(id, music.getLikesId());
-
-                // like의 totalCount값 1 감소
-                Likes userLike = likeRepository.findByUserId(userId).getFirst();
-                Long likeCount = userLike.getTotalCount();
-                userLike.setTotalCount(likeCount-1);
-                // like의 totalCount값이 0이면 like테이블에서 삭제
-                if (likeCount == 1){
-                    likeRepository.deleteById(userLike.getId());
-                }
-                return false;
-            }
-        }
-
-        // 컨텐츠의 likeCount 값 증가
-        musicContent.setLikeCount(musicLikeCount+1);
-
-        // 삽입: likes가 없을 경우
-        if (!likesExist){
-            // likes 테이블에 userId 행 추가
-            Likes likes1 = new Likes();
-            likes1.setTotalCount(1L);
-            likes1.setUserId(userId);
-            likeRepository.save(likes1);
-
-            // like_detail_musics에 행 추가
-            LikeDetailMusic likeDetailMusic1 = new LikeDetailMusic();
-            likeDetailMusic1.setLikesId(likes1.getId());
-            likeDetailMusic1.setMusicId(id);
-            likeDetailMusicRepository.save(likeDetailMusic1);
+        // 좋아요 목록은 있지만, likeDetailMusic에 해당 id의 music이 없음 -> like 행 업데이트, likeDetailMusic 행 추가
+        Likes likes1 = likes.getFirst();
+        if(!existInLikeDetailMusic(likes1.getId(), id)){
+            updateLikeIncrement(likes1);
+            createLikeDetailMusic(likes1.getId(), id);
             return true;
         }
 
-        // 삽입: likes가 있는 경우
-        // 삽입하기
-        // likes테이블에 userId의 like 조회 후 totalCount 1 증가
-        Likes userLike = likeRepository.findByUserId(userId).getFirst();
-        Long likeCount = userLike.getTotalCount();
-        userLike.setTotalCount(likeCount+1);
+        // 좋아요 목록이 있고, likeDetailMusic에 해당 id의 music이 있음 -> like 행 업데이트, likeDetailMusic 행 삭제
+        deleteLikeDetailMusic(likes1, id);
 
-        // like_detail_musics 테이블에 요소 추가
-        LikeDetailMusic newLikeMusic = new LikeDetailMusic();
-        newLikeMusic.setMusicId(id);
-        newLikeMusic.setLikesId(userLike.getId());
-        likeDetailMusicRepository.save(newLikeMusic);
-        return true;
+        // like의 totalCount값이 0이면 like테이블에서 삭제
+        if (likes1.getTotalCount() == 0){
+            likeRepository.deleteById(likes1.getId());
+        }
+        return false;
     }
 
     @Transactional
     public boolean toggleLikeMovie(String userId, String id) {
-        // user가 좋아요를 누른 likes가져오기, 좋아요 한 컨텐츠가 한 개 이상일 경우 likesExist는 true, 하나도 없으면 false
         List<Likes> likes = getLikeInfo(userId);
-        boolean likesExist = !likes.isEmpty();
-
-        // 유저가 좋아요 누른 movie 컨텐츠들
-        List<LikeDetailMovies> likeDetailMovies = new ArrayList<>();
-        if (likesExist){
-            likeDetailMovies = getLikeDetailMovie(likes);
+        // 좋아요 목록 없음 -> like 행 추가, likeDetailMovie 행 추가
+        if (likes.isEmpty()){
+            Likes likes1 = createLike(userId);
+            createLikeDetailMovie(likes1.getId(), id);
+            return true;
         }
-        // 좋아요 증감 할 컨텐츠의 likeCount값 조회
-        Movie movieContent = movieRepository.findById(id).orElseThrow();
-        Long movieLikeCount = movieContent.getLikeCount();
-
-        for(LikeDetailMovies movies : likeDetailMovies){
-            if(movies.getMovieId().equals(id)){
-                // 컨텐츠의 likeCount값 감소
-                movieContent.setLikeCount(movieLikeCount-1);
-
-                // like_detail_movies 테이블에 요소 삭제
-                likeDetailMoviesRepository.deleteByMovieIdAndLikesId(id, movies.getLikesId());
-
-                // like의 totalCount값 1 감소
-                Likes userLike = likeRepository.findByUserId(userId).getFirst();
-                Long likeCount = userLike.getTotalCount();
-                userLike.setTotalCount(likeCount-1);
-                // like의 totalCount값이 0이면 like테이블에서 삭제
-                if (likeCount == 1){
-                    likeRepository.deleteById(userLike.getId());
-                }
-                return false;
-            }
-        }
-
-        // 컨텐츠의 likeCount 값 증가
-        movieContent.setLikeCount(movieLikeCount+1);
-
-        // 삽입: likes가 없을 경우
-        if (!likesExist){
-            // likes 테이블에 userId 행 추가
-            Likes likes1 = new Likes();
-            likes1.setTotalCount(1L);
-            likes1.setUserId(userId);
-            likeRepository.save(likes1);
-
-            // like_detail_movies에 행 추가
-            LikeDetailMovies likeDetailMovies1 = new LikeDetailMovies();
-            likeDetailMovies1.setLikesId(likes1.getId());
-            likeDetailMovies1.setMovieId(id);
-            likeDetailMoviesRepository.save(likeDetailMovies1);
+        // 좋아요 목록은 있지만, likeDetailMovie에 해당 id의 movie이 없음 -> like 행 업데이트, likeDetailMovie 행 추가
+        Likes likes1 = likes.getFirst();
+        if(!existInLikeDetailMovie(likes1.getId(),id)){
+            updateLikeIncrement(likes1);
+            createLikeDetailMovie(likes1.getId(), id);
             return true;
         }
 
-        // 삽입: likes가 있는 경우
-        // 삽입하기
-        // likes테이블에 userId의 like 조회 후 totalCount 1 증가
-        Likes userLike = likeRepository.findByUserId(userId).getFirst();
-        Long likeCount = userLike.getTotalCount();
-        userLike.setTotalCount(likeCount+1);
+        // 좋아요 목록이 있고, likeDetailMovie에 해당 id의 movie이 있음 -> like 행 업데이트, likeDetailMovie 행 삭제
+        deleteLikeDetailMovie(likes1, id);
 
-        // like_detail_movies 테이블에 요소 추가
-        LikeDetailMovies newLikeMovies = new LikeDetailMovies();
-        newLikeMovies.setMovieId(id);
-        newLikeMovies.setLikesId(userLike.getId());
-        likeDetailMoviesRepository.save(newLikeMovies);
-        return true;
+        // like의 totalCount값이 0이면 like테이블에서 삭제
+        if (likes1.getTotalCount() == 0){
+            likeRepository.deleteById(likes1.getId());
+        }
+        return false;
     }
-
 
     @Transactional
     public boolean toggleLikeBook(String userId, String id) {
-        // user가 좋아요를 누른 likes가져오기, 좋아요 한 컨텐츠가 한 개 이상일 경우 likesExist는 true, 하나도 없으면 false
         List<Likes> likes = getLikeInfo(userId);
-        boolean likesExist = !likes.isEmpty();
-
-        // 유저가 좋아요 누른 book 컨텐츠들
-        List<LikeDetailBooks> likeDetailBooks = new ArrayList<>();
-        if (likesExist){
-            likeDetailBooks = getLikeDetailBook(likes);
+        // 좋아요 목록 없음 -> like 행 추가, likeDetailBook 행 추가
+        if (likes.isEmpty()){
+            Likes likes1 = createLike(userId);
+            createLikeDetailBook(likes1.getId(), id);
+            return true;
         }
-        // 좋아요 증감 할 컨텐츠의 likeCount값 조회
-        Book bookContent = bookRepository.findByIsbn(id);
-        Long bookLikeCount = bookContent.getLikeCount();
-
-        for(LikeDetailBooks books : likeDetailBooks){
-            if(books.getBookId().equals(id)){
-                // 컨텐츠의 likeCount값 감소
-                bookContent.setLikeCount(bookLikeCount-1);
-
-                // like_detail_books 테이블에 요소 삭제
-                likeDetailBooksRepository.deleteByBookIdAndLikesId(id, books.getLikesId());
-
-                // like의 totalCount값 1 감소
-                Likes userLike = likeRepository.findByUserId(userId).getFirst();
-                Long likeCount = userLike.getTotalCount();
-                userLike.setTotalCount(likeCount-1);
-                // like의 totalCount값이 0이면 like테이블에서 삭제
-                if (likeCount == 1){
-                    likeRepository.deleteById(userLike.getId());
-                }
-                return false;
-            }
-        }
-
-        // 컨텐츠의 likeCount 값 증가
-        bookContent.setLikeCount(bookLikeCount+1);
-
-        // 삽입: likes가 없을 경우
-        if (!likesExist){
-            // likes 테이블에 userId 행 추가
-            Likes likes1 = new Likes();
-            likes1.setTotalCount(1L);
-            likes1.setUserId(userId);
-            likeRepository.save(likes1);
-
-            // like_detail_books에 행 추가
-            LikeDetailBooks likeDetailBooks1 = new LikeDetailBooks();
-            likeDetailBooks1.setLikesId(likes1.getId());
-            likeDetailBooks1.setBookId(id);
-            likeDetailBooksRepository.save(likeDetailBooks1);
+        // 좋아요 목록은 있지만, likeDetailBook에 해당 id의 book이 없음 -> like 행 업데이트, likeDetailBook 행 추가
+        Likes likes1 = likes.getFirst();
+        if(!existInLikeDetailBook(likes1.getId(),id)){
+            updateLikeIncrement(likes1);
+            createLikeDetailBook(likes1.getId(), id);
             return true;
         }
 
-        // 삽입: likes가 있는 경우
-        // 삽입하기
-        // likes테이블에 userId의 like 조회 후 totalCount 1 증가
-        Likes userLike = likeRepository.findByUserId(userId).getFirst();
-        Long likeCount = userLike.getTotalCount();
-        userLike.setTotalCount(likeCount+1);
+        // 좋아요 목록이 있고, likeDetailBook에 해당 id의 book이 있음 -> like 행 업데이트, likeDetailBook 행 삭제
+        deleteLikeDetailBook(likes1, id);
 
-        // like_detail_books 테이블에 요소 추가
-        LikeDetailBooks newLikeBooks = new LikeDetailBooks();
-        newLikeBooks.setBookId(id);
-        newLikeBooks.setLikesId(userLike.getId());
-        likeDetailBooksRepository.save(newLikeBooks);
-        return true;
+        // like의 totalCount값이 0이면 like테이블에서 삭제
+        if (likes1.getTotalCount() == 0){
+            likeRepository.deleteById(likes1.getId());
+        }
+        return false;
     }
 }
-
-
-

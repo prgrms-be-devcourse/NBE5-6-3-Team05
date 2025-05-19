@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Moodlink 관리자 페이지</title>
+  <link rel="stylesheet" th:href="@{/css/admin/contents.css}">
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="layout">
+    <!-- 왼쪽 메뉴 -->
+    <div class="menu">
+      <a href="movies">영화</a>
+      <a href="music">음악</a>
+      <a class="active" href="books">도서</a>
+    </div>
+
+    <!-- 오른쪽 콘텐츠 -->
+    <div class="main-contents">
+      <a class="add-btn" href="books/add">+ 추가</a>
+      <!-- 데이터 존재 시 -->
+
+      <div class="item-grid" th:if="${page.content() != null}">
+        <div th:each="book : ${page.content()}">
+          <div class="item-card"
+               th:attr="data-isbn=${book.isbn}">
+            <div class="item-thumbnail">
+              <img th:src="${book.image}" alt="썸네일" style="width: 100%; height: 100%; object-fit: cover;"/>
+            </div>
+            <div class="item-details">
+              <div class="item-title" th:text="${book.title}">제목</div>
+              <div class="item-meta"><span th:text="${book.author}">작가</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 비어있을 때 -->
+      <div th:if="${page.content() == null}" class="empty-message">
+        등록된 항목이 없습니다.
+      </div>
+
+      <div class="pagination" th:insert="~{fragments :: frg_pagination}"></div>
+    </div>
+  </div>
+</main>
+<div layout:fragment="scripts">
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll(".item-card")
+      .forEach((card) => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => {
+          const isbn = card.dataset.isbn;
+          if (isbn) {
+            window.location.href = `/admin/books/modify/${isbn}`;
+          }
+        });
+      });
+    });
+  </script>
+</div>
+</body>
+
+</html>

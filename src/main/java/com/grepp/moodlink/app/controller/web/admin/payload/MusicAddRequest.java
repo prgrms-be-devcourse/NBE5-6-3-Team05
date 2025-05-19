@@ -12,14 +12,15 @@ import org.springframework.web.multipart.MultipartFile;
 public class MusicAddRequest {
 
     private List<MultipartFile> thumbnail;
-    @NotBlank
+    @NotBlank(message = "제목을 입력해주세요")
     private String title;
-    @NotBlank
+    @NotBlank(message = "가수를 입력해주세요")
     private String singer;
-    @NotNull
+    @NotNull(message = "장르를 선택해주세요")
     private String genre;
 
     private String description;
+    @NotBlank
     private String lyrics;
 
     private LocalDate releaseDate;

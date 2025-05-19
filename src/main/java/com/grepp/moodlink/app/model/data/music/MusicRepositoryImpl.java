@@ -52,40 +52,6 @@ public class MusicRepositoryImpl implements MusicRepositoryCustom {
     }
 
     @Override
-    public Page<Music> findPaged(Pageable pageable) {
-
-        List<Music> content = queryFactory
-            .select(music)
-            .from(music)
-            .where(music.activated)
-            .orderBy(music.modifiedAt.desc())
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .fetch();
-
-        JPAQuery<Long> countQuery = queryFactory
-            .select(music.count())
-            .from(music)
-            .where(music.activated);
-
-        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
-    }
-
-    @Override
-    @Transactional
-    public void updateBook(MusicDto music) {
-        Music entity = em.find(Music.class, music.getId());
-
-        entity.setGenre(music.getGenre());
-        if (music.getThumbnail() != null) {
-            entity.setThumbnail(music.getThumbnail());
-        }
-        entity.setGenre(music.getGenre());
-        entity.setDescription(music.getDescription());
-        entity.setLyrics(music.getLyrics());
-    }
-
-    @Override
     public List<MusicDto> searchContent(String contentName) {
         return queryFactory.select(Projections.constructor(MusicDto.class,
                 music.title,
