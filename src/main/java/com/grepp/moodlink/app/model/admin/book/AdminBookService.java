@@ -85,7 +85,7 @@ public class AdminBookService {
             uploadImage(thumbnail, dto);
             // 업데이트
             adminBookRepository.updateBook(dto);
-
+            embeddingService.generateEmbeddingsBook();
             log.info("{}",dto);
 
 

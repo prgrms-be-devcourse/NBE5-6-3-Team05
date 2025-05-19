@@ -88,7 +88,7 @@ public class AdminMusicService {
            uploadImage(thumbnail,dto);
             // 업데이트
             musicRepository.updateBook(dto);
-
+            embeddingService.generateEmbeddingsMusic();
             log.info("{}",dto);
 
 

@@ -96,7 +96,7 @@ public class AdminMovieService {
 
             // 업데이트
             movieRepository.updateBook(dto);
-
+            embeddingService.generateEmbeddingsMovie();
             log.info("{}",dto);
 
 

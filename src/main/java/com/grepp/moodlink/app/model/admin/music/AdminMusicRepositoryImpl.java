@@ -57,6 +57,10 @@ public class AdminMusicRepositoryImpl implements AdminMusicRepositoryCustom {
         }
         entity.setGenre(music.getGenre());
         entity.setDescription(music.getDescription());
-        entity.setLyrics(music.getLyrics());
+        if(!entity.getLyrics().equals(music.getLyrics())){
+            entity.setLyrics(music.getLyrics());
+            // 변경된 설명에 대한 embedding 값을 넣기 위해 null 값 넣기
+            entity.setEmbedding(null);
+        }
     }
 }
