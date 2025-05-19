@@ -1,17 +1,14 @@
 package com.grepp.moodlink.app.controller.web.home;
 
-import com.grepp.moodlink.app.model.data.ContentDto;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
-import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.home.HomeService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -51,5 +48,4 @@ public class HomeController {
 
         return "/home/search";
     }
-
 }
