@@ -172,6 +172,6 @@
 
 ---
 
-[NULL NULL 하게 발표자료 보기](readmeresource/ppt.pdf)<br>
+[NULL NULL 하게 발표자료 보기](readmeresource/nullnullppt.pdf)<br>
 [NULL NULL 하게 팀 2차 프로젝트 WBS(Gantt)](readmeresource/wbs_timeline.pdf)<br>
 
