@@ -141,7 +141,9 @@ public class AdminController {
             movieService.addMovie(movieAddRequest.getThumbnail(), movieAddRequest.toDto());
         } catch (CommonException e) {
             log.info(e.code().message());
-            redirectAttributes.addFlashAttribute("errorMessage", e.code().message());
+            Map<String, String> fieldErrors = new HashMap<>();
+            fieldErrors.put("title",e.code().message());
+            redirectAttributes.addFlashAttribute("fieldErrors", fieldErrors);
             return "redirect:/admin/movies/add";
         }
 
@@ -176,8 +178,9 @@ public class AdminController {
             musicService.addMusic(musicAddRequest.getThumbnail(), musicAddRequest.toDto());
         } catch (CommonException e) {
             log.info(e.code().message());
-            redirectAttributes.addFlashAttribute("errorMessage", e.code().message());
-            redirectAttributes.addFlashAttribute("musicAddRequest", musicAddRequest);
+            Map<String, String> fieldErrors = new HashMap<>();
+            fieldErrors.put("title",e.code().message());
+            redirectAttributes.addFlashAttribute("fieldErrors", fieldErrors);
             return "redirect:/admin/music/add";
         }
 
@@ -211,7 +214,9 @@ public class AdminController {
             adminBookService.addBook(bookAddRequest.getImage(), bookAddRequest.toDto());
         } catch (CommonException e) {
             log.info(e.code().message());
-            redirectAttributes.addFlashAttribute("errorMessage", e.code().message());
+            Map<String, String> fieldErrors = new HashMap<>();
+            fieldErrors.put("title",e.code().message());
+            redirectAttributes.addFlashAttribute("fieldErrors", fieldErrors);
             return "redirect:/admin/books/add";
         }
 
