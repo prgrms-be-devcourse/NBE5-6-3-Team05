@@ -44,7 +44,7 @@
       <img src="readmeresource/fortune.gif" width="380"/>
     </td>
     <td align="center">
-      <img src="readmeresource/main_all_search.gif" width="380"/>
+      <img src="readmeresource/main_search_all.gif" width="380"/>
     </td>
   </tr>
 
@@ -54,7 +54,7 @@
   </tr>
   <tr>
     <td align="center">
-      <img src="readmeresource/main_search.gif" width="380"/>
+      <img src="readmeresource/main_search_keyword.gif" width="380"/>
     </td>
     <td align="center">
       <img src="readmeresource/mypage.gif" width="380"/>
