@@ -116,6 +116,35 @@
       opacity: 0.5;
       cursor: not-allowed;
     }
+
+    .loading-wrap {
+      display: flex;
+      position: fixed;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.3);
+    }
+    .loading-spinner {
+      width: 80px;
+      height: 80px;
+      margin-top: -15vh;
+      border: 8px solid #eee;
+      border-top: 8px solid #a64dff;
+      border-radius: 50%;
+      margin-bottom: 10px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
   </style>
 </head>
 <body>
@@ -201,9 +230,13 @@
       <textarea class="additional-input" id="additionalText" placeholder="추가로 원하는 사항을 자유롭게 입력하세요"></textarea>
     </div>
 
-    <button type="submit" class="submit-button" id="submitBtn" disabled>추천받기</button>
-  </form>
+    <button type="submit" class="submit-button" id="submitBtn" disabled >추천받기</button>
 
+  </form>
+  <div class="loading-wrap loading-wrap--js" id="loading-wrap" style="display: none">
+    <div class="loading-spinner loading-spinner--js"></div>
+    <div>컨텐츠 추천 중입니다...</div>
+  </div>
   <script>
     const questionToKeywords = {};
 
@@ -282,8 +315,17 @@
       if (document.getElementById('submitBtn').disabled) {
         e.preventDefault();
         alert("필수 항목을 모두 선택해 주세요.");
+        return;
       }
+      e.preventDefault();
+
+      document.getElementById('recommendForm').style.display = 'none';
+      document.getElementById('loading-wrap').style.display = 'flex';
+      setTimeout(() => {
+        e.target.submit();
+      }, 100);
     });
+
   </script>
 
 </div>
