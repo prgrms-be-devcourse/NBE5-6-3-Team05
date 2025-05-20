@@ -13,7 +13,7 @@ public class SignupRequest {
     private String userId;
 
     @NotBlank
-    @Size(min = 4, max = 15)
+    @Size(min = 8, max = 15, message = "비밀번호는 8~15자리를 입력해주세요.")
     private String password;
 
     @NotBlank
@@ -27,7 +27,6 @@ public class SignupRequest {
 
     @NotBlank
     private String countries;
-
 
     public MemberDto toDto() {
         MemberDto memberDto = new MemberDto();

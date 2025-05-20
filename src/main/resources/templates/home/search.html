@@ -9,6 +9,14 @@
 <body>
 <main layout:fragment="content" class="search-result-container">
 
+    <div class="main-content">
+      <div class="search-container">
+        <form id="searchForm" th:action="@{/search}" method="get">
+          <input type="text" id="search-input" name="contentName" placeholder="원하는 음악,영화,도서를 찾아보세요!">
+          <button type="submit">검색</button>
+        </form>
+      </div>
+
   <!-- contentName 이 비었을 때 -->
   <h4 th:if="${#strings.isEmpty(contentName)}">전체 검색결과입니다.</h4>
 
