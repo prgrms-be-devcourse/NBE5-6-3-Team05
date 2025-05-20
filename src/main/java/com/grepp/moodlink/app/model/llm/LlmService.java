@@ -80,7 +80,7 @@ public class LlmService {
                 return new AbstractMap.SimpleEntry<>(movie, similarity);
             })
             .sorted((a, b) -> Float.compare(b.getValue(), a.getValue()))
-            .limit(10)
+            .limit(15)
             .map(Map.Entry::getKey)
             .collect(Collectors.toList());
 
@@ -106,7 +106,7 @@ public class LlmService {
                 );
                 return new AbstractMap.SimpleEntry<>(book, similarity);
             }).sorted((a, b) -> Float.compare(b.getValue(), a.getValue()))
-            .limit(10)
+            .limit(15)
             .map(Map.Entry::getKey)
             .collect(Collectors.toList());
 
@@ -132,7 +132,7 @@ public class LlmService {
                 );
                 return new AbstractMap.SimpleEntry<>(music, similarity);
             }).sorted((a, b) -> Float.compare(b.getValue(), a.getValue()))
-            .limit(10)
+            .limit(15)
             .map(Map.Entry::getKey)
             .collect(Collectors.toList());
 
