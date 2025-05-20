@@ -77,41 +77,42 @@
 
 ## 🧑‍💻 팀원 소개
 
-  <table >
-    <tbody>
-      <tr>
-        <td align="center"><b>이강현</b></td>
-        <td align="center"><b>강민서</b></td>
-        <td align="center"><b>강대겸</b></td>
-        <td align="center"><b>최종우</b></td>
-        <td align="center"><b>안준희</b></td>
-      </tr>
-      <tr>
-        <td align="center"><a href="https://github.com/Leeka99"><img src="https://github.com/Leeka99.png" width="100px;" alt="이강현"/></a></td>
-        <td align="center"><a href="https://github.com/childstone"><img src="https://github.com/childstone.png" width="100px;" alt="강민서"/></a></td>
-        <td align="center"><a href="https://github.com/KangDaegyeom"><img src="https://github.com/KangDaegyeom.png" width="100px;" alt="강대겸"/></a></td>
-        <td align="center"><a href="https://github.com/lnvisibledragon"><img src="https://github.com/lnvisibledragon.png" width="100px;" alt="최종우"/></a></td>
-        <td align="center"><a href="https://github.com/june3780"><img src="https://github.com/june3780.png" width="100px;" alt="안준희"/></a></td>
-      </tr>
-<tr>
-        <td align="center"><sub><b>PM</b></sub></td>
-        <td align="center"><sub><b>TM</b></sub></td>
-        <td align="center"><sub><b>TM</b></sub></td>
-        <td align="center"><sub><b>TM</b></sub></td>
-        <td align="center"><sub><b>TM</b></sub></td>
-      </tr>
-      <tr>
-        <td align="center"><a href="https://github.com/Leeka99"><sub><b>GitHub</b></sub></a></td>
-        <td align="center"><a href="https://github.com/childstone"><sub><b>GitHub</b></sub></a></td>
-        <td align="center"><a href="https://github.com/KangDaegyeom"><sub><b>GitHub</b></sub></a></td>
-        <td align="center"><a href="https://github.com/lnvisibledragon"><sub><b>GitHub</b></sub></a></td>
-        <td align="center"><a href="https://github.com/june3780"><sub><b>GitHub</b></sub></a></td>
-      </tr>
-    </tbody>
-  </table>
+<div align="center">
 
+<table>
+  <tbody>
+    <tr>
+      <td align="center"><b>이강현</b></td>
+      <td align="center"><b>강민서</b></td>
+      <td align="center"><b>강대겸</b></td>
+      <td align="center"><b>최종우</b></td>
+      <td align="center"><b>안준희</b></td>
+    </tr>
+    <tr>
+      <td align="center"><a href="https://github.com/Leeka99"><img src="https://github.com/Leeka99.png" width="100px;" alt="이강현"/></a></td>
+      <td align="center"><a href="https://github.com/childstone"><img src="https://github.com/childstone.png" width="100px;" alt="강민서"/></a></td>
+      <td align="center"><a href="https://github.com/KangDaegyeom"><img src="https://github.com/KangDaegyeom.png" width="100px;" alt="강대겸"/></a></td>
+      <td align="center"><a href="https://github.com/lnvisibledragon"><img src="https://github.com/lnvisibledragon.png" width="100px;" alt="최종우"/></a></td>
+      <td align="center"><a href="https://github.com/june3780"><img src="https://github.com/june3780.png" width="100px;" alt="안준희"/></a></td>
+    </tr>
+    <tr>
+      <td align="center"><sub><b>PM</b></sub></td>
+      <td align="center"><sub><b>TM</b></sub></td>
+      <td align="center"><sub><b>TM</b></sub></td>
+      <td align="center"><sub><b>TM</b></sub></td>
+      <td align="center"><sub><b>TM</b></sub></td>
+    </tr>
+    <tr>
+      <td align="center"><a href="https://github.com/Leeka99"><sub><b>GitHub</b></sub></a></td>
+      <td align="center"><a href="https://github.com/childstone"><sub><b>GitHub</b></sub></a></td>
+      <td align="center"><a href="https://github.com/KangDaegyeom"><sub><b>GitHub</b></sub></a></td>
+      <td align="center"><a href="https://github.com/lnvisibledragon"><sub><b>GitHub</b></sub></a></td>
+      <td align="center"><a href="https://github.com/june3780"><sub><b>GitHub</b></sub></a></td>
+    </tr>
+  </tbody>
+</table>
 
-<br/>
+</div>
 
 ## 👨‍🔧 기술 스택 & 협업 도구
 <div align="center">
