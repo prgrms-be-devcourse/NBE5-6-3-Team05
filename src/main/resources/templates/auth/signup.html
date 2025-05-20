@@ -62,6 +62,7 @@
   <form th:action="@{/signup}" method="post" th:object="${signupRequest}">
     <input type="text" th:field="*{userId}" placeholder="ID">
     <input type="password" th:field="*{password}" placeholder="Password">
+    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red;"></div>
     <input type="text" th:field="*{username}" placeholder="Username">
 
     <select th:field="*{genre}">
