@@ -156,7 +156,7 @@ public class MemberController {
         @RequestParam(value = "book_page", defaultValue = "0") int bookPage,
         @RequestParam(value = "music_page", defaultValue = "0") int musicPage,
         @RequestParam(value = "movie_page", defaultValue = "0") int moviePage,
-        @RequestParam(value = "size", defaultValue = "4") int size,
+        @RequestParam(value = "size", defaultValue = "6") int size,
         @RequestParam(value = "tab", defaultValue = "books") String tab) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isAuthenticated = authentication != null &&
