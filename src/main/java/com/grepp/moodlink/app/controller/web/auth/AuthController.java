@@ -24,11 +24,16 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public String postSignup(@Valid SignupRequest signupRequest, BindingResult bindingResult) {
+    public String postSignup(@Valid SignupRequest signupRequest, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "auth/signup";
         }
-        memberService.signup(signupRequest.toDto());
+        try {
+            memberService.signup(signupRequest.toDto());
+        } catch (IllegalArgumentException e) {
+            bindingResult.reject(null, e.getMessage());
+            return "auth/signup";
+        }
         return "redirect:/signin";
     }
 
@@ -37,5 +42,4 @@ public class AuthController {
         model.addAttribute("signinRequest", new SigninRequest());
         return "auth/signin";
     }
-
 }
