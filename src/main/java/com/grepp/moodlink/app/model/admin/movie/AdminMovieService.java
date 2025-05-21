@@ -10,6 +10,7 @@ import com.grepp.moodlink.infra.response.ResponseCode;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -86,7 +87,9 @@ public class AdminMovieService {
     }
 
     public MovieInfoDto findById(String id) {
-        return movieRepository.findByIdWithGenre(id).map(MovieInfoDto::toDto).orElse(null);
+        return movieRepository.findByIdWithGenre(id)
+            .map(MovieInfoDto::toDto)
+            .orElseThrow(() -> new CommonException(ResponseCode.BAD_REQUEST));
     }
 
     // 관리자가 직접 영화 정보 수정
