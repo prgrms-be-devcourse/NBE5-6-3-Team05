@@ -226,7 +226,8 @@ public class AdminController {
     // 영화 수정 화면
     @GetMapping("movies/modify/{id}")
     public String modifyMovies(MovieModifyRequest movieModifyRequest, @PathVariable String id,
-        Model model) {
+        Model model, RedirectAttributes redirectAttributes) {
+        try{
 
         // title releasedDate 기록 가져오기
         MovieInfoDto movie = movieService.findById(id);
@@ -246,6 +247,10 @@ public class AdminController {
         model.addAttribute("movieModifyRequest", movieModifyRequest);
         // 장르 데이터 넘기기
         model.addAttribute("genreList", movieService.findAllGenre());
+        }catch(CommonException e){
+            redirectAttributes.addFlashAttribute("error", "더이상 존재하지 않는 데이터입니다.");
+            return "redirect:/admin/movies";
+        }
 
         return "admin/contents/movies-modify";
     }
@@ -281,8 +286,9 @@ public class AdminController {
     // 도서 수정 화면
     @GetMapping("books/modify/{isbn}")
     public String modifyBooks(BookModifyRequest bookModifyRequest, @PathVariable String isbn,
-        Model model) {
+        Model model,RedirectAttributes redirectAttributes) {
 
+        try{
         // title author 기록 가져오기
         BookDto book = adminBookService.findByIsbn(isbn);
 
@@ -298,6 +304,10 @@ public class AdminController {
         model.addAttribute("bookModifyRequest", bookModifyRequest);
         // 장르 데이터 넘기기
         model.addAttribute("genres", BookGenre.values());
+        }catch(CommonException e){
+            redirectAttributes.addFlashAttribute("error", "더이상 존재하지 않는 데이터입니다.");
+            return "redirect:/admin/books";
+        }
         return "admin/contents/books-modify";
     }
 
@@ -332,7 +342,8 @@ public class AdminController {
     // 음악 수정 화면
     @GetMapping("music/modify/{id}")
     public String modifyMusic(MusicModifyRequest musicModifyRequest, @PathVariable String id,
-        Model model) {
+        Model model,RedirectAttributes redirectAttributes) {
+        try{
 
         // title author 기록 가져오기
         MusicDto music = musicService.findById(id);
@@ -350,6 +361,10 @@ public class AdminController {
         model.addAttribute("musicModifyRequest", musicModifyRequest);
         // 장르 데이터 넘기기
         model.addAttribute("genres", MusicGenre.values());
+        }catch(CommonException e){
+            redirectAttributes.addFlashAttribute("error", "더이상 존재하지 않는 데이터입니다.");
+            return "redirect:/admin/music";
+        }
         return "admin/contents/music-modify";
     }
 
