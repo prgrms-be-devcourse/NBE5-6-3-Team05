@@ -1,5 +1,6 @@
 package com.grepp.moodlink.app.model.admin.music;
 
+import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.llm.EmbeddingService;
@@ -8,6 +9,7 @@ import com.grepp.moodlink.infra.imgbb.ImgUploadTemplate;
 import com.grepp.moodlink.infra.response.ResponseCode;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -78,7 +80,10 @@ public class AdminMusicService {
 
     // 수정 시에 id를 통해 기존에 저장되어 있던 정보를 가져옴
     public MusicDto findById(String id) {
-        return musicRepository.findById(id).map(e -> mapper.map(e, MusicDto.class)).orElse(null);
+        Optional<Music> music = musicRepository.findById(id);
+        if(music.isEmpty())
+            throw new CommonException(ResponseCode.BAD_REQUEST);
+        return music.map(e -> mapper.map(e, MusicDto.class)).orElseThrow(() -> new CommonException(ResponseCode.BAD_REQUEST));
     }
 
 

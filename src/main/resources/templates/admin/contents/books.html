@@ -8,6 +8,8 @@
 </head>
 <body>
 <main layout:fragment="content">
+  <!-- 컨트롤러에서 넘어오는 에러를 담음 -->
+  <div style="display: none" id="for-alert" th:if="${error != null}" th:text="${error}"></div>
   <div class="layout">
     <!-- 왼쪽 메뉴 -->
     <div class="menu">
@@ -49,17 +51,23 @@
 <div layout:fragment="scripts">
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      document.querySelectorAll(".item-card")
-      .forEach((card) => {
-        card.style.cursor = 'pointer';
-        card.addEventListener('click', () => {
-          const isbn = card.dataset.isbn;
-          if (isbn) {
-            window.location.href = `/admin/books/modify/${isbn}`;
-          }
-        });
+    // 클릭 시 수정 페이지로
+    document.querySelectorAll(".item-card").forEach((card) => {
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', () => {
+        const isbn = card.dataset.isbn;
+        if (isbn) {
+          window.location.href = `/admin/books/modify/${isbn}`;
+        }
       });
     });
+
+    // 에러 메시지 알림 기능
+    const errorDiv = document.getElementById('for-alert');
+    if (errorDiv && errorDiv.textContent.trim() !== "") {
+    alert(errorDiv.textContent.trim());
+  }
+  });
   </script>
 </div>
 </body>

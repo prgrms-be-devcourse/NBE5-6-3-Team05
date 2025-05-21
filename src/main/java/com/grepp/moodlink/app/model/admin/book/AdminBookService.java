@@ -52,7 +52,7 @@ public class AdminBookService {
             // 입력한 데이터를 바탕으로 임베딩 값 생성
             embeddingService.generateEmbeddingsBook();
         } catch (IOException e) {
-            throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR, e);
+            throw new CommonException(ResponseCode.BAD_REQUEST, e);
         }
     }
 
@@ -77,7 +77,10 @@ public class AdminBookService {
 
 
     public BookDto findByIsbn(String isbn) {
-        return mapper.map(adminBookRepository.findByIsbn(isbn), BookDto.class);
+        Book book = adminBookRepository.findByIsbn(isbn);
+        if(book==null)
+            throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR);
+        return mapper.map(book, BookDto.class);
     }
 
     public void updateBook(List<MultipartFile> thumbnail, BookDto dto) {
