@@ -145,7 +145,7 @@
 
 <br/>
 
-## 🛠️ 트러블 슈팅 & 해결 과정
+## 🛠️ 트러블 슈팅
 <div align="center">
 <img src="readmeresource/troubleshooting.png" alt="Troubleshooting" style="max-width: 100%; height: auto;">
 </div>
