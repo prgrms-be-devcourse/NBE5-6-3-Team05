@@ -60,9 +60,14 @@
   <div class="logo"><a th:href="@{/}">Moodlink</a></div>
   <h1>SIGN UP</h1>
   <form th:action="@{/signup}" method="post" th:object="${signupRequest}">
+
+
     <input type="text" th:field="*{userId}" placeholder="ID">
+    <div th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}" style="color: red;"></div>
+
     <input type="password" th:field="*{password}" placeholder="Password">
     <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red;"></div>
+
     <input type="text" th:field="*{username}" placeholder="Username">
 
     <select th:field="*{genre}">

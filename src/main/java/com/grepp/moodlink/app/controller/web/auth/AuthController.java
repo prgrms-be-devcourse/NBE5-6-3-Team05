@@ -28,7 +28,14 @@ public class AuthController {
         if (bindingResult.hasErrors()) {
             return "auth/signup";
         }
+
+        if (memberService.existsByUserId(signupRequest.getUserId())) {
+            bindingResult.rejectValue("userId", "duplicate", "이미 가입된 회원입니다.");
+            return "auth/signup";
+        }
+
         memberService.signup(signupRequest.toDto());
+
         return "redirect:/signin";
     }
 
@@ -37,5 +44,4 @@ public class AuthController {
         model.addAttribute("signinRequest", new SigninRequest());
         return "auth/signin";
     }
-
 }

@@ -69,9 +69,6 @@ public class MemberService {
 
     @Transactional
     public void signup(MemberDto dto) {
-        if (memberRepository.existsById(dto.getUserId())) {
-            throw new IllegalArgumentException("이미 존재하는 회원입니다.");
-        }
 
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
 
@@ -80,6 +77,11 @@ public class MemberService {
         member.setRole(Role.ROLE_USER);
         memberRepository.save(member);
     }
+
+    public boolean existsByUserId(String userId) {
+        return memberRepository.existsById(userId);
+    }
+
 
     public Optional<Member> findGenre(String userId) {
         System.out.println(memberRepository.findById(userId));
