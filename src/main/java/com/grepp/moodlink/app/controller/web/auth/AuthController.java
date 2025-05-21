@@ -24,17 +24,17 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public String postSignup(@Valid SignupRequest signupRequest, BindingResult bindingResult, Model model) {
+    public String postSignup(@Valid SignupRequest signupRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "auth/signup";
         }
 
         if (memberService.existsByUserId(signupRequest.getUserId())) {
-            bindingResult.rejectValue("userId","duplicate", "이미 가입된 회원입니다.");
+            bindingResult.rejectValue("userId", "duplicate", "이미 가입된 회원입니다.");
             return "auth/signup";
         }
 
-            memberService.signup(signupRequest.toDto());
+        memberService.signup(signupRequest.toDto());
 
         return "redirect:/signin";
     }
