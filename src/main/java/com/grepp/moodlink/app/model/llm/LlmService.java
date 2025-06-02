@@ -33,6 +33,7 @@ public class LlmService {
     private final KeywordRepository keywordRepository;
     private final ChatLanguageModel chatLanguageModel;
 
+    // 컨텐츠 추천 이유
     public String generateReason(String userId) {
         KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
 
@@ -58,6 +59,7 @@ public class LlmService {
         return recommendation;
     }
 
+    // 영화 추천
     public String recommendMovie(String genre, String userId) {
         KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
         byte[] byteEmbedding = keywordSelection.getEmbedding();
@@ -80,9 +82,9 @@ public class LlmService {
                 return new AbstractMap.SimpleEntry<>(movie, similarity);
             })
             .sorted((a, b) -> Float.compare(b.getValue(), a.getValue()))
-            .limit(15)
+            .limit(40)
             .map(Map.Entry::getKey)
-            .collect(Collectors.toList());
+            .toList();
 
         String context = movies.stream()
             .map(m -> String.format("제목: %s\n영화소개: %s", m.getTitle(), m.getSummary()))
@@ -95,6 +97,7 @@ public class LlmService {
         return result;
     }
 
+    // 도서 추천
     public String recommendBook(String userId) {
         KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
         byte[] byteEmbedding = keywordSelection.getEmbedding();
@@ -106,9 +109,9 @@ public class LlmService {
                 );
                 return new AbstractMap.SimpleEntry<>(book, similarity);
             }).sorted((a, b) -> Float.compare(b.getValue(), a.getValue()))
-            .limit(15)
+            .limit(40)
             .map(Map.Entry::getKey)
-            .collect(Collectors.toList());
+            .toList();
 
         String context = books.stream()
             .map(b -> String.format("제목: %s\n책소개: %s", b.getTitle(), b.getSummary()))
@@ -121,6 +124,7 @@ public class LlmService {
         return result;
     }
 
+    // 음악 추천
     public String recommendMusic(String userId) {
         KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
         byte[] byteEmbedding = keywordSelection.getEmbedding();
@@ -132,9 +136,9 @@ public class LlmService {
                 );
                 return new AbstractMap.SimpleEntry<>(music, similarity);
             }).sorted((a, b) -> Float.compare(b.getValue(), a.getValue()))
-            .limit(15)
+            .limit(40)
             .map(Map.Entry::getKey)
-            .collect(Collectors.toList());
+            .toList();
 
         String context = musics.stream()
             .map(m -> String.format("제목: %s\n노래소개: %s", m.getTitle(), m.getSummary()))
@@ -147,6 +151,7 @@ public class LlmService {
         return result;
     }
 
+    // 콘텐츠 추천 llm 호출
     private String llmRecommend(String category, String keywords, String context) {
         String prompt = String.format("""
             [시스템]
@@ -172,6 +177,7 @@ public class LlmService {
         return recommendation;
     }
 
+    // 임베딩 값 변환
     private float[] toFloatArray(byte[] bytes) {
         FloatBuffer buffer = ByteBuffer.wrap(bytes).asFloatBuffer();
         float[] floats = new float[buffer.remaining()];

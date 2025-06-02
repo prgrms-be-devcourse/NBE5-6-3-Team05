@@ -39,8 +39,7 @@ public class EmbeddingService {
     @Async
     @Retryable(
         maxAttempts = 5,
-        backoff = @Backoff(delay = 1000, multiplier = 2),
-        include = {RuntimeException.class}
+        backoff = @Backoff(delay = 1000, multiplier = 2)
     )
     public void generateEmbeddingsMovie() {
         List<Movie> movies = movieRepository.findByEmbeddingIsNull();
@@ -70,8 +69,7 @@ public class EmbeddingService {
     @Async
     @Retryable(
         maxAttempts = 5,
-        backoff = @Backoff(delay = 1000, multiplier = 2),
-        include = {RuntimeException.class}
+        backoff = @Backoff(delay = 1000, multiplier = 2)
     )
     public void generateEmbeddingsBook() {
         List<Book> books = bookRepository.findByEmbeddingIsNull();
@@ -101,8 +99,7 @@ public class EmbeddingService {
     @Async
     @Retryable(
         maxAttempts = 5,
-        backoff = @Backoff(delay = 1000, multiplier = 2),
-        include = {RuntimeException.class}
+        backoff = @Backoff(delay = 1000, multiplier = 2)
     )
     public void generateEmbeddingsMusic() {
         List<Music> musics = musicRepository.findByEmbeddingIsNull();
