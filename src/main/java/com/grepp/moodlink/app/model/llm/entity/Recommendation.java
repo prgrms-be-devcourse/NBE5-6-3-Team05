@@ -15,6 +15,7 @@ public class Recommendation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String keywords;
+    private String reason;
     private String contentType;
     private String contentId;
 }
