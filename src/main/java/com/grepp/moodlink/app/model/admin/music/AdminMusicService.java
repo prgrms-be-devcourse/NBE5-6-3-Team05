@@ -3,6 +3,7 @@ package com.grepp.moodlink.app.model.admin.music;
 import com.grepp.moodlink.app.model.data.music.MusicGenreRepository;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
+import com.grepp.moodlink.app.model.data.music.entity.MusicGenre;
 import com.grepp.moodlink.app.model.llm.EmbeddingService;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
 import com.grepp.moodlink.infra.imgbb.ImgUploadTemplate;
@@ -97,6 +98,7 @@ public class AdminMusicService {
 
 
     // 관리자가 직접 음악 데이터를 수정
+    @Transactional
     public void updateMusic(List<MultipartFile> thumbnail, MusicDto dto) {
 
         try {
@@ -133,5 +135,10 @@ public class AdminMusicService {
     @Transactional
     public void deleteMusic(String id) {
         musicRepository.findById(id).ifPresent(Music::unActivated);
+    }
+    
+    // 모든 음악 장르를 가져옴
+    public List<String> findAllGenre() {
+        return musicGenreRepository.findAll().stream().map(MusicGenre::getName).toList();
     }
 }

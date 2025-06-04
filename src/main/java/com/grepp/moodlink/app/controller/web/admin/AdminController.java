@@ -9,11 +9,9 @@ import com.grepp.moodlink.app.controller.web.admin.payload.MusicModifyRequest;
 import com.grepp.moodlink.app.model.admin.book.AdminBookService;
 import com.grepp.moodlink.app.model.admin.movie.AdminMovieService;
 import com.grepp.moodlink.app.model.admin.music.AdminMusicService;
-import com.grepp.moodlink.app.model.data.book.code.BookGenre;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.movie.entity.Genre;
-import com.grepp.moodlink.app.model.data.music.code.MusicGenre;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
 import com.grepp.moodlink.infra.payload.PageParam;
@@ -46,7 +44,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
-    private final AdminBookService adminBookService;
+    private final AdminBookService bookService;
     private final AdminMovieService movieService;
     private final AdminMusicService musicService;
 
@@ -101,7 +99,7 @@ public class AdminController {
         }
 
         Pageable pageable = PageRequest.of(param.getPage() - 1, param.getSize());
-        Page<BookDto> page = adminBookService.findPaged(pageable);
+        Page<BookDto> page = bookService.findPaged(pageable);
 
         if (param.getPage() != 1 && page.getContent().isEmpty()) {
             throw new CommonException(ResponseCode.BAD_REQUEST);
@@ -155,7 +153,7 @@ public class AdminController {
     @GetMapping("music/add")
     public String addMusic(@ModelAttribute("musicAddRequest") MusicAddRequest musicAddRequest,
         Model model) {
-        model.addAttribute("genres", MusicGenre.values());
+        model.addAttribute("genres", musicService.findAllGenre());
         return "admin/contents/music-add";
     }
 
@@ -191,7 +189,7 @@ public class AdminController {
     @GetMapping("books/add")
     public String addBooks(@ModelAttribute("bookAddRequest") BookAddRequest bookAddRequest,
         Model model) {
-        model.addAttribute("genres", BookGenre.values());
+        model.addAttribute("genres", bookService.findAllGenre());
         return "admin/contents/books-add";
     }
 
@@ -211,7 +209,7 @@ public class AdminController {
         }
 
         try {
-            adminBookService.addBook(bookAddRequest.getImage(), bookAddRequest.toDto());
+            bookService.addBook(bookAddRequest.getImage(), bookAddRequest.toDto());
         } catch (CommonException e) {
             log.info(e.code().message());
             Map<String, String> fieldErrors = new HashMap<>();
@@ -240,7 +238,6 @@ public class AdminController {
             selectedGenre = selectedGenre.concat(genre.getId() + ",");
         }
         selectedGenre = selectedGenre.substring(0, selectedGenre.length() - 1);
-        log.info(selectedGenre);
         model.addAttribute("selectedGenre", selectedGenre);
 
         // 미리 값을 저장해둔 request 넘기기
@@ -290,7 +287,7 @@ public class AdminController {
 
         try{
         // title author 기록 가져오기
-        BookDto book = adminBookService.findByIsbn(isbn);
+        BookDto book = bookService.findByIsbn(isbn);
 
         model.addAttribute("book", book);
 
@@ -303,7 +300,7 @@ public class AdminController {
         // 미리 값을 저장해둔 request 넘기기
         model.addAttribute("bookModifyRequest", bookModifyRequest);
         // 장르 데이터 넘기기
-        model.addAttribute("genres", BookGenre.values());
+        model.addAttribute("genres", bookService.findAllGenre());
         }catch(CommonException e){
             redirectAttributes.addFlashAttribute("error", "더이상 존재하지 않는 데이터입니다.");
             return "redirect:/admin/books";
@@ -334,7 +331,7 @@ public class AdminController {
         log.info("{}", bookModifyRequest.getImage().isEmpty());
         log.info("{}", bookModifyRequest);
 
-        adminBookService.updateBook(bookModifyRequest.getImage(), dto);
+        bookService.updateBook(bookModifyRequest.getImage(), dto);
 
         return "redirect:/admin/books";
     }
@@ -360,7 +357,7 @@ public class AdminController {
         // 미리 값을 저장해둔 request 넘기기
         model.addAttribute("musicModifyRequest", musicModifyRequest);
         // 장르 데이터 넘기기
-        model.addAttribute("genres", MusicGenre.values());
+        model.addAttribute("genres", musicService.findAllGenre());
         }catch(CommonException e){
             redirectAttributes.addFlashAttribute("error", "더이상 존재하지 않는 데이터입니다.");
             return "redirect:/admin/music";

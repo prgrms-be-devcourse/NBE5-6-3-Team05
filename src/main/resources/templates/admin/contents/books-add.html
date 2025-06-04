@@ -51,8 +51,8 @@
           <select th:field="*{genre}" class="input-line">
             <option disabled selected value="">장르 선택</option>
             <option th:each="gen : ${genres}"
-                    th:value="${gen.name}"
-                    th:text="${gen.name}">
+                    th:value="${gen}"
+                    th:text="${gen}">
             </option>
           </select>
           <span class="helper-text form-row"

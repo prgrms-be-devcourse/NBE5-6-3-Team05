@@ -3,6 +3,7 @@ package com.grepp.moodlink.app.model.admin.book;
 import com.grepp.moodlink.app.model.data.book.BookGenreRepository;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
+import com.grepp.moodlink.app.model.data.book.entity.BookGenre;
 import com.grepp.moodlink.app.model.llm.EmbeddingService;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
 import com.grepp.moodlink.infra.imgbb.ImgUploadTemplate;
@@ -12,7 +13,6 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -93,6 +93,7 @@ public class AdminBookService {
         return BookDto.toDto(book);
     }
 
+    @Transactional
     public void updateBook(List<MultipartFile> thumbnail, BookDto dto) {
 
         try {
@@ -128,5 +129,9 @@ public class AdminBookService {
     @Transactional
     public void deleteBook(String isbn) {
         adminBookRepository.findByIsbn(isbn).unActivated();
+    }
+
+    public List<String> findAllGenre() {
+        return bookGenreRepository.findAll().stream().map(BookGenre::getName).toList();
     }
 }
