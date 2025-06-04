@@ -28,7 +28,7 @@ public class BookDto implements ContentDto {
     @JsonProperty("pubdate")
     private LocalDate publishedDate;
     private String description;
-    private String genre;
+    private Long genre;
     private Boolean activated;
     private String summary;
 
