@@ -24,7 +24,6 @@ public class RecommendationService {
     }
 
     public List<String> getBooks(String keywords) {
-        System.out.println(keywords);
         return recommendationRepository.findByKeywordsAndContentType(keywords, ContentType.BOOK.name())
                 .stream()
                 .map(Recommendation::getContentId)
@@ -32,7 +31,7 @@ public class RecommendationService {
     }
 
     public List<String> getMusics(String keywords) {
-        return recommendationRepository.findByKeywordsAndContentType(keywords, ContentType.SONG.name())
+        return recommendationRepository.findByKeywordsAndContentType(keywords, ContentType.MUSIC.name())
                 .stream()
                 .map(Recommendation::getContentId)
                 .toList();

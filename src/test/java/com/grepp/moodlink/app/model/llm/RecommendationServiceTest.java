@@ -11,6 +11,8 @@ class RecommendationServiceTest {
 
     @Test
     public void recommendTest(){
-        System.out.println(recommendationService.getBooks("기쁨|맑음|아침|가족|즐거움"));
+        System.out.println(recommendationService.getMovies("기쁨|맑음|아침|가족|즐거움"));
+        System.out.println(recommendationService.getBooks("위로|흐림|저녁|혼자|휴식"));
+        System.out.println(recommendationService.getMusics("그리움|흐림|밤|혼자|위로"));
     }
 }
