@@ -38,7 +38,7 @@
     <div th:if="${movie.size() > 0}" class="card-container">
       <div th:each="m : ${movie}" class="card-movie"
            th:attr="onclick=
-             'showDetailModal(' +
+             'showDetailModalMovie(' +
                '\'' + ${#strings.escapeJavaScript(m.title)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(m.releaseDate)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(m.summary)} + '\',' +
@@ -57,7 +57,7 @@
     <div th:if="${music.size() > 0}" class="card-container">
       <div th:each="m : ${music}" class="card-music"
            th:attr="onclick=
-             'showDetailModal(' +
+             'showDetailModalMusic(' +
                '\'' + ${#strings.escapeJavaScript(m.title)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(m.releaseDate)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(m.lyrics)} + '\',' +
@@ -76,7 +76,7 @@
     <div th:if="${book.size() > 0}" class="card-container">
       <div th:each="b : ${book}" class="card-book"
            th:attr="onclick=
-             'showDetailModal(' +
+             'showDetailModalBook(' +
                '\'' + ${#strings.escapeJavaScript(b.title)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(b.publishedDate)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(b.description)} + '\',' +
@@ -125,7 +125,7 @@
 
   document.addEventListener('DOMContentLoaded', () => showCategory('movie'));
 
-  function showDetailModal(title, releaseDate, summary, thumbnail, type) {
+  function showDetailModalMovie(title, releaseDate, summary, thumbnail, type) {
     /* ===== 제목·연도 ===== */
     document.getElementById('modalTitle').textContent = title;
     document.getElementById('modalYear').textContent =
@@ -159,9 +159,7 @@
 
     // 타입별 라벨 매핑
     const labelMap = {
-      movie: '영화 정보 찾아보기 ➜',
-      music: '음악 정보 찾아보기 ➜',
-      book: '책 정보 찾아보기 ➜'
+      movie: '영화 보러가기 ➜',
     };
     searchBtn.textContent = labelMap[type] || '자세히 보기 ➜';
 
@@ -169,7 +167,99 @@
     searchBtn.disabled = false;
     searchBtn.onclick = () => {
       const query = encodeURIComponent(title);
-      window.open(`https://www.google.com/search?q=${query}`, '_blank');
+      window.open(`https://www.youtube.com/search?q=${query}`, '_blank');
+    };
+  }
+
+  function showDetailModalMusic(title, releaseDate, summary, thumbnail, type) {
+    /* ===== 제목·연도 ===== */
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalYear').textContent =
+        releaseDate.split('-')[0] || releaseDate;
+
+    /* ===== 가사·줄바꿈 처리 ===== */
+    const processedSummary = summary
+    .replace(/\n/g, '<br>')      // 줄바꿈 → <br>
+    .replace(/\[/g, '<br><br>[') // [ 앞에 <br><br>
+    .replace(/\]/g, ']<br>');    // ] 뒤에 <br>
+    document.getElementById('modalSummary').innerHTML = processedSummary;
+
+    /* ===== 썸네일 ===== */
+    const img = document.getElementById('modalBg');
+    img.src = thumbnail;
+
+    // 타입별 이미지 크기(class) 조정
+    img.classList.remove('music', 'book');
+    if (type === 'music') {
+      img.classList.add('music');
+    }
+    if (type === 'book') {
+      img.classList.add('book');
+    }
+
+    /* ===== 모달 표시 ===== */
+    document.getElementById('detailModal').classList.add('active');
+
+    /* ===== 검색 버튼 ===== */
+    const searchBtn = document.getElementById('modalSearchBtn');
+
+    // 타입별 라벨 매핑
+    const labelMap = {
+      music: '유튜브로 음악 감상하기 ➜',
+    };
+    searchBtn.textContent = labelMap[type] || '자세히 보기 ➜';
+
+    // 활성화 + 클릭 이벤트
+    searchBtn.disabled = false;
+    searchBtn.onclick = () => {
+      const query = encodeURIComponent(title);
+      window.open(`https://www.youtube.com/search?q=${query}`, '_blank');
+    };
+  }
+
+  function showDetailModalBook(title, releaseDate, summary, thumbnail, type) {
+    /* ===== 제목·연도 ===== */
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalYear').textContent =
+        releaseDate.split('-')[0] || releaseDate;
+
+    /* ===== 가사·줄바꿈 처리 ===== */
+    const processedSummary = summary
+    .replace(/\n/g, '<br>')      // 줄바꿈 → <br>
+    .replace(/\[/g, '<br><br>[') // [ 앞에 <br><br>
+    .replace(/\]/g, ']<br>');    // ] 뒤에 <br>
+    document.getElementById('modalSummary').innerHTML = processedSummary;
+
+    /* ===== 썸네일 ===== */
+    const img = document.getElementById('modalBg');
+    img.src = thumbnail;
+
+    // 타입별 이미지 크기(class) 조정
+    img.classList.remove('music', 'book');
+    if (type === 'music') {
+      img.classList.add('music');
+    }
+    if (type === 'book') {
+      img.classList.add('book');
+    }
+
+    /* ===== 모달 표시 ===== */
+    document.getElementById('detailModal').classList.add('active');
+
+    /* ===== 검색 버튼 ===== */
+    const searchBtn = document.getElementById('modalSearchBtn');
+
+    // 타입별 라벨 매핑
+    const labelMap = {
+      book: '책 구매하러 가기 ➜'
+    };
+    searchBtn.textContent = labelMap[type] || '자세히 보기 ➜';
+
+    // 활성화 + 클릭 이벤트
+    searchBtn.disabled = false;
+    searchBtn.onclick = () => {
+      const query = encodeURIComponent(title);
+      window.open(`https://www.yes24.com/product/search?domain=ALL&query=${query}`, '_blank');
     };
   }
 
