@@ -68,10 +68,11 @@ public class RecommendController {
         genre = genre.substring(1);
 
         String userId = getLoginUserId();
-        processUserKeywords(userId, keywords);
-
         String reason = llmService.generateReason(userId);
+
+        processUserKeywords(userId, keywords, reason);
         System.out.println(reason);
+
         session.setAttribute("reason", reason);
 
         List<CuratingDetailIdDto> items = curatingContents(genre, userId);
@@ -96,8 +97,8 @@ public class RecommendController {
         return details;
     }
 
-    private void processUserKeywords(String userId, String keywords) {
-        keywordService.generateKeywordSelection(userId);
+    private void processUserKeywords(String userId, String keywords, String reason) {
+        keywordService.generateKeywordSelection(userId, reason);
         embeddingService.generateEmbeddingKeyword(userId, keywords);
     }
 

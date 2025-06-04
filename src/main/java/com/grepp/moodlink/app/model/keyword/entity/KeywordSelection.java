@@ -28,4 +28,5 @@ public class KeywordSelection {
     private String keywords;
     @Column(columnDefinition = "BLOB")
     private byte[] embedding;
+    private String reason;
 }
