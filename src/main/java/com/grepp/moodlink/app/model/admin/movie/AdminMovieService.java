@@ -3,6 +3,7 @@ package com.grepp.moodlink.app.model.admin.movie;
 import com.grepp.moodlink.app.model.data.movie.dto.GenreDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
+import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.llm.EmbeddingService;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
 import com.grepp.moodlink.infra.imgbb.ImgUploadTemplate;
@@ -96,10 +97,26 @@ public class AdminMovieService {
     public void updateMovie(List<MultipartFile> thumbnail, MovieInfoDto dto) {
 
         try {
-            uploadImage(thumbnail, dto);
+            Movie data = movieRepository.findById(dto.getId()).orElseThrow(() -> new CommonException(ResponseCode.BAD_REQUEST));
+            log.info(data.getThumbnail());
+            String ThumbnailImg = data.getThumbnail();
+            if(!thumbnail.getFirst().isEmpty()){
+                uploadImage(thumbnail, dto);
+                ThumbnailImg = dto.getThumbnail();
+            }
 
+            Movie movie = Movie.builder()
+                .id(dto.getId())
+                .title(data.getTitle())
+                .genres(dto.getGenres())
+                .description(dto.getDescription())
+                .releaseDate(data.getReleaseDate())
+                .thumbnail(ThumbnailImg)
+                .likeCount(data.getLikeCount())
+                .activated(true)
+                .build();
             // 업데이트
-            movieRepository.updateBook(dto);
+            movieRepository.save(movie);
             embeddingService.generateEmbeddingsMovie();
             log.info("{}", dto);
 

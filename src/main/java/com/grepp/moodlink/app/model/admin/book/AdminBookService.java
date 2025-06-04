@@ -96,20 +96,24 @@ public class AdminBookService {
     public void updateBook(List<MultipartFile> thumbnail, BookDto dto) {
 
         try {
-            uploadImage(thumbnail, dto);
-
             Book data = adminBookRepository.findByIsbn(dto.getIsbn());
+
+            String ThumbnailImg = data.getImage();
+            if(!thumbnail.getFirst().isEmpty()){
+                uploadImage(thumbnail, dto);
+                ThumbnailImg = dto.getImage();
+            }
 
             Book book = Book.builder()
                 .isbn(dto.getIsbn())
                 .title(data.getTitle())
-                .image(dto.getImage())
+                .image(ThumbnailImg)
                 .author(data.getAuthor())
                 .publisher(dto.getPublisher())
                 .publishedDate(dto.getPublishedDate())
                 .description(dto.getDescription())
                 .genre(bookGenreRepository.findByName(dto.getGenre()))
-                .likeCount(adminBookRepository.findById(dto.getIsbn()).get().getLikeCount())
+                .likeCount(data.getLikeCount())
                 .build();
 
             // 업데이트

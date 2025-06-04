@@ -100,19 +100,23 @@ public class AdminMusicService {
     public void updateMusic(List<MultipartFile> thumbnail, MusicDto dto) {
 
         try {
-            uploadImage(thumbnail, dto);
             Music data = musicRepository.findById(dto.getId()).orElseThrow(() -> new CommonException(ResponseCode.BAD_REQUEST));
+            String ThumbnailImg = data.getThumbnail();
+            if(!thumbnail.getFirst().isEmpty()){
+                uploadImage(thumbnail, dto);
+                ThumbnailImg = dto.getThumbnail();
+            }
 
             Music music = Music.builder()
                 .id(dto.getId())
-                .thumbnail(dto.getThumbnail())
+                .thumbnail(ThumbnailImg)
                 .title(data.getTitle())
                 .genre(musicGenreRepository.findByName(dto.getGenre()))
                 .singer(data.getSinger())
                 .description(dto.getDescription())
                 .lyrics(dto.getLyrics())
                 .releaseDate(dto.getReleaseDate())
-                .likeCount(musicRepository.findById(dto.getId()).get().getLikeCount())
+                .likeCount(data.getLikeCount())
                 .build();
             // 업데이트
             musicRepository.save(music);
