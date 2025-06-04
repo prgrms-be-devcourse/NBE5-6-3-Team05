@@ -24,7 +24,6 @@ public class KeywordSelection {
     private Long id;
 
     private String userId;
-    private LocalDate selectionDate = LocalDate.now();
     private String keywords;
     @Column(columnDefinition = "BLOB")
     private byte[] embedding;
