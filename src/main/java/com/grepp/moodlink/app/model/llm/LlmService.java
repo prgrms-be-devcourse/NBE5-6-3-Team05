@@ -34,8 +34,8 @@ public class LlmService {
     private final ChatLanguageModel chatLanguageModel;
 
     // 컨텐츠 추천 이유
-    public String generateReason(String userId) {
-        KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
+    public String generateReason(String keywords) {
+        KeywordSelection keywordSelection = keywordRepository.findByKeywords(keywords);
 
         String prompt = String.format("""
             [시스템]
@@ -59,9 +59,9 @@ public class LlmService {
         return recommendation;
     }
 
+    public String recommendMovie(String genre, String keywords) {
+        KeywordSelection keywordSelection = keywordRepository.findByKeywords(keywords);
     // 영화 추천
-    public String recommendMovie(String genre, String userId) {
-        KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
         byte[] byteEmbedding = keywordSelection.getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
         List<Movie> rawMovies;
@@ -98,8 +98,8 @@ public class LlmService {
     }
 
     // 도서 추천
-    public String recommendBook(String userId) {
-        KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
+    public String recommendBook(String keywords) {
+        KeywordSelection keywordSelection = keywordRepository.findByKeywords(keywords);
         byte[] byteEmbedding = keywordSelection.getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
         List<Book> books = bookRepository.findAll().stream().map(book -> {
@@ -125,8 +125,8 @@ public class LlmService {
     }
 
     // 음악 추천
-    public String recommendMusic(String userId) {
-        KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
+    public String recommendMusic(String keywords) {
+        KeywordSelection keywordSelection = keywordRepository.findByKeywords(keywords);
         byte[] byteEmbedding = keywordSelection.getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
         List<Music> musics = musicRepository.findAll().stream().map(music -> {
@@ -184,4 +184,5 @@ public class LlmService {
         buffer.get(floats);
         return floats;
     }
+
 }

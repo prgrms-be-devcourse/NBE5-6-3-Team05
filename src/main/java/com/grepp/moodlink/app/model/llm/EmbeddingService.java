@@ -134,8 +134,8 @@ public class EmbeddingService {
         return buffer.array();
     }
 
-    public void generateEmbeddingKeyword(String userId, String keywords) {
-        KeywordSelection keywordSelection = keywordRepository.findByUserId(userId);
+    public void generateEmbeddingKeyword(String keywords) {
+        KeywordSelection keywordSelection = keywordRepository.findByKeywords(keywords);
         float[] floatEmbedding = embeddingModel.embed(keywords).content().vector();
         byte[] byteEmbedding = toByteArray(floatEmbedding);
         keywordSelection.setEmbedding(byteEmbedding);
