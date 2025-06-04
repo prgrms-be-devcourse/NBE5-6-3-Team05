@@ -637,8 +637,8 @@
 
       /*검색 모달*/
 
-      /* 모달 배경 */
-      #detailModal {
+      /* 영화 모달 배경 */
+      .detailMovieModal {
         display: none;
         position: fixed;
         inset: 0;
@@ -648,7 +648,35 @@
         align-items: center
       }
 
-      #detailModal.active {
+      .detailMovieModal.active {
+        display: flex
+      }
+
+      .detailMusicModal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(0, 0, 0, .75);
+        justify-content: center;
+        align-items: center
+      }
+
+      .detailMusicModal.active {
+        display: flex
+      }
+
+      .detailBookModal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(0, 0, 0, .75);
+        justify-content: center;
+        align-items: center
+      }
+
+      .detailBookModal.active {
         display: flex
       }
 

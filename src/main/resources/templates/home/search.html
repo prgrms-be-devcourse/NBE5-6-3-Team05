@@ -175,10 +175,7 @@
   /* 카테고리 토글 */
   function showCategory(id) {
     document.querySelectorAll('.category').forEach(c => c.style.display = 'none');
-    const target = document.getElementById(id);
-    if (target) {
-      target.style.display = 'block';
-    }
+    document.getElementById(id).style.display = 'block';
   }
 
   document.addEventListener('DOMContentLoaded', () => showCategory('movie'));
@@ -280,7 +277,7 @@
   /* 영화 모달 닫기 */
   function closeMovieModal() {
     document.querySelector('.detailMovieModal').classList.remove('active');
-    const searchBtn = document.getElementById('modalSearchBtn');
+    const searchBtn = document.getElementById('movieDetailModal');
     searchBtn.disabled = true;
     searchBtn.onclick = null; // 이벤트 리셋
   }
@@ -289,7 +286,7 @@
 
   function closeMusicModal() {
     document.querySelector('.detailMusicModal').classList.remove('active');
-    const searchBtn = document.getElementById('modalSearchBtn');
+    const searchBtn = document.getElementById('musicDetailModal');
     searchBtn.disabled = true;
     searchBtn.onclick = null; // 이벤트 리셋
   }
@@ -297,7 +294,7 @@
   /* 도서 모달 닫기 */
   function closeBookModal() {
     document.querySelector('.detailBookModal').classList.remove('active');
-    const searchBtn = document.getElementById('modalSearchBtn');
+    const searchBtn = document.getElementById('bookDetailModal');
     searchBtn.disabled = true;
     searchBtn.onclick = null; // 이벤트 리셋
   }
