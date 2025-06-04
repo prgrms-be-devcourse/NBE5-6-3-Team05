@@ -9,7 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AdminBookRepositoryCustom {
 
-    void updateBook(BookDto book);
-
     Page<Book> findPaged(Pageable pageable);
 }
