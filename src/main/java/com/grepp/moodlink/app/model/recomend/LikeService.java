@@ -5,6 +5,7 @@ import com.grepp.moodlink.app.model.data.book.BookRepository;
 import com.grepp.moodlink.app.model.data.book.BookService;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
+import com.grepp.moodlink.app.model.data.book.entity.BookGenre;
 import com.grepp.moodlink.app.model.data.movie.MovieRepository;
 import com.grepp.moodlink.app.model.data.movie.MovieService;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
@@ -14,6 +15,7 @@ import com.grepp.moodlink.app.model.data.music.MusicRepository;
 import com.grepp.moodlink.app.model.data.music.MusicService;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
+import com.grepp.moodlink.app.model.data.music.entity.MusicGenre;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailBooks;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMovies;
 import com.grepp.moodlink.app.model.recomend.entity.LikeDetailMusic;
@@ -258,10 +260,10 @@ public class LikeService {
         Map<String, Long> genreCount = new HashMap<>();
 
         for (Music music : musics) {
-            String genre = music.getGenre();
+            MusicGenre genre = music.getGenre();
             Long likeCount = music.getLikeCount();
-            if (genre != null && !genre.isBlank() && likeCount != null) {
-                genreCount.put(genre, genreCount.getOrDefault(genre, 0L) + likeCount);
+            if (genre != null && likeCount != null) {
+                genreCount.put(genre.getName(), genreCount.getOrDefault(genre.getName(), 0L) + likeCount);
             }
         }
 
@@ -300,10 +302,10 @@ public class LikeService {
         Map<String, Long> genreCount = new HashMap<>();
 
         for (Book book : books) {
-            String genre = book.getGenre();
+            BookGenre genre = book.getGenre();
             Long likeCount = book.getLikeCount();
-            if (genre != null && !genre.isBlank() && likeCount != null) {
-                genreCount.put(genre, genreCount.getOrDefault(genre, 0L) + likeCount);
+            if (genre != null && likeCount != null) {
+                genreCount.put(genre.getName(), genreCount.getOrDefault(genre.getName(), 0L) + likeCount);
             }
         }
 

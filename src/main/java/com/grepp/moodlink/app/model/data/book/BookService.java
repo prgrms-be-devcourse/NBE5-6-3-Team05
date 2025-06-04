@@ -2,6 +2,8 @@ package com.grepp.moodlink.app.model.data.book;
 
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
+import com.grepp.moodlink.infra.error.exceptions.CommonException;
+import com.grepp.moodlink.infra.response.ResponseCode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +23,7 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final ModelMapper mapper;
+    private final BookGenreRepository bookGenreRepository;
 
     public void saveMusic(List<BookDto> bookDtos) {
 
@@ -34,7 +37,8 @@ public class BookService {
             book.setPublisher(dto.getPublisher());
             book.setPublishedDate(dto.getPublishedDate());
             book.setDescription(dto.getDescription());
-            book.setGenre(dto.getGenre());
+            book.setGenre(bookGenreRepository.findById(Long.parseLong(dto.getGenre())).orElseThrow());
+            book.setLikeCount(0L);
 
             bookRepository.save(book);
         }

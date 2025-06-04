@@ -28,29 +28,6 @@ public class AdminBookRepositoryImpl implements AdminBookRepositoryCustom {
     private final QBook book = QBook.book;
 
     @Override
-    @Transactional
-    public void updateBook(BookDto book) {
-        Book entity = em.find(Book.class, book.getIsbn());
-
-        if (entity == null) {
-            log.warn("도서 없음: {}", book.getIsbn());
-        }
-
-        assert entity != null;
-        entity.setGenre(book.getGenre());
-        if (book.getImage() != null) {
-            entity.setImage(book.getImage());
-        }
-        entity.setPublisher(book.getPublisher());
-        entity.setPublishedDate(book.getPublishedDate());
-        if (!entity.getDescription().equals(book.getDescription())) {
-            entity.setDescription(book.getDescription());
-            // 변경된 설명에 대한 embedding 값을 넣기 위해 null 값 넣기
-            entity.setEmbedding(null);
-        }
-    }
-
-    @Override
     public Page<Book> findPaged(Pageable pageable) {
 
         List<Book> content = queryFactory

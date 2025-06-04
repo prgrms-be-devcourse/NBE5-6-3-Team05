@@ -22,6 +22,7 @@ public class MusicService {
 
     private final MusicRepository musicRepository;
     private final ModelMapper mapper;
+    private final MusicGenreRepository musicGenreRepository;
 
     public void saveMusic(List<MusicDto> musicDtos) {
 
@@ -30,14 +31,14 @@ public class MusicService {
             long count = musicRepository.count();
             music.setId("S" + count);
             music.setTitle(dto.getTitle());
-            music.setGenre(dto.getGenre());
+            music.setGenre(musicGenreRepository.findById(Long.parseLong(dto.getGenre())).orElseThrow());
             music.setSinger(dto.getSinger());
             music.setDescription(dto.getDescription());
             music.setLyrics(dto.getLyrics());
             music.setReleaseDate(dto.getReleaseDate());
             music.setThumbnail(String.valueOf(dto.getThumbnail()));
             music.setCreatedAt(LocalDate.now());
-            music.setLikeCount(dto.getLikeCount());
+            music.setLikeCount(0L);
 
             musicRepository.save(music);
         }

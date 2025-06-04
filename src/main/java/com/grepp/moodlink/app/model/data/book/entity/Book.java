@@ -1,17 +1,22 @@
 package com.grepp.moodlink.app.model.data.book.entity;
 
+import com.grepp.moodlink.app.model.data.music.entity.MusicGenre;
 import com.grepp.moodlink.infra.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+@Builder
 @Entity
 @Table(name = "book")
 @Data
@@ -36,7 +41,9 @@ public class Book extends BaseEntity {
     private String summary;
     @Column(columnDefinition = "BLOB")
     private byte[] embedding;
-    private String genre;
+    @ManyToOne
+    @JoinColumn(name = "genre")
+    private BookGenre genre;
     @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
     private Long likeCount;
     // 정렬을 위해 일단 임시로...
