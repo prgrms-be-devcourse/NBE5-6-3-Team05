@@ -10,6 +10,4 @@ import org.springframework.stereotype.Repository;
 public interface AdminMusicRepositoryCustom {
 
     Page<Music> findPaged(Pageable pageable);
-
-    void updateBook(MusicDto dto);
 }

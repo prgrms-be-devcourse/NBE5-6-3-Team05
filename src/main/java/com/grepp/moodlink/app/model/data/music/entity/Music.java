@@ -1,12 +1,18 @@
 package com.grepp.moodlink.app.model.data.music.entity;
 
 import com.grepp.moodlink.infra.entity.BaseEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -17,12 +23,15 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Music extends BaseEntity {
 
     @Id
     private String id;
     private String title;
-    private String genre;
+    @ManyToOne
+    @JoinColumn(name = "genre")
+    private MusicGenre genre;
     private String singer;
     @Column(columnDefinition = "TEXT")
     private String description;

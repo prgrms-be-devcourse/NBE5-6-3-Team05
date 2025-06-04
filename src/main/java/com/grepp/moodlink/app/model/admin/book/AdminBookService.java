@@ -1,5 +1,6 @@
 package com.grepp.moodlink.app.model.admin.book;
 
+import com.grepp.moodlink.app.model.data.book.BookGenreRepository;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.app.model.llm.EmbeddingService;
@@ -22,12 +23,13 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AdminBookService {
 
     private final AdminBookRepository adminBookRepository;
     private final EmbeddingService embeddingService;
-    private final ModelMapper mapper;
     private final ImgUploadTemplate imgUploadTemplate;
+    private final BookGenreRepository bookGenreRepository;
 
     // 관리자 페이지에서 도서 추가
     @Transactional
@@ -40,7 +42,15 @@ public class AdminBookService {
         try {
             uploadImage(thumbnail, dto);
 
-            Book book = mapper.map(dto, Book.class);
+            Book book = Book.builder()
+                    .title(dto.getTitle())
+                    .image(dto.getImage())
+                    .author(dto.getAuthor())
+                    .publisher(dto.getPublisher())
+                    .publishedDate(dto.getPublishedDate())
+                    .description(dto.getDescription())
+                    .genre(bookGenreRepository.findByName(dto.getGenre()))
+                    .build();
 
             long count = adminBookRepository.count();
             book.setIsbn("B" + count);
@@ -72,7 +82,7 @@ public class AdminBookService {
 
     public Page<BookDto> findPaged(Pageable pageable) {
         return adminBookRepository.findPaged(pageable)
-            .map(e -> mapper.map(e, BookDto.class));
+            .map(BookDto::toDto);
     }
 
 
@@ -80,18 +90,31 @@ public class AdminBookService {
         Book book = adminBookRepository.findByIsbn(isbn);
         if(book==null)
             throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR);
-        return mapper.map(book, BookDto.class);
+        return BookDto.toDto(book);
     }
 
     public void updateBook(List<MultipartFile> thumbnail, BookDto dto) {
 
         try {
             uploadImage(thumbnail, dto);
-            // 업데이트
-            adminBookRepository.updateBook(dto);
-            embeddingService.generateEmbeddingsBook();
-            log.info("{}", dto);
 
+            Book data = adminBookRepository.findByIsbn(dto.getIsbn());
+
+            Book book = Book.builder()
+                .isbn(dto.getIsbn())
+                .title(data.getTitle())
+                .image(dto.getImage())
+                .author(data.getAuthor())
+                .publisher(dto.getPublisher())
+                .publishedDate(dto.getPublishedDate())
+                .description(dto.getDescription())
+                .genre(bookGenreRepository.findByName(dto.getGenre()))
+                .likeCount(adminBookRepository.findById(dto.getIsbn()).get().getLikeCount())
+                .build();
+
+            // 업데이트
+            adminBookRepository.save(book);
+            embeddingService.generateEmbeddingsBook();
 
         } catch (IOException e) {
             throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR, e);

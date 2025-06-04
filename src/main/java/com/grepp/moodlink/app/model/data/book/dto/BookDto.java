@@ -41,7 +41,7 @@ public class BookDto implements ContentDto {
         dto.setPublisher(book.getPublisher());
         dto.setPublishedDate(book.getPublishedDate());
         dto.setDescription(book.getDescription());
-        dto.setGenre(book.getGenre());
+        dto.setGenre(book.getGenre().getName());
 
         return dto;
     }
