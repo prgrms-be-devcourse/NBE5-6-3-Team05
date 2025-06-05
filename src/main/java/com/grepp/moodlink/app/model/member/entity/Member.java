@@ -1,11 +1,9 @@
 package com.grepp.moodlink.app.model.member.entity;
 
 import com.grepp.moodlink.app.model.auth.code.Role;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.grepp.moodlink.app.model.keyword.entity.KeywordSelection;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +19,9 @@ public class Member {
     @Id
     private String id;
     private String password;
+    @ManyToOne
+    @JoinColumn(name = "KEYWORD_SELECTION_ID")
+    private KeywordSelection keywordSelectionId;
     private String username;
     private String genre;
     private String periods;

@@ -1,6 +1,6 @@
 package com.grepp.moodlink.app.model.admin.music;
 
-import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
+import com.grepp.moodlink.app.model.data.music.MusicGenreRepository;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.llm.EmbeddingService;
@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,13 +26,13 @@ public class AdminMusicService {
 
     private final AdminMusicRepository musicRepository;
     private final EmbeddingService embeddingService;
-    private final ModelMapper mapper;
     private final ImgUploadTemplate imgUploadTemplate;
+    private final MusicGenreRepository musicGenreRepository;
 
     // 음악 목록을 페이지네이션으로 가져옴
     public Page<MusicDto> findPaged(Pageable pageable) {
         return musicRepository.findPaged(pageable)
-            .map(e -> mapper.map(e, MusicDto.class));
+            .map(MusicDto::toDto);
     }
 
     // 관리자가 직접 음악을 추가할 때 쓰이는 메소드
@@ -47,7 +46,17 @@ public class AdminMusicService {
         try {
 
             uploadImage(thumbnail, dto);
-            Music music = mapper.map(dto, Music.class);
+
+            Music music = Music.builder()
+                .thumbnail(dto.getThumbnail())
+                .title(dto.getTitle())
+                .genre(musicGenreRepository.findByName((dto.getGenre())))
+                .singer(dto.getSinger())
+                .description(dto.getDescription())
+                .lyrics(dto.getLyrics())
+                .releaseDate(dto.getReleaseDate())
+                .likeCount(0L)
+                .build();
 
             long count = musicRepository.count();
             music.setId("S" + count);
@@ -83,7 +92,7 @@ public class AdminMusicService {
         Optional<Music> music = musicRepository.findById(id);
         if(music.isEmpty())
             throw new CommonException(ResponseCode.BAD_REQUEST);
-        return music.map(e -> mapper.map(e, MusicDto.class)).orElseThrow(() -> new CommonException(ResponseCode.BAD_REQUEST));
+        return music.map(MusicDto::toDto).orElseThrow(() -> new CommonException(ResponseCode.BAD_REQUEST));
     }
 
 
@@ -92,8 +101,21 @@ public class AdminMusicService {
 
         try {
             uploadImage(thumbnail, dto);
+            Music data = musicRepository.findById(dto.getId()).orElseThrow(() -> new CommonException(ResponseCode.BAD_REQUEST));
+
+            Music music = Music.builder()
+                .id(dto.getId())
+                .thumbnail(dto.getThumbnail())
+                .title(data.getTitle())
+                .genre(musicGenreRepository.findByName(dto.getGenre()))
+                .singer(data.getSinger())
+                .description(dto.getDescription())
+                .lyrics(dto.getLyrics())
+                .releaseDate(dto.getReleaseDate())
+                .likeCount(musicRepository.findById(dto.getId()).get().getLikeCount())
+                .build();
             // 업데이트
-            musicRepository.updateBook(dto);
+            musicRepository.save(music);
             embeddingService.generateEmbeddingsMusic();
             log.info("{}", dto);
 

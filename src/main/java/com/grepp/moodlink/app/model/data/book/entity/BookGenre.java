@@ -1,31 +1,24 @@
-package com.grepp.moodlink.app.model.keyword.entity;
+package com.grepp.moodlink.app.model.data.book.entity;
 
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "keyword_selection")
+@Table(name = "book_genre")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class KeywordSelection {
+public class BookGenre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    String name;
 
-    private String userId;
-    private String keywords;
-    @Column(columnDefinition = "BLOB")
-    private byte[] embedding;
-    private String reason;
 }

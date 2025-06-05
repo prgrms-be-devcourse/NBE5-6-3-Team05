@@ -46,21 +46,4 @@ public class AdminMusicRepositoryImpl implements AdminMusicRepositoryCustom {
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
-    @Override
-    @Transactional
-    public void updateBook(MusicDto music) {
-        Music entity = em.find(Music.class, music.getId());
-
-        entity.setGenre(music.getGenre());
-        if (music.getThumbnail() != null) {
-            entity.setThumbnail(music.getThumbnail());
-        }
-        entity.setGenre(music.getGenre());
-        entity.setDescription(music.getDescription());
-        if (!entity.getLyrics().equals(music.getLyrics())) {
-            entity.setLyrics(music.getLyrics());
-            // 변경된 설명에 대한 embedding 값을 넣기 위해 null 값 넣기
-            entity.setEmbedding(null);
-        }
-    }
 }

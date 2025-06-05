@@ -45,7 +45,7 @@ public class MusicDto implements ContentDto {
         MusicDto dto = new MusicDto();
         dto.setId(music.getId());
         dto.setTitle(music.getTitle());
-        dto.setGenre(music.getGenre());
+        dto.setGenre(music.getGenre().getName());
         dto.setSinger(music.getSinger());
         dto.setDescription(music.getDescription());
         dto.setReleaseDate(music.getReleaseDate());

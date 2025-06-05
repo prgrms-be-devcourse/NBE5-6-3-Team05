@@ -1,4 +1,4 @@
-package com.grepp.moodlink.app.model.keyword.entity;
+package com.grepp.moodlink.app.model.data.music.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,23 +10,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "keyword_selection_detail")
+@Table(name = "music_genre")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class KeywordSelectionDetail {
+public class MusicGenre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    String name;
 
-    private Long keywordSelectionId;
-
-    private String mood;
-    private String random1;
-    private String answer1;
-    private String random2;
-    private String answer2;
-    private String random3;
-    private String answer3;
 }
