@@ -70,7 +70,7 @@
       <!-- 영화 예고편 유튜브 iframe -->
       <div id="trailerMovieModal" class="trailer-modal" style="display:none;" onclick="handleModalBackgroundClick(event)">
         <div class="trailer-modal-content">
-          <span class="trailer-modal-close" onclick="closeTrailerModal()">×</span>
+          <span class="trailer-modal-close" onclick="closeTrailerModal('trailerMovieModal', 'trailerMovieIframe')">×</span>
           <iframe id = "trailerMovieIframe" class="trailerIframe" width="1280" height="720" frameborder="0"
                   allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
@@ -110,7 +110,7 @@
             </ul>
             <h5><p id="musicDes"></p></h5>
             <p id="musicSummary" class="modal-summary"></p>
-            <button id="modalSearchMusicBtn" onclick="showMusicTrailer(document.getElementById('musicTitle').innerText, document.getElementById('singer').innerText)">음악 감상하기</button>
+            <button id="modalSearchMusicBtn" onclick="showMusicTrailer(document.getElementById('musicTitle').innerText)">음악 감상하기</button>
 
           </div>
         </div>
@@ -119,7 +119,7 @@
       <!-- 음악 감상 유튜브 iframe -->
       <div id="trailerMusicModal" class="trailer-modal" style="display:none;" onclick="handleModalBackgroundClick(event)">
         <div class="trailer-modal-content">
-          <span class="trailer-modal-close" onclick="closeTrailerModal()">×</span>
+          <span class="trailer-modal-close" onclick="closeTrailerModal('trailerMusicModal', 'trailerMusicIframe')">×</span>
           <iframe id = "trailerMusicIframe" class="trailerIframe" width="1280" height="720" frameborder="0"
                   allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
@@ -315,14 +315,14 @@
 
   }
 
-  function showMusicTrailer(title, singer) {
+  function showMusicTrailer(title) {
     // 음악 유튜브 실행
-    fetch(`/api/trailer/music?title=${encodeURIComponent(title + ' ' + singer)}`)
+    fetch(`/api/trailer/music?title=${encodeURIComponent(title)}`)
     .then(res => res.json())
     .then(data => {
-      if (data.movieVideoId) {
+      if (data.musicVideoId) {
         const iframe = document.getElementById('trailerMusicIframe');
-        iframe.src = `https://www.youtube.com/embed/${data.movieVideoId}?autoplay=1`;
+        iframe.src = `https://www.youtube.com/embed/${data.musicVideoId}?autoplay=1`;
         document.getElementById('trailerMusicModal').style.display = 'flex';
       } else {
         alert('음악을 찾을 수 없습니다.');
@@ -332,10 +332,14 @@
 
   }
 
-  function closeTrailerModal() {
-    const iframe = document.querySelector('.trailerIframe');
-    iframe.src = ''; // 재생 중지
-    document.querySelector('.trailer-modal').style.display = 'none';
+  function closeTrailerModal(modalId, iframeId) {
+    const modal = document.getElementById(modalId);
+    const iframe = document.getElementById(iframeId);
+
+    if (modal && iframe) {
+      iframe.src = '';
+      modal.style.display = 'none';
+    }
   }
 
   function handleModalBackgroundClick(event) {
