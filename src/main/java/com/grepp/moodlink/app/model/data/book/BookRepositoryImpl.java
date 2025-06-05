@@ -55,6 +55,8 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
                 book.publisher,
                 book.image))
             .from(book)
-            .where(book.title.lower().like("%" + contentName.toLowerCase() + "%")).fetch();
+            .where(book.title.lower().like("%" + contentName.toLowerCase() + "%")
+                .or(book.publisher.lower().like("%" + contentName.toLowerCase() + "%"))
+            ).fetch();
     }
 }
