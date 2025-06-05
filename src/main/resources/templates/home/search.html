@@ -32,7 +32,6 @@
         <button onclick="showCategory('book')">📚 도서</button>
       </div>
 
-
   <!-- 영화 -->
   <div class="category" id="movie">
     <h3><span class="highlight">영화</span> 검색 결과</h3>
@@ -72,7 +71,7 @@
       <div id="trailerMovieModal" class="trailer-modal" style="display:none;" onclick="handleModalBackgroundClick(event)">
         <div class="trailer-modal-content">
           <span class="trailer-modal-close" onclick="closeTrailerModal()">×</span>
-          <iframe id = "trailerIframe" class="trailerIframe" width="1280" height="720" frameborder="0"
+          <iframe id = "trailerMovieIframe" class="trailerIframe" width="1280" height="720" frameborder="0"
                   allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
       </div>
@@ -334,9 +333,9 @@
   }
 
   function closeTrailerModal() {
-    const iframe = document.getElementById('trailerIframe');
+    const iframe = document.querySelector('.trailerIframe');
     iframe.src = ''; // 재생 중지
-    document.getElementById('trailerModal').style.display = 'none';
+    document.querySelector('.trailer-modal').style.display = 'none';
   }
 
   function handleModalBackgroundClick(event) {
