@@ -40,8 +40,8 @@
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     transition: all 0.3s ease;
-  " onmouseover="this.style.background='#F3F4F6'"
-            onmouseout="this.style.background='white'">
+  " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.background='#F3F4F6'"
+            onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.05)'; this.style.background='white'">
       영화
     </button>
 
@@ -56,8 +56,8 @@
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     transition: all 0.3s ease;
-  " onmouseover="this.style.background='#F3F4F6'"
-            onmouseout="this.style.background='white'">
+  " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.background='#F3F4F6'"
+            onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.05)'; this.style.background='white'">
       음악
     </button>
 
@@ -72,10 +72,12 @@
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     transition: all 0.3s ease;
-  " onmouseover="this.style.background='#F3F4F6'"
-            onmouseout="this.style.background='white'">
+  " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.background='#F3F4F6'"
+            onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.05)'; this.style.background='white'">
       도서
     </button>
+
+
   </div>
 
   <br>
@@ -89,6 +91,10 @@
     </div>
 
     <h3>오늘의 기분, 하나의 링크로 영화·도서·음악을 만나보세요.</h3>
+    <br>
+
+    <p class="content-description"><i>⭐ Best Content ⭐</i></p>
+
 
     <div class="category">
       <div class="category-card" onclick="showContentInfo('music')">
@@ -126,7 +132,10 @@
       </div>
     </div>
 
+    <br>
     <p class="content-description"><i>moodlink 이용자들의 추천 콘텐츠 입니다.</i></p>
+
+    <br>
 
     <div class="buttons">
       <button disabled style="margin-right: 15px" class="fancy-button red-button"

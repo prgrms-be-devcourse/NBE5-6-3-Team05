@@ -17,24 +17,28 @@
         </form>
       </div>
 
-  <!-- contentName 이 비었을 때 -->
-  <h4 th:if="${#strings.isEmpty(contentName)}">전체 검색결과입니다.</h4>
+      <br>
 
-  <!-- contentName 이 있을 때 -->
-  <h4 th:unless="${#strings.isEmpty(contentName)}">
-    "<span th:text="${contentName}"></span>" 검색결과입니다.
-  </h4>
-
-  <!-- 카테고리 메뉴 -->
+      <!-- 카테고리 메뉴 -->
       <div class="menu">
         <button onclick="showCategory('movie')">🎬 영화</button>
         <button onclick="showCategory('music')">🎧 음악</button>
         <button onclick="showCategory('book')">📚 도서</button>
       </div>
 
+  <!-- contentName 이 비었을 때 -->
+  <h4 th:if="${#strings.isEmpty(contentName)}">전체 검색결과입니다.</h4>
+
+  <!-- contentName 이 있을 때 -->
+  <h4 th:unless="${#strings.isEmpty(contentName)}">
+    "<span th:text="${contentName}"></span>" 에 대한 검색결과입니다.
+  </h4>
+
+
+
   <!-- 영화 -->
   <div class="category" id="movie">
-    <h3><span class="highlight">영화</span> 검색 결과</h3>
+<!--    <h3><span class="highlight">영화</span> 검색 결과</h3>  -->
     <div th:if="${movie.size() > 0}" class="card-container">
       <div th:each="m : ${movie}" class="card-movie"
            th:attr="onclick='showDetailModalMovie(' +
@@ -46,8 +50,8 @@
       >
         <img th:src="${m.thumbnail}" alt="영화 썸네일" class="card-thumbnail"/>
       </div>
-    </div>
-    <div th:if="${movie.size() == 0}"><p>검색 결과가 없습니다.</p></div>
+    </div><br><br><br><br>
+    <div th:if="${movie.size() == 0}"><h4>검색 자료가 없습니다.</h4></div>
   </div>
       <!-- 영화 모달 -->
       <div class = "detailMovieModal" id="movieDetailModal" onclick="if(event.target===this){closeMovieModal()}">
@@ -78,7 +82,7 @@
 
   <!-- 음악 -->
   <div class="category" id="music">
-    <h3><span class="highlight">음악</span> 검색 결과</h3>
+<!--    <h3><span class="highlight">음악</span> 검색 결과</h3>-->
     <div th:if="${music.size() > 0}" class="card-container">
       <div th:each="m : ${music}" class="card-music"
            th:attr = "onclick=
@@ -92,8 +96,8 @@
       >
         <img th:src="${m.thumbnail}" alt="음악 썸네일" class="card-thumbnail music-thumb"/>
       </div>
-    </div>
-    <div th:if="${music.size() == 0}"><p>검색 결과가 없습니다.</p></div>
+    </div><br><br><br><br>
+    <div th:if="${music.size() == 0}"><h4>검색 자료가 없습니다.</h4></div>
   </div>
 
       <!-- 음악 모달 -->
@@ -128,7 +132,7 @@
 
   <!-- 도서 -->
   <div class="category" id="book">
-    <h3><span class="highlight">도서</span> 검색 결과</h3>
+<!--    <h3><span class="highlight">도서</span> 검색 결과</h3>-->
     <div th:if="${book.size() > 0}" class="card-container">
       <div th:each="b : ${book}" class="card-book"
            th:attr = "onclick=
@@ -140,8 +144,8 @@
              ')'">
         <img th:src="${b.image}" alt="도서 썸네일" class="card-thumbnail modal-bg.book"/>
       </div>
-    </div>
-    <div th:if="${book.size() == 0}"><p>검색 결과가 없습니다.</p></div>
+    </div><br><br><br><br>
+    <div th:if="${book.size() == 0}"><h4>검색 자료가 없습니다.</h4></div>
   </div>
 
 
