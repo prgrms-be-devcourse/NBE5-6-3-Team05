@@ -66,6 +66,7 @@
             </ul>
             <p id="movieSummary" class="modal-summary"></p>
             <button id="modalSearchMovieBtn" onclick="showMovieTrailer(document.getElementById('movieTitle').innerText)">예고편 보기</button>
+            <button id="modalBuyMovieBtn" onclick="showMovieTrailer(document.getElementById('movieTitle').innerText)">영화 보러가기</button>
 
           </div>
         </div>
@@ -114,7 +115,7 @@
             </ul>
             <h5><p id="musicDes"></p></h5>
             <p id="musicSummary" class="modal-summary"></p>
-            <button id="modalSearchMusicBtn" onclick="showMusicTrailer(document.getElementById('musicTitle').innerText)">음악 감상하기</button>
+            <button id="modalSearchMusicBtn" onclick="showMusicTrailer(document.getElementById('musicTitle').innerText)">뮤직비디오 보기</button>
 
           </div>
         </div>
@@ -162,7 +163,7 @@
             </ul>
             <h5><p id="bookDes"></p></h5>
             <p id="bookSummary" class="modal-summary"></p>
-                    <button id="modalSearchBtn" class="modal-play" disabled>도서 구매하기 ➜</button>
+                    <button id="modalSearchBtn" class="modal-play" disabled>도서 구매하기</button>
           </div>
         </div>
       </div>
@@ -197,17 +198,17 @@
     /* ===== 모달 표시 ===== */
     document.getElementById('movieDetailModal').classList.add('active');
 
-    // const searchBtn = document.getElementById('modalSearchMovieBtn');
-    //
-    // // 영화 구매 버튼
-    // searchBtn.textContent = '영화 구매하기 ➜';
-    //
-    // // 활성화 + 클릭 이벤트
-    // searchBtn.disabled = false;
-    // searchBtn.onclick = () => {
-    //   const query = encodeURIComponent(title);
-    //   window.open(`https://www.youtube.com/search?q=${query}`, '_blank');
-    // };
+    const searchBtn = document.getElementById('modalBuyMovieBtn');
+
+    // 영화 구매 버튼
+    searchBtn.textContent = '영화 구매하기';
+
+    // 활성화 + 클릭 이벤트
+    searchBtn.disabled = false;
+    searchBtn.onclick = () => {
+      const query = encodeURIComponent(title);
+      window.open(`https://www.youtube.com/search?q=${query}`, '_blank');
+    };
   }
 
   function showDetailModalMusic(title, releaseDate, summary, thumbnail, type, singer) {
