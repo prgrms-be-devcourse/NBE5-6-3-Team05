@@ -168,7 +168,7 @@
     </div>
 
     <div class="section" data-question="오늘 기분은" data-required="true">
-      <h3>오늘 기분은 어떠신가요? (필수)</h3>
+      <h3>오늘 기분은 어떠신가요? (필수, 최대 3개)</h3>
       <div class="card-grid" id="mood-cards">
         <div class="card">기쁨</div>
         <div class="card">슬픔</div>
@@ -182,7 +182,7 @@
     </div>
 
     <div class="section" data-question="오늘 날씨는" data-required="true">
-      <h3>오늘 날씨는 어떤가요? (필수)</h3>
+      <h3>오늘 날씨는 어떤가요? (필수, 최대 3개)</h3>
       <div class="card-grid">
         <div class="card">맑음</div>
         <div class="card">비</div>
@@ -193,7 +193,7 @@
     </div>
 
     <div class="section" data-question="지금 시간대는" data-required="true" data-single="true">
-      <h3>어떤 시간대 인가요? (필수, 1개만 선택)</h3>
+      <h3>어떤 시간대 인가요? (필수)</h3>
       <div class="card-grid">
         <div class="card">아침</div>
         <div class="card">점심</div>
@@ -204,7 +204,7 @@
     </div>
 
     <div class="section" data-question="같이 있는 사람은" data-required="true" data-single="true">
-      <h3>누구와 같이 있나요? (필수, 1개만 선택)</h3>
+      <h3>누구와 같이 있나요? (필수)</h3>
       <div class="card-grid">
         <div class="card">혼자</div>
         <div class="card">연인</div>
@@ -214,7 +214,7 @@
     </div>
 
     <div class="section" data-question="지금 필요한거는" data-required="true" data-single="true">
-      <h3>지금 무엇이 필요한가요? (필수, 1개만 선택)</h3>
+      <h3>지금 무엇이 필요한가요? (필수)</h3>
       <div class="card-grid">
         <div class="card">행복</div>
         <div class="card">위로</div>
@@ -270,6 +270,16 @@
 
         if (!questionToKeywords[question]) {
           questionToKeywords[question] = new Set();
+        }
+
+        // 기분, 날씨 섹션만 최대 3개 제한
+        if (
+          (question === "오늘 기분은" || question === "오늘 날씨는") &&
+          !card.classList.contains('selected') &&
+          questionToKeywords[question].size >= 3
+        ) {
+          alert(`${question} 최대 3개까지만 선택할 수 있습니다.`);
+          return;
         }
 
         card.classList.toggle('selected');

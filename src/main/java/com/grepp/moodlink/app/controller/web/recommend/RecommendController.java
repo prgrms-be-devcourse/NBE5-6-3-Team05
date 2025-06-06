@@ -63,7 +63,7 @@ public class RecommendController {
         @RequestParam("keywords") String keywords,
         HttpSession session) {
         genre = genre.substring(1);
-
+        System.out.println(keywords);
         String reason = keywordService.findReason(keywords);
         session.setAttribute("reason", reason);
         System.out.println(reason);
