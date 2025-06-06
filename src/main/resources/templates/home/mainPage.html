@@ -6,7 +6,6 @@
 
 <body>
 <div layout:fragment="content">
-
   <div style="
   display: flex;
   justify-content: center;
@@ -15,65 +14,23 @@
 ">
     <form th:action="@{/search}" method="get">
       <input type="hidden" name="contentName" value="" />
-      <button type="submit" style="padding: 10px 20px; border: none; border-radius: 9999px;
-    background: linear-gradient(135deg, #6366F1, #4338CA); color: white; font-size: 15px;
-    font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-    transition: all 0.3s ease;"
-              onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 14px rgba(99, 102, 241, 0.4)'"
-              onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.3)'">
-        전체검색
+      <button type="submit" style="
+      padding: 10px 20px;
+      border: none;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, #ff0000, #FF0000);
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
+      transition: all 0.3s ease;
+    "
+              onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 14px rgba(255, 80, 0, 0.4)'"
+              onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 12px rgba(255, 102, 0, 0.3)'">
+        컨텐츠 전체 보기
       </button>
     </form>
-
-    <button style="
-    padding: 10px 20px;
-    border: 1px solid #E5E7EB;
-    border-radius: 9999px;
-    background: white;
-    color: #374151;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
-  " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.background='#F3F4F6'"
-            onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.05)'; this.style.background='white'">
-      영화
-    </button>
-
-    <button style="
-    padding: 10px 20px;
-    border: 1px solid #E5E7EB;
-    border-radius: 9999px;
-    background: white;
-    color: #374151;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
-  " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.background='#F3F4F6'"
-            onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.05)'; this.style.background='white'">
-      음악
-    </button>
-
-    <button style="
-    padding: 10px 20px;
-    border: 1px solid #E5E7EB;
-    border-radius: 9999px;
-    background: white;
-    color: #374151;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
-  " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.background='#F3F4F6'"
-            onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.05)'; this.style.background='white'">
-      도서
-    </button>
-
-
   </div>
 
   <br>
@@ -87,7 +44,6 @@
     </div>
 
     <h3>오늘의 기분, 하나의 링크로 영화·도서·음악을 만나보세요.</h3>
-    <br>
 
     <p class="content-description"><i>⭐ Best Content ⭐</i></p>
 
@@ -132,6 +88,7 @@
     <p class="content-description"><i>moodlink 이용자들의 추천 콘텐츠 입니다.</i></p>
 
     <br>
+
 
     <div class="buttons">
       <button disabled style="margin-right: 15px" class="fancy-button red-button"

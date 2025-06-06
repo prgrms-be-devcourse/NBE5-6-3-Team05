@@ -38,6 +38,28 @@
 
   <!-- 영화 -->
   <div class="category" id="movie">
+    <div id = movieGenre>
+      동화
+      라이트노벨
+      무협소설
+      수필
+      스릴러
+      시집
+      추리소설
+      판타지소설
+      프로그래밍
+      인문학
+      심리학
+      철학
+      문화인류학
+      종교학
+      한국소설
+      외국소설
+      고전문학
+      현대문학
+      사회학
+
+    </div>
 <!--    <h3><span class="highlight">영화</span> 검색 결과</h3>  -->
     <div th:if="${movie.size() > 0}" class="card-container">
       <div th:each="m : ${movie}" class="card-movie"
@@ -83,7 +105,16 @@
 
   <!-- 음악 -->
   <div class="category" id="music">
-<!--    <h3><span class="highlight">음악</span> 검색 결과</h3>-->
+    발라드
+    댄스
+    힙합
+    R&B
+    인디음악
+    록/메탈
+    트로트
+    포크/블루스
+
+    <!--    <h3><span class="highlight">음악</span> 검색 결과</h3>-->
     <div th:if="${music.size() > 0}" class="card-container">
       <div th:each="m : ${music}" class="card-music"
            th:attr = "onclick=
@@ -133,7 +164,27 @@
 
   <!-- 도서 -->
   <div class="category" id="book">
-<!--    <h3><span class="highlight">도서</span> 검색 결과</h3>-->
+    동화
+    라이트노벨
+    무협소설
+    수필
+    스릴러
+    시집
+    추리소설
+    판타지소설
+    프로그래밍
+    인문학
+    심리학
+    철학
+    문화인류학
+    종교학
+    한국소설
+    외국소설
+    고전문학
+    현대문학
+    사회학
+
+    <!--    <h3><span class="highlight">도서</span> 검색 결과</h3>-->
     <div th:if="${book.size() > 0}" class="card-container">
       <div th:each="b : ${book}" class="card-book"
            th:attr = "onclick=
