@@ -88,8 +88,7 @@
             </ul>
             <p id="movieSummary" class="modal-summary"></p>
             <button id="modalSearchMovieBtn" onclick="showMovieTrailer(document.getElementById('movieTitle').innerText)">예고편 보기</button>
-            <button id="modalBuyMovieBtn" onclick="showMovieTrailer(document.getElementById('movieTitle').innerText)">영화 보러가기</button>
-
+            <button id="modalBuyMovieBtn" onclick="youtubeMovie(document.getElementById('movieTitle').innerText)">영화 보러가기</button>
           </div>
         </div>
       </div>
@@ -249,17 +248,20 @@
     /* ===== 모달 표시 ===== */
     document.getElementById('movieDetailModal').classList.add('active');
 
-    const searchBtn = document.getElementById('modalBuyMovieBtn');
+  }
 
-    // 영화 구매 버튼
-    searchBtn.textContent = '영화 구매하기';
-
-    // 활성화 + 클릭 이벤트
-    searchBtn.disabled = false;
-    searchBtn.onclick = () => {
-      const query = encodeURIComponent(title);
-      window.open(`https://www.youtube.com/search?q=${query}`, '_blank');
-    };
+  function youtubeMovie(title) {
+    fetch(`/api/trailer/movie?title=${encodeURIComponent(title)}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.movieVideoId) {
+        const videoUrl = `https://www.youtube.com/watch?v=${data.movieVideoId}`;
+        window.open(videoUrl, '_blank');
+      } else {
+        alert('영화를 찾을 수 없습니다.');
+      }
+    })
+    .catch(() => alert('영화를 불러오는 중 오류가 발생했습니다.'));
   }
 
   function showDetailModalMusic(title, releaseDate, summary, thumbnail, type, singer) {
