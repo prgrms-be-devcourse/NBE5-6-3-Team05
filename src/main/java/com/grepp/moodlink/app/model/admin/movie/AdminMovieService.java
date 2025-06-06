@@ -2,8 +2,8 @@ package com.grepp.moodlink.app.model.admin.movie;
 
 import com.grepp.moodlink.app.model.data.movie.dto.GenreDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
+import com.grepp.moodlink.app.model.data.movie.entity.Genre;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
-import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.llm.EmbeddingService;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
 import com.grepp.moodlink.infra.imgbb.ImgUploadTemplate;
@@ -11,7 +11,6 @@ import com.grepp.moodlink.infra.response.ResponseCode;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +40,7 @@ public class AdminMovieService {
 
     // 모든 장르를 가져옴
     public List<GenreDto> findAllGenre() {
-        return genreRepository.findAll().stream().map(e -> mapper.map(e, GenreDto.class)).toList();
+        return genreRepository.findAllByActivated(true).stream().map(e -> mapper.map(e, GenreDto.class)).toList();
     }
 
     // 영화를 추가함
@@ -132,4 +131,37 @@ public class AdminMovieService {
         movieRepository.findById(id).ifPresent(Movie::unActivated);
     }
 
+    // 해당 장르를 사용하는 영화 수 카운트
+    public Long countMoviesByGenre(Integer id) {
+        return movieRepository.countMoviesByGenre(id);
+    }
+
+    // 장르 추가
+    @Transactional
+    public void addGenre(GenreDto genreDto) {
+        if(genreRepository.findByName((genreDto.getName()))!=null){
+            throw new CommonException(ResponseCode.DUPLICATED_DATA);
+        }
+        // id 임의로 10001 부터
+        Genre genre = new Genre((int) (movieRepository.count()+10000L), genreDto.getName(),true);
+        genreRepository.save(genre);
+    }
+
+    // 장르 삭제
+    @Transactional
+    public Boolean deleteGenre(int id) {
+        // 해당 장르인 영화가 하나라도 있다면 삭제 불가능
+        if(countMoviesByGenre(id)!=0)
+            return false;
+        genreRepository.findById(id).ifPresent(Genre::unActivated);
+        return true;
+    }
+
+    // 장르 수정
+    @Transactional
+    public void modifyGenre(Integer longId, GenreDto genreDto) {
+        Genre genre = genreRepository.findById(longId).get();
+        genre.setName(genreDto.getName());
+        genreRepository.save(genre);
+    }
 }

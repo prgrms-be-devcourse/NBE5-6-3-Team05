@@ -1,6 +1,5 @@
 package com.grepp.moodlink.app.model.admin.movie;
 
-import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import com.grepp.moodlink.app.model.data.movie.entity.QMovie;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -15,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Repository
@@ -66,23 +64,12 @@ public class AdminMovieRepositoryImpl implements AdminMovieRepositoryCustom {
     }
 
     @Override
-    @Transactional
-    public void updateBook(MovieInfoDto dto) {
-        Movie entity = em.find(Movie.class, dto.getId());
-
-        if (entity == null) {
-            log.warn("영화 없음: {}", dto.getId());
-        }
-
-        assert entity != null;
-        entity.setGenres(dto.getGenres());
-        if (dto.getThumbnail() != null) {
-            entity.setThumbnail(dto.getThumbnail());
-        }
-        if (!entity.getDescription().equals(dto.getDescription())) {
-            entity.setDescription(dto.getDescription());
-            // 변경된 설명에 대한 embedding 값을 넣기 위해 null 값 넣기
-            entity.setEmbedding(null);
-        }
+    public Long countMoviesByGenre(Integer id) {
+        return queryFactory
+            .select(movie.count())
+            .from(movie)
+            .where(movie.genres.any().id.eq(id))
+            .fetchOne();
     }
+
 }
