@@ -23,12 +23,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
-//@RequiredArgsConstructor
 public class SecurityConfig {
 
-
-    //    @Value("${remember-me.key}")
-    private String rememberMeKey;
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
