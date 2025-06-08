@@ -47,6 +47,7 @@ body {
 .main-contents {
   flex: 1;
   padding: 0 150px 0 1rem;
+  margin-left: 1rem;
 }
 
 .item-buttons {
@@ -131,4 +132,14 @@ body {
   color: gray;
   font-size: 0.9rem;
   margin-bottom: 0.3rem;
+}
+
+.input-line {
+  flex: 1;
+  border: none;
+  border-bottom: 1px solid #666;
+  background-color: transparent;
+  color: white;
+  padding: 0.5rem;
+  font-size: 1rem;
 }

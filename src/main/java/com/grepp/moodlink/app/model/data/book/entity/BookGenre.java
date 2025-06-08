@@ -20,5 +20,15 @@ public class BookGenre {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     String name;
+    Boolean activated = true;
+
+    public BookGenre(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public void unActivated() {
+        this.activated = false;
+    }
 
 }
