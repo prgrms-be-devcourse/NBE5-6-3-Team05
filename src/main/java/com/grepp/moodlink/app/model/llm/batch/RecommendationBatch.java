@@ -7,12 +7,25 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 public class RecommendationBatch {
+
+    @Bean
+    public FlatFileItemReader<String> keywordItemReader() {
+        return new FlatFileItemReaderBuilder<String>()
+                .name("keywordItemReader")
+                .resource(new ClassPathResource("keyword_combinations.txt"))
+                .lineMapper((line, lineNumber) -> line.trim())
+                .build();
+    }
+
     // job 정의
     @Bean
     public Job recommendationJob(JobRepository jobRepository, Step recommendationStep) {
