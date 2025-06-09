@@ -1,6 +1,5 @@
-package com.grepp.moodlink.app.model.admin.music;
+package com.grepp.moodlink.app.model.admin.music.repository;
 
-import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.data.music.entity.QMusic;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -13,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Repository
