@@ -1,4 +1,4 @@
-package com.grepp.moodlink.app.model.admin.movie;
+package com.grepp.moodlink.app.model.admin.movie.repository;
 
 import com.grepp.moodlink.app.model.data.movie.entity.Genre;
 import java.util.List;
