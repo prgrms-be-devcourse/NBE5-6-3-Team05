@@ -4,8 +4,10 @@ package com.grepp.moodlink.app.controller.api.admin;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.grepp.moodlink.app.model.admin.book.BookLookupService;
 import com.grepp.moodlink.app.model.admin.movie.MovieLookupService;
+import com.grepp.moodlink.app.model.admin.music.MusicLookupService;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
+import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.infra.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,7 @@ public class AdminApiLookuplController {
 
     private final MovieLookupService movieLookupService;
     private final BookLookupService bookLookupService;
+    private final MusicLookupService musicLookupService;
 
     @GetMapping("movie/{title}")
     public ResponseEntity<ApiResponse<MovieInfoDto>> lookUpMovie(@PathVariable String title) {
@@ -49,13 +52,12 @@ public class AdminApiLookuplController {
 
     }
 
-    @GetMapping("music")
-    public ResponseEntity<ApiResponse<MovieInfoDto>> lookUpMusic(@RequestParam String title)
+    @GetMapping("music/{title}")
+    public ResponseEntity<ApiResponse<MusicDto>> lookUpMusic(@PathVariable String title)
         throws JsonProcessingException {
-        //TODO 내용 바꾸기
-        MovieInfoDto movie = movieLookupService.lookup(title);
+        MusicDto music = musicLookupService.lookup(title);
 
-        return ResponseEntity.ok(ApiResponse.success(movie));
+        return ResponseEntity.ok(ApiResponse.success(music));
 
     }
 }

@@ -11,6 +11,21 @@
   <!-- 돌아가기 버튼 -->
   <a class="back-btn" th:href="@{/admin/music}">← 돌아가기</a>
 
+  <!-- 정보 가져오기 버튼을 누를 시 나오는 모달 -->
+  <!-- 음악 대한 정보를 받아 추가합니다. -->
+  <div id="apiLookupModal" style="display:none; position:fixed; top:30%; left:45%; background:white; padding:20px; border-radius:10px; z-index:1000;">
+    <form id="musicLookup">
+      <label>음악 이름 (검색 후 장르는 직접 입력해주세요)</label><br/>
+      <label for="searchName"></label><input type="text" id="searchName" name="name" required><br/><br/>
+      <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+        <button type="submit" class="add-btn">정보 가져오기</button>
+        <button type="button" class="add-btn" onclick="closeModal()">닫기</button>
+      </div>
+    </form>
+  </div>
+  <!-- 모달 배경 -->
+  <div id="modalBackdrop" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;" onclick="closeModal()"></div>
+
   <!-- 중앙 배치 form -->
   <div class="main-area">
     <form th:action="@{/admin/music/add}" th:object="${musicAddRequest}" method="post"
@@ -22,6 +37,7 @@
           <div class="image-upload">
             <div id="preview" class="image-preview"></div>
             <input type="file" id="image-input" name="thumbnail" style="display:none"/>
+            <input th:field="*{thumbnailPath}" id="imagePath-input"  style="display:none"/>
             <div id="sizeInfo"></div>
             <button class="img-btn" type="button"
                     onclick="document.getElementById('image-input').click()">이미지 추가
@@ -30,17 +46,18 @@
 
 
           <div>
-            <div class="form-row"><label>제목</label><input th:field="*{title}" class="input-line"/>
+            <div class="form-row"><label>제목</label><input th:field="*{title}" id="title-input" class="input-line"/>
+              <a class="add-btn" id="api-lookup" onclick="openModal()">정보 가져오기</a>
             </div>
             <span class="helper-text form-row"
                   th:if="${fieldErrors != null and fieldErrors.containsKey('title')}"
                   th:text="${fieldErrors.title}"></span>
-            <div class="form-row"><label>가수</label><input th:field="*{singer}" class="input-line"
+            <div class="form-row"><label>가수</label><input th:field="*{singer}" id="singer-input" class="input-line"
                                                           type="text"/></div>
             <span class="helper-text form-row"
                   th:if="${fieldErrors != null and fieldErrors.containsKey('singer')}"
                   th:text="${fieldErrors.singer}"></span>
-            <div class="form-row"><label>발매일</label><input th:field="*{releaseDate}"
+            <div class="form-row"><label>발매일</label><input th:field="*{releaseDate}" id="releaseDate-input"
                                                            class="input-line" type="date"/></div>
           </div>
         </div>
@@ -61,11 +78,11 @@
 
         <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
           <label>설명</label>
-          <textarea th:field="*{description}" class="textarea"></textarea>
+          <textarea th:field="*{description}" id="description-input" class="textarea"></textarea>
         </div>
         <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
           <label>가사</label>
-          <textarea th:field="*{lyrics}" class="textarea"></textarea>
+          <textarea th:field="*{lyrics}" id="lyrics-input" class="textarea"></textarea>
           <span class="helper-text form-row"
                 th:if="${fieldErrors != null and fieldErrors.containsKey('lyrics')}"
                 th:text="${fieldErrors.lyrics}"></span>
@@ -100,6 +117,55 @@
         reader.onload = e => preview.style.backgroundImage = `url(${e.target.result})`;
         reader.readAsDataURL(file);
       }
+    });
+
+    function openModal() {
+      document.getElementById('searchName').value = '';
+      document.getElementById('apiLookupModal').style.display = 'block';
+      document.getElementById('modalBackdrop').style.display = 'block';
+    }
+
+    // 모달 닫기
+    function closeModal() {
+      document.getElementById('apiLookupModal').style.display = 'none';
+      document.getElementById('modalBackdrop').style.display = 'none';
+    }
+
+
+    // form 제출 시 REST API 호출
+    document.getElementById('musicLookup').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const title = document.getElementById('searchName').value.trim();
+      const encodedTitle = encodeURIComponent(title);
+
+      fetch(`http://localhost:8080/api/admin/lookup/music/${encodedTitle}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+      .then(res => {
+        if (res.ok) {
+          return res.json(); // 먼저 JSON으로 파싱
+        } else {
+          return res.text().then(msg => {
+            throw new Error("가져오기 실패");
+          });
+        }
+      })
+      .then(json => {
+        const data = json.data;
+        console.log(data);
+        document.getElementById('preview').style.backgroundImage = `url(${data.thumbnail})`;
+        document.getElementById('imagePath-input').value = data.thumbnail;
+        document.getElementById('title-input').value = data.title;
+        document.getElementById('singer-input').value = data.singer;
+        document.getElementById('lyrics-input').value = data.lyrics;
+        document.getElementById('releaseDate-input').value = new Date(data.release_date).toISOString().slice(0,10);
+        document.getElementById('description-input').value=data.description;
+      })
+      .catch(err => {alert(err.message); console.log(err.message)});
     });
   </script>
 </div>
