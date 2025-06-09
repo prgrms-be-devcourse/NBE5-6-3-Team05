@@ -59,25 +59,26 @@ public class RecommendController {
 
     @PostMapping("result")
     public String selectKeyword(
-        @RequestParam("genre") String genre,
+//        @RequestParam("genre") String genre,
         @RequestParam("keywords") String keywords,
         HttpSession session) {
-        genre = genre.substring(1);
+//        genre = genre.substring(1);
         System.out.println(keywords);
         String reason = keywordService.findReason(keywords);
         session.setAttribute("reason", reason);
         System.out.println(reason);
 
-        List<CuratingDetailIdDto> items = curatingContents(genre, keywords);
+        List<CuratingDetailIdDto> items = curatingContents(keywords);
         System.out.println(items);
         session.setAttribute("items", items);
 
         return "redirect:/result";
     }
 
-    private List<CuratingDetailIdDto> curatingContents(String genre, String keywords) {
+    // Test용으로 public으로 변경 나중에 private으로 바꾸기
+    public List<CuratingDetailIdDto> curatingContents(String keywords) {
         List<CuratingDetailIdDto> details = new ArrayList<>();
-        List<String> movieIds = getMovieRecommendations(genre, keywords);
+        List<String> movieIds = getMovieRecommendations(keywords);
         List<String> bookIds = getBookRecommendations(keywords);
         List<String> musicIds = getMusicRecommendations(keywords);
         for (int i = 0; i < musicIds.size(); i++) {
@@ -90,7 +91,7 @@ public class RecommendController {
         return details;
     }
 
-    private List<String> getMovieRecommendations(String genre, String keywords) {
+    private List<String> getMovieRecommendations(String keywords) {
         return recommendationService.getMovies(keywords);
     }
 
