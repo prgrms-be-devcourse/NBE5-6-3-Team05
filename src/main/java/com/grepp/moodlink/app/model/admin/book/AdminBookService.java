@@ -1,5 +1,7 @@
 package com.grepp.moodlink.app.model.admin.book;
 
+import com.grepp.moodlink.app.model.admin.book.repository.AdminBookGenreRepository;
+import com.grepp.moodlink.app.model.admin.book.repository.AdminBookRepository;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.dto.BookGenreDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
@@ -43,7 +45,12 @@ public class AdminBookService {
         }
 
         try {
-            uploadImage(thumbnail, dto);
+            // api를 통해 가져왔을 때 thumbnail의 path 값을 가져오기에 따로 처리1
+            String ThumbnailImg = dto.getImage();
+            if(!thumbnail.getFirst().isEmpty()){
+                uploadImage(thumbnail, dto);
+                ThumbnailImg = dto.getImage();
+            }
 
             Book book = Book.builder()
                     .title(dto.getTitle())

@@ -2,7 +2,9 @@ package com.grepp.moodlink.app.controller.api.admin;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.grepp.moodlink.app.model.admin.book.BookLookupService;
 import com.grepp.moodlink.app.model.admin.movie.MovieLookupService;
+import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.infra.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminApiLookuplController {
 
     private final MovieLookupService movieLookupService;
+    private final BookLookupService bookLookupService;
 
     @GetMapping("movie/{title}")
     public ResponseEntity<ApiResponse<MovieInfoDto>> lookUpMovie(@PathVariable String title) {
@@ -37,13 +40,12 @@ public class AdminApiLookuplController {
         }
     }
 
-    @GetMapping("book")
-    public ResponseEntity<ApiResponse<MovieInfoDto>> lookUpBook(@RequestParam String title)
+    @GetMapping("book/{title}")
+    public ResponseEntity<ApiResponse<BookDto>> lookUpBook(@PathVariable String title)
         throws JsonProcessingException {
-        //TODO 내용 바꾸기
-        MovieInfoDto movie = movieLookupService.lookup(title);
+        BookDto book = bookLookupService.lookup(title);
 
-        return ResponseEntity.ok(ApiResponse.success(movie));
+        return ResponseEntity.ok(ApiResponse.success(book));
 
     }
 
