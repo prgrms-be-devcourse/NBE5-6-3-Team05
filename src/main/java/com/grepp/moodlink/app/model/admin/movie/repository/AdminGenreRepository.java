@@ -13,4 +13,6 @@ public interface AdminGenreRepository extends JpaRepository<Genre, Integer> {
     List<Genre> findAllByActivated(Boolean activated);
 
     Integer id(Integer id);
+
+    Genre findByid(Integer id);
 }
