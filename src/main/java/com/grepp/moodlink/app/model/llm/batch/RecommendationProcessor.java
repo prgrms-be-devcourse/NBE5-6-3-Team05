@@ -4,6 +4,7 @@ import com.google.common.util.concurrent.RateLimiter;
 import com.grepp.moodlink.app.model.data.book.BookService;
 import com.grepp.moodlink.app.model.data.movie.MovieService;
 import com.grepp.moodlink.app.model.data.music.MusicService;
+import com.grepp.moodlink.app.model.keyword.KeywordRepository;
 import com.grepp.moodlink.app.model.keyword.entity.KeywordSelection;
 import com.grepp.moodlink.app.model.llm.LlmService;
 import com.grepp.moodlink.app.model.llm.RecommendationRepository;
@@ -22,6 +23,7 @@ public class RecommendationProcessor implements ItemProcessor<KeywordSelection, 
     private final BookService bookService;
     private final MusicService musicService;
     private final RecommendationRepository recommendationRepository;
+    private final KeywordRepository keywordRepository;
 
     private static final RateLimiter ratelimiter = RateLimiter.create(3.0 / 60.0);
 
@@ -34,7 +36,7 @@ public class RecommendationProcessor implements ItemProcessor<KeywordSelection, 
             List<String> bookRecommendations = bookService.parseRecommend(llmService.recommendBook(keywords));
             List<String> musicRecommendations = musicService.parseRecommend(llmService.recommendMusic(keywords));
             String reason = llmService.generateReason(keywords);
-
+            keywordSelection.setReason(reason);
             return new RecommendationDto(keywords, reason, movieRecommendations, bookRecommendations, musicRecommendations);
         }else {
             return new RecommendationDto(keywords, "", null, null, null);

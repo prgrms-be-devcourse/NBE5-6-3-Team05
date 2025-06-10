@@ -75,8 +75,7 @@ public class RecommendController {
         return "redirect:/result";
     }
 
-    // Test용으로 public으로 변경 나중에 private으로 바꾸기
-    public List<CuratingDetailIdDto> curatingContents(String keywords) {
+    private List<CuratingDetailIdDto> curatingContents(String keywords) {
         List<CuratingDetailIdDto> details = new ArrayList<>();
         List<String> movieIds = getMovieRecommendations(keywords);
         List<String> bookIds = getBookRecommendations(keywords);

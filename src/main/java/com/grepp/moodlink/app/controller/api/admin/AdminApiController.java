@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
 @Slf4j
+//@PreAuthorize("hasRole('ADMIN')") // postman 호출을 위해 주석 처리함 나중에 풀어야함.
 public class AdminApiController {
 
     private final AdminBookService bookService;
