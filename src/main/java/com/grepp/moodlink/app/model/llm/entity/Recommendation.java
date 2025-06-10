@@ -2,10 +2,7 @@ package com.grepp.moodlink.app.model.llm.entity;
 
 import com.grepp.moodlink.infra.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(
@@ -17,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Recommendation extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

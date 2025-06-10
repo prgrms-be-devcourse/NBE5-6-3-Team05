@@ -32,7 +32,6 @@ public class EmbeddingService {
     private final BookRepository bookRepository;
     private final MusicRepository musicRepository;
     private final EmbeddingModel embeddingModel;
-    private final KeywordRepository keywordRepository;
     private final ChatLanguageModel chatLanguageModel;
 
     @Transactional
@@ -132,15 +131,6 @@ public class EmbeddingService {
             buffer.putFloat(f);
         }
         return buffer.array();
-    }
-
-    public void generateEmbeddingKeyword(String keywords) {
-        KeywordSelection keywordSelection = keywordRepository.findByKeywords(keywords);
-        float[] floatEmbedding = embeddingModel.embed(keywords).content().vector();
-        byte[] byteEmbedding = toByteArray(floatEmbedding);
-        keywordSelection.setEmbedding(byteEmbedding);
-        keywordSelection.setKeywords(keywords);
-        keywordRepository.save(keywordSelection);
     }
 
 }
