@@ -20,7 +20,8 @@ public class KeywordService {
     private final EmbeddingModel embeddingModel;
 
     public String findReason(String keywords) {
-        return keywordRepository.findReasonByKeywords(keywords);
+        KeywordSelection keywordSelection = keywordRepository.findByKeywords(keywords);
+        return keywordSelection.getReason();
     }
 
     public void importKeywordsFromFile() throws Exception {
