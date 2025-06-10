@@ -3,6 +3,7 @@ package com.grepp.moodlink.app.controller.web.home;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
+import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.home.HomeService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -47,5 +48,12 @@ public class HomeController {
         model.addAttribute("book", book);
 
         return "/home/search";
+    }
+
+    @GetMapping("/search/genre")
+    public String searchGenre(Model model, @RequestParam String genreName) {
+        List<MusicDto> musicContentByGenre = homeService.searchMusicContentByGenre(genreName);
+        model.addAttribute("musicContentByGenre", musicContentByGenre);
+        return"/home/search";
     }
 }
