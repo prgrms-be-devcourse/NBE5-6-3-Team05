@@ -17,7 +17,7 @@
   <!-- 장르에 대한 정보를 받아 추가합니다. -->
   <div id="apiLookupModal" style="display:none; position:fixed; top:30%; left:45%; background:white; padding:20px; border-radius:10px; z-index:1000;">
     <form id="movieLookup">
-      <label>영화 이름 (정확한 제목을 입력해주세요)</label><br/>
+      <label>영화 제목 (정확한 제목을 입력해주세요)</label><br/>
       <label for="searchName"></label><input type="text" id="searchName" name="name" required><br/><br/>
       <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
         <button type="submit" class="add-btn">정보 가져오기</button>
@@ -183,8 +183,9 @@
           });
           updateGenre();
           document.getElementById('description-input').value=data.description;
+          closeModal();
         })
-        .catch(err => alert(err.message));
+        .catch(err => alert("검색 결과가 없습니다."));
       });
     });
 
