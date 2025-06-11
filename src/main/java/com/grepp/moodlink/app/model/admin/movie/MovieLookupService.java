@@ -10,6 +10,7 @@ import com.grepp.moodlink.app.model.data.movie.entity.Genre;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
 import com.grepp.moodlink.infra.response.ResponseCode;
 import feign.template.UriUtils;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -46,18 +47,18 @@ public class MovieLookupService {
         headers.set("Accept", "application/json");
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        // param 설정
-        String encodedTitle = UriUtils.encode(title, StandardCharsets.UTF_8);
-
-        String baseUrl = "https://api.themoviedb.org/3/search/movie";
-        String requestUrl = UriComponentsBuilder.fromHttpUrl(baseUrl)
-            .queryParam("query",encodedTitle)
+        // URI 빌드 + 인코딩
+        URI uri = UriComponentsBuilder
+            .fromHttpUrl("https://api.themoviedb.org/3/search/movie")
+            .queryParam("query",title)
             .queryParam("language","ko")
             .queryParam("region","KR")
-            .build(false).toUriString();
+            .encode()                    // <-- 여기서 UTF-8 percent-encoding 수행
+            .build()
+            .toUri();
 
         ResponseEntity<String> response = restTemplate.exchange(
-            requestUrl,
+            uri,
             HttpMethod.GET,
             entity,
             String.class

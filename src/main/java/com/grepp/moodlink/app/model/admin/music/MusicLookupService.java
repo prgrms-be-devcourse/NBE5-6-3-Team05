@@ -7,6 +7,7 @@ import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
 import com.grepp.moodlink.infra.response.ResponseCode;
 import feign.template.UriUtils;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -51,13 +52,16 @@ public class MusicLookupService {
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        String baseUrl = "https://api.genius.com/search";
-        String requestUrl = UriComponentsBuilder.fromHttpUrl(baseUrl)
-            .queryParam("q",title)
-            .toUriString();
+        // URI 빌드 + 인코딩
+        URI uri = UriComponentsBuilder
+            .fromHttpUrl("https://api.genius.com/search")
+            .queryParam("q", title)      // title에 한글/공백이 포함되어 있어도 OK
+            .encode()                    // <-- 여기서 UTF-8 percent-encoding 수행
+            .build()
+            .toUri();
 
         ResponseEntity<String> response = restTemplate.exchange(
-            requestUrl,
+            uri,
             HttpMethod.GET,
             entity,
             String.class
@@ -65,14 +69,15 @@ public class MusicLookupService {
 
         // 1) 루트 노드 파싱
         JsonNode root = objectMapper.readTree(response.getBody());
-// 2) hits 배열 노드
+        log.info(root.toString());
+        // 2) hits 배열 노드
         JsonNode hits = root.path("response").path("hits");
-// 3) hits 가 배열이고, 사이즈가 1 이상인지 체크
+        // 3) hits 가 배열이고, 사이즈가 1 이상인지 체크 -> 검색 결과가 있는지 체크
         if (!hits.isArray() || hits.isEmpty()) {
             throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR);
         }
 
-// 4) 첫 번째 요소의 result.id 추출
+        // 4) 첫 번째 요소의 result.id 추출
         JsonNode idNode = hits.get(0).path("result").path("id");
         if (idNode.isMissingNode() || !idNode.isInt()) {
             throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR);

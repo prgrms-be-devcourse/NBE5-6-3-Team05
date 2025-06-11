@@ -13,6 +13,7 @@ import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
 import com.grepp.moodlink.infra.response.ResponseCode;
 import feign.template.UriUtils;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,17 +47,19 @@ public class BookLookupService {
         headers.set("X-Naver-Client-Secret", clientSecret);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        // param 설정
-        String encodedTitle = UriUtils.encode(title, StandardCharsets.UTF_8);
-
-        String baseUrl = "https://openapi.naver.com/v1/search/book.json";
-        String requestUrl = UriComponentsBuilder.fromHttpUrl(baseUrl)
-            .queryParam("query",title)
+        // URI 빌드 + 인코딩
+        URI uri = UriComponentsBuilder
+            .fromHttpUrl("https://openapi.naver.com/v1/search/book.json")
+            .queryParam("query", title)      // title에 한글/공백이 포함되어 있어도 OK
             .queryParam("sort","sim")
-            .build(false).toUriString();
+            .encode()                    // <-- 여기서 UTF-8 percent-encoding 수행
+            .build()
+            .toUri();
+
+        log.info("Request URI: {}", uri);
 
         ResponseEntity<String> response = restTemplate.exchange(
-            requestUrl,
+            uri,
             HttpMethod.GET,
             entity,
             String.class
