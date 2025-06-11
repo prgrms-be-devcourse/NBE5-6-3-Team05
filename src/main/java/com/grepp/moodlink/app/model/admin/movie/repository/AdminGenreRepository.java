@@ -1,4 +1,4 @@
-package com.grepp.moodlink.app.model.admin.movie;
+package com.grepp.moodlink.app.model.admin.movie.repository;
 
 import com.grepp.moodlink.app.model.data.movie.entity.Genre;
 import java.util.List;
@@ -13,4 +13,6 @@ public interface AdminGenreRepository extends JpaRepository<Genre, Integer> {
     List<Genre> findAllByActivated(Boolean activated);
 
     Integer id(Integer id);
+
+    Genre findByid(Integer id);
 }
