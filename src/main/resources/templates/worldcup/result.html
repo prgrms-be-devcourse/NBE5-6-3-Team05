@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>월드컵</title>
+
+  <style>
+    .back-button {
+      display: inline-block;
+      padding: 12px 24px;
+      font-weight: bold;
+      background-color: #4CAF50;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+<div layout:fragment="content">
+  <h2>월드컵 결과</h2>
+
+  <hr>
+  <div id="winner-percentage"></div>
+  <hr>
+  <div id="top5-ranking"></div>
+  <hr>
+
+  <div id="meta"
+       th:attr="data-worldcup-count=${worldcupCount}, data-winner-count=${winnerCount}">
+  </div>
+
+  <div style="margin-top: 30px; text-align: center;">
+    <a href="/worldcup" class="back-button">다른 월드컵 하러 가기</a>
+  </div>
+
+
+  <script>
+    // get 메서드로 얻음(play 수, 해당 play들 중 같은 winner의 수)
+    const meta = document.getElementById('meta');
+    // total 수
+    const totalCountModel = Number(meta.dataset.worldcupCount);
+    // winner 수
+    const winCountModel = Number(meta.dataset.winnerCount);
+
+    // 1. 우승자 선택 비율
+    const percentage = ((winCountModel / totalCountModel) * 100).toFixed(1);
+    console.log(percentage);
+
+    const winnerDiv = document.getElementById('winner-percentage');
+    winnerDiv.innerHTML = `
+    <h3>나와 같은 선택한 사람의 비율</h3>
+      <div>비율: ${percentage}</div>
+      <div>같은 컨텐츠가 우승한 횟수: ${winCountModel}</div>
+      <div>해당 월드컵 플레이 횟수: ${totalCountModel}</div>
+
+  `;
+
+    // 2. 인기 순위 Top 5 (승률 기준)
+    // localStorage에서 꺼내오기
+    const sorted= JSON.parse(localStorage.getItem('worldcupItems') || '[]')
+    .filter(item => item.totalCount > 0)
+    .map(item => ({
+      id: item.contentId,
+      ratio: item.winCount / item.totalCount
+    }))
+    .sort((a, b) => b.ratio - a.ratio)
+    .slice(0, 5);
+
+    const rankingDiv = document.getElementById('top5-ranking');
+    rankingDiv.innerHTML = `
+    <h3>인기 콘텐츠 TOP 5 (대진 승률 순)</h3>
+    <ol>
+      ${sorted.map(item => `<li>${item.id} - 승률 ${(item.ratio * 100).toFixed(1)}%</li>`).join('')}
+    </ol>
+  `;
+
+  </script>
+
+
+</div>
+</body>
+</html>
