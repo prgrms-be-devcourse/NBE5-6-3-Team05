@@ -4,6 +4,21 @@ main {
   color: white;
 }
 
+.add-btn {
+  background: linear-gradient(to right, #A64DFF, #6A00FF);
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
 /* 돌아가기 버튼 */
 .back-btn, .delete-btn {
   margin-left: 2rem;

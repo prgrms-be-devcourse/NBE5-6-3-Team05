@@ -1,6 +1,5 @@
-package com.grepp.moodlink.app.model.admin.movie;
+package com.grepp.moodlink.app.model.admin.movie.repository;
 
-import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import java.util.Optional;
 import org.springframework.data.domain.Page;

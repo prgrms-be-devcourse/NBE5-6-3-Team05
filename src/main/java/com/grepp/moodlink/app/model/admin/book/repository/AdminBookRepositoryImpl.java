@@ -1,49 +1,47 @@
-package com.grepp.moodlink.app.model.admin.music;
+package com.grepp.moodlink.app.model.admin.book.repository;
 
-import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
-import com.grepp.moodlink.app.model.data.music.entity.Music;
-import com.grepp.moodlink.app.model.data.music.entity.QMusic;
+import com.grepp.moodlink.app.model.data.book.entity.Book;
+import com.grepp.moodlink.app.model.data.book.entity.QBook;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-@RequiredArgsConstructor
+@Slf4j
 @Repository
-public class AdminMusicRepositoryImpl implements AdminMusicRepositoryCustom {
+@RequiredArgsConstructor
+public class AdminBookRepositoryImpl implements AdminBookRepositoryCustom {
 
     @PersistenceContext
     private EntityManager em;
 
-
     private final JPAQueryFactory queryFactory;
-    private final QMusic music = QMusic.music;
+    private final QBook book = QBook.book;
 
     @Override
-    public Page<Music> findPaged(Pageable pageable) {
+    public Page<Book> findPaged(Pageable pageable) {
 
-        List<Music> content = queryFactory
-            .select(music)
-            .from(music)
-            .where(music.activated)
-            .orderBy(music.modifiedAt.desc())
+        List<Book> content = queryFactory
+            .select(book)
+            .from(book)
+            .where(book.activated)
+            .orderBy(book.modifiedAt.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
-            .select(music.count())
-            .from(music)
-            .where(music.activated);
+            .select(book.count())
+            .from(book)
+            .where(book.activated);
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
-
 }
