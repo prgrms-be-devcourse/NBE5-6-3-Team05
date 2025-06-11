@@ -5,12 +5,12 @@ import dev.langchain4j.model.embedding.EmbeddingModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +20,8 @@ public class KeywordService {
     private final EmbeddingModel embeddingModel;
 
     public String findReason(String keywords) {
-        KeywordSelection keywordSelection = keywordRepository.findByKeywords(keywords);
-        return keywordSelection.getReason();
+        Optional<KeywordSelection> keywordSelection = keywordRepository.findByKeywords(keywords);
+        return keywordSelection.get().getReason();
     }
 
     public void importKeywordsFromFile() throws Exception {
@@ -42,8 +42,15 @@ public class KeywordService {
         }
     }
 
+    public void generateKeywordSelection(String keywords) {
+        KeywordSelection keywordSelection = new KeywordSelection();
+        keywordSelection.setKeywords(keywords);
+        keywordSelection.setEmbedding(generateEmbeddingKeyword(keywords));
+        keywordRepository.save(keywordSelection);
+    }
+
     private byte[] generateEmbeddingKeyword(String keywords) {
-        KeywordSelection keywordSelection = keywordRepository.findByKeywords(keywords);
+        Optional<KeywordSelection> keywordSelection = keywordRepository.findByKeywords(keywords);
         float[] floatEmbedding = embeddingModel.embed(keywords).content().vector();
         return toByteArray(floatEmbedding);
     }
@@ -55,4 +62,10 @@ public class KeywordService {
         }
         return buffer.array();
     }
+
+    public boolean exist(String keywords) {
+        Optional<KeywordSelection> keywordSelection = keywordRepository.findByKeywords(keywords);
+        return keywordSelection.isPresent();
+    }
+
 }

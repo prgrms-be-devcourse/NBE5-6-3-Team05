@@ -64,7 +64,6 @@ public class MovieService {
         }
     }
 
-    @Transactional
     public List<String> parseRecommend(String movieResult) {
         List<String> result = new ArrayList<>();
         if (movieResult == null || movieResult.isBlank()) {

@@ -23,7 +23,6 @@ public class RecommendationProcessor implements ItemProcessor<KeywordSelection, 
     private final BookService bookService;
     private final MusicService musicService;
     private final RecommendationRepository recommendationRepository;
-    private final KeywordRepository keywordRepository;
 
     private static final RateLimiter ratelimiter = RateLimiter.create(3.0 / 60.0);
 

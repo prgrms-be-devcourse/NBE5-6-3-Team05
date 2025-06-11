@@ -6,8 +6,6 @@ import com.grepp.moodlink.app.model.data.movie.MovieRepository;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import com.grepp.moodlink.app.model.data.music.MusicRepository;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
-import com.grepp.moodlink.app.model.keyword.KeywordRepository;
-import com.grepp.moodlink.app.model.keyword.entity.KeywordSelection;
 import com.grepp.moodlink.infra.error.LLMServiceUnavailableException;
 import com.grepp.moodlink.infra.response.ResponseCode;
 import dev.langchain4j.model.chat.ChatLanguageModel;

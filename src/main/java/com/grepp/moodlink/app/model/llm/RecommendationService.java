@@ -36,4 +36,8 @@ public class RecommendationService {
                 .map(Recommendation::getContentId)
                 .toList();
     }
+
+    public boolean exists(String keywords) {
+        return recommendationRepository.existsByKeywords(keywords);
+    }
 }

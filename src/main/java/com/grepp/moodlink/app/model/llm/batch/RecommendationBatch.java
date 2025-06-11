@@ -24,7 +24,7 @@ public class RecommendationBatch {
                 .name("keywordSelectionItemReader")
                 .entityManagerFactory(emf)
                 .queryString("SELECT k FROM KeywordSelection k")
-                .pageSize(10)
+                .pageSize(5)
                 .build();
     }
 
@@ -44,7 +44,7 @@ public class RecommendationBatch {
                                    RecommendationProcessor recommendationProcessor,
                                    ItemWriter<RecommendationDto> recommendationWriter) {
         return new StepBuilder("recommendationStep", jobRepository)
-                .<KeywordSelection, RecommendationDto>chunk(10, transactionManager) // 10개씩 모아서
+                .<KeywordSelection, RecommendationDto>chunk(5, transactionManager) // 10개씩 모아서
                 .reader(keywordItemReader) // 키워드를 읽고
                 .processor(recommendationProcessor) // llmservice를 호출
                 .writer(recommendationWriter)
