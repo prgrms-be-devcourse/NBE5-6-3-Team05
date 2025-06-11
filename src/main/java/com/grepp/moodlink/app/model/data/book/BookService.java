@@ -2,10 +2,10 @@ package com.grepp.moodlink.app.model.data.book;
 
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
-import com.grepp.moodlink.infra.error.exceptions.CommonException;
-import com.grepp.moodlink.infra.response.ResponseCode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -84,5 +84,20 @@ public class BookService {
         Book book = bookRepository.findByIsbn(isbn);
         Long currentCount = book.getLikeCount();
         book.setLikeCount(currentCount - 1);
+    }
+
+    public List<Map<String, Object>> getBookList() {
+        // Dto 대신 임의의 Map<>을 통해 전달("id" : 도서 컨텐츠의 id, "title": 도서 컨텐츠의 제목)
+        return bookRepository.findAll().stream()
+            .map(m -> {
+
+                Map<String, Object> map = new HashMap<>();
+                map.put("id", m.getIsbn());
+                map.put("title", m.getTitle());
+
+                // 함수형 내부에서의 return(메서드의 반환이 아님.)
+                return map;
+            })
+            .collect(Collectors.toList());
     }
 }
