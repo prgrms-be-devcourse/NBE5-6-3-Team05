@@ -1,6 +1,7 @@
 package com.grepp.moodlink.app.model.admin.music;
 
-import com.grepp.moodlink.app.model.data.movie.entity.Genre;
+import com.grepp.moodlink.app.model.admin.music.repository.AdminMusicGenreRepository;
+import com.grepp.moodlink.app.model.admin.music.repository.AdminMusicRepository;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.dto.MusicGenreDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
@@ -49,11 +50,14 @@ public class AdminMusicService {
         }
 
         try {
-
-            uploadImage(thumbnail, dto);
-
+            // api를 통해 가져왔을 때 thumbnail의 path 값을 가져오기에 따로 처리1
+            String ThumbnailImg = dto.getThumbnail();
+            if(!thumbnail.getFirst().isEmpty()){
+                uploadImage(thumbnail, dto);
+                ThumbnailImg = dto.getThumbnail();
+            }
             Music music = Music.builder()
-                .thumbnail(dto.getThumbnail())
+                .thumbnail(ThumbnailImg)
                 .title(dto.getTitle())
                 .genre(musicGenreRepository.findByName((dto.getGenre())))
                 .singer(dto.getSinger())
