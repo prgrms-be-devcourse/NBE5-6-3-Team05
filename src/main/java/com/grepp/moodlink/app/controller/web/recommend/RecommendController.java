@@ -7,12 +7,9 @@ import com.grepp.moodlink.app.model.data.movie.MovieService;
 import com.grepp.moodlink.app.model.data.movie.entity.Genre;
 import com.grepp.moodlink.app.model.data.music.MusicService;
 import com.grepp.moodlink.app.model.keyword.KeywordService;
-import com.grepp.moodlink.app.model.llm.EmbeddingService;
 import com.grepp.moodlink.app.model.llm.LlmService;
 import com.grepp.moodlink.app.model.llm.RecommendationService;
-import com.grepp.moodlink.app.model.member.MemberRepository;
 import com.grepp.moodlink.app.model.member.MemberService;
-import com.grepp.moodlink.app.model.result.CuratingDetailRepository;
 import com.grepp.moodlink.app.model.result.dto.CuratingDetailIdDto;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -37,6 +34,10 @@ public class RecommendController {
     private final KeywordService keywordService;
     private final GenreRepository genreRepository;
     private final MemberService memberService;
+    private final MovieService movieService;
+    private final BookService bookService;
+    private final MusicService musicService;
+    private final LlmService llmService;
 
     @GetMapping
     public String selectKeyword() {
@@ -59,27 +60,49 @@ public class RecommendController {
 
     @PostMapping("result")
     public String selectKeyword(
-        @RequestParam("genre") String genre,
         @RequestParam("keywords") String keywords,
         HttpSession session) {
-        genre = genre.substring(1);
-
-        String reason = keywordService.findReason(keywords);
+        System.out.println(keywords);
+        String reason;
+        // 키워드가 존재하는지
+        if(keywordService.exist(keywords)) {
+            // 키워드가 존재한다면 추천 받은적 있는지
+             if(keywordService.findReason(keywords) == null) {
+                 reason = llmService.generateReason(keywords);
+             }else{
+                 reason = keywordService.findReason(keywords);
+             }
+        }else{ // 없다면 새로 생성
+            processKeyword(keywords);
+            reason = llmService.generateReason(keywords);
+        }
         session.setAttribute("reason", reason);
-        System.out.println(reason);
 
-        List<CuratingDetailIdDto> items = curatingContents(genre, keywords);
+        List<CuratingDetailIdDto> items = curatingContents(keywords);
         System.out.println(items);
         session.setAttribute("items", items);
 
         return "redirect:/result";
     }
 
-    private List<CuratingDetailIdDto> curatingContents(String genre, String keywords) {
+    private void processKeyword(String keywords) {
+        keywordService.generateKeywordSelection(keywords);
+    }
+
+    private List<CuratingDetailIdDto> curatingContents(String keywords) {
         List<CuratingDetailIdDto> details = new ArrayList<>();
-        List<String> movieIds = getMovieRecommendations(genre, keywords);
-        List<String> bookIds = getBookRecommendations(keywords);
-        List<String> musicIds = getMusicRecommendations(keywords);
+        List<String> movieIds;
+        List<String> bookIds;
+        List<String> musicIds;
+        if(recommendationService.exists(keywords)) { // 추천 받은 적 있는 키워드의 경우 가져오기
+            movieIds = getMovieRecommendations(keywords);
+            bookIds = getBookRecommendations(keywords);
+            musicIds = getMusicRecommendations(keywords);
+        }else{ // 추천 받은 적 없는 키워드의 경우 새로 생성
+            movieIds = generateMovieRecommendations(keywords);
+            bookIds = generateBookRecommendations(keywords);
+            musicIds = generateMusicRecommendations(keywords);
+        }
         for (int i = 0; i < musicIds.size(); i++) {
             CuratingDetailIdDto detail = new CuratingDetailIdDto();
             detail.setMovieId(movieIds.get(i));
@@ -90,7 +113,22 @@ public class RecommendController {
         return details;
     }
 
-    private List<String> getMovieRecommendations(String genre, String keywords) {
+    private List<String> generateMovieRecommendations(String keywords) {
+        String movieResult = llmService.recommendMovie(keywords);
+        return movieService.parseRecommend(movieResult);
+    }
+
+    private List<String> generateBookRecommendations(String keywords) {
+        String bookResult = llmService.recommendBook(keywords);
+        return bookService.parseRecommend(bookResult);
+    }
+
+    private List<String> generateMusicRecommendations(String keywords) {
+        String musicResult = llmService.recommendMusic(keywords);
+        return musicService.parseRecommend(musicResult);
+    }
+
+    private List<String> getMovieRecommendations(String keywords) {
         return recommendationService.getMovies(keywords);
     }
 

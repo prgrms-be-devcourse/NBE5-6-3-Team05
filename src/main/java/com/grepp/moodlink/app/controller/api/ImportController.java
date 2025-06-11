@@ -10,6 +10,8 @@ import com.grepp.moodlink.app.model.data.music.MusicService;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import java.io.IOException;
 import java.util.List;
+
+import com.grepp.moodlink.app.model.keyword.KeywordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,8 @@ public class ImportController {
     private ObjectMapper objectMapper;
     @Autowired
     private BookService bookService;
+    @Autowired
+    private KeywordService keywordService;
 
     @PostMapping("/movies")
     public ResponseEntity<String> importMovies(@RequestPart("file") MultipartFile file)
@@ -67,5 +71,13 @@ public class ImportController {
         );
         bookService.saveMusic(dtos);
         return ResponseEntity.ok("Book saved!");
+    }
+
+    // 키워드 등록
+    @PostMapping("/keyword")
+    public ResponseEntity<String> importKeyword() throws Exception {
+        keywordService.importKeywordsFromFile();
+
+        return ResponseEntity.ok("Keyword Upload");
     }
 }
