@@ -105,4 +105,27 @@ public class MovieService {
         Long currentCount = movie.getLikeCount();
         movie.setLikeCount(currentCount - 1);
     }
+
+
+    // dto에서의 id의 type을 변경해야 함.
+    public List<Map<String, Object>> getMovieList() {
+        // Dto 대신 임의의 Map<>을 통해 전달("id" : 영화 컨텐츠의 id, "title": 영화 컨텐츠의 제목)
+        return movieRepository.findAll().stream()
+            .map(m -> {
+
+                // MovieDto의 id는 int형이기에 String인 entity의 id를 받아서 전달
+                //{
+                //  "id":movie의 id,
+                //  "title":movie의 title
+                // }
+                Map<String, Object> map = new HashMap<>();
+                map.put("id", m.getId());
+                map.put("title", m.getTitle());
+
+                // 함수형 내부에서의 return(메서드의 반환이 아님.)
+                return map;
+            })
+            .collect(Collectors.toList());
+
+    }
 }

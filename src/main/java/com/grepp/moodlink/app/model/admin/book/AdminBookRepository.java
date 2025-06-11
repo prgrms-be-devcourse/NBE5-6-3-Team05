@@ -9,4 +9,6 @@ public interface AdminBookRepository extends JpaRepository<Book, String>,
     boolean existsByTitleAndAuthor(String title, String author);
 
     Book findByIsbn(String isbn);
+
+    Long countBooksByGenre_Id(Long genreId);
 }

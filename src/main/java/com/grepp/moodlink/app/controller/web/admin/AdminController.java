@@ -9,18 +9,20 @@ import com.grepp.moodlink.app.controller.web.admin.payload.MusicModifyRequest;
 import com.grepp.moodlink.app.model.admin.book.AdminBookService;
 import com.grepp.moodlink.app.model.admin.movie.AdminMovieService;
 import com.grepp.moodlink.app.model.admin.music.AdminMusicService;
-import com.grepp.moodlink.app.model.data.book.code.BookGenre;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
+import com.grepp.moodlink.app.model.data.book.dto.BookGenreDto;
+import com.grepp.moodlink.app.model.data.movie.dto.GenreDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.movie.entity.Genre;
-import com.grepp.moodlink.app.model.data.music.code.MusicGenre;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
+import com.grepp.moodlink.app.model.data.music.dto.MusicGenreDto;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
 import com.grepp.moodlink.infra.payload.PageParam;
 import com.grepp.moodlink.infra.response.PageResponse;
 import com.grepp.moodlink.infra.response.ResponseCode;
 import jakarta.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +48,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
-    private final AdminBookService adminBookService;
+    private final AdminBookService bookService;
     private final AdminMovieService movieService;
     private final AdminMusicService musicService;
 
@@ -101,7 +103,7 @@ public class AdminController {
         }
 
         Pageable pageable = PageRequest.of(param.getPage() - 1, param.getSize());
-        Page<BookDto> page = adminBookService.findPaged(pageable);
+        Page<BookDto> page = bookService.findPaged(pageable);
 
         if (param.getPage() != 1 && page.getContent().isEmpty()) {
             throw new CommonException(ResponseCode.BAD_REQUEST);
@@ -155,7 +157,7 @@ public class AdminController {
     @GetMapping("music/add")
     public String addMusic(@ModelAttribute("musicAddRequest") MusicAddRequest musicAddRequest,
         Model model) {
-        model.addAttribute("genres", MusicGenre.values());
+        model.addAttribute("genres", musicService.findAllGenreName());
         return "admin/contents/music-add";
     }
 
@@ -191,7 +193,7 @@ public class AdminController {
     @GetMapping("books/add")
     public String addBooks(@ModelAttribute("bookAddRequest") BookAddRequest bookAddRequest,
         Model model) {
-        model.addAttribute("genres", BookGenre.values());
+        model.addAttribute("genres", bookService.findAllGenreName());
         return "admin/contents/books-add";
     }
 
@@ -211,7 +213,7 @@ public class AdminController {
         }
 
         try {
-            adminBookService.addBook(bookAddRequest.getImage(), bookAddRequest.toDto());
+            bookService.addBook(bookAddRequest.getImage(), bookAddRequest.toDto());
         } catch (CommonException e) {
             log.info(e.code().message());
             Map<String, String> fieldErrors = new HashMap<>();
@@ -240,7 +242,6 @@ public class AdminController {
             selectedGenre = selectedGenre.concat(genre.getId() + ",");
         }
         selectedGenre = selectedGenre.substring(0, selectedGenre.length() - 1);
-        log.info(selectedGenre);
         model.addAttribute("selectedGenre", selectedGenre);
 
         // 미리 값을 저장해둔 request 넘기기
@@ -290,7 +291,7 @@ public class AdminController {
 
         try{
         // title author 기록 가져오기
-        BookDto book = adminBookService.findByIsbn(isbn);
+        BookDto book = bookService.findByIsbn(isbn);
 
         model.addAttribute("book", book);
 
@@ -303,7 +304,7 @@ public class AdminController {
         // 미리 값을 저장해둔 request 넘기기
         model.addAttribute("bookModifyRequest", bookModifyRequest);
         // 장르 데이터 넘기기
-        model.addAttribute("genres", BookGenre.values());
+        model.addAttribute("genres", bookService.findAllGenreName());
         }catch(CommonException e){
             redirectAttributes.addFlashAttribute("error", "더이상 존재하지 않는 데이터입니다.");
             return "redirect:/admin/books";
@@ -334,7 +335,7 @@ public class AdminController {
         log.info("{}", bookModifyRequest.getImage().isEmpty());
         log.info("{}", bookModifyRequest);
 
-        adminBookService.updateBook(bookModifyRequest.getImage(), dto);
+        bookService.updateBook(bookModifyRequest.getImage(), dto);
 
         return "redirect:/admin/books";
     }
@@ -360,7 +361,7 @@ public class AdminController {
         // 미리 값을 저장해둔 request 넘기기
         model.addAttribute("musicModifyRequest", musicModifyRequest);
         // 장르 데이터 넘기기
-        model.addAttribute("genres", MusicGenre.values());
+        model.addAttribute("genres", musicService.findAllGenreName());
         }catch(CommonException e){
             redirectAttributes.addFlashAttribute("error", "더이상 존재하지 않는 데이터입니다.");
             return "redirect:/admin/music";
@@ -394,4 +395,33 @@ public class AdminController {
 
         return "redirect:/admin/music";
     }
+
+    // 장르 화면
+    @GetMapping("genres")
+    public String genres(Model model){
+
+        // 미리 모든 정보 전달
+        List<GenreDto> movieGenres = movieService.findAllGenre();
+        List<MusicGenreDto> musicGenres = musicService.findAllGenre();
+        List<BookGenreDto> bookGenres = bookService.findAllGenre();
+        model.addAttribute("movieGenres", movieGenres);
+        model.addAttribute("musicGenres", musicGenres);
+        model.addAttribute("bookGenres", bookGenres);
+
+        // 해당 장르를 사용하는 컨텐츠가 얼마나 있는지 count하여 맵에 장르 이름과 함께 저장
+        Map<String, Long> genreCount = new HashMap<>();
+        for(GenreDto genre : movieGenres){
+            genreCount.put(genre.getName(), movieService.countMoviesByGenre(genre.getId()));
+        }
+        for(MusicGenreDto genre : musicGenres){
+            genreCount.put(genre.getName(), musicService.countMusicByGenre(genre.getId()));
+        }
+        for(BookGenreDto genre: bookGenres){
+            genreCount.put(genre.getName(), bookService.countBooksByGenre(genre.getId()));
+        }
+
+        model.addAttribute("genreCount", genreCount);
+        return "admin/contents/genres";
+    }
+
 }

@@ -1,8 +1,9 @@
 package com.grepp.moodlink.app.model.admin.book;
 
-import com.grepp.moodlink.app.model.data.book.BookGenreRepository;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
+import com.grepp.moodlink.app.model.data.book.dto.BookGenreDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
+import com.grepp.moodlink.app.model.data.book.entity.BookGenre;
 import com.grepp.moodlink.app.model.llm.EmbeddingService;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
 import com.grepp.moodlink.infra.imgbb.ImgUploadTemplate;
@@ -10,6 +11,7 @@ import com.grepp.moodlink.infra.response.ResponseCode;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -29,7 +31,8 @@ public class AdminBookService {
     private final AdminBookRepository adminBookRepository;
     private final EmbeddingService embeddingService;
     private final ImgUploadTemplate imgUploadTemplate;
-    private final BookGenreRepository bookGenreRepository;
+    private final AdminBookGenreRepository bookGenreRepository;
+    private final ModelMapper mapper;
 
     // 관리자 페이지에서 도서 추가
     @Transactional
@@ -93,23 +96,28 @@ public class AdminBookService {
         return BookDto.toDto(book);
     }
 
+    @Transactional
     public void updateBook(List<MultipartFile> thumbnail, BookDto dto) {
 
         try {
-            uploadImage(thumbnail, dto);
-
             Book data = adminBookRepository.findByIsbn(dto.getIsbn());
+
+            String ThumbnailImg = data.getImage();
+            if(!thumbnail.getFirst().isEmpty()){
+                uploadImage(thumbnail, dto);
+                ThumbnailImg = dto.getImage();
+            }
 
             Book book = Book.builder()
                 .isbn(dto.getIsbn())
                 .title(data.getTitle())
-                .image(dto.getImage())
+                .image(ThumbnailImg)
                 .author(data.getAuthor())
                 .publisher(dto.getPublisher())
                 .publishedDate(dto.getPublishedDate())
                 .description(dto.getDescription())
                 .genre(bookGenreRepository.findByName(dto.getGenre()))
-                .likeCount(adminBookRepository.findById(dto.getIsbn()).get().getLikeCount())
+                .likeCount(data.getLikeCount())
                 .build();
 
             // 업데이트
@@ -124,5 +132,47 @@ public class AdminBookService {
     @Transactional
     public void deleteBook(String isbn) {
         adminBookRepository.findByIsbn(isbn).unActivated();
+    }
+
+    public List<String> findAllGenreName() {
+        return bookGenreRepository.findAll().stream().map(BookGenre::getName).toList();
+    }
+
+    public List<BookGenreDto> findAllGenre() {
+        return bookGenreRepository.findAllByActivated(true).stream().map(e->mapper.map(e, BookGenreDto.class)).collect(
+            Collectors.toList());
+    }
+
+    // 해당 장르를 사용하는 책 수 카운트
+    public Long countBooksByGenre(Long id) {
+        return adminBookRepository.countBooksByGenre_Id(id);
+    }
+    
+    // 장르 추가
+    @Transactional
+    public void addGenre(BookGenreDto bookGenreDto) {
+        if(bookGenreRepository.findByName(bookGenreDto.getName())!=null){
+            throw new CommonException(ResponseCode.DUPLICATED_DATA);
+        }
+        BookGenre bookGenre = new BookGenre(null, bookGenreDto.getName());
+        bookGenreRepository.save(bookGenre);
+    }
+
+    // 장르 삭제
+    @Transactional
+    public Boolean deleteGenre(Long id) {
+        // 해당 장르인 책이 하나라도 있다면 삭제 불가능
+        if(countBooksByGenre(id)!=0)
+            return false;
+        bookGenreRepository.findById(id).ifPresent(BookGenre::unActivated);
+        return true;
+    }
+    
+    // 장르 수정 
+    @Transactional
+    public void modifyGenre(Long longId, BookGenreDto bookGenreDto) {
+        BookGenre genre = bookGenreRepository.findById(longId).get();
+        genre.setName(bookGenreDto.getName());
+        bookGenreRepository.save(genre);
     }
 }

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>월드컵</title>
+  <style>
+    #worldcup-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .worldcup-card {
+      width: 200px;
+      text-align: center;
+    }
+
+    .worldcup-card img {
+      width: 100%;
+      border: 1px solid #ccc;
+    }
+
+    .worldcup-title {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .create-button-wrapper {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .create-button-wrapper button {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+<h5>월드컵 페이지입니다.</h5>
+<div layout:fragment="content">
+
+
+  <div id="worldcup-list"></div>
+
+  <div class="create-button-wrapper">
+    <a href="/worldcup/create">
+      <button>월드컵 만들기</button>
+    </a>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', async () => {
+      const res = await fetch('/api/worldcup/list');
+      const worldcups = await res.json();
+
+      const container = document.getElementById('worldcup-list');
+
+      for (const wc of worldcups) {
+        const item = document.createElement('div');
+        item.className = 'worldcup-card';
+
+        item.innerHTML = `
+  <a href="/worldcup/play?id=${wc.id}">
+    <img src="/images/sample.jpg" alt="샘플 이미지" />
+    <p class="worldcup-title">${wc.title}</p>
+  </a>
+`;
+
+        container.appendChild(item);
+      }
+    });
+  </script>
+</div>
+</body>
+</html>

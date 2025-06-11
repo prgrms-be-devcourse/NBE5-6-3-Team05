@@ -30,13 +30,8 @@ public class HomeController {
         return "/home/mainPage";
     }
 
-    @GetMapping("/worldcup")
-    public String worldcupPage(Model model) {
-        return "/home/worldcup";
-    }
-
     @GetMapping("/search")
-    public String searchContent(Model model, @RequestParam("contentName") String contentName) {
+    public String searchContent(Model model, @RequestParam String contentName) {
         List<MusicDto> music = homeService.searchMusicContent(contentName);
         List<MovieDto> movie = homeService.searchMovieContent(contentName);
         List<BookDto> book = homeService.searchBookContent(contentName);

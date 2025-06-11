@@ -14,5 +14,5 @@ public interface AdminMovieRepositoryCustom {
 
     Optional<Movie> findByIdWithGenre(String id);
 
-    void updateBook(MovieInfoDto dto);
+    Long countMoviesByGenre(Integer id);
 }

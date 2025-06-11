@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -22,6 +23,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Movie extends BaseEntity {
 
     @Id

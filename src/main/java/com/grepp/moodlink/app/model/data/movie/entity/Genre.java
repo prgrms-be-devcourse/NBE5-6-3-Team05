@@ -20,4 +20,15 @@ public class Genre {
 
     @Column(nullable = false)
     private String name;
+
+    private Boolean activated = true;
+
+    public Genre(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public void unActivated() {
+        this.activated = false;
+    }
 }

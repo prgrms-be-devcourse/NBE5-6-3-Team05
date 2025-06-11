@@ -54,6 +54,9 @@ public class MusicRepositoryImpl implements MusicRepositoryCustom {
                 music.releaseDate,
                 music.lyrics))
             .from(music)
-            .where(music.title.lower().like("%" + contentName.toLowerCase() + "%")).fetch();
+            .where(
+                music.title.lower().like("%" + contentName.toLowerCase() + "%")
+                    .or(music.singer.lower().like("%" + contentName.toLowerCase() + "%"))
+            ).fetch();
     }
 }

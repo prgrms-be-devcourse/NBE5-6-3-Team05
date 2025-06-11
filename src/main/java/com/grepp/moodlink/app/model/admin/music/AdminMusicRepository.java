@@ -13,4 +13,6 @@ public interface AdminMusicRepository extends JpaRepository<Music, String>,
     AdminMusicRepositoryCustom {
 
     boolean existsByTitleAndSinger(String title, String singer);
+
+    Long countMusicByGenre_Id(Long genreId);
 }
