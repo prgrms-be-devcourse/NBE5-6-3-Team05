@@ -6,8 +6,6 @@ import com.grepp.moodlink.app.model.data.movie.MovieRepository;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import com.grepp.moodlink.app.model.data.music.MusicRepository;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
-import com.grepp.moodlink.app.model.keyword.KeywordRepository;
-import com.grepp.moodlink.app.model.keyword.entity.KeywordSelection;
 import com.grepp.moodlink.infra.error.LLMServiceUnavailableException;
 import com.grepp.moodlink.infra.response.ResponseCode;
 import dev.langchain4j.model.chat.ChatLanguageModel;
@@ -32,7 +30,6 @@ public class EmbeddingService {
     private final BookRepository bookRepository;
     private final MusicRepository musicRepository;
     private final EmbeddingModel embeddingModel;
-    private final KeywordRepository keywordRepository;
     private final ChatLanguageModel chatLanguageModel;
 
     @Transactional
@@ -132,15 +129,6 @@ public class EmbeddingService {
             buffer.putFloat(f);
         }
         return buffer.array();
-    }
-
-    public void generateEmbeddingKeyword(String keywords) {
-        KeywordSelection keywordSelection = keywordRepository.findByKeywords(keywords);
-        float[] floatEmbedding = embeddingModel.embed(keywords).content().vector();
-        byte[] byteEmbedding = toByteArray(floatEmbedding);
-        keywordSelection.setEmbedding(byteEmbedding);
-        keywordSelection.setKeywords(keywords);
-        keywordRepository.save(keywordSelection);
     }
 
 }

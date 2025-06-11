@@ -9,6 +9,7 @@ class RecommendationServiceTest {
     @Autowired
     private RecommendationService recommendationService;
 
+
     @Test
     public void recommendTest(){
         System.out.println(recommendationService.getMovies("기쁨|맑음|아침|가족|즐거움"));
