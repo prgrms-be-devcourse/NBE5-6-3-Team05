@@ -1,5 +1,5 @@
 # NBE5-6-2-Team05 
-test 글입니다. - lkh
+test 글입니다. -  lkh
 
 <hr/>
 
