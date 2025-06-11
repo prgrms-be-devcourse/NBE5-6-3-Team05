@@ -42,9 +42,6 @@ public class AdminApiController {
     private final AdminMusicService musicService;
     private final JobLauncher jobLauncher;
     private final Job recommendationJob;
-    private final AdminMovieService adminMovieService;
-    private final AdminMusicService adminMusicService;
-    private final AdminBookService adminBookService;
 
     // 영화 삭제
     @DeleteMapping("movies/delete/{id}")
@@ -88,9 +85,9 @@ public class AdminApiController {
     public ResponseEntity<ApiResponse<String>> addGenre(@RequestBody GenreAddRequest genreAddRequest) {
 
         switch (genreAddRequest.getContentType()) {
-            case "MOVIE" -> adminMovieService.addGenre(genreAddRequest.toGenreDto());
-            case "MUSIC" -> adminMusicService.addGenre(genreAddRequest.toMusicGenreDto());
-            case "BOOK" -> adminBookService.addGenre(genreAddRequest.toBookGenreDto());
+            case "MOVIE" -> movieService.addGenre(genreAddRequest.toGenreDto());
+            case "MUSIC" -> musicService.addGenre(genreAddRequest.toMusicGenreDto());
+            case "BOOK" -> bookService.addGenre(genreAddRequest.toBookGenreDto());
             case null, default -> {
                 return ResponseEntity.badRequest()
                     .body(ApiResponse.error(ResponseCode.BAD_REQUEST));
@@ -107,9 +104,9 @@ public class AdminApiController {
         Long longId = Long.parseLong(id);
 
         switch (genreModifyRequest.getContentType()) {
-            case "MOVIE" -> adminMovieService.modifyGenre(longId.intValue(), genreModifyRequest.toGenreDto());
-            case "MUSIC" -> adminMusicService.modifyGenre(longId, genreModifyRequest.toMusicGenreDto());
-            case "BOOK" -> adminBookService.modifyGenre(longId, genreModifyRequest.toBookGenreDto());
+            case "MOVIE" -> movieService.modifyGenre(longId.intValue(), genreModifyRequest.toGenreDto());
+            case "MUSIC" -> musicService.modifyGenre(longId, genreModifyRequest.toMusicGenreDto());
+            case "BOOK" -> bookService.modifyGenre(longId, genreModifyRequest.toBookGenreDto());
             case null, default -> {
                 return ResponseEntity.badRequest()
                     .body(ApiResponse.error(ResponseCode.BAD_REQUEST));
@@ -130,9 +127,9 @@ public class AdminApiController {
         Long longId = Long.parseLong(id);
         Boolean isDeleted;
         switch (content) {
-        case "MOVIE" -> isDeleted = adminMovieService.deleteGenre(longId.intValue());
-        case "MUSIC" -> isDeleted = adminMusicService.deleteGenre(longId);
-        case "BOOK" -> isDeleted = adminBookService.deleteGenre(longId);
+        case "MOVIE" -> isDeleted = movieService.deleteGenre(longId.intValue());
+        case "MUSIC" -> isDeleted = musicService.deleteGenre(longId);
+        case "BOOK" -> isDeleted = bookService.deleteGenre(longId);
         case null, default -> {
             return ResponseEntity.badRequest()
                 .body(ApiResponse.error(ResponseCode.BAD_REQUEST));
