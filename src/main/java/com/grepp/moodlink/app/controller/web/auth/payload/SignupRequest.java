@@ -38,6 +38,7 @@ public class SignupRequest {
         memberDto.setUserId(userId);
         memberDto.setPassword(password);
         memberDto.setUsername(username);
+        memberDto.setEmail(email);
         memberDto.setGenre(genre);
         memberDto.setPeriods(periods);
         memberDto.setCountries(countries);

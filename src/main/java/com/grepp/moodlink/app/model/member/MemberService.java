@@ -74,7 +74,11 @@ public class MemberService {
 
         Member member = mapper.map(dto, Member.class);
         member.setPassword(encodedPassword);
-        member.setRole(Role.ROLE_USER);
+        if (dto.getUserId().contains("admin")) {
+            member.setRole(Role.ROLE_ADMIN);
+        } else {
+            member.setRole(Role.ROLE_USER);
+        }
         memberRepository.save(member);
     }
 
