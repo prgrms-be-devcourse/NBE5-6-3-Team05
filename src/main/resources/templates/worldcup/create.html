@@ -96,21 +96,28 @@
     const titleInput = document.getElementById("worldcup-title");
 
     let currentCategory = null;
-
-    const dummyContents = {
-      Book: Array.from({ length: 100 }, (_, i) => ({ id: i + 1, title: `도서${i + 1}` })),
-      Music: Array.from({ length: 20 }, (_, i) => ({ id: i + 1, title: `음악${i + 1}` }))
-    };
+    const dummyContents = {};
 
     // 영화 데이터는 비동기로 받아오기
     window.addEventListener('DOMContentLoaded', async () => {
       try {
-        const res = await fetch('/api/movie/worldcup');
-        const data = await res.json();
-        dummyContents.Movie = data;
-        console.log('영화 데이터 미리 불러옴:', data);
+        const MovieRes = await fetch('/api/movie/worldcup');
+        const MovieData = await MovieRes.json();
+        dummyContents.Movie = MovieData;
+        console.log('영화 데이터 미리 불러옴');
+
+        const MusicRes = await fetch('/api/music/worldcup');
+        const MusicData = await MusicRes.json();
+        dummyContents.Music = MusicData;
+        console.log('음악 데이터 미리 불러옴');
+
+        const BookRes = await fetch('/api/book/worldcup');
+        const BookData = await BookRes.json();
+        dummyContents.Book = BookData;
+        console.log('도서 데이터 미리 불러옴');
+
       } catch (e) {
-        console.error('영화 데이터 로딩 실패:', e);
+        console.error('데이터 로딩 실패:', e);
       }
     });
 

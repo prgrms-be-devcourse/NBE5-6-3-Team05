@@ -4,7 +4,9 @@ import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -91,5 +93,21 @@ public class MusicService {
         Music music = musicRepository.findById(id).orElseThrow();
         Long currentCount = music.getLikeCount();
         music.setLikeCount(currentCount - 1);
+    }
+
+    // dto에서의 id의 type을 변경해야 함.
+    public List<Map<String, Object>> getMusicList() {
+        // Dto 대신 임의의 Map<>을 통해 전달("id" : 음악 컨텐츠의 id, "title": 음악 컨텐츠의 제목)
+        return musicRepository.findAll().stream()
+            .map(m -> {
+
+                Map<String, Object> map = new HashMap<>();
+                map.put("id", m.getId());
+                map.put("title", m.getTitle());
+
+                // 함수형 내부에서의 return(메서드의 반환이 아님.)
+                return map;
+            })
+            .collect(Collectors.toList());
     }
 }
