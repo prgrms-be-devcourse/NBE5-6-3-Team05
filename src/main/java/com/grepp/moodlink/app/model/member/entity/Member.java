@@ -21,7 +21,7 @@ public class Member {
     private String password;
     @ManyToOne
     @JoinColumn(name = "KEYWORD_SELECTION_ID")
-    private KeywordSelection keywordSelectionId;
+    private KeywordSelection keywordSelection;
     private String username;
     private String genre;
     private String periods;

@@ -64,7 +64,6 @@ public class MusicService {
             if (title.startsWith("[") && title.endsWith("]")) {
                 title = title.substring(1, title.length() - 1).trim();
             }
-            System.out.println(title);
             result.add(title);
         }
         return result.stream()

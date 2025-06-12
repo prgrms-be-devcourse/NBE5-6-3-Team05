@@ -1,9 +1,11 @@
 package com.grepp.moodlink.app.model.llm;
 
 import com.grepp.moodlink.app.model.data.book.BookRepository;
+import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.app.model.data.movie.MovieRepository;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import com.grepp.moodlink.app.model.data.music.MusicRepository;
+import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.llm.batch.RecommendationDto;
 import com.grepp.moodlink.app.model.llm.code.ContentType;
 import com.grepp.moodlink.app.model.llm.entity.Recommendation;
@@ -11,10 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,19 +22,24 @@ import java.util.stream.Collectors;
 public class RecommendationService {
 
     private final RecommendationRepository recommendationRepository;
+    private final MovieRepository movieRepository;
+    private final BookRepository bookRepository;
+    private final MusicRepository musicRepository;
 
     public List<String> getMovies(String keywords) {
         List<String> movies = recommendationRepository.findByKeywordsAndContentType(keywords, ContentType.MOVIE.name())
                 .stream()
                 .map(Recommendation::getContentId)
                 .toList();
-        if(movies.size() < 5) return movies;
-        else {
-            // 5개 이상인 경우 4개를 무작위로 추출
-            List<String> copy = new ArrayList<>(movies);
-            Collections.shuffle(copy);
-            return copy.subList(0, 4);
-        }
+        List<Movie> movieEntities = movieRepository.findAllById(movies);
+        movieEntities.sort(Comparator.comparing(Movie::getLikeCount).reversed());
+
+        List<String> sortedIds = movieEntities.stream()
+                .map(Movie::getId)
+                .collect(Collectors.toList());
+
+        return getSortResult(sortedIds);
+
     }
 
     public List<String> getBooks(String keywords) {
@@ -43,13 +47,14 @@ public class RecommendationService {
                 .stream()
                 .map(Recommendation::getContentId)
                 .toList();
-        if(books.size() < 5) return books;
-        else {
-            // 5개 이상인 경우 4개를 무작위로 추출
-            List<String> copy = new ArrayList<>(books);
-            Collections.shuffle(copy);
-            return copy.subList(0, 4);
-        }
+        List<Book> bookEntities = bookRepository.findAllByIsbnIn(books);
+        bookEntities.sort(Comparator.comparing(Book::getLikeCount).reversed());
+
+        List<String> sortedIds = bookEntities.stream()
+                .map(Book::getIsbn)
+                .collect(Collectors.toList());
+
+        return getSortResult(sortedIds);
     }
 
     public List<String> getMusics(String keywords) {
@@ -57,20 +62,21 @@ public class RecommendationService {
                 .stream()
                 .map(Recommendation::getContentId)
                 .toList();
-        if(musics.size() < 5) return musics;
-        else {
-            // 5개 이상인 경우 4개를 무작위로 추출
-            List<String> copy = new ArrayList<>(musics);
-            Collections.shuffle(copy);
-            return copy.subList(0, 4);
-        }
+        List<Music> musicEntities = musicRepository.findAllById(musics);
+        musicEntities.sort(Comparator.comparing(Music::getLikeCount).reversed());
+
+        List<String> sortedIds = musicEntities.stream()
+                .map(Music::getId)
+                .collect(Collectors.toList());
+
+        return getSortResult(sortedIds);
     }
 
     public boolean exists(String keywords) {
         return recommendationRepository.existsByKeywords(keywords);
     }
 
-    public void saveRecommedationContent(List<String> movieids, List<String> bookIds, List<String> musicIds, String keywords, String reason) {
+    public void saveRecommendationContent(List<String> movieids, List<String> bookIds, List<String> musicIds, String keywords, String reason) {
         List<Recommendation> allEntities = new ArrayList<>();
 
         // 영화 추천 저장
@@ -95,7 +101,6 @@ public class RecommendationService {
         }
         // 음악 추천 저장
         for (String musicId : musicIds) {
-            System.out.println(musicId);
             Recommendation entity = Recommendation.builder()
                     .keywords(keywords)
                     .reason(reason)
@@ -107,4 +112,28 @@ public class RecommendationService {
 
         recommendationRepository.saveAll(allEntities);
     }
+
+    private static List<String> getSortResult(List<String> sortedIds) {
+        List<String> result = new ArrayList<>();
+        Random random = new Random();
+
+        result.add(sortedIds.getFirst());
+
+        if (sortedIds.size() > 2) {
+            int idx = 1 + random.nextInt(Math.min(2, sortedIds.size() - 1));
+            result.add(sortedIds.get(idx));
+        }
+        if (sortedIds.size() > 4) {
+            int idx = 3 + random.nextInt(Math.min(2, sortedIds.size() - 1));
+            result.add(sortedIds.get(idx));
+        }
+        if (sortedIds.size() > 5){
+            int start = 5;
+            int end = sortedIds.size();
+            int idx = start + random.nextInt(end - start);
+            result.add(sortedIds.get(idx));
+        }
+        return result;
+    }
+
 }

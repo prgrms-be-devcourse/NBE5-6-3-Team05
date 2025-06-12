@@ -76,6 +76,9 @@ public class RecommendController {
             processKeyword(keywords);
             reason = llmService.generateReason(keywords);
         }
+        String userId = getLoginUserId();
+        if (userId != null) memberService.selectKeyword(userId, keywords);
+
         session.setAttribute("reason", reason);
 
         List<CuratingDetailIdDto> items = curatingContents(keywords, reason);
@@ -116,7 +119,7 @@ public class RecommendController {
     }
 
     private void saveRecommendation(List<String> movieIds, List<String> bookIds, List<String> musicIds, String keywords, String reason) {
-        recommendationService.saveRecommedationContent(movieIds, bookIds, musicIds, keywords, reason);
+        recommendationService.saveRecommendationContent(movieIds, bookIds, musicIds, keywords, reason);
     }
 
     private List<String> generateMovieRecommendations(String keywords) {
