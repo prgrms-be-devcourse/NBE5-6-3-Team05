@@ -1,5 +1,10 @@
 package com.grepp.moodlink.app.model.llm;
 
+import com.grepp.moodlink.app.model.data.book.BookRepository;
+import com.grepp.moodlink.app.model.data.movie.MovieRepository;
+import com.grepp.moodlink.app.model.data.movie.entity.Movie;
+import com.grepp.moodlink.app.model.data.music.MusicRepository;
+import com.grepp.moodlink.app.model.llm.batch.RecommendationDto;
 import com.grepp.moodlink.app.model.llm.code.ContentType;
 import com.grepp.moodlink.app.model.llm.entity.Recommendation;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,5 +68,43 @@ public class RecommendationService {
 
     public boolean exists(String keywords) {
         return recommendationRepository.existsByKeywords(keywords);
+    }
+
+    public void saveRecommedationContent(List<String> movieids, List<String> bookIds, List<String> musicIds, String keywords, String reason) {
+        List<Recommendation> allEntities = new ArrayList<>();
+
+        // 영화 추천 저장
+        for (String movieId : movieids) {
+            Recommendation entity = Recommendation.builder()
+                    .keywords(keywords)
+                    .reason(reason)
+                    .contentType("MOVIE")
+                    .contentId(movieId)
+                    .build();
+            allEntities.add(entity);
+        }
+        // 도서 추천 저장
+        for (String bookId : bookIds) {
+            Recommendation entity = Recommendation.builder()
+                    .keywords(keywords)
+                    .reason(reason)
+                    .contentType("BOOK")
+                    .contentId(bookId)
+                    .build();
+            allEntities.add(entity);
+        }
+        // 음악 추천 저장
+        for (String musicId : musicIds) {
+            System.out.println(musicId);
+            Recommendation entity = Recommendation.builder()
+                    .keywords(keywords)
+                    .reason(reason)
+                    .contentType("MUSIC")
+                    .contentId(musicId)
+                    .build();
+            allEntities.add(entity);
+        }
+
+        recommendationRepository.saveAll(allEntities);
     }
 }

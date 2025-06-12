@@ -50,23 +50,31 @@ public class MusicService {
             return result;
         }
 
-        String line = musicResult.trim().replaceFirst("^[가-힣a-zA-Z0-9\\s:]+", "");
+        // "노래"로 시작하면 그 부분을 자름
+        String line = musicResult.trim();
+        if (line.startsWith("노래")) {
+            line = line.substring(2).trim();
+        }
 
+        // 정규식으로 큰따옴표 안의 텍스트 모두 추출
         Matcher m = Pattern.compile("\"([^\"]+)\"").matcher(line);
         while (m.find()) {
             String title = m.group(1).trim();
+            // [제목] 형태 제거 (혹시 있을 경우)
             if (title.startsWith("[") && title.endsWith("]")) {
                 title = title.substring(1, title.length() - 1).trim();
             }
+            System.out.println(title);
             result.add(title);
         }
         return result.stream()
-            .map(musicRepository::findIdByTitle)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .distinct()
-            .collect(Collectors.toList());
+                .map(musicRepository::findIdByTitle)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .distinct()
+                .collect(Collectors.toList());
     }
+
 
     public MusicDto findById(String id) {
         return musicRepository.findById(id).map(e -> mapper.map(e, MusicDto.class)).orElse(null);
