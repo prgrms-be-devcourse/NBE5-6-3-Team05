@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -52,7 +53,7 @@ public class AdminMusicService {
         try {
             // api를 통해 가져왔을 때 thumbnail의 path 값을 가져오기에 따로 처리1
             String ThumbnailImg = dto.getThumbnail();
-            if(!thumbnail.getFirst().isEmpty()){
+            if(thumbnail!=null&&!thumbnail.getFirst().isEmpty()){
                 uploadImage(thumbnail, dto);
                 ThumbnailImg = dto.getThumbnail();
             }
@@ -70,13 +71,13 @@ public class AdminMusicService {
             long count = musicRepository.count();
             music.setId("S" + count);
 
-            log.info("{}", music);
-
             // 입력한 데이터 추가
             musicRepository.save(music);
+            // 만약 동시에 접근하여 같은 Id를 가지게 될 경우 방지
+            musicRepository.flush();
             // 입력한 데이터를 바탕으로 임베딩 값 생성
-            embeddingService.generateEmbeddingsMusic();
-        } catch (IOException e) {
+//            embeddingService.generateEmbeddingsMusic();
+        } catch (IOException | DataIntegrityViolationException e) {
             throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR, e);
         }
     }
@@ -165,7 +166,13 @@ public class AdminMusicService {
             throw new CommonException(ResponseCode.DUPLICATED_DATA);
         }
         MusicGenre musicGenre = new MusicGenre(null, musicGenreDto.getName());
-        musicGenreRepository.save(musicGenre);
+
+        try{
+            musicGenreRepository.save(musicGenre);
+            musicGenreRepository.flush();
+        } catch (DataIntegrityViolationException e) {
+            throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR, e);
+        }
     }
 
     // 장르 삭제

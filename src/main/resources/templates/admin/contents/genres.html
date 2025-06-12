@@ -207,7 +207,7 @@
           return res.json(); // 먼저 JSON으로 파싱
         } else {
           return res.text().then(msg => {
-            throw new Error("추가 실패: " + msg);
+            throw new Error("추가 실패");
           });
         }
       })
@@ -243,7 +243,7 @@
           return res.json(); // 먼저 JSON으로 파싱
         } else {
           return res.text().then(msg => {
-            throw new Error("수정 실패: " + msg);
+            throw new Error("수정 실패");
           });
         }
       })

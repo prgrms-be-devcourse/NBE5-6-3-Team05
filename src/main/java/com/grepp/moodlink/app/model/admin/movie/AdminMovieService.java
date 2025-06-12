@@ -17,6 +17,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class AdminMovieService {
 
     private final AdminMovieRepository movieRepository;
@@ -46,6 +48,7 @@ public class AdminMovieService {
     }
 
     // 영화를 추가함
+    @Transactional
     public void addMovie(List<MultipartFile> thumbnail, MovieInfoDto dto) {
 
         if (movieRepository.existsByTitleAndReleaseDate(dto.getTitle(), dto.getReleaseDate())) {
@@ -56,7 +59,7 @@ public class AdminMovieService {
             // api를 통해 가져왔을 때 thumbnail의 path 값을 가져오기에 따로 처리1
 
             String ThumbnailImg = dto.getThumbnail();
-            if(!thumbnail.getFirst().isEmpty()){
+            if(thumbnail!=null&&!thumbnail.getFirst().isEmpty()){
                 uploadImage(thumbnail, dto);
                 ThumbnailImg = dto.getThumbnail();
             }
@@ -69,9 +72,11 @@ public class AdminMovieService {
 
             // 입력한 데이터 저장
             movieRepository.save(movie);
+            // 만약 동시에 접근하여 같은 Id를 가지게 될 경우 방지
+            movieRepository.flush();
             // 입력한 데이터를 바탕으로 임베딩값 생성
-            embeddingService.generateEmbeddingsMovie();
-        } catch (IOException e) {
+//            embeddingService.generateEmbeddingsMovie();
+        } catch (IOException | DataIntegrityViolationException e) {
             throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR, e);
         }
     }
@@ -98,6 +103,7 @@ public class AdminMovieService {
     }
 
     // 관리자가 직접 영화 정보 수정
+    @Transactional
     public void updateMovie(List<MultipartFile> thumbnail, MovieInfoDto dto) {
 
         try {
@@ -146,9 +152,18 @@ public class AdminMovieService {
         if(genreRepository.findByName((genreDto.getName()))!=null){
             throw new CommonException(ResponseCode.DUPLICATED_DATA);
         }
-        // id 임의로 10001 부터
-        Genre genre = new Genre((int) (movieRepository.count()+10000L), genreDto.getName(),true);
-        genreRepository.save(genre);
+
+        // id 임의로 20001 부터
+        Genre genre = new Genre((int) (movieRepository.count()+20000L), genreDto.getName(),true);
+
+        try{
+            genreRepository.save(genre);
+            // 동시에 접근 했을 때 같은 id로 insert 하는 것 방지
+            // flush 단계에서 예외 잡기
+            genreRepository.flush();
+        } catch (DataIntegrityViolationException e) {
+            throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR, e);
+        }
     }
 
     // 장르 삭제

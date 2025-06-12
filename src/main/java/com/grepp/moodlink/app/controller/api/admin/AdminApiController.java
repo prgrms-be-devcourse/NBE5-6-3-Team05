@@ -5,10 +5,9 @@ import com.grepp.moodlink.app.controller.api.admin.payload.GenreModifyRequest;
 import com.grepp.moodlink.app.model.admin.book.AdminBookService;
 import com.grepp.moodlink.app.model.admin.movie.AdminMovieService;
 import com.grepp.moodlink.app.model.admin.music.AdminMusicService;
-import com.grepp.moodlink.app.model.data.movie.entity.Genre;
+import com.grepp.moodlink.infra.error.exceptions.CommonException;
 import com.grepp.moodlink.infra.response.ApiResponse;
 import com.grepp.moodlink.infra.response.ResponseCode;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -21,7 +20,6 @@ import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteExcep
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -84,14 +82,18 @@ public class AdminApiController {
     @PostMapping("genres/add")
     public ResponseEntity<ApiResponse<String>> addGenre(@RequestBody GenreAddRequest genreAddRequest) {
 
-        switch (genreAddRequest.getContentType()) {
-            case "MOVIE" -> movieService.addGenre(genreAddRequest.toGenreDto());
-            case "MUSIC" -> musicService.addGenre(genreAddRequest.toMusicGenreDto());
-            case "BOOK" -> bookService.addGenre(genreAddRequest.toBookGenreDto());
-            case null, default -> {
-                return ResponseEntity.badRequest()
-                    .body(ApiResponse.error(ResponseCode.BAD_REQUEST));
+        try{
+            switch (genreAddRequest.getContentType()) {
+                case "MOVIE" -> movieService.addGenre(genreAddRequest.toGenreDto());
+                case "MUSIC" -> musicService.addGenre(genreAddRequest.toMusicGenreDto());
+                case "BOOK" -> bookService.addGenre(genreAddRequest.toBookGenreDto());
+                case null, default -> {
+                    return ResponseEntity.badRequest()
+                        .body(ApiResponse.error(ResponseCode.BAD_REQUEST));
+                }
             }
+        }catch (CommonException e){
+            return ResponseEntity.internalServerError().body(ApiResponse.error(ResponseCode.DUPLICATED_DATA, e.getMessage()));
         }
 
         return ResponseEntity.ok(ApiResponse.success("정상적으로 입력되었습니다."));

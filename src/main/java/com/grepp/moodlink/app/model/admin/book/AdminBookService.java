@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -47,19 +48,20 @@ public class AdminBookService {
         try {
             // api를 통해 가져왔을 때 thumbnail의 path 값을 가져오기에 따로 처리1
             String ThumbnailImg = dto.getImage();
-            if(!thumbnail.getFirst().isEmpty()){
+            if(thumbnail!=null&&!thumbnail.getFirst().isEmpty()){
                 uploadImage(thumbnail, dto);
                 ThumbnailImg = dto.getImage();
             }
 
             Book book = Book.builder()
                     .title(dto.getTitle())
-                    .image(dto.getImage())
+                    .image(ThumbnailImg)
                     .author(dto.getAuthor())
                     .publisher(dto.getPublisher())
                     .publishedDate(dto.getPublishedDate())
                     .description(dto.getDescription())
                     .genre(bookGenreRepository.findByName(dto.getGenre()))
+                    .likeCount(0L)
                     .build();
 
             long count = adminBookRepository.count();
@@ -69,10 +71,12 @@ public class AdminBookService {
 
             // 입력한 데이터 저장
             adminBookRepository.save(book);
+            // 만약 동시에 접근하여 같은 Id를 가지게 될 경우 방지
+            adminBookRepository.flush();
             // 입력한 데이터를 바탕으로 임베딩 값 생성
-            embeddingService.generateEmbeddingsBook();
-        } catch (IOException e) {
-            throw new CommonException(ResponseCode.BAD_REQUEST, e);
+//            embeddingService.generateEmbeddingsBook();
+        } catch (IOException | DataIntegrityViolationException e) {
+            throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR, e);
         }
     }
 
@@ -162,7 +166,12 @@ public class AdminBookService {
             throw new CommonException(ResponseCode.DUPLICATED_DATA);
         }
         BookGenre bookGenre = new BookGenre(null, bookGenreDto.getName());
-        bookGenreRepository.save(bookGenre);
+        try{
+            bookGenreRepository.save(bookGenre);
+            bookGenreRepository.flush();
+        } catch (DataIntegrityViolationException e) {
+            throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR, e);
+        }
     }
 
     // 장르 삭제
