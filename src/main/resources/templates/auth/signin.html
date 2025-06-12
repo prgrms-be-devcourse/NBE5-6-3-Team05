@@ -11,8 +11,8 @@
     <h1>로그인</h1>
     <p th:if="${param.error}" class="error-msg">아이디 또는 비밀번호가 잘못되었습니다.</p>
     <form th:action="@{/signin}" method="post" th:object="${signinRequest}">
-      <input type="text" th:field="*{id}" placeholder="ID" style="color: white;">
-      <input type="password" th:field="*{password}" placeholder="Password" style="color: white;">
+      <input type="text" th:field="*{userId}" placeholder="아이디" style="color: white;">
+      <input type="password" th:field="*{password}" placeholder="비밀번호" style="color: white;">
       <button style="cursor: pointer" type="submit">접속하기</button>
     </form>
 

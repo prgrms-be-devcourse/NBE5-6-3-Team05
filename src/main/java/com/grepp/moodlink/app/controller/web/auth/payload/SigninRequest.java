@@ -11,7 +11,7 @@ import lombok.Setter;
 public class SigninRequest {
 
     @NotBlank
-    private String id;
+    private String userId;
 
     @NotBlank
     @Size(min = 8, max = 15)

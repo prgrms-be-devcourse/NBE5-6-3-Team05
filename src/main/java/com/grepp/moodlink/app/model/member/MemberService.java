@@ -74,7 +74,7 @@ public class MemberService {
 
 //        Member member = mapper.map(dto, Member.class);
         Member member = new Member();
-        member.setId(dto.getId());
+        member.setId(dto.getUserId());
         member.setPassword(encodedPassword);
         member.setUsername(dto.getUsername());
         member.setEmail(dto.getEmail());
@@ -82,7 +82,7 @@ public class MemberService {
         member.setPeriods(dto.getPeriods());
         member.setCountries(dto.getCountries());
         member.setCreatedAt(LocalDate.now());
-        if (dto.getId().contains("admin")) {
+        if (dto.getUserId().contains("admin")) {
             member.setRole(Role.ROLE_ADMIN);
         } else {
             member.setRole(Role.ROLE_USER);
