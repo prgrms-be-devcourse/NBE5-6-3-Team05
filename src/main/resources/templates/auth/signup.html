@@ -58,17 +58,19 @@
 <body>
 <div class="container">
   <div class="logo"><a th:href="@{/}">Moodlink</a></div>
-  <h1>SIGN UP</h1>
+  <h1>회원가입</h1>
   <form th:action="@{/signup}" method="post" th:object="${signupRequest}">
 
 
-    <input type="text" th:field="*{userId}" placeholder="ID">
+    <input type="text" th:field="*{userId}" placeholder="아이디">
     <div th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}" style="color: red;"></div>
 
-    <input type="password" th:field="*{password}" placeholder="Password">
+    <input type="password" th:field="*{password}" placeholder="비밀번호">
     <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red;"></div>
 
-    <input type="text" th:field="*{username}" placeholder="Username">
+    <input type="text" th:field="*{username}" th:placeholder="유저명">
+
+    <input type="text" th:field="*{email}" th:placeholder="이메일">
 
     <select th:field="*{genre}">
       <option value="" disabled selected>선호하는 장르 선택</option>
@@ -112,7 +114,7 @@
 
     <button type="submit">Sign Up</button>
   </form>
-  <p>Already have an account? <a th:href="@{/signin}">Log in</a></p>
+  <p>회원이신가요? <a th:href="@{/signin}">로그인</a></p>
 </div>
 </body>
 </html>

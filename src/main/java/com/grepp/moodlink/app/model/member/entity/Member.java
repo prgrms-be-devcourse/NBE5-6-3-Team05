@@ -23,6 +23,7 @@ public class Member {
     @JoinColumn(name = "KEYWORD_SELECTION_ID")
     private KeywordSelection keywordSelectionId;
     private String username;
+    private String email;
     private String genre;
     private String periods;
     private String countries;
