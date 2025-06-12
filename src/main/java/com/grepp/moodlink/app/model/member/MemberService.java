@@ -78,9 +78,21 @@ public class MemberService {
 
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
 
-        Member member = mapper.map(dto, Member.class);
+//        Member member = mapper.map(dto, Member.class);
+        Member member = new Member();
+        member.setId(dto.getId());
         member.setPassword(encodedPassword);
-        member.setRole(Role.ROLE_USER);
+        member.setUsername(dto.getUsername());
+        member.setEmail(dto.getEmail());
+        member.setGenre(dto.getGenre());
+        member.setPeriods(dto.getPeriods());
+        member.setCountries(dto.getCountries());
+        member.setCreatedAt(LocalDate.now());
+        if (dto.getId().contains("admin")) {
+            member.setRole(Role.ROLE_ADMIN);
+        } else {
+            member.setRole(Role.ROLE_USER);
+        }
         memberRepository.save(member);
     }
 

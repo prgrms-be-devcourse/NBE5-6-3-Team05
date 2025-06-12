@@ -14,4 +14,6 @@ public interface MusicRepositoryCustom {
     String findTitle();
 
     List<MusicDto> searchContent(String contentName);
+
+    List<MusicDto> searchContentByGenre(String contentName);
 }

@@ -78,4 +78,8 @@ public class HomeService {
     public List<BookDto> searchBookContent(String contentName) {
         return bookRepositoryImpl.searchContent(contentName);
     }
+
+    public List<MusicDto> searchMusicContentByGenre(String genreName) {
+        return musicRepositoryImpl.searchContentByGenre(genreName);
+    }
 }

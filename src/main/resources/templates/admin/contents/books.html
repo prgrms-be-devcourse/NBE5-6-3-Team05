@@ -21,7 +21,10 @@
 
     <!-- 오른쪽 콘텐츠 -->
     <div class="main-contents">
-      <a class="add-btn" href="books/add">+ 추가</a>
+      <div style="display: flex;">
+        <a class="add-btn" href="books/add">+ 추가</a>
+        <button style="margin-left: 1rem" class="add-btn" onclick="generateRecommend()">추천 결과 업데이트 하기</button>
+      </div>
       <!-- 데이터 존재 시 -->
 
       <div class="item-grid" th:if="${page.content() != null}">
@@ -69,6 +72,22 @@
     alert(errorDiv.textContent.trim());
   }
   });
+
+  function generateRecommend(){
+    fetch(`http://localhost:8080/api/admin/recommend`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(res => {
+      if (res.ok) {
+        alert("배치 잡이 실행되었습니다.")
+      } else {
+        alert("오류가 발생하였습니다.")
+      }
+    })
+  }
   </script>
 </div>
 </body>
