@@ -72,21 +72,23 @@ public class MemberService {
 
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
 
-//        Member member = mapper.map(dto, Member.class);
-        Member member = new Member();
-        member.setId(dto.getUserId());
-        member.setPassword(encodedPassword);
-        member.setUsername(dto.getUsername());
-        member.setEmail(dto.getEmail());
-        member.setGenre(dto.getGenre());
-        member.setPeriods(dto.getPeriods());
-        member.setCountries(dto.getCountries());
-        member.setCreatedAt(LocalDate.now());
+        Member.MemberBuilder builder = Member.builder()
+            .id(dto.getUserId())
+            .password(encodedPassword)
+            .username(dto.getUsername())
+            .email(dto.getEmail())
+            .genre(dto.getGenre())
+            .periods(dto.getPeriods())
+            .countries(dto.getCountries())
+            .createdAt(LocalDate.now());
+
         if (dto.getUserId().contains("admin")) {
-            member.setRole(Role.ROLE_ADMIN);
+            builder.role(Role.ROLE_ADMIN);
         } else {
-            member.setRole(Role.ROLE_USER);
+            builder.role(Role.ROLE_USER);
         }
+
+        Member member = builder.build();
         memberRepository.save(member);
     }
 
