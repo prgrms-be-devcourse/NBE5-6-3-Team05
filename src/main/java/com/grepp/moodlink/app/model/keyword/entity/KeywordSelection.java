@@ -1,6 +1,5 @@
 package com.grepp.moodlink.app.model.keyword.entity;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

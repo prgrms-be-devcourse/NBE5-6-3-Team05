@@ -61,8 +61,8 @@
   <h1>회원가입</h1>
   <form th:action="@{/signup}" method="post" th:object="${signupRequest}">
 
-    <input type="text" th:field="*{userId}" placeholder="아이디">
-    <div th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}" style="color: red;"></div>
+    <input type="text" th:field="*{id}" placeholder="아이디">
+    <div th:if="${#fields.hasErrors('id')}" th:errors="*{id}" style="color: red;"></div>
 
     <input type="password" th:field="*{password}" placeholder="비밀번호">
     <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red;"></div>
