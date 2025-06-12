@@ -82,7 +82,7 @@ public class RecommendController {
         session.setAttribute("reason", reason);
 
         List<CuratingDetailIdDto> items = curatingContents(keywords, reason);
-        System.out.println(items);
+
         session.setAttribute("items", items);
 
         return "redirect:/result";
@@ -98,7 +98,6 @@ public class RecommendController {
         List<String> bookIds;
         List<String> musicIds;
         if(recommendationService.exists(keywords)) { // 추천 받은 적 있는 키워드의 경우 가져오기
-            System.out.println("추천 받은 적 있음");
             movieIds = getMovieRecommendations(keywords);
             bookIds = getBookRecommendations(keywords);
             musicIds = getMusicRecommendations(keywords);

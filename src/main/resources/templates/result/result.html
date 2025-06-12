@@ -235,10 +235,28 @@
       0 -0.8px #f4b464;
     }
 
+    /* 별과 숫자 묶음 */
+    .like-count-group {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
     /* ON 상태 */
     .toggle-star-btn.on {
       color: #f4b464;
       text-shadow: none;
+    }
+
+    /* 좋아요 수 */
+    .like-count {
+      font-size: 16px;
+      color: #f4b464;
+      top: -20px;
+      margin-left: 4px;
+      font-weight: bold;
+      min-width: 18px;
+      text-align: left;
     }
 
     /* OFF 상태에 hover 시 노란색으로 */
@@ -255,11 +273,14 @@
       line-height: 1em;
       margin-top: 4px;
       visibility: hidden; /* 처음에는 숨김 */
+      opacity: 0;
       text-align: center;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
     }
 
     .like-msg.show {
       visibility: visible;
+      opacity: 1;
     }
 
     /* 링크 스타일 */
@@ -421,8 +442,7 @@
       <div class="divider"></div>
     </div>
     <p class="guide-text" th:utext="${curatingReason}">
-      오늘 해고당해서 우울한 당신! 고단한 하루를 달래줄 명작을 소개해드릴게요.
-      다음 작품들은 위로가 될 거예요!
+
     </p>
   </main>
 
@@ -450,6 +470,10 @@
           <a th:href="${item.book.externalLink}" target="_blank" class="purple-btn">Search</a>
           <button class="details-btn" data-type="book" th:attr="data-id=${item.book.id}">Details
           </button>
+          <span class="like-count-group">
+            좋아요 수 :
+            <span class="like-count" th:text="${item.book.likeCount}">0</span>
+          </span>
           <button class="toggle-star-btn"
                   th:classappend="${item.book.status} ? ' on' : ''"
                   th:id="'toggle-book-' + ${item.book.id}"
@@ -464,7 +488,7 @@
       <div th:if="${item.book.id == null}" class="image-and-info">
         <div class="image-block">
           <div class="image-wrapper no-song-wrapper">
-            <p class="no-song-msg">적절한 영화를 찾지 못했습니다.</p>
+            <p class="no-song-msg">적절한 도서를 찾지 못했습니다.</p>
           </div>
           <div class="title" style="visibility: hidden;">빈 제목</div>
         </div>
@@ -488,6 +512,10 @@
           <a th:href="${item.movie.externalLink}" target="_blank" class="purple-btn">Search</a>
           <button class="details-btn" data-type="movie" th:attr="data-id=${item.movie.id}">Details
           </button>
+          <span class="like-count-group">
+            좋아요 수 :
+            <span class="like-count" th:text="${item.movie.likeCount}">0</span>
+          </span>
           <button class="toggle-star-btn"
                   th:classappend="${item.movie.status} ? ' on' : ''"
                   th:id="'toggle-movie-' + ${item.movie.id}"
@@ -526,6 +554,10 @@
           <a th:href="${item.song.externalLink}" target="_blank" class="purple-btn">Search</a>
           <button class="details-btn" data-type="song" th:attr="data-id=${item.song.id}">Details
           </button>
+          <span class="like-count-group">
+            좋아요 수 :
+            <span class="like-count" th:text="${item.song.likeCount}">0</span>
+          </span>
           <button class="toggle-star-btn"
                   th:classappend="${item.song.status} ? ' on' : ''"
                   th:id="'toggle-song-' + ${item.song.id}"
@@ -533,6 +565,7 @@
                   onclick="toggle(this)">
             ★
           </button>
+
           <span class="like-msg">로그인 후, 좋아요!</span>
         </div>
       </div>
