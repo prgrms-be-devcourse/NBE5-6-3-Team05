@@ -28,10 +28,10 @@ public class AuthService implements UserDetailsService {
         Member user = memberRepository.findById(username)
             .orElseThrow(() -> new UsernameNotFoundException(username));
 
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>(); // 권한 정보를 담을 객체 생성
+        authorities.add(new SimpleGrantedAuthority(user.getRole().name())); // 사용자 권한 추가
 
-        return Principal.createPrincipal(user, authorities);
+        return Principal.createPrincipal(user, authorities); // 현재 인증된 사용자에 대한 정보를 생성
     }
 
 }
