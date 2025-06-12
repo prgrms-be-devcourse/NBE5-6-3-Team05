@@ -8,6 +8,7 @@ import com.grepp.moodlink.app.model.data.music.MusicRepository;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.keyword.KeywordRepository;
 import com.grepp.moodlink.app.model.keyword.entity.KeywordSelection;
+import com.grepp.moodlink.infra.error.LLMResourceException;
 import com.grepp.moodlink.infra.error.LLMServiceUnavailableException;
 import com.grepp.moodlink.infra.response.ResponseCode;
 import dev.langchain4j.model.chat.ChatLanguageModel;
@@ -164,6 +165,8 @@ public class LlmService {
             recommendation = chatLanguageModel.chat(prompt);
         } catch (ResourceAccessException e) {
             throw new LLMServiceUnavailableException(ResponseCode.EXTERNAL_API_UNAVAILABLE, e);
+        } catch (RuntimeException e){
+            throw new LLMResourceException(ResponseCode.RESOURCE_EXHAUSTED, e);
         }
         return recommendation;
     }
