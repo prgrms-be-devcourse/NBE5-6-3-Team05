@@ -2,12 +2,16 @@ package com.grepp.moodlink.app.controller.api.book;
 
 
 import com.grepp.moodlink.app.model.data.book.BookService;
+import com.grepp.moodlink.app.model.data.book.dto.BookDto;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,4 +28,13 @@ public class BookApiController {
     public ResponseEntity<List<Map<String,Object>>> getBooks(){
         return ResponseEntity.ok(bookService.getBookList());
     }
+
+
+    @PostMapping("/details")
+    public ResponseEntity<Map<String, BookDto>> getDetails(@RequestBody List<String> strings) {
+        Map<String, BookDto> response = new HashMap<>();
+        response = bookService.getDetails(strings);
+        return ResponseEntity.ok(response);
+    }
+
 }

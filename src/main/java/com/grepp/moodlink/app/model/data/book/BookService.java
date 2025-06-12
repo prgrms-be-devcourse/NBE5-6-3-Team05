@@ -100,4 +100,13 @@ public class BookService {
             })
             .collect(Collectors.toList());
     }
+
+    // List로 들어온 isbn들로부터 각 Content들의 세부정보(Dto로) 가져오기
+    public Map<String, BookDto> getDetails(List<String> isbns) {
+        return isbns.stream()
+            .collect(Collectors.toMap(
+                isbn -> isbn,                    // key
+                isbn -> this.findByIsbn(isbn)   // value
+            ));
+    }
 }
