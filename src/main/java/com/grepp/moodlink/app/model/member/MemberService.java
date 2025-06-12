@@ -22,7 +22,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ModelMapper mapper;
+//    private final ModelMapper mapper;
 
     @Transactional
     public Optional<MemberInfoDto> GetMemberInfo(String userId) {

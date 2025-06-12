@@ -11,8 +11,8 @@ import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 @Entity
-@ToString(onlyExplicitlyIncluded = true)
 @Table(name = "user")
 public class Member {
 

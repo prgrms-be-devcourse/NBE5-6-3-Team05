@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @RequiredArgsConstructor
-@Slf4j
 public class AuthController {
 
     private final MemberService memberService;
@@ -44,7 +43,6 @@ public class AuthController {
     @GetMapping("/signin")
     public String getSignin(Model model) {
         model.addAttribute("signinRequest", new SigninRequest());
-//        log.info("로그인 창");
         return "auth/signin";
     }
 }
