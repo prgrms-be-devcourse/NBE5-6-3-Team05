@@ -32,7 +32,7 @@ public class BookApiController {
 
     @PostMapping("/details")
     public ResponseEntity<Map<String, BookDto>> getDetails(@RequestBody List<String> strings) {
-        Map<String, BookDto> response = new HashMap<>();
+        Map<String, BookDto> response;
         response = bookService.getDetails(strings);
         return ResponseEntity.ok(response);
     }
