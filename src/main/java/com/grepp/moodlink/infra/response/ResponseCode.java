@@ -9,10 +9,10 @@ public enum ResponseCode {
     DUPLICATED_DATA("4002", HttpStatus.CONFLICT, "이미 존재하는 데이터입니다."),
     INTERNAL_SERVER_ERROR("5000", HttpStatus.INTERNAL_SERVER_ERROR, "서버에러 입니다."),
     EXTERNAL_API_TIMEOUT("5101", HttpStatus.GATEWAY_TIMEOUT, "외부 API 요청이 타임아웃되었습니다."),
-    EXTERNAL_API_UNAVAILABLE("5001", HttpStatus.SERVICE_UNAVAILABLE, "외부 API에 연결할 수 없습니다.");
-//    INVALID_TOKEN("4003", HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
-//    BAD_CREDENTIAL("4011", HttpStatus.UNAUTHORIZED, "아이디나 비밀번호가 틀렸습니다."),
-//    SECURITY_INCIDENT("6000", HttpStatus.UNAUTHORIZED, "계정에 비정상적인 접근이 감지되었습니다.");
+    EXTERNAL_API_UNAVAILABLE("5001", HttpStatus.SERVICE_UNAVAILABLE, "외부 API에 연결할 수 없습니다."),
+    INVALID_TOKEN("4003", HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
+    BAD_CREDENTIAL("4011", HttpStatus.UNAUTHORIZED, "아이디나 비밀번호가 틀렸습니다."),
+    SECURITY_INCIDENT("6000", HttpStatus.UNAUTHORIZED, "계정에 비정상적인 접근이 감지되었습니다.");
 
 
 
