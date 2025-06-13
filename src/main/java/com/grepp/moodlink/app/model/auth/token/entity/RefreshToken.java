@@ -12,7 +12,7 @@ import org.springframework.data.redis.core.index.Indexed;
 public class RefreshToken {
     @Id
     private String id = UUID.randomUUID().toString();
-    private String email;
+    private String userId;
     @Indexed
     private String accessTokenId;
     private String token = UUID.randomUUID().toString();
@@ -20,8 +20,8 @@ public class RefreshToken {
     public RefreshToken() {
     }
 
-    public RefreshToken(String email, String id) {
-        this.email = email;
+    public RefreshToken(String userId, String id) {
+        this.userId = userId;
         this.accessTokenId = id;
     }
 }
