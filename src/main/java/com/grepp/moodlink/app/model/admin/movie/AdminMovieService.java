@@ -10,6 +10,7 @@ import com.grepp.moodlink.app.model.llm.EmbeddingService;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
 import com.grepp.moodlink.infra.imgbb.ImgUploadTemplate;
 import com.grepp.moodlink.infra.response.ResponseCode;
+import jakarta.persistence.OptimisticLockException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -75,7 +76,7 @@ public class AdminMovieService {
             // 만약 동시에 접근하여 같은 Id를 가지게 될 경우 방지
             movieRepository.flush();
             // 입력한 데이터를 바탕으로 임베딩값 생성
-//            embeddingService.generateEmbeddingsMovie();
+            embeddingService.generateEmbeddingsMovie();
         } catch (IOException | DataIntegrityViolationException e) {
             throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR, e);
         }
@@ -108,27 +109,18 @@ public class AdminMovieService {
 
         try {
             Movie data = movieRepository.findById(dto.getId()).orElseThrow(() -> new CommonException(ResponseCode.BAD_REQUEST));
-            String ThumbnailImg = data.getThumbnail();
-            if(!thumbnail.getFirst().isEmpty()){
+            if(thumbnail!=null&&!thumbnail.getFirst().isEmpty()){
                 uploadImage(thumbnail, dto);
-                ThumbnailImg = dto.getThumbnail();
+                String ThumbnailImg = dto.getThumbnail();
+                data.setThumbnail(ThumbnailImg);
             }
 
-            Movie movie = Movie.builder()
-                .id(dto.getId())
-                .title(data.getTitle())
-                .genres(dto.getGenres())
-                .description(dto.getDescription())
-                .releaseDate(data.getReleaseDate())
-                .thumbnail(ThumbnailImg)
-                .likeCount(data.getLikeCount())
-                .activated(true)
-                .build();
-            // 업데이트
-            movieRepository.save(movie);
-            embeddingService.generateEmbeddingsMovie();
-            log.info("{}", dto);
+            data.setGenres(dto.getGenres());
+            data.setDescription(dto.getDescription());
 
+            // 업데이트
+            movieRepository.save(data);
+            embeddingService.generateEmbeddingsMovie();
 
         } catch (IOException e) {
             throw new CommonException(ResponseCode.INTERNAL_SERVER_ERROR, e);

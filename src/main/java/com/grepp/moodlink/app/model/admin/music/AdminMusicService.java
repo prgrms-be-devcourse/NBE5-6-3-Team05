@@ -112,25 +112,18 @@ public class AdminMusicService {
 
         try {
             Music data = musicRepository.findById(dto.getId()).orElseThrow(() -> new CommonException(ResponseCode.BAD_REQUEST));
-            String ThumbnailImg = data.getThumbnail();
-            if(!thumbnail.getFirst().isEmpty()){
+            if(thumbnail!=null&&!thumbnail.getFirst().isEmpty()){
                 uploadImage(thumbnail, dto);
-                ThumbnailImg = dto.getThumbnail();
+                String ThumbnailImg = dto.getThumbnail();
             }
 
-            Music music = Music.builder()
-                .id(dto.getId())
-                .thumbnail(ThumbnailImg)
-                .title(data.getTitle())
-                .genre(musicGenreRepository.findByName(dto.getGenre()))
-                .singer(data.getSinger())
-                .description(dto.getDescription())
-                .lyrics(dto.getLyrics())
-                .releaseDate(dto.getReleaseDate())
-                .likeCount(data.getLikeCount())
-                .build();
+            data.setGenre(musicGenreRepository.findByName(dto.getGenre()));
+            data.setDescription(dto.getDescription());
+            data.setLyrics(dto.getLyrics());
+            data.setReleaseDate(dto.getReleaseDate());
+
             // 업데이트
-            musicRepository.save(music);
+            musicRepository.save(data);
             embeddingService.generateEmbeddingsMusic();
 
         } catch (IOException e) {

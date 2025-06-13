@@ -107,32 +107,26 @@ public class AdminBookService {
         return BookDto.toDto(book);
     }
 
+    // 관리자가 직접 도서 데이터를 수정
     @Transactional
     public void updateBook(List<MultipartFile> thumbnail, BookDto dto) {
 
         try {
             Book data = adminBookRepository.findByIsbn(dto.getIsbn());
 
-            String ThumbnailImg = data.getImage();
-            if(!thumbnail.getFirst().isEmpty()){
+            if(thumbnail!=null&&!thumbnail.getFirst().isEmpty()){
                 uploadImage(thumbnail, dto);
-                ThumbnailImg = dto.getImage();
+                String ThumbnailImg = dto.getImage();
+                data.setImage(ThumbnailImg);
             }
 
-            Book book = Book.builder()
-                .isbn(dto.getIsbn())
-                .title(data.getTitle())
-                .image(ThumbnailImg)
-                .author(data.getAuthor())
-                .publisher(dto.getPublisher())
-                .publishedDate(dto.getPublishedDate())
-                .description(dto.getDescription())
-                .genre(bookGenreRepository.findByName(dto.getGenre()))
-                .likeCount(data.getLikeCount())
-                .build();
+            data.setPublisher(dto.getPublisher());
+            data.setPublishedDate(dto.getPublishedDate());
+            data.setDescription(dto.getDescription());
+            data.setGenre(bookGenreRepository.findByName(dto.getGenre()));
 
             // 업데이트
-            adminBookRepository.save(book);
+            adminBookRepository.save(data);
             embeddingService.generateEmbeddingsBook();
 
         } catch (IOException e) {
