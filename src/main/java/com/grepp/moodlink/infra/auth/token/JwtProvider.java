@@ -35,24 +35,24 @@ import org.springframework.stereotype.Service;
 @Slf4j
 // 주요 역할: JWT 토큰 생성, 검증, 파싱
 public class JwtProvider {
-    
+
     private RefreshTokenRepository refreshTokenRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserDetailsServiceImpl userDetailsService;
-    
+
     @Value("${jwt.secrete}")
     private String key;
-    
+
     @Getter
     @Value("${jwt.access-expiration}")
     private long atExpiration;
-    
+
     @Getter
     @Value("${jwt.refresh-expiration}")
     private long rtExpiration;
-    
+
     private SecretKey secretKey;
-    
+
     public SecretKey getSecretKey(){
         if(secretKey == null){
             String base64Key = Base64.getEncoder().encodeToString(key.getBytes());
@@ -60,11 +60,11 @@ public class JwtProvider {
         }
         return secretKey;
     }
-    
+
     public AccessTokenDto generateAccessToken(Authentication authentication){
         return generateAccessToken(authentication.getName());
     }
-    
+
     public AccessTokenDto generateAccessToken(String username){
         String id = UUID.randomUUID().toString();
         long now = new Date().getTime();
@@ -75,21 +75,21 @@ public class JwtProvider {
                                  .expiration(atExpiresIn)
                                  .signWith(getSecretKey())
                                  .compact();
-        
+
         return AccessTokenDto.builder()
                    .id(id)
                    .token(accessToken)
                    .expiresIn(atExpiration)
                    .build();
     }
-    
+
     public Authentication genreateAuthentication(String accessToken){
         Claims claims = parseClaim(accessToken);
         List<? extends GrantedAuthority> authorities = userDetailsService.findAuthorities(claims.getSubject());
         Principal principal = new Principal(claims.getSubject(),"", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
-    
+
     public Claims parseClaim(String accessToken) {
         try{
             return Jwts.parser().verifyWith(getSecretKey()).build()
@@ -98,8 +98,8 @@ public class JwtProvider {
             return ex.getClaims();
         }
     }
-    
-    
+
+
     public boolean validateToken(String requestAccessToken) {
         try{
             Jwts.parser().verifyWith(getSecretKey()).build().parse(requestAccessToken);
@@ -109,23 +109,23 @@ public class JwtProvider {
         }
         return false;
     }
-    
+
     public String resolveToken(HttpServletRequest request, TokenType tokenType) {
         String headerToken = request.getHeader("Authorization");
         if (headerToken != null && headerToken.startsWith("Bearer")) {
             return headerToken.substring(7);
         }
-        
+
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
             return null;
         }
-        
+
         return Arrays.stream(cookies)
                    .filter(e -> e.getName().equals(tokenType.name()))
                    .map(Cookie::getValue).findFirst()
                    .orElse(null);
     }
-    
+
 
 }

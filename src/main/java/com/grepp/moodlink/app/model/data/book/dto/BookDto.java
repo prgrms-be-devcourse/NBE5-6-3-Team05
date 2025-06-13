@@ -5,14 +5,10 @@ import com.grepp.moodlink.app.model.data.ContentDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@Getter
-@Setter
-@ToString
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookDto implements ContentDto {
@@ -45,6 +41,15 @@ public class BookDto implements ContentDto {
         dto.setGenre(book.getGenre().getName());
         dto.setLikeCount(book.getLikeCount());
         return dto;
+    }
+
+    public BookDto(String title, String description, LocalDate publishedDate, String publisher,
+        String image) {
+        this.title = title;
+        this.description = description;
+        this.publishedDate = publishedDate;
+        this.publisher = publisher;
+        this.image = image;
     }
 
     public BookDto(String title, String description, LocalDate publishedDate, String publisher,

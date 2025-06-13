@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @RequiredArgsConstructor
-public class AuthController {
+public class WebAuthController {
 
     private final MemberService memberService;
 
@@ -29,8 +29,8 @@ public class AuthController {
             return "auth/signup";
         }
 
-        if (memberService.existsByUserId(signupRequest.getId())) {
-            bindingResult.rejectValue("id", "duplicate", "이미 가입된 회원입니다.");
+        if (memberService.existsByUserId(signupRequest.getUserId())) {
+            bindingResult.rejectValue("userId", "duplicate", "이미 가입된 회원입니다.");
             return "auth/signup";
         }
 

@@ -28,7 +28,7 @@ public class CommonException extends RuntimeException {
         this.redirect = redirect;
         log.error(e.getMessage(), e);
     }
-    
+
     public String redirect(){return redirect; }
     public ResponseCode code() {
         return code;

@@ -6,15 +6,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 public class SignupRequest {
 
     @NotBlank
-    private String id;
+    private String userId;
 
     @NotBlank
     @Size(min = 8, max = 15, message = "비밀번호는 8~15자리를 입력해주세요.")
@@ -38,7 +35,7 @@ public class SignupRequest {
 
     public MemberDto toDto() {
         MemberDto memberDto = new MemberDto();
-        memberDto.setId(id);
+        memberDto.setUserId(userId);
         memberDto.setPassword(password);
         memberDto.setUsername(username);
         memberDto.setEmail(email);
