@@ -9,15 +9,15 @@
   <style>
 
     /* 전체 배경 및 기본 글자색 */
-    body {
-      background-attachment: fixed;
-      background-position: center;
-      margin: 0;
+    .center-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     .main-content {
       text-align: center;
-      margin-top: 40px;
+      margin-top: 90px;
     }
 
     .divider-wrapper {
@@ -426,7 +426,7 @@
 </head>
 <body>
 
-<div layout:fragment="content">
+<div layout:fragment="content" class="center-container">
 
 
   <main class="main-content">
@@ -444,7 +444,7 @@
     <p class="guide-text" th:utext="${curatingReason}">
 
     </p>
-  </main>
+
 
 
   <div class="curation-header">
@@ -584,7 +584,7 @@
     </div>
 
   </div>
-
+  </main>
   <!-- 모달창 HTML -->
   <div id="detailModalResult" class="custom-modal hidden">
     <div class="custom-modal-content">
@@ -622,7 +622,14 @@
     function toggle(btn) {
       const type = btn.dataset.type;
       const id = btn.dataset.id;
-
+      const isOn = btn.classList.contains('on');
+      const likeCountSpan = btn.parentElement.querySelector('.like-count');
+      let currentCount = parseInt(likeCountSpan.textContent, 10);
+      if (isOn) {
+        likeCountSpan.textContent = Math.max(currentCount - 1, 0); // 음수 방지
+      } else {
+        likeCountSpan.textContent = currentCount + 1;
+      }
       fetch(`/api/like/${type}/toggle`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
