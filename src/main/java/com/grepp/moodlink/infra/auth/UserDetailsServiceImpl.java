@@ -30,10 +30,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 //연동: JWT에서 추출한 사용자 식별자로 사용자 정보 로드
 public class UserDetailsServiceImpl implements UserDetailsService {
-    
+
     private final MemberRepository memberRepository;
 //    private final TeamMemberRepository teamMemberRepository;
-    
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberRepository.findById(username)
@@ -41,14 +41,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         List<SimpleGrantedAuthority> authorities = findAuthorities(username);
         return Principal.createPrincipal(member, authorities);
     }
-    
+
     @Cacheable("user-authorities")
     public List<SimpleGrantedAuthority> findAuthorities(String username){
         Member member = memberRepository.findById(username)
                             .orElseThrow(() -> new UsernameNotFoundException(username));
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(member.getRole().name()));
-        
+
 //        List<TeamMember> teamMembers = teamMemberRepository.findByUserIdAndActivated(username, true);
 //        List<SimpleGrantedAuthority> teamAuthorities =
 //            teamMembers.stream().map(e -> new SimpleGrantedAuthority("TEAM_" + e.getTeamId() + ":" + e.getRole()))
@@ -57,17 +57,5 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 //        authorities.addAll(teamAuthorities);
         return authorities;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
 }
