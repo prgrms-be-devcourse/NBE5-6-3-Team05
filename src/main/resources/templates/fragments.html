@@ -825,7 +825,7 @@
         <button class="mypage-btn" sec:authorize="hasRole('ADMIN')"
                 th:onclick="|location.href='@{/admin/movies}'|">관리자페이지
         </button>
-        <form th:action="@{/logout}" method="post">
+        <form th:action="@{/auth/logout}" method="post">
           <button class="logout-btn" th:if="${isAuthenticated}">로그아웃</button>
         </form>
         <form th:action="@{/signin}" method="get">
