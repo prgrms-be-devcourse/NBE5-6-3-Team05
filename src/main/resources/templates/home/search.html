@@ -409,8 +409,76 @@
     }
   }
 
-  function searchByGenre(genre) {
-    window.location.href = '/search/genre?genreName=' + encodeURIComponent(genre);
+  // 장르 선택 버튼
+  document.querySelectorAll('.genre-btn').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const type = e.target.dataset.type;   // 컨텐츠 타입
+      const genre = e.target.dataset.genre; // 장르
+
+      // 예시: 콘솔 출력
+      console.log(`선택된 콘텐츠 타입: ${type}`);
+      console.log(`선택된 장르: ${genre}`);
+
+      // 콘텐츠 불러오는 함수 호출
+      fetchContentByGenre(type, genre);
+    });
+  });
+
+  // 장르로 검색
+  function fetchContentByGenre(type, genre) {
+    // 예시: 서버에 요청 보내는 경우
+    // fetch(`/api/content?type=${type}&genre=${genre}`)
+    //   .then(res => res.json())
+    //   .then(data => renderContent(data));
+
+    // 간단한 데모용 가짜 데이터
+    const dummyData = {
+
+      movie: {
+        추리소설: [{ title: '살인의 추억', thumbnail: 'img1.jpg', releaseDate: '2003', summary: '살인사건 실화 바탕 영화' }],
+        스릴러: [{ title: '기생충', thumbnail: 'img2.jpg', releaseDate: '2019', summary: '계층의 이야기' }]
+      },
+      music: {
+        발라드: [{ title: '신호등', thumbnail: 'img3.jpg', releaseDate: '2021', summary: '이무진의 히트곡' }]
+      }
+    };
+
+    const contentList = dummyData[type]?.[genre] || [];
+    renderContentByType(type, contentList);
   }
+
+  /// 타입에 따라 콘텐츠 렌더링 위치를 다르게 처리
+  function renderContentByType(type, contentList) {
+    let container;
+
+    if (type === 'movie') {
+      container = document.querySelector('#movie .card-container');
+    } else if (type === 'music') {
+      // 음악 결과 보여줄 별도 영역 있어야 함
+      container = document.querySelector('#music .card-container');
+    } else if (type === 'book') {
+      // 도서 영역도 마찬가지로 별도 필요
+      container = document.querySelector('#book .card-container');
+    }
+
+    if (!container) return;
+
+    if (contentList.length === 0) {
+      container.innerHTML = `<h4>검색 자료가 없습니다.</h4>`;
+      return;
+    }
+
+    // 카드 형태로 콘텐츠 렌더링
+    container.innerHTML = contentList
+    .map((item) => `
+        <div class="card-${type}">
+          <img src="${item.thumbnail}" alt="${item.title}" class="card-thumbnail" />
+          <h4>${item.title}</h4>
+          <p>${item.summary}</p>
+        </div>
+      `)
+    .join('');
+  }
+
 
 </script>
