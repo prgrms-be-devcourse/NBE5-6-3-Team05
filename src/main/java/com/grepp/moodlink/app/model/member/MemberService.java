@@ -1,10 +1,14 @@
 package com.grepp.moodlink.app.model.member;
 
 import com.grepp.moodlink.app.model.auth.code.Role;
+import com.grepp.moodlink.app.model.keyword.KeywordRepository;
+import com.grepp.moodlink.app.model.keyword.entity.KeywordSelection;
 import com.grepp.moodlink.app.model.member.dto.MemberDto;
 import com.grepp.moodlink.app.model.member.dto.MemberInfoDto;
 import com.grepp.moodlink.app.model.member.dto.ModifyDto;
 import com.grepp.moodlink.app.model.member.entity.Member;
+import com.grepp.moodlink.infra.error.UserNotFoundException;
+import com.grepp.moodlink.infra.response.ResponseCode;
 import java.time.LocalDate;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +26,12 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ModelMapper mapper;
+    private final KeywordRepository keywordRepository;
 
     @Transactional
     public Optional<MemberInfoDto> GetMemberInfo(String userId) {
         Optional<Member> user = memberRepository.findById(userId);
         return user.map(MemberInfoDto::ToDto);
-
     }
 
     @Transactional
@@ -99,4 +102,16 @@ public class MemberService {
         System.out.println(memberRepository.findById(userId));
         return memberRepository.findById(userId);
     }
+    @Transactional
+    public void selectKeyword(String userId, String keywords) {
+        Optional<Member> member = memberRepository.findById(userId);
+        Optional<KeywordSelection> keywordSelection = keywordRepository.findByKeywords(keywords);
+        if (member.isPresent() && keywordSelection.isPresent()){
+            member.get().setKeywordSelection(keywordSelection.get());
+            memberRepository.save(member.get());
+        }else{
+            throw new UserNotFoundException(ResponseCode.USER_NOTFOUND);
+        }
+    }
+
 }
