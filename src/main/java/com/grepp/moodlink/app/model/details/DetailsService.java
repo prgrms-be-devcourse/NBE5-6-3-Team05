@@ -1,9 +1,15 @@
 package com.grepp.moodlink.app.model.details;
 
 
+import com.grepp.moodlink.app.controller.api.details.payload.BookDetailResponse;
+import com.grepp.moodlink.app.controller.api.details.payload.MovieDetailResponse;
+import com.grepp.moodlink.app.controller.api.details.payload.MusicDetailResponse;
 import com.grepp.moodlink.app.model.data.book.BookService;
+import com.grepp.moodlink.app.model.data.book.dto.BookGenreDto;
 import com.grepp.moodlink.app.model.data.movie.MovieService;
+import com.grepp.moodlink.app.model.data.movie.dto.GenreDto;
 import com.grepp.moodlink.app.model.data.music.MusicService;
+import com.grepp.moodlink.app.model.data.music.dto.MusicGenreDto;
 import com.grepp.moodlink.app.model.details.dto.BookDetailsDto;
 import com.grepp.moodlink.app.model.details.dto.MovieDetailsDto;
 import com.grepp.moodlink.app.model.details.dto.SongDetailsDto;
@@ -27,17 +33,19 @@ public class DetailsService {
     private final LikeService likeService;
 
 
-    public BookDetailsDto getBookDetails(String userId, String id) {
+    @Transactional
+    public BookDetailResponse getBookDetails(String userId, String id) {
         BookDetailsDto bookDetailsDto = BookDetailsDto.from(bookService.findByIsbn(id));
+        BookGenreDto bookGenreDto = bookService.getBookGenre(id);
         // 비회원 시 Like테이블 조회 없이 바로 반환
         if (userId.isEmpty()) {
-            return bookDetailsDto;
+            return new BookDetailResponse(bookDetailsDto,bookGenreDto);
         }
 
         // User의 Like 목록이 없다면 해당 컨텐츠의 상태를 false로 return
         List<Likes> likes = likeService.getLikeInfo(userId);
         if (likes.isEmpty()) {
-            return bookDetailsDto;
+            return new BookDetailResponse(bookDetailsDto,bookGenreDto);
         }
 
         // Like테이블 조회 후 현재 상세정보를 확인하는 컨텐츠와 같은 id의 컨텐츠가 있으면 status를 true로 변환
@@ -45,21 +53,27 @@ public class DetailsService {
             bookDetailsDto.setStatus(true);
         }
         System.out.println(bookDetailsDto);
-        return bookDetailsDto;
+
+        return new BookDetailResponse(bookDetailsDto,bookGenreDto);
     }
 
-    public SongDetailsDto getSongDetails(String userId, String id) {
+
+
+
+@Transactional
+    public MusicDetailResponse getSongDetails(String userId, String id) {
         SongDetailsDto songDetailsDto = SongDetailsDto.from(musicService.findById(id));
+    MusicGenreDto musicGenreDto = musicService.getMusicGenre(id);
 
         // 비회원 시 Like테이블 조회 없이 바로 반환
         if (userId.isEmpty()) {
-            return songDetailsDto;
+            return new MusicDetailResponse(songDetailsDto, musicService.getMusicGenre(id));
         }
 
         // User의 Like 목록이 없다면 해당 컨텐츠의 상태를 false로 return
         List<Likes> likes = likeService.getLikeInfo(userId);
         if (likes.isEmpty()) {
-            return songDetailsDto;
+            return new MusicDetailResponse(songDetailsDto, musicService.getMusicGenre(id));
         }
 
         // Like테이블 조회 후 현재 상세정보를 확인하는 컨텐츠와 같은 id의 컨텐츠가 있으면 status를 true로 변환
@@ -67,22 +81,24 @@ public class DetailsService {
             songDetailsDto.setStatus(true);
         }
 
-        return songDetailsDto;
+
+        return new MusicDetailResponse(songDetailsDto, musicService.getMusicGenre(id));
     }
 
     @Transactional
-    public MovieDetailsDto getMovieDetails(String userId, String id) {
+    public MovieDetailResponse getMovieDetails(String userId, String id) {
         MovieDetailsDto movieDetailsDto = MovieDetailsDto.from(movieService.findById(id));
+        List<GenreDto> movieGenreDto =movieService.getMovieGenre(id);
 
         // 비회원 시 Like테이블 조회 없이 바로 반환
         if (userId.isEmpty()) {
-            return movieDetailsDto;
+            return new MovieDetailResponse(movieDetailsDto,movieGenreDto);
         }
 
         // User의 Like 목록이 없다면 해당 컨텐츠의 상태를 false로 return
         List<Likes> likes = likeService.getLikeInfo(userId);
         if (likes.isEmpty()) {
-            return movieDetailsDto;
+            return new MovieDetailResponse(movieDetailsDto,movieGenreDto);
         }
 
         // Like테이블 조회 후 현재 상세정보를 확인하는 컨텐츠와 같은 id의 컨텐츠가 있으면 status를 true로 변환
@@ -90,6 +106,9 @@ public class DetailsService {
             movieDetailsDto.setStatus(true);
         }
 
-        return movieDetailsDto;
+        return new MovieDetailResponse(movieDetailsDto,movieGenreDto);
     }
+
+
+
 }

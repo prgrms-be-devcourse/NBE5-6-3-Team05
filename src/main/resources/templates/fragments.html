@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <th:block th:fragment="frg_static">
     <link rel="stylesheet"
@@ -365,7 +366,7 @@
         gap: 35px;
       }
 
-      h3{
+      h3 {
         margin-top: 16px;
         margin-bottom: 16px;
       }
@@ -758,7 +759,7 @@
       }
 
       .modal-bg.music {
-        flex: 1 1 55%;   /* 필요하면 50% 이하로 */
+        flex: 1 1 55%; /* 필요하면 50% 이하로 */
         max-height: 60vh;
         max-width: 20vw; /* 가로폭 ↓ */
       }
@@ -782,9 +783,11 @@
 
       .trailer-modal {
         position: fixed;
-        top: 0; left: 0;
-        width: 100vw; height: 100vh;
-        background: rgba(0,0,0,0.7);
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.7);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -850,5 +853,7 @@
     <a th:href="@{${page.url()}(page=${page.nextPage()})}"><i
         class="material-icons">chevron_right</i></a></li>
 </ul>
+
+
 </body>
 </html>

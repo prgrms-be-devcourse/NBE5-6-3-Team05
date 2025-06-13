@@ -1,146 +1,31 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
 
 <!-- 모달창 HTML -->
+<div id="detailModalResult" class="custom-modal hidden">
+  <div class="custom-modal-content">
+    <span class="custom-close-btn" onclick="closeModal()">&times;</span>
 
-<button class="details-btn" data-type="book" th:attr="data-id=${item.book.id}">Details
-</button>
-<button class="details-btn" data-type="song" th:attr="data-id=${item.song.id}">Details
-</button>
-<button class="details-btn" data-type="movie" th:attr="data-id=${item.movie.id}">Details
-</button>
+    <h2 id="custom-modal-title"></h2>
 
-<ul class="modal" th:fragment="detail_modal">
-  <div id="detailModalResult" class="custom-modal hidden">
-    <div class="custom-modal-content">
-      <span class="custom-close-btn" onclick="closeModal()">&times;</span>
-      <h2 id="custom-modal-title"></h2>
+    <div class="custom-modal-body-layout">
 
-      <div class="custom-modal-body-layout">
-        <div class="custom-modal-body-main">
-          <a id="modal-search-link" href="#" target="_blank">외부 링크로 이동</a>
-          <button id="modal-like-btn" class="like-button">★</button>
-          <img id="modal-img" class="custom-modal-img" src="" alt="컨텐츠 이미지" />
-        </div>
-        <div class="custom-modal-info">
-          <div id="custom-modal-meta"></div>
-        </div>
+      <div class="custom-modal-body-main">
+        <img id="modal-img" class="custom-modal-img" src="" alt="컨텐츠 이미지"/>
+      </div>
+
+      <div class="custom-modal-info">
+        <div id="custom-modal-meta"></div> <!-- 타입별로 여기에 JS로 채워 넣기 -->
       </div>
     </div>
+
+    <div id="modal-like-wrapper" style="margin-top: 1rem; text-align: right">
+      <a id="modal-search-link" class="purple-btn" href="#" target="_blank">Search</a>
+      <button class="toggle-star-btn"
+              id="modal-like-btn"
+              data-type=""
+              data-id=""
+              onclick="toggle(this)">
+        ★
+      </button>
+    </div>
   </div>
-</ul>
-
-</body>
-<script>
-/// 모달창
-// 모달 창 좋아요 버튼 연동 작성하기
-document.addEventListener("DOMContentLoaded", function () {
-const buttons = document.querySelectorAll(".details-btn");
-
-buttons.forEach(btn => {
-btn.addEventListener("click", () => {
-const type = btn.dataset.type; // book, movie, song
-const id = btn.dataset.id;
-
-fetch(`/api/details/${type}/${id}`)
-.then(res => res.json())
-.then(data => {
-openModal(type, data);
-});
-});
-});
-});
-
-function openModal(type, data) {
-const modal = document.getElementById("detailModalResult");
-const body = document.getElementById("modal-body");
-const meta = document.getElementById("custom-modal-meta");
-const likeBtn = document.getElementById("modal-like-btn");
-const searchLink = document.getElementById("modal-search-link");
-
-// 제목 + 이미지는 항상 고정 위치
-document.getElementById("custom-modal-title").textContent = data.name;
-document.getElementById("modal-img").src = data[`${type}Img`];
-document.getElementById("modal-img").alt = data.name;
-
-// 링크 설정
-searchLink.href = data.externalLink;
-
-// 타입별 부가 정보 + description
-let details = "";
-
-if (type === "book") {
-details += `<p><strong>작가:</strong> ${data.author}</p>`;
-details += `<p><strong>장르:</strong> ${data.genre}</p>`;
-details += `<p><strong>요약:</strong> ${buildExpandable(data.summary, "summary")}</p>`;
-details += `<p><strong>설명:</strong> ${buildExpandable(data.description,
-  "description")}</p>`;
-details += `<p><strong>출판사:</strong> ${data.publisher}</p>`;
-details += `<p><strong>출판일:</strong> ${data.publishedAt}</p>`;
-
-} else if (type === "movie") {
-details += `<p><strong>장르:</strong> ${data.genre}</p>`;
-details += `<p><strong>설명:</strong> ${buildExpandable(data.description,
-  "description")}</p>`;     //간략히
-details += `<p><strong>개봉일:</strong> ${data.releaseDate}</p>`;
-} else if (type === "song") {
-details += `<p><strong>아티스트:</strong> ${data.artist}</p>`;
-details += `<p><strong>장르:</strong> ${data.genre}</p>`;
-details += `<p><strong>발매일:</strong> ${data.releasedAt}</p>`;
-details += `<p><strong>요약:</strong> ${buildExpandable(data.summary, "summary")}</p>`;
-details += `<p><strong>가사:</strong> ${buildExpandable(data.lyrics, "lyrics")}</p>`;
-}
-
-meta.innerHTML = details;
-
-// 별 버튼 설정
-likeBtn.dataset.type = type;
-likeBtn.dataset.id = data.id;
-likeBtn.textContent = '★';
-likeBtn.classList.remove("on");
-if (data.status) {
-likeBtn.classList.add("on");
-}
-
-modal.classList.remove("hidden");
-}
-
-function closeModal() {
-document.getElementById("detailModalResult").classList.add("hidden");
-}
-
-//모달 창의 텍스트 줄여서 보기
-function buildExpandable(content, idPrefix) {
-const shortId = `${idPrefix}-short`;
-const fullId = `${idPrefix}-full`;
-const btnId = `${idPrefix}-btn`;
-
-return `
-<span id="${shortId}" style="display:block; overflow: hidden; text-overflow: ellipsis; max-height: 4.5em;">
-      ${content}
-    </span>
-<span id="${fullId}" style="display:none;">
-      ${content}
-    </span>
-<button onclick="toggleText('${shortId}', '${fullId}', '${btnId}')" id="${btnId}" class="text-button">전체 보기</button>
-`;
-}
-
-function toggleText(shortId, fullId, btnId) {
-const shortEl = document.getElementById(shortId);
-const fullEl = document.getElementById(fullId);
-const btnEl = document.getElementById(btnId);
-
-const isShortVisible = shortEl.style.display !== "none";
-shortEl.style.display = isShortVisible ? "none" : "block";
-fullEl.style.display = isShortVisible ? "block" : "none";
-btnEl.textContent = isShortVisible ? "간략히 보기" : "전체 보기";
-}
-</script>
-
-</html>
+</div>

@@ -1,14 +1,17 @@
 package com.grepp.moodlink.app.controller.api.details.payload;
 
-import com.grepp.moodlink.app.model.data.music.entity.MusicGenre;
-import com.grepp.moodlink.app.model.details.dto.SongDetailsDto;
+import com.grepp.moodlink.app.model.data.book.dto.BookGenreDto;
+import com.grepp.moodlink.app.model.details.dto.BookDetailsDto;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Getter
+
 @Data
-public class MusicDetailResponse {
-    SongDetailsDto music;
-    MusicGenre musicGenre;
+@AllArgsConstructor
+@NoArgsConstructor
+public class BookDetailResponse {
+    private BookDetailsDto book;
+    private BookGenreDto bookGenre;
 
 }
