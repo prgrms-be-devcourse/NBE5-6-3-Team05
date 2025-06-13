@@ -28,15 +28,15 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 //응답: JSON 형태의 에러 응답 반환
 //위치: JwtAuthenticationFilter보다 앞에 위치하여 예외를 먼저 캐치
 public class AuthExceptionFilter extends OncePerRequestFilter {
-    
+
     private final HandlerExceptionResolver handlerExceptionResolver;
-    
+
     public AuthExceptionFilter(
         @Qualifier("handlerExceptionResolver")
         HandlerExceptionResolver handlerExceptionResolver) {
         this.handlerExceptionResolver = handlerExceptionResolver;
     }
-    
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
@@ -49,7 +49,7 @@ public class AuthExceptionFilter extends OncePerRequestFilter {
             throwAuthEx(request, response, ResponseCode.UNAUTHORIZED);
         }
     }
-    
+
     private void throwAuthEx(HttpServletRequest request, HttpServletResponse response,
         ResponseCode code) {
 
@@ -68,7 +68,7 @@ public class AuthExceptionFilter extends OncePerRequestFilter {
                 new AuthWebException(code, "/member/signin"));
             return;
         }
-        
+
         handlerExceptionResolver.resolveException(request, response, null,
             new AuthWebException(code));
     }

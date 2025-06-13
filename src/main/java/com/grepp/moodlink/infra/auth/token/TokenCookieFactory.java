@@ -18,7 +18,7 @@ public class TokenCookieFactory {
                    .path("/")
                    .build();
     }
-    
+
     public static ResponseCookie createExpiredToken(TokenType tokenType) {
         return from(tokenType.name(), "")
                    .httpOnly(true)

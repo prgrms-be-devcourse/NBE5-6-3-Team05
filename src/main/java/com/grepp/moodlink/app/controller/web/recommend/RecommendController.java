@@ -159,5 +159,4 @@ public class RecommendController {
         return principal.getUsername();
     }
 
-
 }
