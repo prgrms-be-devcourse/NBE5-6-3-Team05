@@ -13,5 +13,4 @@ public interface KeywordRepository extends JpaRepository<KeywordSelection, Long>
 
     boolean existsByKeywords(String keywords);
 
-    boolean findReasonByKeywords(String keywords);
 }

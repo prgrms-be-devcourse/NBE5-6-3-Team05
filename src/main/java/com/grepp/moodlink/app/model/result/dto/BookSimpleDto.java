@@ -14,17 +14,19 @@ public class BookSimpleDto {
     private String name;
     private String imgUrl;
     private String externalLink;
+    private Long likeCount;
     private boolean status;
 
-    public BookSimpleDto(String id, String name, String imgUrl) {
+    public BookSimpleDto(String id, String name, String imgUrl, Long likeCount) {
         this.id = id;
         this.name = name;
         this.imgUrl = imgUrl;
+        this.likeCount = likeCount;
         this.status = false;
         this.externalLink = "https://www.google.com/search?q=" + name;
     }
 
     public static BookSimpleDto from(BookDto book) {
-        return new BookSimpleDto(book.getIsbn(), book.getTitle(), book.getImage());
+        return new BookSimpleDto(book.getIsbn(), book.getTitle(), book.getImage(), book.getLikeCount());
     }
 }
