@@ -3,7 +3,42 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
+<head>
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
+  <style>
+    .swiper {
+      width: 100%;
+      padding: 10px 0;
+    }
+
+    .swiper-slide {
+      width: 180px; /* 고정 너비 */
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .content-image {
+      width: 200px;
+      height: 280px;
+
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .content-title {
+      margin-top: 8px;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+  </style>
+</head>
 <body>
 <div layout:fragment="content">
   <div style="
@@ -136,6 +171,48 @@
       </div>
     </div>
   </div>
+  <div class="recommendation-container">
+      <!-- 영화 추천 -->
+      <div th:if="${movies != null and !movies.isEmpty()}" class="recommendation-section">
+        <h4>🎬 영화 추천</h4>
+        <div class="swiper movie-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" th:each="movie : ${movies}">
+              <img th:src="${movie.thumbnail}" alt="영화 이미지" class="content-image"/>
+              <p class="recommend-content-title" th:text="${#strings.length(movie.title) > 12 ? #strings.substring(movie.title, 0, 12) + '...' : movie.title}">영화 제목</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 책 추천 -->
+      <div th:if="${books != null and !books.isEmpty()}" class="recommendation-section">
+        <h4>📚 도서 추천</h4>
+        <div class="swiper book-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" th:each="book : ${books}">
+              <img th:src="${book.image}" alt="도서 이미지" class="content-image"/>
+              <p class="recommend-content-title" th:text="${#strings.length(book.title) > 12 ? #strings.substring(book.title, 0, 12) + '...' : book.title}">도서 제목</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 음악 추천 -->
+      <div th:if="${musics != null and !musics.isEmpty()}" class="recommendation-section">
+        <h4>🎵 음악 추천</h4>
+        <div class="swiper music-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" th:each="music : ${musics}">
+              <img th:src="${music.thumbnail}" alt="음악 이미지" class="content-image"/>
+              <p class="recommend-content-title" th:text="${#strings.length(music.title) > 12 ? #strings.substring(music.title, 0, 12) + '...' : music.title}">음악 제목</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 </body>
@@ -201,19 +278,19 @@
         msg2.style.display = "none";
 
         fetch('/fortune')
-        .then(response => response.text())
-        .then(data => {
-          const result = document.getElementById('fortuneResult');
-          result.textContent = data;
-          result.style.display = "block";
+          .then(response => response.text())
+          .then(data => {
+            const result = document.getElementById('fortuneResult');
+            result.textContent = data;
+            result.style.display = "block";
 
-          startScrollingAnimation();
-        })
+            startScrollingAnimation();
+          })
 
-        .catch(() => {
-          result.textContent = "운세를 불러오지 못했습니다.";
-          result.style.display = "block";
-        });
+          .catch(() => {
+            result.textContent = "운세를 불러오지 못했습니다.";
+            result.style.display = "block";
+          });
 
       }, 2000);
 
@@ -234,18 +311,18 @@
     fetch('/fortune/ai', {
       method: 'POST'
     })
-    .then(res => res.text())
-    .then(data => {
-      result.textContent = data;
-      // 애니메이션 재시작을 위해 클래스 제거 후 다시 추가
-      result.classList.remove("scrolling-text");
-      void result.offsetWidth; // 리플로우 강제 발생
-      result.classList.add("scrolling-text");
-    })
-    .catch(() => {
-      result.textContent = "운세를 불러올 수 없습니다.";
-      result.classList.remove("scrolling-text");
-    });
+      .then(res => res.text())
+      .then(data => {
+        result.textContent = data;
+        // 애니메이션 재시작을 위해 클래스 제거 후 다시 추가
+        result.classList.remove("scrolling-text");
+        void result.offsetWidth; // 리플로우 강제 발생
+        result.classList.add("scrolling-text");
+      })
+      .catch(() => {
+        result.textContent = "운세를 불러올 수 없습니다.";
+        result.classList.remove("scrolling-text");
+      });
   }
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -258,5 +335,33 @@
       }, 15000);
     }
   });
+  new Swiper('.movie-swiper', {
+    loop: true,
+    slidesPerView: 'auto',
+    spaceBetween: 10,
+    autoplay: {
+      delay: 2500,
+      disableOnInteraction: false,
+    },
+  });
 
+  new Swiper('.book-swiper', {
+    loop: true,
+    slidesPerView: 'auto',
+    spaceBetween: 10,
+    autoplay: {
+      delay: 2800,
+      disableOnInteraction: false,
+    },
+  });
+
+  new Swiper('.music-swiper', {
+    loop: true,
+    slidesPerView: 'auto',
+    spaceBetween: 10,
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+    },
+  });
 </script>
