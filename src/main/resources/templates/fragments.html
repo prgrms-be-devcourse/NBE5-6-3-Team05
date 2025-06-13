@@ -811,6 +811,7 @@
   </th:block>
 </head>
 <body>
+<!--<div layout:fragment="content">-->
 <th:block th:fragment="frg_header">
   <header>
     <a th:href="@{/}">
@@ -828,7 +829,7 @@
 <!--        <form th:action="@{/auth/logout}" method="post">-->
 <!--          <button class="logout-btn" th:if="${isAuthenticated}">로그아웃</button>-->
 <!--        </form>-->
-        <button onclick="logout()" class="logout-btn" th:if="${isAuthenticated}">로그아웃</button>
+        <button id = "logout" class="logout-btn" th:if="${isAuthenticated}">로그아웃</button>
         <form th:action="@{/signin}" method="get">
           <button class="logout-btn" th:if="${!isAuthenticated}" th:href="@{/signin}">로그인</button>
         </form>
@@ -852,12 +853,24 @@
         class="material-icons">chevron_right</i></a></li>
 </ul>
 
-</body>
-</html>
+<!--</div>-->
+<script th:inline="javascript">
 
-<script>
-  function logout() {
+  document.addEventListener("DOMContentLoaded", ()=> {
+    console.log("확인")
+  });
+
+
+  // const winnerArea = document.getElementById('logout');
+  // console.log(winnerArea);
+  //
+  // if (winnerArea) {
+  //   logout()
+  // }
+
+  document.getElementById('logout').addEventListener('click', () => {
     console.log("로그아웃 버튼 누름 확인");
+
     fetch('/auth/logout', {
       method: 'POST',
       credentials: 'include',
@@ -868,8 +881,16 @@
       if (res.ok) {
         window.location.href = '/';
       }
-    });
-  }
+    })
+  })
+
 </script>
+
+</body>
+</html>
+
+
+
+
 
 
