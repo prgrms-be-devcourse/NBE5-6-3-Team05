@@ -6,6 +6,7 @@
 
 <body>
 <div layout:fragment="content">
+
   <div style="
   display: flex;
   justify-content: center;
@@ -259,4 +260,20 @@
     }
   });
 
+    document.querySelector("#logout").addEventListener('click', async () => {
+      console.log("로그아웃 버튼 누름 확인");
+
+      await fetch('/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res => {
+        if (res.ok) {
+          window.location.href = '/';
+        }
+      })
+    });
 </script>

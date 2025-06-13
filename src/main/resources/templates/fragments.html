@@ -826,9 +826,6 @@
         <button class="mypage-btn" sec:authorize="hasRole('ADMIN')"
                 th:onclick="|location.href='@{/admin/movies}'|">관리자페이지
         </button>
-<!--        <form th:action="@{/auth/logout}" method="post">-->
-<!--          <button class="logout-btn" th:if="${isAuthenticated}">로그아웃</button>-->
-<!--        </form>-->
         <button id = "logout" class="logout-btn" th:if="${isAuthenticated}">로그아웃</button>
         <form th:action="@{/signin}" method="get">
           <button class="logout-btn" th:if="${!isAuthenticated}" th:href="@{/signin}">로그인</button>
@@ -852,39 +849,6 @@
     <a th:href="@{${page.url()}(page=${page.nextPage()})}"><i
         class="material-icons">chevron_right</i></a></li>
 </ul>
-
-<!--</div>-->
-<script th:inline="javascript">
-
-  document.addEventListener("DOMContentLoaded", ()=> {
-    console.log("확인")
-  });
-
-
-  // const winnerArea = document.getElementById('logout');
-  // console.log(winnerArea);
-  //
-  // if (winnerArea) {
-  //   logout()
-  // }
-
-  document.getElementById('logout').addEventListener('click', () => {
-    console.log("로그아웃 버튼 누름 확인");
-
-    fetch('/auth/logout', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(res => {
-      if (res.ok) {
-        window.location.href = '/';
-      }
-    })
-  })
-
-</script>
 
 </body>
 </html>

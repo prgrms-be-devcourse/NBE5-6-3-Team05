@@ -6,7 +6,6 @@ import static org.springframework.http.HttpMethod.POST;
 import com.grepp.moodlink.infra.auth.token.JwtAuthenticationEntryPoint;
 import com.grepp.moodlink.infra.auth.token.filter.AuthExceptionFilter;
 import com.grepp.moodlink.infra.auth.token.filter.JwtAuthenticationFilter;
-import com.grepp.moodlink.infra.auth.token.filter.LogoutFilter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -37,7 +37,7 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint entryPoint;
 //    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 //    private final OAuth2FailureHandler oAuth2FailureHandler;
-    private final LogoutFilter logoutFilter;
+//    private final LogoutFilter logoutFilter;
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
@@ -102,7 +102,7 @@ public class SecurityConfig {
 //                .deleteCookies("JSESSIONID")
 //                .permitAll());
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(logoutFilter, JwtAuthenticationFilter.class)
+//            .addFilterBefore(logoutFilter, JwtAuthenticationFilter.class)
             .addFilterBefore(authExceptionFilter, JwtAuthenticationFilter.class);
         return http.build();
     }

@@ -68,12 +68,12 @@ public class AuthController {
             refreshTokenService.deleteByAccessTokenId(claims.getId());
         }
 
-        System.out.println("start");
+        System.out.println("qwer");
         // 쿠키 삭제
         response.addHeader("Set-Cookie", TokenCookieFactory.createExpiredToken(TokenType.ACCESS_TOKEN).toString());
         response.addHeader("Set-Cookie", TokenCookieFactory.createExpiredToken(TokenType.REFRESH_TOKEN).toString());
         response.addHeader("Set-Cookie", TokenCookieFactory.createExpiredToken(TokenType.AUTH_SERVER_SESSION_ID).toString());
-        System.out.println("end");
+        System.out.println("asdasda");
 
 
 //        return "home/mainPage";
