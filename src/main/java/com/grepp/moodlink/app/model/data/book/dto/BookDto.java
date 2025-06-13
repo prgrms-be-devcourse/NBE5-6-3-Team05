@@ -31,6 +31,7 @@ public class BookDto implements ContentDto {
     private String genre;
     private Boolean activated;
     private String summary;
+    private Long likeCount;
 
     public static BookDto toDto(Book book) {
         BookDto dto = new BookDto();
@@ -42,16 +43,17 @@ public class BookDto implements ContentDto {
         dto.setPublishedDate(book.getPublishedDate());
         dto.setDescription(book.getDescription());
         dto.setGenre(book.getGenre().getName());
-
+        dto.setLikeCount(book.getLikeCount());
         return dto;
     }
 
     public BookDto(String title, String description, LocalDate publishedDate, String publisher,
-        String image) {
+        String image, Long likeCount) {
         this.title = title;
         this.description = description;
         this.publishedDate = publishedDate;
         this.publisher = publisher;
         this.image = image;
+        this.likeCount = likeCount;
     }
 }

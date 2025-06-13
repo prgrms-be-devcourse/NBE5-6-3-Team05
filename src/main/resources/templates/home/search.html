@@ -7,9 +7,11 @@
   <title>검색 결과</title>
 </head>
 <body>
+
 <main layout:fragment="content" class="search-result-container">
 
     <div class="main-content">
+
       <div class="search-container">
         <form id="searchForm" th:action="@{/search}" method="get">
           <input type="text" id="search-input" name="contentName" placeholder="원하는 음악,영화,도서를 찾아보세요!">
@@ -94,29 +96,22 @@
       </div>
 
       <!-- 영화 예고편 유튜브 iframe -->
-      <div id="trailerMovieModal" class="trailer-modal" style="display:none;" onclick="handleModalBackgroundClick(event)">
-        <div class="trailer-modal-content">
-          <span class="trailer-modal-close" onclick="closeTrailerModal('trailerMovieModal', 'trailerMovieIframe')">×</span>
-          <iframe id = "trailerMovieIframe" class="trailerIframe" width="1280" height="720" frameborder="0"
-                  allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-      </div>
+      <div class="category" id="music">
 
-  <!-- 음악 -->
-  <div class="category" id="music">
-    발라드
-    댄스
-    힙합
-    R&B
-    인디음악
-    록/메탈
-    트로트
-    포크/블루스
+          <button onclick="searchByGenre('발라드')">발라드</button>
+          <button onclick="searchByGenre('댄스')">댄스</button>
+          <button onclick="searchByGenre('힙합')">힙합</button>
+          <button onclick="searchByGenre('R&B')">R&B</button>
+          <button onclick="searchByGenre('인디음악')">인디음악</button>
+          <button onclick="searchByGenre('록/메탈')">록/메탈</button>
+          <button onclick="searchByGenre('트로트')">트로트</button>
+          <button onclick="searchByGenre('포크/블루스')">포크/블루스</button>
 
-    <!--    <h3><span class="highlight">음악</span> 검색 결과</h3>-->
-    <div th:if="${music.size() > 0}" class="card-container">
-      <div th:each="m : ${music}" class="card-music"
-           th:attr = "onclick=
+
+        <!--    <h3><span class="highlight">음악</span> 검색 결과</h3>-->
+        <div th:if="${music.size() > 0}" class="card-container">
+          <div th:each="m : ${music}" class="card-music"
+               th:attr = "onclick=
              'showDetailModalMusic(' +
                '\'' + ${#strings.escapeJavaScript(m.title)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(m.releaseDate)} + '\',' +
@@ -124,12 +119,21 @@
                '\'' + ${#strings.escapeJavaScript(m.thumbnail)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(m.singer)} + '\',' +
              ')'"
-      >
-        <img th:src="${m.thumbnail}" alt="음악 썸네일" class="card-thumbnail music-thumb"/>
+          >
+            <img th:src="${m.thumbnail}" alt="음악 썸네일" class="card-thumbnail music-thumb"/>
+          </div>
+        </div><br><br><br><br>
+        <div th:if="${music.size() == 0}"><h4>검색 자료가 없습니다.</h4></div>
       </div>
-    </div><br><br><br><br>
-    <div th:if="${music.size() == 0}"><h4>검색 자료가 없습니다.</h4></div>
-  </div>
+
+  <!-- 음악 -->
+      <div id="trailerMovieModal" class="trailer-modal" style="display:none;" onclick="handleModalBackgroundClick(event)">
+        <div class="trailer-modal-content">
+          <span class="trailer-modal-close" onclick="closeTrailerModal('trailerMovieModal', 'trailerMovieIframe')">×</span>
+          <iframe id = "trailerMovieIframe" class="trailerIframe" width="1280" height="720" frameborder="0"
+                  allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
 
       <!-- 음악 모달 -->
       <div class = "detailMusicModal" id="musicDetailModal" onclick="if(event.target===this){closeMusicModal()}">
@@ -403,6 +407,10 @@
     if (event.target.id === 'trailerModal') {
       closeTrailerModal();
     }
+  }
+
+  function searchByGenre(genre) {
+    window.location.href = '/search/genre?genreName=' + encodeURIComponent(genre);
   }
 
 </script>

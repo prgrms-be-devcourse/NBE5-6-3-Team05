@@ -1,5 +1,7 @@
 package com.grepp.moodlink.app.model.admin.movie;
 
+import com.grepp.moodlink.app.model.admin.movie.repository.AdminGenreRepository;
+import com.grepp.moodlink.app.model.admin.movie.repository.AdminMovieRepository;
 import com.grepp.moodlink.app.model.data.movie.dto.GenreDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.movie.entity.Genre;
@@ -51,14 +53,17 @@ public class AdminMovieService {
         }
 
         try {
+            // api를 통해 가져왔을 때 thumbnail의 path 값을 가져오기에 따로 처리1
 
-            uploadImage(thumbnail, dto);
+            String ThumbnailImg = dto.getThumbnail();
+            if(!thumbnail.getFirst().isEmpty()){
+                uploadImage(thumbnail, dto);
+                ThumbnailImg = dto.getThumbnail();
+            }
             Movie movie = mapper.map(dto, Movie.class);
-
+            movie.setThumbnail(ThumbnailImg);
             long count = movieRepository.count();
             movie.setId("M" + count);
-
-            log.info("{}", movie);
 
             movie.setCreatedAt(LocalDate.now());
 
@@ -97,7 +102,6 @@ public class AdminMovieService {
 
         try {
             Movie data = movieRepository.findById(dto.getId()).orElseThrow(() -> new CommonException(ResponseCode.BAD_REQUEST));
-            log.info(data.getThumbnail());
             String ThumbnailImg = data.getThumbnail();
             if(!thumbnail.getFirst().isEmpty()){
                 uploadImage(thumbnail, dto);

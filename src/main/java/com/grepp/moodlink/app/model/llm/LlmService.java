@@ -8,14 +8,13 @@ import com.grepp.moodlink.app.model.data.music.MusicRepository;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.keyword.KeywordRepository;
 import com.grepp.moodlink.app.model.keyword.entity.KeywordSelection;
+import com.grepp.moodlink.infra.error.LLMResourceException;
 import com.grepp.moodlink.infra.error.LLMServiceUnavailableException;
 import com.grepp.moodlink.infra.response.ResponseCode;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +34,7 @@ public class LlmService {
 
     // 컨텐츠 추천 이유
     public String generateReason(String keywords) {
-        KeywordSelection keywordSelection = keywordRepository.findByKeywords(keywords);
+        Optional<KeywordSelection> keywordSelection = keywordRepository.findByKeywords(keywords);
 
         String prompt = String.format("""
             [시스템]
@@ -49,32 +48,25 @@ public class LlmService {
             
             [키워드]: %s
             
-            """, keywordSelection.getKeywords());
+            """, keywordSelection.get().getKeywords());
         String recommendation;
         try {
             recommendation = chatLanguageModel.chat(prompt);
         } catch (ResourceAccessException e) {
             throw new LLMServiceUnavailableException(ResponseCode.EXTERNAL_API_UNAVAILABLE, e);
         }
+        keywordSelection.get().setReason(recommendation);
+        keywordRepository.save(keywordSelection.get());
         return recommendation;
     }
 
-    public String recommendMovie(String genre, String keywords) {
-        KeywordSelection keywordSelection = keywordRepository.findByKeywords(keywords);
     // 영화 추천
-        byte[] byteEmbedding = keywordSelection.getEmbedding();
+    public String recommendMovie(String keywords) {
+        Optional<KeywordSelection> keywordSelection = keywordRepository.findByKeywords(keywords);
+        byte[] byteEmbedding = keywordSelection.get().getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
-        List<Movie> rawMovies;
-        if (genre.isEmpty()) {
-            rawMovies = movieRepository.findAll();
-        } else {
-            rawMovies = movieRepository.findByGenreName(genre);
-        }
 
-        List<Movie> movies = rawMovies.stream()
-            .peek(m -> {
-            })
-            .map(movie -> {
+        List<Movie> movies = movieRepository.findAll().stream().map(movie -> {
                 float similarity = CosineSimilarity.compute(
                     floatEmbedding,
                     toFloatArray(movie.getEmbedding())
@@ -90,7 +82,7 @@ public class LlmService {
             .map(m -> String.format("제목: %s\n영화소개: %s", m.getTitle(), m.getSummary()))
             .collect(Collectors.joining("\n\n"));
 
-        String result = llmRecommend("영화", keywordSelection.getKeywords(), context);
+        String result = llmRecommend("영화", keywordSelection.get().getKeywords(), context);
 
         System.out.println("영화" + result);
 
@@ -99,8 +91,8 @@ public class LlmService {
 
     // 도서 추천
     public String recommendBook(String keywords) {
-        KeywordSelection keywordSelection = keywordRepository.findByKeywords(keywords);
-        byte[] byteEmbedding = keywordSelection.getEmbedding();
+        Optional<KeywordSelection> keywordSelection = keywordRepository.findByKeywords(keywords);
+        byte[] byteEmbedding = keywordSelection.get().getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
         List<Book> books = bookRepository.findAll().stream().map(book -> {
                 float similarity = CosineSimilarity.compute(
@@ -117,7 +109,7 @@ public class LlmService {
             .map(b -> String.format("제목: %s\n책소개: %s", b.getTitle(), b.getSummary()))
             .collect(Collectors.joining("\n\n"));
 
-        String result = llmRecommend("도서", keywordSelection.getKeywords(), context);
+        String result = llmRecommend("도서", keywordSelection.get().getKeywords(), context);
 
         System.out.println("도서" + result);
 
@@ -126,8 +118,8 @@ public class LlmService {
 
     // 음악 추천
     public String recommendMusic(String keywords) {
-        KeywordSelection keywordSelection = keywordRepository.findByKeywords(keywords);
-        byte[] byteEmbedding = keywordSelection.getEmbedding();
+        Optional<KeywordSelection> keywordSelection = keywordRepository.findByKeywords(keywords);
+        byte[] byteEmbedding = keywordSelection.get().getEmbedding();
         float[] floatEmbedding = toFloatArray(byteEmbedding);
         List<Music> musics = musicRepository.findAll().stream().map(music -> {
                 float similarity = CosineSimilarity.compute(
@@ -144,7 +136,7 @@ public class LlmService {
             .map(m -> String.format("제목: %s\n노래소개: %s", m.getTitle(), m.getSummary()))
             .collect(Collectors.joining("\n\n"));
 
-        String result = llmRecommend("노래", keywordSelection.getKeywords(), context);
+        String result = llmRecommend("노래", keywordSelection.get().getKeywords(), context);
 
         System.out.println("노래" + result);
 
@@ -157,7 +149,7 @@ public class LlmService {
             [시스템]
             - 당신은 %s 추천 전문가입니다.
             - 반드시 제공된 목록에서만 추천하세요.
-            - 한국어로만 답변하고, 4개를 추천하세요.
+            - 한국어로만 답변하고, 8개를 추천하세요.
             - 제공된 목록에서 제목만 출력하세요.
             - 각 제목은 '"'로 감싸져있고, ','로 구분하여 출력하세요.
             - 출력 형식:
@@ -173,6 +165,8 @@ public class LlmService {
             recommendation = chatLanguageModel.chat(prompt);
         } catch (ResourceAccessException e) {
             throw new LLMServiceUnavailableException(ResponseCode.EXTERNAL_API_UNAVAILABLE, e);
+        } catch (RuntimeException e){
+            throw new LLMResourceException(ResponseCode.RESOURCE_EXHAUSTED, e);
         }
         return recommendation;
     }

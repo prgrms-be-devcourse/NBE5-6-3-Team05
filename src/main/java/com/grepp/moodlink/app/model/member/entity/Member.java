@@ -11,8 +11,8 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
 @Entity
+@ToString(onlyExplicitlyIncluded = true)
 @Table(name = "user")
 public class Member {
 
@@ -21,8 +21,9 @@ public class Member {
     private String password;
     @ManyToOne
     @JoinColumn(name = "KEYWORD_SELECTION_ID")
-    private KeywordSelection keywordSelectionId;
+    private KeywordSelection keywordSelection;
     private String username;
+    private String email;
     private String genre;
     private String periods;
     private String countries;

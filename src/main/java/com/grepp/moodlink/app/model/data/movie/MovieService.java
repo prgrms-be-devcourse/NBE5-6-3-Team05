@@ -5,7 +5,6 @@ import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.movie.entity.Genre;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +29,6 @@ public class MovieService {
 
 
     public void saveMovies(List<MovieDto> movieDtos) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         for (MovieDto dto : movieDtos) {
             Movie movie = new Movie();
@@ -45,7 +43,7 @@ public class MovieService {
             }
             movie.setReleaseDate(releaseDate);
             movie.setThumbnail(
-                "https://image.tmdb.org/t/p/original/" + String.valueOf(dto.getPosterPath()));
+                "https://image.tmdb.org/t/p/original/" + dto.getPosterPath());
             movie.setCreatedAt(LocalDate.now());
 
             List<Integer> genreIds = dto.getGenreIds();
@@ -66,7 +64,6 @@ public class MovieService {
         }
     }
 
-    @Transactional
     public List<String> parseRecommend(String movieResult) {
         List<String> result = new ArrayList<>();
         if (movieResult == null || movieResult.isBlank()) {

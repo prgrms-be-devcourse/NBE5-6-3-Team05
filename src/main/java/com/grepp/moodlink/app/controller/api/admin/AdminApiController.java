@@ -11,8 +11,17 @@ import com.grepp.moodlink.infra.response.ResponseCode;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,9 +40,8 @@ public class AdminApiController {
     private final AdminBookService bookService;
     private final AdminMovieService movieService;
     private final AdminMusicService musicService;
-    private final AdminMovieService adminMovieService;
-    private final AdminMusicService adminMusicService;
-    private final AdminBookService adminBookService;
+    private final JobLauncher jobLauncher;
+    private final Job recommendationJob;
 
     // 영화 삭제
     @DeleteMapping("movies/delete/{id}")
@@ -57,14 +65,29 @@ public class AdminApiController {
         return ResponseEntity.ok("정상적으로 삭제되었습니다.");
     }
 
+    // 추천 결과 생성
+    @PostMapping("/recommend")
+    public ResponseEntity<String> generateRecommend(){
+        try {
+            JobParameters jobParameters = new JobParametersBuilder()
+                    .addLong("startAt", System.currentTimeMillis())
+                    .toJobParameters();
+            jobLauncher.run(recommendationJob, jobParameters);
+            return ResponseEntity.ok("배치 잡이 실행되었습니다.");
+        } catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException |
+                 JobParametersInvalidException e) {
+            return ResponseEntity.internalServerError().body("배치 실행 실패: " + e.getMessage());
+        }
+    }
+
     // 장르 추가
     @PostMapping("genres/add")
     public ResponseEntity<ApiResponse<String>> addGenre(@RequestBody GenreAddRequest genreAddRequest) {
 
         switch (genreAddRequest.getContentType()) {
-            case "MOVIE" -> adminMovieService.addGenre(genreAddRequest.toGenreDto());
-            case "MUSIC" -> adminMusicService.addGenre(genreAddRequest.toMusicGenreDto());
-            case "BOOK" -> adminBookService.addGenre(genreAddRequest.toBookGenreDto());
+            case "MOVIE" -> movieService.addGenre(genreAddRequest.toGenreDto());
+            case "MUSIC" -> musicService.addGenre(genreAddRequest.toMusicGenreDto());
+            case "BOOK" -> bookService.addGenre(genreAddRequest.toBookGenreDto());
             case null, default -> {
                 return ResponseEntity.badRequest()
                     .body(ApiResponse.error(ResponseCode.BAD_REQUEST));
@@ -81,9 +104,9 @@ public class AdminApiController {
         Long longId = Long.parseLong(id);
 
         switch (genreModifyRequest.getContentType()) {
-            case "MOVIE" -> adminMovieService.modifyGenre(longId.intValue(), genreModifyRequest.toGenreDto());
-            case "MUSIC" -> adminMusicService.modifyGenre(longId, genreModifyRequest.toMusicGenreDto());
-            case "BOOK" -> adminBookService.modifyGenre(longId, genreModifyRequest.toBookGenreDto());
+            case "MOVIE" -> movieService.modifyGenre(longId.intValue(), genreModifyRequest.toGenreDto());
+            case "MUSIC" -> musicService.modifyGenre(longId, genreModifyRequest.toMusicGenreDto());
+            case "BOOK" -> bookService.modifyGenre(longId, genreModifyRequest.toBookGenreDto());
             case null, default -> {
                 return ResponseEntity.badRequest()
                     .body(ApiResponse.error(ResponseCode.BAD_REQUEST));
@@ -104,9 +127,9 @@ public class AdminApiController {
         Long longId = Long.parseLong(id);
         Boolean isDeleted;
         switch (content) {
-        case "MOVIE" -> isDeleted = adminMovieService.deleteGenre(longId.intValue());
-        case "MUSIC" -> isDeleted = adminMusicService.deleteGenre(longId);
-        case "BOOK" -> isDeleted = adminBookService.deleteGenre(longId);
+        case "MOVIE" -> isDeleted = movieService.deleteGenre(longId.intValue());
+        case "MUSIC" -> isDeleted = musicService.deleteGenre(longId);
+        case "BOOK" -> isDeleted = bookService.deleteGenre(longId);
         case null, default -> {
             return ResponseEntity.badRequest()
                 .body(ApiResponse.error(ResponseCode.BAD_REQUEST));
