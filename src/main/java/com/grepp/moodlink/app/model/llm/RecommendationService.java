@@ -9,9 +9,13 @@ import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.llm.batch.RecommendationDto;
 import com.grepp.moodlink.app.model.llm.code.ContentType;
 import com.grepp.moodlink.app.model.llm.entity.Recommendation;
+import com.grepp.moodlink.app.model.recomend.entity.Likes;
+import com.grepp.moodlink.app.model.result.dto.CuratingDetailDto;
+import com.grepp.moodlink.app.model.result.dto.CuratingDetailIdDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -134,6 +138,11 @@ public class RecommendationService {
             result.add(sortedIds.get(idx));
         }
         return result;
+    }
+
+
+    public List<Recommendation> curatingDetailDtoList(String keyword) {
+            return recommendationRepository.findByKeywords(keyword);
     }
 
 }

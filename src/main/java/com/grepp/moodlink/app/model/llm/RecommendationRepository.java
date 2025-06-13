@@ -14,4 +14,6 @@ public interface RecommendationRepository extends JpaRepository<Recommendation, 
     List<Recommendation> findByKeywordsAndContentType(String keywords, String contentType);
 
     boolean existsByKeywords(String keywords);
+
+    List<Recommendation> findByKeywords(String keyword);
 }
