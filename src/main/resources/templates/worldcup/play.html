@@ -147,8 +147,11 @@
     }
     const worldcupId = getQueryParam('id');
 
-    // 최초 데이터 로딩(월드컵 id로 가져온다.)
+    // 최초 데이터 로딩
+    // 비동기 호출1.(고른 월드컵의 컨텐츠들의 정보를 가져온다.(컨텐츠 아이디, 타입 등등)
+    // 비동기 호출2. (각 컨텐츠들의 상세정보를 가져온다.(각 컨텐츠별 이미지, 제목 등등)
     window.addEventListener('DOMContentLoaded', async () => {
+      // 비동기 호출1. Worldcup 정보 가져오기(월드컵 id, content-Type확인)
       const WorldcupRes = await fetch(`/api/worldcup/${worldcupId}/items`);
       const contentResp = await  WorldcupRes.json();
       const contentItems = contentResp.itemIdList;  // 객체 리스트
@@ -156,10 +159,10 @@
       const contentType = contentResp.contentType.toLowerCase();
 
       finalWinnerCount = contentResp.finalWinnerCountMap;
-
       // localStorage에 저장하기
       localStorage.setItem('worldcupItems', JSON.stringify(contentItems));
 
+      // 비동기 호출2. 각 컨텐츠들의 정보 가져오기(이미지, 타이틀, 줄거리 등등)
       const detailRes = await fetch(`/api/${contentType}/details`,{
         method: 'POST',
         headers:{
