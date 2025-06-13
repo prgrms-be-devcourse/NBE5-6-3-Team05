@@ -43,47 +43,32 @@ public class HomeController {
 
         String userId = getLoginUserId();
         // 로그인이 안 돼서 테스트 용으로 작성
-        String keyword = "오늘 기분은=기쁨,즐거움이야.오늘 날씨는=눈이야.지금 시간대는=저녁이야.같이 있는 사람은=가족이야.지금 필요한거는=즐거움";
+        String keyword;
         List<Recommendation> recommendations;
-        System.out.println(keyword);
-        recommendations = recommendationService.curatingDetailDtoList(keyword);
-        List<Recommendation> movieRecommendation = recommendations.stream().filter(
+
+        if (userId != null) {
+            keyword = keywordService.findKeywords(userId);
+            if (keyword != null) {
+                recommendations = recommendationService.curatingDetailDtoList(keyword);
+                List<Recommendation> movieRecommendation = recommendations.stream().filter(
                         r -> r.getContentType().equals(RecommendContentType.MOVIE.name())
                 ).toList();
-        List<Recommendation> bookRecommendation = recommendations.stream().filter(
-                r -> r.getContentType().equals(RecommendContentType.BOOK.name())
-        ).toList();
-        List<Recommendation> musicRecommendation = recommendations.stream().filter(
-                r -> r.getContentType().equals(RecommendContentType.MUSIC.name())
-        ).toList();
+                List<Recommendation> bookRecommendation = recommendations.stream().filter(
+                        r -> r.getContentType().equals(RecommendContentType.BOOK.name())
+                ).toList();
+                List<Recommendation> musicRecommendation = recommendations.stream().filter(
+                        r -> r.getContentType().equals(RecommendContentType.MUSIC.name())
+                ).toList();
 
-        List<Movie> movies = recommendationService.toMovie(movieRecommendation);
-        List<Book> books = recommendationService.toBook(bookRecommendation);
-        List<Music> musics = recommendationService.toMusic(musicRecommendation);
+                List<Movie> movies = recommendationService.toMovie(movieRecommendation);
+                List<Book> books = recommendationService.toBook(bookRecommendation);
+                List<Music> musics = recommendationService.toMusic(musicRecommendation);
 
-        model.addAttribute("movies", movies);
-        model.addAttribute("books", books);
-        model.addAttribute("musics", musics);
-//        String keyword;
-//        List<Recommendation> recommendations;
-//        if (userId != null) {
-//            keyword = keywordService.findKeywords(userId);
-//            if (keyword != null) {
-//                recommendations = recommendationService.curatingDetailDtoList(keyword);
-//                List<Recommendation> movieRecommendation = recommendations.stream().filter(
-//                        r -> r.getContentType().equals(RecommendContentType.MOVIE.name())
-//                ).toList();
-//                List<Recommendation> bookRecommendation = recommendations.stream().filter(
-//                        r -> r.getContentType().equals(RecommendContentType.BOOK.name())
-//                ).toList();
-//                List<Recommendation> musicRecommendation = recommendations.stream().filter(
-//                        r -> r.getContentType().equals(RecommendContentType.MUSIC.name())
-//                ).toList();
-//                model.addAttribute("movies", movieRecommendation);
-//                model.addAttribute("books", bookRecommendation);
-//                model.addAttribute("musics", musicRecommendation);
-//            }
-//        }
+                model.addAttribute("movies", movies);
+                model.addAttribute("books", books);
+                model.addAttribute("musics", musics);
+            }
+        }
 
         model.addAttribute("thumbnail", thumbnail);
         model.addAttribute("people", people);

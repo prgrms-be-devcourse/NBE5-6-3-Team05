@@ -50,7 +50,7 @@
   display: flex;
   justify-content: center;
   gap: 20px;
-  margin-top: 32px;
+
 ">
     <form th:action="@{/search}" method="get">
       <input type="hidden" name="contentName" value="" />
@@ -175,43 +175,43 @@
         </button>
       </div>
     </div>
-  </div>
-  <div class="recommendation-container">
+    <div class="recommendation-container">
 
-    <!-- 영화 추천 -->
-    <div th:if="${movies != null and !movies.isEmpty()}" class="recommendation-section">
-      <h4>🎬 영화 추천</h4>
-      <div class="swiper movie-swiper">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide" th:each="movie : ${movies}">
-            <img th:src="${movie.thumbnail}" alt="영화 이미지" class="content-image" />
-            <p class="recommend-content-title" th:text="${#strings.length(movie.title) > 12 ? #strings.substring(movie.title, 0, 12) + '...' : movie.title}">제목</p>
+      <!-- 영화 추천 -->
+      <div th:if="${movies != null and !movies.isEmpty()}" class="recommendation-section">
+        <h4>🎬 영화 추천</h4>
+        <div class="swiper movie-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" th:each="movie : ${movies}">
+              <img th:src="${movie.thumbnail}" alt="영화 이미지" class="content-image" />
+              <p class="recommend-content-title" th:text="${#strings.length(movie.title) > 12 ? #strings.substring(movie.title, 0, 12) + '...' : movie.title}">제목</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- 책 추천 -->
-    <div th:if="${books != null and !books.isEmpty()}" class="recommendation-section">
-      <h4>📚 도서 추천</h4>
-      <div class="swiper book-swiper">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide" th:each="book : ${books}">
-            <img th:src="${book.image}" alt="도서 이미지" class="content-image" />
-            <p class="recommend-content-title" th:text="${#strings.length(book.title) > 12 ? #strings.substring(book.title, 0, 12) + '...' : book.title}">제목</p>
+      <!-- 책 추천 -->
+      <div th:if="${books != null and !books.isEmpty()}" class="recommendation-section">
+        <h4>📚 도서 추천</h4>
+        <div class="swiper book-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" th:each="book : ${books}">
+              <img th:src="${book.image}" alt="도서 이미지" class="content-image" />
+              <p class="recommend-content-title" th:text="${#strings.length(book.title) > 12 ? #strings.substring(book.title, 0, 12) + '...' : book.title}">제목</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- 음악 추천 -->
-    <div th:if="${musics != null and !musics.isEmpty()}" class="recommendation-section">
-      <h4>🎵 음악 추천</h4>
-      <div class="swiper music-swiper">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide" th:each="music : ${musics}">
-            <img th:src="${music.thumbnail}" alt="음악 이미지" class="content-image" />
-            <p class="recommend-content-title" th:text="${#strings.length(music.title) > 12 ? #strings.substring(music.title, 0, 12) + '...' : music.title}">제목</p>
+      <!-- 음악 추천 -->
+      <div th:if="${musics != null and !musics.isEmpty()}" class="recommendation-section">
+        <h4>🎵 음악 추천</h4>
+        <div class="swiper music-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" th:each="music : ${musics}">
+              <img th:src="${music.thumbnail}" alt="음악 이미지" class="content-image" />
+              <p class="recommend-content-title" th:text="${#strings.length(music.title) > 12 ? #strings.substring(music.title, 0, 12) + '...' : music.title}">제목</p>
+            </div>
           </div>
         </div>
       </div>
