@@ -15,8 +15,12 @@
       padding: 10px 0;
     }
 
+    .swiper-wrapper {
+      display: flex;
+    }
+
     .swiper-slide {
-      width: 180px; /* 고정 너비 */
+      width: 280px;
       text-align: center;
       flex-shrink: 0;
     }
@@ -24,7 +28,6 @@
     .content-image {
       width: 200px;
       height: 280px;
-
       object-fit: cover;
       border-radius: 8px;
     }
@@ -35,6 +38,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      width: 200px;
     }
 
   </style>
@@ -172,46 +176,47 @@
     </div>
   </div>
   <div class="recommendation-container">
-      <!-- 영화 추천 -->
-      <div th:if="${movies != null and !movies.isEmpty()}" class="recommendation-section">
-        <h4>🎬 영화 추천</h4>
-        <div class="swiper movie-swiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="movie : ${movies}">
-              <img th:src="${movie.thumbnail}" alt="영화 이미지" class="content-image"/>
-              <p class="recommend-content-title" th:text="${#strings.length(movie.title) > 12 ? #strings.substring(movie.title, 0, 12) + '...' : movie.title}">영화 제목</p>
-            </div>
+
+    <!-- 영화 추천 -->
+    <div th:if="${movies != null and !movies.isEmpty()}" class="recommendation-section">
+      <h4>🎬 영화 추천</h4>
+      <div class="swiper movie-swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" th:each="movie : ${movies}">
+            <img th:src="${movie.thumbnail}" alt="영화 이미지" class="content-image" />
+            <p class="recommend-content-title" th:text="${#strings.length(movie.title) > 12 ? #strings.substring(movie.title, 0, 12) + '...' : movie.title}">제목</p>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- 책 추천 -->
-      <div th:if="${books != null and !books.isEmpty()}" class="recommendation-section">
-        <h4>📚 도서 추천</h4>
-        <div class="swiper book-swiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="book : ${books}">
-              <img th:src="${book.image}" alt="도서 이미지" class="content-image"/>
-              <p class="recommend-content-title" th:text="${#strings.length(book.title) > 12 ? #strings.substring(book.title, 0, 12) + '...' : book.title}">도서 제목</p>
-            </div>
+    <!-- 책 추천 -->
+    <div th:if="${books != null and !books.isEmpty()}" class="recommendation-section">
+      <h4>📚 도서 추천</h4>
+      <div class="swiper book-swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" th:each="book : ${books}">
+            <img th:src="${book.image}" alt="도서 이미지" class="content-image" />
+            <p class="recommend-content-title" th:text="${#strings.length(book.title) > 12 ? #strings.substring(book.title, 0, 12) + '...' : book.title}">제목</p>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- 음악 추천 -->
-      <div th:if="${musics != null and !musics.isEmpty()}" class="recommendation-section">
-        <h4>🎵 음악 추천</h4>
-        <div class="swiper music-swiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="music : ${musics}">
-              <img th:src="${music.thumbnail}" alt="음악 이미지" class="content-image"/>
-              <p class="recommend-content-title" th:text="${#strings.length(music.title) > 12 ? #strings.substring(music.title, 0, 12) + '...' : music.title}">음악 제목</p>
-            </div>
+    <!-- 음악 추천 -->
+    <div th:if="${musics != null and !musics.isEmpty()}" class="recommendation-section">
+      <h4>🎵 음악 추천</h4>
+      <div class="swiper music-swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" th:each="music : ${musics}">
+            <img th:src="${music.thumbnail}" alt="음악 이미지" class="content-image" />
+            <p class="recommend-content-title" th:text="${#strings.length(music.title) > 12 ? #strings.substring(music.title, 0, 12) + '...' : music.title}">제목</p>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
 </div>
 
@@ -335,33 +340,34 @@
       }, 15000);
     }
   });
-  new Swiper('.movie-swiper', {
+
+    new Swiper('.movie-swiper', {
     loop: true,
     slidesPerView: 'auto',
-    spaceBetween: 10,
+    spaceBetween: 16,
     autoplay: {
-      delay: 2500,
-      disableOnInteraction: false,
-    },
+    delay: 2500,
+    disableOnInteraction: false,
+  },
   });
 
-  new Swiper('.book-swiper', {
+    new Swiper('.book-swiper', {
     loop: true,
     slidesPerView: 'auto',
-    spaceBetween: 10,
+    spaceBetween: 16,
     autoplay: {
-      delay: 2800,
-      disableOnInteraction: false,
-    },
+    delay: 2700,
+    disableOnInteraction: false,
+  },
   });
 
-  new Swiper('.music-swiper', {
+    new Swiper('.music-swiper', {
     loop: true,
     slidesPerView: 'auto',
-    spaceBetween: 10,
+    spaceBetween: 16,
     autoplay: {
-      delay: 3000,
-      disableOnInteraction: false,
-    },
+    delay: 2900,
+    disableOnInteraction: false,
+  },
   });
 </script>
