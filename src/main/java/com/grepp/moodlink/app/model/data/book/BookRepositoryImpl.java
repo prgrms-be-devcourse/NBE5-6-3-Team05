@@ -25,6 +25,7 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
     private final QBook book = QBook.book;
+    QBookGenre genre = QBookGenre.bookGenre;
 
     @Override
     public String findTopThumbnail() {
@@ -66,8 +67,6 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
     }
 
     public List<BookDto> searchContentByGenre(String genreName) {
-        QBook book = QBook.book;
-        QBookGenre genre = QBookGenre.bookGenre;
         return queryFactory
             .select(Projections.constructor(BookDto.class,
                 book.title,
