@@ -3,14 +3,20 @@ package com.grepp.moodlink.app.controller.web.auth;
 import com.grepp.moodlink.app.controller.web.auth.payload.SigninRequest;
 import com.grepp.moodlink.app.controller.web.auth.payload.SignupRequest;
 import com.grepp.moodlink.app.model.member.MemberService;
+import com.grepp.moodlink.infra.response.ApiResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class WebAuthController {
@@ -23,8 +29,9 @@ public class WebAuthController {
         return "auth/signup";
     }
 
+    // verify 하여 인증 이메일 보내기
     @PostMapping("/signup")
-    public String postSignup(@Valid SignupRequest signupRequest, BindingResult bindingResult) {
+    public String postSignupVerify(@Valid SignupRequest signupRequest, BindingResult bindingResult, HttpSession session) {
         if (bindingResult.hasErrors()) {
             return "auth/signup";
         }
@@ -34,9 +41,29 @@ public class WebAuthController {
             return "auth/signup";
         }
 
-        memberService.signup(signupRequest.toDto());
+        String token = session.getId();
+        // todo 이거 맞나? redis에 저장하는 법 다시 확인
+        session.setAttribute(token,signupRequest);
 
-        return "redirect:/signin";
+        // 이메일 발송
+        memberService.verify(signupRequest.toDto(), token);
+
+        return "auth/verification";
+    }
+
+    // 이메일에서 confirm을 누를 시 회원 가입 완료
+    @GetMapping("add/{token}")
+    public String signin(
+        @PathVariable
+        String token,
+        HttpSession session
+    ){
+        log.info("aaaaaaaaaaaaaaaa");
+        SignupRequest request = (SignupRequest) session.getAttribute(token);
+        memberService.signup(request.toDto());
+
+        log.info("bbbbbbbbbbbbbbbbbbb");
+        return "auth/complete";
     }
 
     @GetMapping("/signin")

@@ -6,10 +6,15 @@ import com.grepp.moodlink.app.model.keyword.entity.KeywordSelection;
 import com.grepp.moodlink.app.model.member.dto.MemberDto;
 import com.grepp.moodlink.app.model.member.dto.MemberInfoDto;
 import com.grepp.moodlink.app.model.member.dto.ModifyDto;
+import com.grepp.moodlink.app.model.member.dto.SmtpDto;
 import com.grepp.moodlink.app.model.member.entity.Member;
 import com.grepp.moodlink.infra.error.UserNotFoundException;
+import com.grepp.moodlink.infra.error.exceptions.CommonException;
+import com.grepp.moodlink.infra.feign.client.MailApi;
 import com.grepp.moodlink.infra.response.ResponseCode;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +31,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final KeywordRepository keywordRepository;
+    private final MailApi mailApi;
 
     @Transactional
     public Optional<MemberInfoDto> GetMemberInfo(String userId) {
@@ -88,6 +94,12 @@ public class MemberService {
             builder.role(Role.ROLE_USER);
         }
 
+        // 만약 이메일 인증 받는 중에 누가 해당 아이디로 회원가입 하면 어떡함??
+        if(existsByUserId(dto.getUserId())) {
+            // todo 임시로 예외 던지기
+            throw new CommonException(ResponseCode.BAD_REQUEST);
+        }
+
         Member member = builder.build();
         memberRepository.save(member);
     }
@@ -113,4 +125,18 @@ public class MemberService {
         }
     }
 
+    public void verify(MemberDto dto, String token) {
+        SmtpDto smtp = SmtpDto.builder()
+            .from("moodlink")
+            .to(List.of(dto.getEmail()))
+            .subject("회원 가입을 완료해주세요.")
+            .properties(Map.of(
+                "token", token,
+                "domain", "http://localhost:8080"
+            ))
+            .eventType("signup_verify")
+            .build();
+
+        mailApi.sendMail("moodlink", "ROLE_SERVER",smtp);
+    }
 }
