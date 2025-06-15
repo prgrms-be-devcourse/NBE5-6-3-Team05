@@ -24,4 +24,6 @@ public interface MovieRepository extends JpaRepository<Movie, String>, MovieRepo
     Optional<String> findIdByTitle(@Param("title") String title);
 
     List<Movie> findAllByIdIn(List<String> id);
+
+    List<Movie> findTop10ByOrderByLikeCountDesc();
 }

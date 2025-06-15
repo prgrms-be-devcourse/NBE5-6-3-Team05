@@ -180,4 +180,17 @@ public class RecommendationService {
         // 해당 contentId로 music 조회
         return musicRepository.findAllById(contentIds);
     }
+
+    public List<Movie> bestMovies() {
+        return movieRepository.findTop10ByOrderByLikeCountDesc();
+
+    }
+
+    public List<Book> bestBooks() {
+        return bookRepository.findTop10ByOrderByLikeCountDesc();
+    }
+
+    public List<Music> bestMusics() {
+        return musicRepository.findTop10ByOrderByLikeCountDesc();
+    }
 }

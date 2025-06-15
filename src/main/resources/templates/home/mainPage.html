@@ -130,12 +130,25 @@
         <h4>🎬 영화 추천</h4>
         <div class="swiper movie-swiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="movie : ${movies}">
+            <div class="swiper-slide"
+                 th:each="movie : ${movies}"
+                 th:attr="onclick=|showDetailModalMovie(
+           '${#strings.escapeJavaScript(movie.title)}',
+           '${#strings.escapeJavaScript(movie.releaseDate)}',
+           '${#strings.escapeJavaScript(movie.summary)}',
+           '${#strings.escapeJavaScript(movie.thumbnail)}'
+         )|">
+
               <img th:src="${movie.thumbnail}" alt="영화 이미지" class="content-image" />
-              <p class="recommend-content-title" th:text="${#strings.length(movie.title) > 12 ? #strings.substring(movie.title, 0, 12) + '...' : movie.title}">제목</p>
+
+              <p class="recommend-content-title"
+                 th:text="${#strings.length(movie.title) > 12 ? #strings.substring(movie.title, 0, 12) + '...' : movie.title}">
+                제목
+              </p>
             </div>
           </div>
         </div>
+
       </div>
 
       <!-- 책 추천 -->
@@ -143,7 +156,13 @@
         <h4>📚 도서 추천</h4>
         <div class="swiper book-swiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="book : ${books}">
+            <div class="swiper-slide" th:each="book : ${books}"
+                 th:attr="onclick=|showDetailModalBook(
+           '${#strings.escapeJavaScript(book.title)}',
+           '${#strings.escapeJavaScript(book.publishedDate)}',
+           '${#strings.escapeJavaScript(book.description)}',
+           '${#strings.escapeJavaScript(book.image)}'
+         )|">
               <img th:src="${book.image}" alt="도서 이미지" class="content-image" />
               <p class="recommend-content-title" th:text="${#strings.length(book.title) > 12 ? #strings.substring(book.title, 0, 12) + '...' : book.title}">제목</p>
             </div>
@@ -156,7 +175,14 @@
         <h4>🎵 음악 추천</h4>
         <div class="swiper music-swiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="music : ${musics}">
+            <div class="swiper-slide" th:each="music : ${musics}"
+                 th:attr="onclick=|showDetailModalMusic(
+           '${#strings.escapeJavaScript(music.title)}',
+           '${#strings.escapeJavaScript(music.releaseDate)}',
+           '${#strings.escapeJavaScript(music.lyrics)}',
+           '${#strings.escapeJavaScript(music.thumbnail)}',
+           '${#strings.escapeJavaScript(music.singer)}'
+         )|">
               <img th:src="${music.thumbnail}" alt="음악 이미지" class="content-image" />
               <p class="recommend-content-title" th:text="${#strings.length(music.title) > 12 ? #strings.substring(music.title, 0, 12) + '...' : music.title}">제목</p>
             </div>
@@ -164,57 +190,53 @@
         </div>
       </div>
     </div>
-  </div>
-</div>
+    <script th:inline="javascript">
 
+      function showContentInfo(id) {
+        const info = document.getElementById(id + '-info');
+        if (info.style.display === 'block') {
+          info.style.display = 'none';
+        } else {
+          document.querySelectorAll('.content-info').forEach(el => el.style.display = 'none');
+          info.style.display = 'block';
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        new Swiper('.movie-swiper', {
+          loop: true,
+          slidesPerView: 'auto',
+          spaceBetween: 16,
+          autoplay: {
+            delay: 2500,
+            disableOnInteraction: false,
+          },
+        });
+
+        new Swiper('.book-swiper', {
+          loop: true,
+          slidesPerView: 'auto',
+          spaceBetween: 16,
+          autoplay: {
+            delay: 2700,
+            disableOnInteraction: false,
+          },
+        });
+
+        new Swiper('.music-swiper', {
+          loop: true,
+          slidesPerView: 'auto',
+          spaceBetween: 16,
+          autoplay: {
+            delay: 2900,
+            disableOnInteraction: false,
+          },
+        });
+      });
+    </script>
+    <th:block th:replace="fragments::modal"/>
+  </div>
 </div>
 
 </body>
 </html>
-
-<script th:inline="javascript">
-
-  function showContentInfo(id) {
-    const info = document.getElementById(id + '-info');
-    if (info.style.display === 'block') {
-      info.style.display = 'none';
-    } else {
-      document.querySelectorAll('.content-info').forEach(el => el.style.display = 'none');
-      info.style.display = 'block';
-    }
-  }
-
-
-
-
-
-    new Swiper('.movie-swiper', {
-    loop: true,
-    slidesPerView: 'auto',
-    spaceBetween: 16,
-    autoplay: {
-    delay: 2500,
-    disableOnInteraction: false,
-  },
-  });
-
-    new Swiper('.book-swiper', {
-    loop: true,
-    slidesPerView: 'auto',
-    spaceBetween: 16,
-    autoplay: {
-    delay: 2700,
-    disableOnInteraction: false,
-  },
-  });
-
-    new Swiper('.music-swiper', {
-    loop: true,
-    slidesPerView: 'auto',
-    spaceBetween: 16,
-    autoplay: {
-    delay: 2900,
-    disableOnInteraction: false,
-  },
-  });
-</script>
