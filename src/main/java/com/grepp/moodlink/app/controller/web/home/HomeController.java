@@ -1,24 +1,20 @@
 package com.grepp.moodlink.app.controller.web.home;
 
 import com.grepp.moodlink.app.model.auth.domain.Principal;
-import com.grepp.moodlink.app.model.data.book.BookService;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
-import com.grepp.moodlink.app.model.data.movie.MovieService;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
-import com.grepp.moodlink.app.model.data.music.MusicService;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.home.HomeService;
 import java.util.List;
+import java.util.Objects;
 
 import com.grepp.moodlink.app.model.keyword.KeywordService;
 import com.grepp.moodlink.app.model.llm.RecommendationService;
 import com.grepp.moodlink.app.model.llm.code.RecommendContentType;
 import com.grepp.moodlink.app.model.llm.entity.Recommendation;
-import com.grepp.moodlink.app.model.result.dto.CuratingDetailDto;
-import com.grepp.moodlink.app.model.worldcup.code.ContentType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,8 +38,7 @@ public class HomeController {
         List<String> title = homeService.findTitle();
 
         String userId = getLoginUserId();
-        // 로그인이 안 돼서 테스트 용으로 작성
-        String keyword;
+        String keyword = "";
         List<Recommendation> recommendations;
 
         if (userId != null) {
@@ -68,6 +63,15 @@ public class HomeController {
                 model.addAttribute("books", books);
                 model.addAttribute("musics", musics);
             }
+        }
+        if(userId == null || Objects.requireNonNull(keyword).equals("No exist keywords")){
+            List<Movie> movies = recommendationService.bestMovies();
+            List<Book> books = recommendationService.bestBooks();
+            List<Music> musics = recommendationService.bestMusics();
+
+            model.addAttribute("movies", movies);
+            model.addAttribute("books", books);
+            model.addAttribute("musics", musics);
         }
 
         model.addAttribute("thumbnail", thumbnail);
