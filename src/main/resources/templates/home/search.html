@@ -68,23 +68,26 @@
 
   <!-- 영화 -->
   <div class="category" id="movie">
-    <div id = movieGenre>
-      <button class = "genre-btn" data-type="movie" data-genre="모험">모험</button>
-      <button class = "genre-btn" data-type="movie" data-genre="판타지">판타지</button>
-      <button class = "genre-btn" data-type="movie" data-genre="애니메이션">애니메이션</button>
-      <button class = "genre-btn" data-type="movie" data-genre="드라마">드라마</button>
-      <button class = "genre-btn" data-type="movie" data-genre="공포">공포</button>
-      <button class = "genre-btn" data-type="movie" data-genre="액션</">액션</button>
-      <button class = "genre-btn" data-type="movie" data-genre="코미디">코미디</button>
-      <button class = "genre-btn" data-type="movie" data-genre="역사">역사</button>
-      <button class = "genre-btn" data-type="movie" data-genre="스릴러">스릴러</button>
-      <button class = "genre-btn" data-type="movie" data-genre="범죄">범죄</button>
-      <button class = "genre-btn" data-type="movie" data-genre="다큐멘터리">다큐멘터리</button>
-      <button class = "genre-btn" data-type="movie" data-genre="SF">SF</button>
-      <button class = "genre-btn" data-type="movie" data-genre="미스터리">미스터리</button>
-      <button class = "genre-btn" data-type="movie" data-genre="로맨스">로맨스</button>
-      <button class = "genre-btn" data-type="movie" data-genre="전쟁">전쟁</button>
-    </div>
+
+    <form  id="searchMovieWithGenreForm" th:action="@{/search/genre/movie}" method="get">
+      <input type="hidden" id="selectedMovieCategory" th:value="${selectedMovieCategory}" />
+      <input type="hidden" name="genreName" id="movieGenreNameInput"/>
+      <button type="button" class = "genre-btn" onclick="submitMovieGenre('모험')">모험</button>
+      <button type="button" class = "genre-btn" onclick="submitMovieGenre('판타지')">판타지</button>
+      <button type="button" class = "genre-btn" onclick="submitMovieGenre('애니메이션')">애니메이션</button>
+      <button type="button" class = "genre-btn" onclick="submitMovieGenre('드라마')">드라마</button>
+      <button type="button" class = "genre-btn" onclick="submitMovieGenre('공포')">공포</button>
+      <button type="button" class = "genre-btn" onclick="submitMovieGenre('액션')">액션</button>
+      <button type="button" class = "genre-btn" onclick="submitMovieGenre('코미디')">코미디</button>
+      <button type="button" class = "genre-btn" onclick="submitMovieGenre('역사')">역사</button>
+      <button type="button" class = "genre-btn" onclick="submitMovieGenre('스릴러')">스릴러</button>
+      <button type="button" class = "genre-btn" onclick="submitMovieGenre('범죄')">범죄</button>
+      <button type="button" class = "genre-btn" onclick="submitMovieGenre('다큐멘터리')">다큐멘터리</button>
+      <button type="button" class = "genre-btn" onclick="submitMovieGenre('SF')">SF</button>
+      <button type="button" class = "genre-btn" onclick="submitMovieGenre('미스터리')">미스터리</button>
+      <button type="button" class = "genre-btn" onclick="submitMovieGenre('로맨스')">로맨스</button>
+      <button type="button" class = "genre-btn" onclick="submitMovieGenre('전쟁')">전쟁</button>
+    </form>
 
     <div class="genre-title">
       <h4 th:text="${genre}"></h4>
@@ -102,8 +105,21 @@
       >
         <img th:src="${m.thumbnail}" alt="영화 썸네일" class="card-thumbnail"/>
       </div>
-    </div><br><br><br><br>
-    <div th:if="${movie == null}"><h4>영화 검색 자료가 없습니다.</h4></div>
+    </div>
+
+      <div th:if="${movieContentWithGenre != null and movieContentWithGenre.size() > 0 }" class="card-container">
+        <div th:each="mg : ${movieContentWithGenre}" class="card-movie"
+             th:attr="onclick='showDetailModalMovie(' +
+                 '\'' + ${#strings.escapeJavaScript(mg.title)} + '\',' +
+                 '\'' + ${#strings.escapeJavaScript(mg.releaseDate)} + '\',' +
+                 '\'' + ${#strings.escapeJavaScript(mg.summary)} + '\',' +
+                 '\'' + ${#strings.escapeJavaScript(mg.thumbnail)} + '\'' +
+                 ')'"
+        >
+          <img th:src="${mg.thumbnail}" alt="영화 썸네일" class="card-thumbnail"/>
+        </div>
+      </div><br><br><br><br>
+    <div th:if="${movieContentWithGenre == null and movie == null}"><h4>영화 검색 자료가 없습니다.</h4></div>
   </div>
       <!-- 영화 모달 -->
       <div class = "detailMovieModal" id="movieDetailModal" onclick="if(event.target===this){closeMovieModal()}">
@@ -504,6 +520,13 @@
     document.getElementById('bookGenreNameInput').value = genre;
     document.getElementById('searchBookWithGenreForm').submit();
   }
+
+  // 영화 장르 선택 버튼
+  function submitMovieGenre(genre) {
+    document.getElementById('movieGenreNameInput').value = genre;
+    document.getElementById('searchMovieWithGenreForm').submit();
+  }
+
 
 
 

@@ -112,18 +112,18 @@ public class HomeController {
         return"/home/search";
     }
 
-//    @GetMapping("/search/genre/movie")
-//    public String searchBookGenre(Model model, @RequestParam String genreName) {
-//        System.out.println("영화 장르 검색 컨트롤러");
-//        List<MovieDto> movieContentByGenre = homeService.searchMovieContentByGenre(genreName);
-//        System.out.println("영화 장르 검색 컨트롤러 ee");
-//        model.addAttribute("movieContentWithGenre", movieContentByGenre);
-//        model.addAttribute("selectedMovieCategory", "movie");
-//        model.addAttribute("genre", genreName);
-//        System.out.println("영화 장르 검색 컨트롤러 ee22");
-//        System.out.println(movieContentByGenre);
-//        return"/home/search";
-//    }
+    @GetMapping("/search/genre/movie")
+    public String searchMovieGenre(Model model, @RequestParam String genreName) {
+        System.out.println("영화 장르 검색 컨트롤러");
+        List<MovieDto> movieContentByGenre = homeService.searchMovieContentByGenre(genreName);
+        System.out.println("영화 장르 검색 컨트롤러 ee");
+        model.addAttribute("movieContentWithGenre", movieContentByGenre);
+        model.addAttribute("selectedMovieCategory", "movie");
+        model.addAttribute("genre", genreName);
+        System.out.println("영화 장르 검색 컨트롤러 ee22");
+        System.out.println(movieContentByGenre);
+        return"/home/search";
+    }
 
     private String getLoginUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
