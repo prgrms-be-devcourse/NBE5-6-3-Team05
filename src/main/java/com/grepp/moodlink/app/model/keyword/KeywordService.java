@@ -76,6 +76,6 @@ public class KeywordService {
         KeywordSelection keyword = null;
         if (member.isPresent()) keyword = member.get().getKeywordSelection();
         if (keyword != null) return keyword.getKeywords();
-        return "";
+        return "No exist keywords";
     }
 }

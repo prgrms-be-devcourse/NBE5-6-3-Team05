@@ -1085,7 +1085,7 @@
       document.getElementById('movieDetailModal').classList.add('active');
 
     }
-    
+
     function youtubeMovie(title) {
       fetch(`/api/trailer/movie?title=${encodeURIComponent(title)}`)
         .then(res => res.json())
