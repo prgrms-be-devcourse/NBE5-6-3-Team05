@@ -124,61 +124,9 @@
       </div>
     </div>
 
-    <br>
-    <p class="content-description"><i>moodlink 이용자들의 추천 콘텐츠 입니다.</i></p>
-
-    <br>
-
-
-    <div class="buttons">
-      <button class="fancy-button red-button"
-              th:onclick="|location.href='@{/worldcup}'|">
-        <i class="material-icons">sports_esports</i>
-        월드컵(출시예정)
-      </button>
-
-      <button class="fancy-button blue-button" onclick="openFortuneModal()">
-        <i class="material-icons">auto_awesome</i>
-        오늘의 운세
-      </button>
-
-      <div id="fortuneModal" class="fortune-modal" onclick="closeModal(event)">
-        <div class="fortune-modal-content" onclick="event.stopPropagation()">
-          <div class="scrolling-wrapper">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h4 style="color: #814700 ; margin-bottom: 20px;">오늘의 운세</h4>
-
-            <div id="fortuneText">
-              <p id="fortuneMsg1" class="fortune-message" style="display: none;">당신의 오늘을 위한 짧은
-                안내서입니다.</p>
-              <p id="fortuneMsg2" class="fortune-message" style="display: none;">이 운세가 당신의 하루에 작은
-                방향이 되길 바랍니다.</p>
-              <p id="fortuneResult" class="fortune-result  scrolling-text"
-                 style="display: none;"></p>
-
-            </div>
-
-            <div style="margin-top: 20px; text-align: center;">
-              <button id="retryFortuneBtn" class="fancy-button blue-button"
-                      onclick="retryFortune()">
-                다시 추천받기
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="buttons">
-        <button class="fancy-button purple-button" th:onclick="|location.href='@{/recommend}'|">
-          <i class="material-icons">stars</i>
-          추천받기
-        </button>
-      </div>
-    </div>
-    <div class="recommendation-container">
-
+    <div class="recommendation-container" th:if="${movies != null and !movies.isEmpty()}">
       <!-- 영화 추천 -->
-      <div th:if="${movies != null and !movies.isEmpty()}" class="recommendation-section">
+      <div  class="recommendation-section">
         <h4>🎬 영화 추천</h4>
         <div class="swiper movie-swiper">
           <div class="swiper-wrapper">
@@ -191,7 +139,7 @@
       </div>
 
       <!-- 책 추천 -->
-      <div th:if="${books != null and !books.isEmpty()}" class="recommendation-section">
+      <div class="recommendation-section">
         <h4>📚 도서 추천</h4>
         <div class="swiper book-swiper">
           <div class="swiper-wrapper">
@@ -204,7 +152,7 @@
       </div>
 
       <!-- 음악 추천 -->
-      <div th:if="${musics != null and !musics.isEmpty()}" class="recommendation-section">
+      <div class="recommendation-section">
         <h4>🎵 음악 추천</h4>
         <div class="swiper music-swiper">
           <div class="swiper-wrapper">
