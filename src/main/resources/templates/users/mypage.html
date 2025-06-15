@@ -6,6 +6,14 @@
 <head>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
+    .container{
+      display: flex;
+      margin-top: 20px;
+      flex-direction: column;
+      width: 100%;
+    }
+
+
     :root {
       --primary-color: #6a3de8;
       --secondary-color: #4a30a0;
@@ -43,7 +51,6 @@
       background: var(--bg-card);
       border-radius: 16px;
       padding: 2rem;
-      margin-bottom: 2rem;
       box-shadow: var(--shadow);
       position: relative;
       overflow: hidden;
@@ -192,6 +199,7 @@
 <body>
 
 <div layout:fragment="content" class="content-container">
+  <div class="container">
   <h1 class="page-title">User Profile</h1>
 
   <div class="user-info-card">
@@ -531,6 +539,7 @@
       loadTab('books');
     });
   </script>
+</div>
 </div>
 </body>
 </html>
