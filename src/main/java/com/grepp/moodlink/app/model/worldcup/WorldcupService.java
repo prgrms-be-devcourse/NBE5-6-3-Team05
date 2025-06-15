@@ -1,7 +1,7 @@
 package com.grepp.moodlink.app.model.worldcup;
 
 import com.grepp.moodlink.app.controller.api.worldcup.payload.WorldcupIdsRequest;
-import com.grepp.moodlink.app.controller.web.worldcup.Response.WorldcupResultResponse;
+import com.grepp.moodlink.app.controller.api.worldcup.payload.WorldcupPlayResponse;
 import com.grepp.moodlink.app.model.worldcup.code.ContentType;
 import com.grepp.moodlink.app.model.worldcup.entity.Worldcup;
 import com.grepp.moodlink.app.model.worldcup.entity.WorldcupItem;
@@ -9,6 +9,7 @@ import com.grepp.moodlink.app.model.worldcup.entity.WorldcupPlay;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -90,8 +91,21 @@ public class WorldcupService {
     }
 
     // 월드컵의 컨텐츠들 list 가져오기
-    public List<WorldcupItem> findByWorldcupId(Long id) {
-        return worldcupItemRepository.findByWorldcupId(id);
+    public WorldcupPlayResponse findByWorldcupId(Long id) {
+        // Worldcup의 컨텐츠들을 DTO로 변환
+        List<WorldcupItem> items = worldcupItemRepository.findByWorldcupId(id);
+
+        // 해당 월드컵의 Content 타입 가져오기
+        ContentType contentType = worldcupRepository.getWorldcupById(id).getContentType();
+
+        // item 마다 해당 월드컵에서 우승한 횟수 가져오기
+        Map<String, Long> itemWinCountMap = items.stream()
+            .collect(Collectors.toMap(
+                WorldcupItem::getContentId,
+                item -> worldcupPlayRepository.countByWinnerIdAndWorldcupId(item.getContentId(), id)
+            ));
+
+        return new WorldcupPlayResponse(items, contentType, itemWinCountMap);
     }
 
     // 월드컵 수행 후, 컨텐츠들의 winCount, totalCount 최신화
@@ -149,17 +163,4 @@ public class WorldcupService {
         worldcupPlayRepository.save(worldcupPlay);
     }
 
-    // 하나의 월드컵에 대해 총 플레이 수, 현재 winnerId와 같은 우승자 수 반환
-    public WorldcupResultResponse getStatistics(Long worldcupId, String winnerId) {
-        System.out.println();
-        System.out.println();
-        Long totalCount = (long) worldcupPlayRepository.findAllByWorldcupId(worldcupId).size();
-        Long winnerCount = (long) worldcupPlayRepository.findAllByWorldcupIdAndWinnerId(worldcupId,winnerId).size();
-
-        // 필드가 2개 밖에 없어서 builder 대신 그냥 setter로 씀.
-        WorldcupResultResponse worldcupResultResponse = new WorldcupResultResponse();
-        worldcupResultResponse.setTotalCount(totalCount);
-        worldcupResultResponse.setWinCount(winnerCount);
-        return worldcupResultResponse;
-    }
 }

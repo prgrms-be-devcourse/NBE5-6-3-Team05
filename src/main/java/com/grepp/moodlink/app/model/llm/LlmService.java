@@ -8,6 +8,7 @@ import com.grepp.moodlink.app.model.data.music.MusicRepository;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.keyword.KeywordRepository;
 import com.grepp.moodlink.app.model.keyword.entity.KeywordSelection;
+import com.grepp.moodlink.infra.error.LLMResourceException;
 import com.grepp.moodlink.infra.error.LLMServiceUnavailableException;
 import com.grepp.moodlink.infra.response.ResponseCode;
 import dev.langchain4j.model.chat.ChatLanguageModel;
@@ -148,7 +149,7 @@ public class LlmService {
             [시스템]
             - 당신은 %s 추천 전문가입니다.
             - 반드시 제공된 목록에서만 추천하세요.
-            - 한국어로만 답변하고, 4개를 추천하세요.
+            - 한국어로만 답변하고, 8개를 추천하세요.
             - 제공된 목록에서 제목만 출력하세요.
             - 각 제목은 '"'로 감싸져있고, ','로 구분하여 출력하세요.
             - 출력 형식:
@@ -164,6 +165,8 @@ public class LlmService {
             recommendation = chatLanguageModel.chat(prompt);
         } catch (ResourceAccessException e) {
             throw new LLMServiceUnavailableException(ResponseCode.EXTERNAL_API_UNAVAILABLE, e);
+        } catch (RuntimeException e){
+            throw new LLMResourceException(ResponseCode.RESOURCE_EXHAUSTED, e);
         }
         return recommendation;
     }

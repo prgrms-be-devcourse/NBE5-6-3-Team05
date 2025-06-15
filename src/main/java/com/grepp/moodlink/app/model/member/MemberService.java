@@ -1,15 +1,18 @@
 package com.grepp.moodlink.app.model.member;
 
 import com.grepp.moodlink.app.model.auth.code.Role;
+import com.grepp.moodlink.app.model.keyword.KeywordRepository;
+import com.grepp.moodlink.app.model.keyword.entity.KeywordSelection;
 import com.grepp.moodlink.app.model.member.dto.MemberDto;
 import com.grepp.moodlink.app.model.member.dto.MemberInfoDto;
 import com.grepp.moodlink.app.model.member.dto.ModifyDto;
 import com.grepp.moodlink.app.model.member.entity.Member;
+import com.grepp.moodlink.infra.error.UserNotFoundException;
+import com.grepp.moodlink.infra.response.ResponseCode;
 import java.time.LocalDate;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,13 +25,12 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ModelMapper mapper;
+    private final KeywordRepository keywordRepository;
 
     @Transactional
     public Optional<MemberInfoDto> GetMemberInfo(String userId) {
         Optional<Member> user = memberRepository.findById(userId);
         return user.map(MemberInfoDto::ToDto);
-
     }
 
     @Transactional
@@ -63,18 +65,30 @@ public class MemberService {
         member.setUpdatedAt(LocalDate.now());
 
         memberRepository.save(member);
-
     }
 
 
     @Transactional
     public void signup(MemberDto dto) {
-
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
 
-        Member member = mapper.map(dto, Member.class);
-        member.setPassword(encodedPassword);
-        member.setRole(Role.ROLE_USER);
+        Member.MemberBuilder builder = Member.builder()
+            .id(dto.getUserId())
+            .password(encodedPassword)
+            .username(dto.getUsername())
+            .email(dto.getEmail())
+            .genre(dto.getGenre())
+            .periods(dto.getPeriods())
+            .countries(dto.getCountries())
+            .createdAt(LocalDate.now());
+
+        if (dto.getUserId().contains("admin")) {
+            builder.role(Role.ROLE_ADMIN);
+        } else {
+            builder.role(Role.ROLE_USER);
+        }
+
+        Member member = builder.build();
         memberRepository.save(member);
     }
 
@@ -87,4 +101,16 @@ public class MemberService {
         System.out.println(memberRepository.findById(userId));
         return memberRepository.findById(userId);
     }
+    @Transactional
+    public void selectKeyword(String userId, String keywords) {
+        Optional<Member> member = memberRepository.findById(userId);
+        Optional<KeywordSelection> keywordSelection = keywordRepository.findByKeywords(keywords);
+        if (member.isPresent() && keywordSelection.isPresent()){
+            member.get().setKeywordSelection(keywordSelection.get());
+            memberRepository.save(member.get());
+        }else{
+            throw new UserNotFoundException(ResponseCode.USER_NOTFOUND);
+        }
+    }
+
 }

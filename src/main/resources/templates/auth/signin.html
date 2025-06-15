@@ -8,17 +8,40 @@
 <body>
 <div layout:fragment="content">
   <div class="container">
-    <h1>LOG IN</h1>
+    <h1>로그인</h1>
     <p th:if="${param.error}" class="error-msg">아이디 또는 비밀번호가 잘못되었습니다.</p>
-    <form th:action="@{/signin}" method="post" th:object="${signinRequest}">
-      <input type="text" th:field="*{userId}" placeholder="ID" style="color: white;">
-      <input type="password" th:field="*{password}" placeholder="Password" style="color: white;">
-      <button style="cursor: pointer" type="submit">Sign In</button>
-    </form>
 
+    <input id="userId" type="text" placeholder="아이디" style="color: white;">
+    <input id="password" type="password" placeholder="비밀번호" style="color: white;">
+    <button id="loginBtn" style="cursor: pointer">접속하기</button>
 
-    <p>Don't have an account? <a th:href="@{/signup}">Sign Up</a></p>
+    <p>계정이 없으신가요? <a th:href="@{/signup}">회원가입</a></p>
   </div>
 </div>
+
 </body>
+
 </html>
+
+<script>
+  document.querySelector("#loginBtn").addEventListener("click", async () => {
+    const userId = document.querySelector("#userId").value;
+    const password = document.querySelector("#password").value;
+
+    const res = await fetch("/auth/signin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ userId, password })
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      alert(data.message || "로그인 실패");
+      return;
+    }
+
+    location.href = "/";
+  });
+</script>
