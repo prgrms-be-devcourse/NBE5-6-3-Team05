@@ -21,7 +21,7 @@ public class MusicRepositoryImpl implements MusicRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
     private final QMusic music = QMusic.music;
-    QMusicGenre genre = QMusicGenre.musicGenre;
+    private final QMusicGenre genre = QMusicGenre.musicGenre;
 
 
 

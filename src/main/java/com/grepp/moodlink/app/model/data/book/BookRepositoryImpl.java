@@ -3,9 +3,6 @@ package com.grepp.moodlink.app.model.data.book;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.QBook;
 import com.grepp.moodlink.app.model.data.book.entity.QBookGenre;
-import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
-import com.grepp.moodlink.app.model.data.music.entity.QMusic;
-import com.grepp.moodlink.app.model.data.music.entity.QMusicGenre;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -25,7 +22,7 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
     private final QBook book = QBook.book;
-    QBookGenre genre = QBookGenre.bookGenre;
+    private final QBookGenre genre = QBookGenre.bookGenre;
 
     @Override
     public String findTopThumbnail() {
