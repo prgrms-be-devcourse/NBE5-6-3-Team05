@@ -9,7 +9,7 @@
   <th:block th:replace="fragments::frg_static"/>
 </head>
 
-<body>
+<body th:class="${pageClass} ?: 'default'">
 <header th:replace="fragments::frg_header"></header>
 
 <main layout:fragment="content"></main>
