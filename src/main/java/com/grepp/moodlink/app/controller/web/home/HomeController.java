@@ -93,8 +93,15 @@ public class HomeController {
 
     @GetMapping("/search/genre")
     public String searchGenre(Model model, @RequestParam String genreName) {
-        List<MusicDto> musicContentByGenre = homeService.searchMusicContentByGenre(genreName);
-        model.addAttribute("musicContentByGenre", musicContentByGenre);
+        System.out.println("장르 검색 컨트롤러");
+        List<MusicDto> musicContentWithGenre = homeService.searchMusicContentByGenre(genreName);
+        System.out.println("장르 검색 컨트롤러 ee");
+//        List<MovieDto> movieContentByGenre = homeService.searchMovieContentByGenre(genreName);
+//        List<BookDto> bookContentByGenre = homeService.searchBookContentByGenre(genreName);
+        model.addAttribute("musicContentWithGenre", musicContentWithGenre);
+        model.addAttribute("selectedCategory", "music");
+        System.out.println("장르 검색 컨트롤러 ee22");
+        System.out.println(musicContentWithGenre);
         return"/home/search";
     }
 

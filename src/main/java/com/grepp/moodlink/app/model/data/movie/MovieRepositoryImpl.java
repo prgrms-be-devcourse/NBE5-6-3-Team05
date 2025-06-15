@@ -1,8 +1,13 @@
 package com.grepp.moodlink.app.model.data.movie;
 
 import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
+import com.grepp.moodlink.app.model.data.movie.entity.Genre;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
+import com.grepp.moodlink.app.model.data.movie.entity.QGenre;
 import com.grepp.moodlink.app.model.data.movie.entity.QMovie;
+import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
+import com.grepp.moodlink.app.model.data.music.entity.QMusic;
+import com.grepp.moodlink.app.model.data.music.entity.QMusicGenre;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -66,4 +71,22 @@ public class MovieRepositoryImpl implements MovieRepositoryCustom {
 
         return Optional.ofNullable(content.fetchOne());
     }
+
+//    public List<MovieDto> searchContentByGenre(String genreName) {
+//        QMovie movie = QMovie.movie;
+//        QGenre genre = QGenre.genre;
+//        QMovieGenre movieGenre = QMovieGenre.movieGenre;
+//        return queryFactory
+//            .select(Projections.constructor(MovieDto.class,
+//                movie.title,
+//                movie.summary,
+//                movie.thumbnail,
+//                movie.releaseDate))
+//            .from(movie)
+//            .join(movie.genre, genre)
+//            .where(genre.name.eq(genreName))
+//            .where(genre.id.eq(movie))
+//            .fetch();
+//    }
+//    }
 }
