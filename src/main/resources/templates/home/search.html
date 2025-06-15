@@ -69,32 +69,33 @@
   <!-- 영화 -->
   <div class="category" id="movie">
 
-    <form  id="searchMovieWithGenreForm" th:action="@{/search/genre/movie}" method="get">
-      <input type="hidden" id="selectedMovieCategory" th:value="${selectedMovieCategory}" />
-      <input type="hidden" name="genreName" id="movieGenreNameInput"/>
-      <button type="button" class = "genre-btn" onclick="submitMovieGenre('모험')">모험</button>
-      <button type="button" class = "genre-btn" onclick="submitMovieGenre('판타지')">판타지</button>
-      <button type="button" class = "genre-btn" onclick="submitMovieGenre('애니메이션')">애니메이션</button>
-      <button type="button" class = "genre-btn" onclick="submitMovieGenre('드라마')">드라마</button>
-      <button type="button" class = "genre-btn" onclick="submitMovieGenre('공포')">공포</button>
-      <button type="button" class = "genre-btn" onclick="submitMovieGenre('액션')">액션</button>
-      <button type="button" class = "genre-btn" onclick="submitMovieGenre('코미디')">코미디</button>
-      <button type="button" class = "genre-btn" onclick="submitMovieGenre('역사')">역사</button>
-      <button type="button" class = "genre-btn" onclick="submitMovieGenre('스릴러')">스릴러</button>
-      <button type="button" class = "genre-btn" onclick="submitMovieGenre('범죄')">범죄</button>
-      <button type="button" class = "genre-btn" onclick="submitMovieGenre('다큐멘터리')">다큐멘터리</button>
-      <button type="button" class = "genre-btn" onclick="submitMovieGenre('SF')">SF</button>
-      <button type="button" class = "genre-btn" onclick="submitMovieGenre('미스터리')">미스터리</button>
-      <button type="button" class = "genre-btn" onclick="submitMovieGenre('로맨스')">로맨스</button>
-      <button type="button" class = "genre-btn" onclick="submitMovieGenre('전쟁')">전쟁</button>
-    </form>
+      <form  id="searchMovieWithGenreForm" th:action="@{/search/genre/movie}" method="get">
+        <input type="hidden" id="selectedMovieCategory" th:value="${selectedMovieCategory}" />
+        <input type="hidden" name="genreName" id="movieGenreNameInput"/>
+        <button type="button" class = "genre-btn" onclick="submitMovieGenre('모험')">모험</button>
+        <button type="button" class = "genre-btn" onclick="submitMovieGenre('판타지')">판타지</button>
+        <button type="button" class = "genre-btn" onclick="submitMovieGenre('애니메이션')">애니메이션</button>
+        <button type="button" class = "genre-btn" onclick="submitMovieGenre('드라마')">드라마</button>
+        <button type="button" class = "genre-btn" onclick="submitMovieGenre('공포')">공포</button>
+        <button type="button" class = "genre-btn" onclick="submitMovieGenre('액션')">액션</button>
+        <button type="button" class = "genre-btn" onclick="submitMovieGenre('코미디')">코미디</button>
+        <button type="button" class = "genre-btn" onclick="submitMovieGenre('역사')">역사</button>
+        <button type="button" class = "genre-btn" onclick="submitMovieGenre('스릴러')">스릴러</button>
+        <button type="button" class = "genre-btn" onclick="submitMovieGenre('범죄')">범죄</button>
+        <button type="button" class = "genre-btn" onclick="submitMovieGenre('다큐멘터리')">다큐멘터리</button>
+        <button type="button" class = "genre-btn" onclick="submitMovieGenre('SF')">SF</button>
+        <button type="button" class = "genre-btn" onclick="submitMovieGenre('미스터리')">미스터리</button>
+        <button type="button" class = "genre-btn" onclick="submitMovieGenre('로맨스')">로맨스</button>
+        <button type="button" class = "genre-btn" onclick="submitMovieGenre('전쟁')">전쟁</button>
+      </form>
+
 
     <div class="genre-title">
       <h4 th:text="${genre}"></h4>
     </div>
 
 <!--    <h3><span class="highlight">영화</span> 검색 결과</h3>  -->
-    <div th:if="${movie != null }" class="card-container">
+    <div th:if="${movie != null and movie.size() > 0}" class="card-container">
       <div th:each="m : ${movie}" class="card-movie"
            th:attr="onclick='showDetailModalMovie(' +
                  '\'' + ${#strings.escapeJavaScript(m.title)} + '\',' +
@@ -170,7 +171,7 @@
         </div>
 
         <!--    <h3><span class="highlight">음악</span> 검색 결과</h3>-->
-        <div th:if="${music != null}" class="card-container">
+        <div th:if="${music != null and music.size() > 0}" class="card-container">
           <div th:each="m : ${music}" class="card-music"
                th:attr = "onclick=
              'showDetailModalMusic(' +
@@ -266,7 +267,7 @@
     </div>
 
     <!--    <h3><span class="highlight">도서</span> 검색 결과</h3>-->
-    <div th:if="${book != null }" class="card-container">
+    <div th:if="${book != null and book.size() > 0}" class="card-container">
       <div th:each="b : ${book}" class="card-book"
            th:attr = "onclick=
              'showDetailModalBook(' +
