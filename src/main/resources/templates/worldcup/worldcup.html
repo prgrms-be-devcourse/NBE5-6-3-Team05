@@ -5,6 +5,16 @@
   <meta charset="UTF-8">
   <title>월드컵</title>
   <style>
+    .worldcup-container{
+      display: flex;
+      justify-items: center;
+    }
+
+    .container {
+      margin-top: 80px;
+      padding: 2rem;
+    }
+
     #worldcup-list {
       display: flex;
       flex-wrap: wrap;
@@ -39,39 +49,40 @@
 </head>
 <body>
 <h5>월드컵 페이지입니다.</h5>
-<div layout:fragment="content">
+<div layout:fragment="content" class="worldcup-container">
+  <div class="container">
 
+    <div id="worldcup-list"></div>
 
-  <div id="worldcup-list"></div>
+    <div class="create-button-wrapper">
+      <a href="/worldcup/create">
+        <button>월드컵 만들기</button>
+      </a>
+    </div>
 
-  <div class="create-button-wrapper">
-    <a href="/worldcup/create">
-      <button>월드컵 만들기</button>
+    <script>
+      window.addEventListener('DOMContentLoaded', async () => {
+        const res = await fetch('/api/worldcup/list');
+        const worldcups = await res.json();
+
+        const container = document.getElementById('worldcup-list');
+
+        for (const wc of worldcups) {
+          const item = document.createElement('div');
+          item.className = 'worldcup-card';
+
+          item.innerHTML = `
+    <a href="/worldcup/play?id=${wc.id}">
+      <img src="/images/sample.jpg" alt="샘플 이미지" />
+      <p class="worldcup-title">${wc.title}</p>
     </a>
+  `;
+
+          container.appendChild(item);
+        }
+      });
+    </script>
   </div>
-
-  <script>
-    window.addEventListener('DOMContentLoaded', async () => {
-      const res = await fetch('/api/worldcup/list');
-      const worldcups = await res.json();
-
-      const container = document.getElementById('worldcup-list');
-
-      for (const wc of worldcups) {
-        const item = document.createElement('div');
-        item.className = 'worldcup-card';
-
-        item.innerHTML = `
-  <a href="/worldcup/play?id=${wc.id}">
-    <img src="/images/sample.jpg" alt="샘플 이미지" />
-    <p class="worldcup-title">${wc.title}</p>
-  </a>
-`;
-
-        container.appendChild(item);
-      }
-    });
-  </script>
 </div>
 </body>
 </html>
