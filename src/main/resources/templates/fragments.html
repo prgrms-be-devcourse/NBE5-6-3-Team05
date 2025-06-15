@@ -811,7 +811,55 @@
 
       .genre-title {
         padding-bottom: 24px;
+        text-align: center;
       }
+
+      .genre-title h4 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #d1b3ff; /* 연보라 */
+        font-family: 'Pretendard', 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+        letter-spacing: 0.8px;
+        text-shadow:
+            0 0 6px rgba(209, 179, 255, 0.6),
+            0 0 12px rgba(209, 179, 255, 0.4),
+            0 0 18px rgba(209, 179, 255, 0.2);
+        margin-top: 30px;
+        position: relative;
+        display: inline-block;
+      }
+
+
+      .genre-button-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 25px 0;
+        justify-content: center;
+      }
+
+      .genre-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 30px;
+        background-color: #f7f7f7;
+        color: #222;
+        font-family: 'Segoe UI', 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+        font-weight: 500;
+        font-size: 15.5px;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.2s ease;
+      }
+
+      .genre-btn:hover {
+        background-color: #0066ff;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 2px 4px 12px rgba(0,0,0,0.2);
+      }
+
 
     </style>
 
