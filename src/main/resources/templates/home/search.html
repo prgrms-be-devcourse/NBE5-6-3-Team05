@@ -59,7 +59,7 @@
       </div>
 
   <!-- contentName 이 비었을 때 -->
-  <h4 th:if="${#strings.isEmpty(contentName)}">전체 검색결과입니다.</h4>
+<!--  <h4 th:if="${#strings.isEmpty(contentName)}">전체 검색결과입니다.</h4>-->
 
   <!-- contentName 이 있을 때 -->
   <h4 th:unless="${#strings.isEmpty(contentName)}">
@@ -84,8 +84,12 @@
       <button class = "genre-btn" data-type="movie" data-genre="미스터리">미스터리</button>
       <button class = "genre-btn" data-type="movie" data-genre="로맨스">로맨스</button>
       <button class = "genre-btn" data-type="movie" data-genre="전쟁">전쟁</button>
-
     </div>
+
+    <div class="genre-title">
+      <h4 th:text="${genre}"></h4>
+    </div>
+
 <!--    <h3><span class="highlight">영화</span> 검색 결과</h3>  -->
     <div th:if="${movie != null }" class="card-container">
       <div th:each="m : ${movie}" class="card-movie"
@@ -99,7 +103,7 @@
         <img th:src="${m.thumbnail}" alt="영화 썸네일" class="card-thumbnail"/>
       </div>
     </div><br><br><br><br>
-    <div th:if="${movie == null}"><h4>검색 자료가 없습니다. 영화</h4></div>
+    <div th:if="${movie == null}"><h4>영화 검색 자료가 없습니다.</h4></div>
   </div>
       <!-- 영화 모달 -->
       <div class = "detailMovieModal" id="movieDetailModal" onclick="if(event.target===this){closeMovieModal()}">
@@ -132,18 +136,22 @@
       <!--음악 -->
       <div class="category" id="music">
 
-        <form  id="searchMusicWithGenreForm" th:action="@{/search/genre}" method="get">
-          <input type="hidden" id="selectedCategory" th:value="${selectedCategory}" />
-          <input type="hidden" name="genreName" id="genreNameInput"/>
-          <button type="button" class = "genre-btn" onclick="submitGenre('발라드')">발라드</button>
-          <button type="button" class = "genre-btn" onclick="submitGenre('댄스')">댄스</button>
-          <button type="button" class = "genre-btn" onclick="submitGenre('힙합')">힙합</button>
-          <button type="button" class = "genre-btn" onclick="submitGenre('R&B')">R&B</button>
-          <button type="button" class = "genre-btn" onclick="submitGenre('인디음악')">인디음악</button>
-          <button type="button" class = "genre-btn" onclick="submitGenre('록/메탈')">록/메탈</button>
-          <button type="button" class = "genre-btn" onclick="submitGenre('트로트')">트로트</button>
-          <button type="button" class = "genre-btn" onclick="submitGenre('포크/블루스')">포크/블루스</button>
+        <form  id="searchMusicWithGenreForm" th:action="@{/search/genre/music}" method="get">
+          <input type="hidden" id="selectedMusicCategory" th:value="${selectedMusicCategory}" />
+          <input type="hidden" name="genreName" id="musicGenreNameInput"/>
+          <button type="button" class = "genre-btn" onclick="submitMusicGenre('발라드')">발라드</button>
+          <button type="button" class = "genre-btn" onclick="submitMusicGenre('댄스')">댄스</button>
+          <button type="button" class = "genre-btn" onclick="submitMusicGenre('힙합')">힙합</button>
+          <button type="button" class = "genre-btn" onclick="submitMusicGenre('R&B')">R&B</button>
+          <button type="button" class = "genre-btn" onclick="submitMusicGenre('인디음악')">인디음악</button>
+          <button type="button" class = "genre-btn" onclick="submitMusicGenre('록/메탈')">록/메탈</button>
+          <button type="button" class = "genre-btn" onclick="submitMusicGenre('트로트')">트로트</button>
+          <button type="button" class = "genre-btn" onclick="submitMusicGenre('포크/블루스')">포크/블루스</button>
         </form>
+
+        <div class="genre-title">
+          <h4 th:text="${genre}"></h4>
+        </div>
 
         <!--    <h3><span class="highlight">음악</span> 검색 결과</h3>-->
         <div th:if="${music != null}" class="card-container">
@@ -162,6 +170,7 @@
         </div>
 
         <div th:if="${musicContentWithGenre != null and musicContentWithGenre.size() > 0}" class="card-container">
+
           <div th:each="mg : ${musicContentWithGenre}" class="card-music"
                th:attr = "onclick=
              'showDetailModalMusic(' +
@@ -176,7 +185,7 @@
           </div>
 
         </div><br><br><br><br>
-        <div th:if="${musicContentByGenre == null and music == null}"><h4>검색 자료가 없습니다. 음악</h4></div>
+        <div th:if="${musicContentByGenre == null and music == null}"><h4>음악 검색 자료가 없습니다.</h4></div>
       </div>
 
       <!-- 음악 모달 -->
@@ -212,24 +221,33 @@
   <!-- 도서 -->
   <div class="category" id="book">
 
-    <button class = "genre-btn" data-type="book" data-genre="동화">동화</button>
-    <button class = "genre-btn" data-type="book" data-genre="라이트노벨">라이트노벨</button>
-    <button class = "genre-btn" data-type="book" data-genre="무협소설">무협소설</button>
-    <button class = "genre-btn" data-type="book" data-genre="수필">수필</button>
-    <button class = "genre-btn" data-type="book" data-genre="시집">시집</button>
-    <button class = "genre-btn" data-type="book" data-genre="추리소설">추리소설</button>
-    <button class = "genre-btn" data-type="book" data-genre="판타지소설">판타지소설</button>
-    <button class = "genre-btn" data-type="book" data-genre="프로그래밍">프로그래밍</button>
-    <button class = "genre-btn" data-type="book" data-genre="인문학">인문학</button>
-    <button class = "genre-btn" data-type="book" data-genre="심리학">심리학</button>
-    <button class = "genre-btn" data-type="book" data-genre="철학">철학</button>
-    <button class = "genre-btn" data-type="book" data-genre="문화인류학">문화인류학</button>
-    <button class = "genre-btn" data-type="book" data-genre="종교학">종교학</button>
-    <button class = "genre-btn" data-type="book" data-genre="한국소설">한국소설</button>
-    <button class = "genre-btn" data-type="book" data-genre="외국소설">외국소설</button>
-    <button class = "genre-btn" data-type="book" data-genre="고전문학">고전문학</button>
-    <button class = "genre-btn" data-type="book" data-genre="현대문학">현대문학</button>
-    <button class = "genre-btn" data-type="book" data-genre="사회학">사회학</button>
+    <form  id="searchBookWithGenreForm" th:action="@{/search/genre/book}" method="get">
+      <input type="hidden" id ="selectedBookCategory" th:value="${selectedBookCategory}" />
+      <input type="hidden" name="genreName" id="bookGenreNameInput"/>
+
+      <button type="button" class = "genre-btn" onclick="submitBookGenre('동화')">동화</button>
+    <button type="button" class = "genre-btn" onclick="submitBookGenre('라이트노벨')">라이트노벨</button>
+    <button type="button" class = "genre-btn" onclick="submitBookGenre('무협소설')">무협소설</button>
+    <button type="button" class = "genre-btn" onclick="submitBookGenre('수필')">수필</button>
+    <button type="button" class = "genre-btn" onclick="submitBookGenre('시집')">시집</button>
+    <button type="button" class = "genre-btn" onclick="submitBookGenre('추리소설')">추리소설</button>
+    <button type="button" class = "genre-btn" onclick="submitBookGenre('판타지소설')">판타지소설</button>
+    <button type="button" class = "genre-btn" onclick="submitBookGenre('프로그래밍')">프로그래밍</button>
+    <button type="button" class = "genre-btn" onclick="submitBookGenre('인문학')">인문학</button>
+    <button type="button" class = "genre-btn" onclick="submitBookGenre('심리학')">심리학</button>
+    <button type="button" class = "genre-btn" onclick="submitBookGenre('철학')">철학</button>
+    <button type="button" class = "genre-btn" onclick="submitBookGenre('문화인류학')">문화인류학</button>
+    <button type="button" class = "genre-btn" onclick="submitBookGenre('종교학')">종교학</button>
+    <button type="button" class = "genre-btn" onclick="submitBookGenre('한국소설')">한국소설</button>
+    <button type="button" class = "genre-btn" onclick="submitBookGenre('외국소설')">외국소설</button>
+    <button type="button" class = "genre-btn" onclick="submitBookGenre('고전문학')">고전문학</button>
+    <button type="button" class = "genre-btn" onclick="submitBookGenre('현대문학')">현대문학</button>
+    <button type="button" class = "genre-btn" onclick="submitBookGenre('사회학')">사회학</button>
+    </form>
+
+    <div class="genre-title">
+      <h4 th:text="${genre}"></h4>
+    </div>
 
     <!--    <h3><span class="highlight">도서</span> 검색 결과</h3>-->
     <div th:if="${book != null }" class="card-container">
@@ -243,8 +261,21 @@
              ')'">
         <img th:src="${b.image}" alt="도서 썸네일" class="card-thumbnail modal-bg.book"/>
       </div>
+    </div>
+
+    <div th:if="${bookContentWithGenre != null and bookContentWithGenre.size() > 0}" class="card-container">
+      <div th:each="bg : ${bookContentWithGenre}" class="card-book"
+           th:attr = "onclick=
+             'showDetailModalBook(' +
+               '\'' + ${#strings.escapeJavaScript(bg.title)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(bg.publishedDate)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(bg.description)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(bg.image)} + '\',' +
+             ')'">
+        <img th:src="${bg.image}" alt="도서 썸네일" class="card-thumbnail modal-bg.book"/>
+      </div>
     </div><br><br><br><br>
-    <div th:if="${book == null}"><h4>검색 자료가 없습니다.</h4></div>
+    <div th:if="${bookContentWithGenre == null and book == null}"><h4>도서 검색 자료가 없습니다.</h4></div>
   </div>
 
 
@@ -281,8 +312,14 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    const selectedCategory = document.getElementById('selectedCategory')?.value || 'movie';
-    showCategory(selectedCategory);
+    const musicCategory = document.getElementById('selectedMusicCategory')?.value;
+    const bookCategory = document.getElementById('selectedBookCategory')?.value;
+    const movieCategory = document.getElementById('selectedMovieCategory')?.value;
+
+    // 각 카테고리 값이 존재하면 showCategory 실행
+    if (musicCategory) showCategory(musicCategory);
+    if (bookCategory) showCategory(bookCategory);
+    if (movieCategory) showCategory(movieCategory);
   });
 
   function showDetailModalMovie(title, releaseDate, summary, thumbnail) {
@@ -456,86 +493,19 @@
     }
   }
 
-  // 장르 선택 버튼
-  function submitGenre(genre) {
-    document.getElementById('genreNameInput').value = genre;
+  // 음악 장르 선택 버튼
+  function submitMusicGenre(genre) {
+    document.getElementById('musicGenreNameInput').value = genre;
     document.getElementById('searchMusicWithGenreForm').submit();
   }
 
-  // // 장르 선택 버튼
-  // document.querySelectorAll('.genre-btn').forEach((btn) => {
-  //   btn.addEventListener('click', (e) => {
-  //     const type = e.target.dataset.type;   // 컨텐츠 타입
-  //     const genre = e.target.dataset.genre; // 장르
-  //
-  //     // 예시: 콘솔 출력
-  //     console.log(`선택된 콘텐츠 타입: ${type}`);
-  //     console.log(`선택된 장르: ${genre}`);
-  //
-  //     // 콘텐츠 불러오는 함수 호출
-  //     fetchContentByGenre(type, genre);
-  //   });
-  // });
+  // 도서 장르 선택 버튼
+  function submitBookGenre(genre) {
+    document.getElementById('bookGenreNameInput').value = genre;
+    document.getElementById('searchBookWithGenreForm').submit();
+  }
 
-  // // 장르로 검색
-  // function fetchContentByGenre(type, genre) {
-  //   // 예시: 서버에 요청 보내는 경우
-  //   // fetch(`/api/content?type=${type}&genre=${genre}`)
-  //   //   .then(res => res.json())
-  //   //   .then(data => renderContent(data));
-  //
-  //   // 간단한 데모용 가짜 데이터
-  //   const dummyData = {
-  //
-  //     movie: {
-  //       추리소설: [{ title: '살인의 추억', thumbnail: 'img1.jpg', releaseDate: '2003', summary: '살인사건 실화 바탕 영화' }],
-  //       스릴러: [{ title: '기생충', thumbnail: 'img2.jpg', releaseDate: '2019', summary: '계층의 이야기' }]
-  //     },
-  //     music: {
-  //       발라드: [{ title: '신호등', thumbnail: 'img3.jpg', releaseDate: '2021', summary: '이무진의 히트곡' }]
-  //     },
-  //
-  //     book: {
-  //       동화: [{ title: '해피버쓰데이', thumbnail: 'img4.jpg', releaseDate: '2023', summary: '해피해피해피 ' }]
-  //     }
-  //   };
-  //
-  //   const contentList = dummyData[type]?.[genre] || [];
-  //   renderContentByType(type, contentList);
-  // }
 
-  // // 타입에 따라 콘텐츠 렌더링 위치를 다르게 처리
-  // function renderContentByType(type, contentList) {
-  //   let container;
-  //
-  //   if (type === 'movie') {
-  //     container = document.querySelector('#movie .card-container');
-  //   } else if (type === 'music') {
-  //     // 음악 결과 보여줄 별도 영역 있어야 함
-  //     container = document.querySelector('#music .card-container');
-  //   } else if (type === 'book') {
-  //     // 도서 영역도 마찬가지로 별도 필요
-  //     container = document.querySelector('#book .card-container');
-  //   }
-  //
-  //   if (!container) return;
-  //
-  //   if (contentList.length === 0) {
-  //     container.innerHTML = `<h4>검색 자료가 없습니다.</h4>`;
-  //     return;
-  //   }
-  //
-  //   // 카드 형태로 콘텐츠 렌더링
-  //   container.innerHTML = contentList
-  //   .map((item) => `
-  //       <div class="card-${type}">
-  //         <img src="${item.thumbnail}" alt="${item.title}" class="card-thumbnail" />
-  //         <h4>${item.title}</h4>
-  //         <p>${item.summary}</p>
-  //       </div>
-  //     `)
-  //   .join('');
-  // }
 
 
 </script>

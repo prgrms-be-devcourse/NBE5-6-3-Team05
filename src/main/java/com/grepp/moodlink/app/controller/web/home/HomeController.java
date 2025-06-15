@@ -1,13 +1,10 @@
 package com.grepp.moodlink.app.controller.web.home;
 
 import com.grepp.moodlink.app.model.auth.domain.Principal;
-import com.grepp.moodlink.app.model.data.book.BookService;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
-import com.grepp.moodlink.app.model.data.movie.MovieService;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
-import com.grepp.moodlink.app.model.data.music.MusicService;
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.home.HomeService;
@@ -17,8 +14,6 @@ import com.grepp.moodlink.app.model.keyword.KeywordService;
 import com.grepp.moodlink.app.model.llm.RecommendationService;
 import com.grepp.moodlink.app.model.llm.code.RecommendContentType;
 import com.grepp.moodlink.app.model.llm.entity.Recommendation;
-import com.grepp.moodlink.app.model.result.dto.CuratingDetailDto;
-import com.grepp.moodlink.app.model.worldcup.code.ContentType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -91,19 +86,44 @@ public class HomeController {
         return "/home/search";
     }
 
-    @GetMapping("/search/genre")
-    public String searchGenre(Model model, @RequestParam String genreName) {
-        System.out.println("장르 검색 컨트롤러");
+    @GetMapping("/search/genre/music")
+    public String searchMusicGenre(Model model, @RequestParam String genreName) {
+        System.out.println("음악 장르 검색 컨트롤러");
         List<MusicDto> musicContentWithGenre = homeService.searchMusicContentByGenre(genreName);
-        System.out.println("장르 검색 컨트롤러 ee");
-//        List<MovieDto> movieContentByGenre = homeService.searchMovieContentByGenre(genreName);
-//        List<BookDto> bookContentByGenre = homeService.searchBookContentByGenre(genreName);
+        System.out.println("음악 장르 검색 컨트롤러 ee");
         model.addAttribute("musicContentWithGenre", musicContentWithGenre);
-        model.addAttribute("selectedCategory", "music");
-        System.out.println("장르 검색 컨트롤러 ee22");
+        model.addAttribute("selectedMusicCategory", "music");
+        model.addAttribute("genre", genreName);
+        System.out.println("음악 장르 검색 컨트롤러 ee22");
         System.out.println(musicContentWithGenre);
         return"/home/search";
     }
+
+    @GetMapping("/search/genre/book")
+    public String searchBookGenre(Model model, @RequestParam String genreName) {
+        System.out.println("도서 장르 검색 컨트롤러");
+        List<BookDto> bookContentByGenre = homeService.searchBookContentByGenre(genreName);
+        System.out.println("도서 장르 검색 컨트롤러 ee");
+        model.addAttribute("bookContentWithGenre", bookContentByGenre);
+        model.addAttribute("selectedBookCategory", "book");
+        model.addAttribute("genre", genreName);
+        System.out.println("도서 장르 검색 컨트롤러 ee22");
+        System.out.println(bookContentByGenre);
+        return"/home/search";
+    }
+
+//    @GetMapping("/search/genre/movie")
+//    public String searchBookGenre(Model model, @RequestParam String genreName) {
+//        System.out.println("영화 장르 검색 컨트롤러");
+//        List<MovieDto> movieContentByGenre = homeService.searchMovieContentByGenre(genreName);
+//        System.out.println("영화 장르 검색 컨트롤러 ee");
+//        model.addAttribute("movieContentWithGenre", movieContentByGenre);
+//        model.addAttribute("selectedMovieCategory", "movie");
+//        model.addAttribute("genre", genreName);
+//        System.out.println("영화 장르 검색 컨트롤러 ee22");
+//        System.out.println(movieContentByGenre);
+//        return"/home/search";
+//    }
 
     private String getLoginUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -114,5 +134,4 @@ public class HomeController {
         Principal principal = (Principal) auth.getPrincipal();
         return principal.getUsername();
     }
-
 }

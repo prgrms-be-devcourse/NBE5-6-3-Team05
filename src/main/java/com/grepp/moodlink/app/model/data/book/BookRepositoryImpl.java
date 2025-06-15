@@ -2,6 +2,10 @@ package com.grepp.moodlink.app.model.data.book;
 
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.QBook;
+import com.grepp.moodlink.app.model.data.book.entity.QBookGenre;
+import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
+import com.grepp.moodlink.app.model.data.music.entity.QMusic;
+import com.grepp.moodlink.app.model.data.music.entity.QMusicGenre;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -59,5 +63,21 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
                 .or(book.publisher.lower().like("%" + contentName.toLowerCase() + "%"))
                 .or(book.author.lower().like("%" + contentName.toLowerCase() + "%"))
             ).fetch();
+    }
+
+    public List<BookDto> searchContentByGenre(String genreName) {
+        QBook book = QBook.book;
+        QBookGenre genre = QBookGenre.bookGenre;
+        return queryFactory
+            .select(Projections.constructor(BookDto.class,
+                book.title,
+                book.description,
+                book.publishedDate,
+                book.publisher,
+                book.image))
+            .from(book)
+            .join(book.genre, genre)
+            .where(genre.name.eq(genreName))
+            .fetch();
     }
 }
