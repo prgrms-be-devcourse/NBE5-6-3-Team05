@@ -43,7 +43,7 @@
     <div class="main-content">
 
       <div class="search-container">
-        <form id="searchForm" th:action="@{/search}" method="get">
+        <form id="searchAllForm" th:action="@{/search/movie}" method="get">
           <input type="text" id="search-input" name="contentName" placeholder="원하는 음악,영화,도서를 찾아보세요!">
           <button type="submit">검색</button>
         </form>
@@ -53,9 +53,18 @@
 
       <!-- 카테고리 메뉴 -->
       <div class="menu">
+        <form id="searchMovieForm" th:action="@{/search/movie}" method="get">
+          <input type="hidden" id="search-movie" name="contentName" >
         <button onclick="showCategory('movie')">🎬 영화</button>
+        </form>
+        <form id="searchMusicForm" th:action="@{/search/music}" method="get">
+          <input type="hidden" id="search-music" name="contentName" >
         <button onclick="showCategory('music')">🎧 음악</button>
+        </form>
+        <form id="searchBookForm" th:action="@{/search/book}" method="get">
+          <input type="hidden" id="search-book" name="contentName" >
         <button onclick="showCategory('book')">📚 도서</button>
+        </form>
       </div>
 
       <!-- contentName 이 비었을 때 -->
