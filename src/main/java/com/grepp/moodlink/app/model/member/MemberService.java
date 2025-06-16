@@ -10,6 +10,8 @@ import com.grepp.moodlink.app.model.member.dto.SmtpDto;
 import com.grepp.moodlink.app.model.member.entity.Member;
 import com.grepp.moodlink.infra.error.UserNotFoundException;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
+import com.grepp.moodlink.infra.event.Outbox;
+import com.grepp.moodlink.infra.event.OutboxRepository;
 import com.grepp.moodlink.infra.feign.client.MailApi;
 import com.grepp.moodlink.infra.response.ResponseCode;
 import java.time.LocalDate;
@@ -31,6 +33,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final KeywordRepository keywordRepository;
+    private final OutboxRepository outboxRepository;
     private final MailApi mailApi;
 
     @Transactional
@@ -102,6 +105,9 @@ public class MemberService {
 
         Member member = builder.build();
         memberRepository.save(member);
+
+        Outbox outbox = new Outbox("signup_complete",member.getEmail());
+        outboxRepository.save(outbox);
     }
 
     public boolean existsByUserId(String userId) {
@@ -125,18 +131,10 @@ public class MemberService {
         }
     }
 
+    @Transactional
+    // 회원 가입을 위해 이메일을 발송하여 인증하는 메소드
     public void verify(MemberDto dto, String token) {
-        SmtpDto smtp = SmtpDto.builder()
-            .from("moodlink")
-            .to(List.of(dto.getEmail()))
-            .subject("회원 가입을 완료해주세요.")
-            .properties(Map.of(
-                "token", token,
-                "domain", "http://localhost:8080"
-            ))
-            .eventType("signup_verify")
-            .build();
-
-        mailApi.sendMail("moodlink", "ROLE_SERVER",smtp);
+        Outbox outbox = new Outbox("signup_verify",dto.getEmail()+","+token);
+        outboxRepository.save(outbox);
     }
 }
