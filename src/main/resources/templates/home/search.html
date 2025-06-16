@@ -211,7 +211,6 @@
           </div><br><br><br><br>
           <div th:if="${musicContentWithGenre == null and music == null}"><h4>음악 검색 자료가 없습니다.</h4></div>
         </div>
-
         <!-- 음악 모달 -->
         <div class = "detailMusicModal" id="musicDetailModal" onclick="if(event.target===this){closeMusicModal()}">
           <div class="search-modal-content">
@@ -227,6 +226,7 @@
               <h5><p id="musicDes"></p></h5>
               <p id="musicSummary" class="modal-summary"></p>
               <button id="modalSearchMusicBtn" onclick="showMusicTrailer(document.getElementById('musicTitle').innerText)">뮤직비디오 보기</button>
+
 
             </div>
           </div>

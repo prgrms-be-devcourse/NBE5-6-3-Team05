@@ -6,7 +6,6 @@
 <head>
   <title>Index</title>
   <style>
-
     .center-container {
       min-height: 100vh;
       display: flex;
@@ -149,16 +148,7 @@
     <input type="hidden" name="genre" id="selectedGenre"/>
 
     <div class="select-group">
-      영화 장르
-      <label>
-        <select name="genre" >
-          <option value="" th:selected="${userGenre == ''}">전체</option>
-          <option th:each="genre : ${genres}"
-                  th:value="${genre.name}"
-                  th:text="${genre.name}"
-                  th:selected="${genre.name == userGenre}"></option>
-        </select>
-      </label>
+      <span>장르 : 전체</span>
       <span>국가 : 대한민국</span>
     </div>
 
