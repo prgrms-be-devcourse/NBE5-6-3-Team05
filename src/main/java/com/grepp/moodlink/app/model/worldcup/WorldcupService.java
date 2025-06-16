@@ -44,13 +44,14 @@ public class WorldcupService {
     }
 
     //Worldcup 하나에 대해 insert 쿼리문을 던지는 메서드
-    private long insertWorldcup(String title, String contentType, String hashValue) {
+    private long insertWorldcup(String title, String contentType, String hashValue, String image) {
         Worldcup worldcup = Worldcup.builder()
             .title(title)
             .contentType(ContentType.valueOf(contentType))
             .hashCode(hashValue)
             .userId(null)
             .createdAt(LocalDate.now())
+            .imageUrl(image)
             .build();
         worldcupRepository.save(worldcup);
         return worldcup.getId();
@@ -73,13 +74,17 @@ public class WorldcupService {
         List<Worldcup> existing = findAll();
 
         for (Worldcup worldcup : existing){
-            // 중복된 hash값이 있으면 return false
-            // 중복된 title이 있으면 return false
+            // 중복된 hash값이 있거나 title이 있으면 return false
             if(worldcup.getHashCode().equals(hashValue) ||
-                worldcup.getTitle().equals(worldcupIdsRequest.getTitle())) return false;
+                worldcup.getTitle().equals(worldcupIdsRequest.getTitle())) {
+                return false;
+            }
         }
-
-        long worldcupId = insertWorldcup(worldcupIdsRequest.getTitle(),worldcupIdsRequest.getContentType(),hashValue);
+        // 중복이 아닌 경우: 생성
+        long worldcupId = insertWorldcup(worldcupIdsRequest.getTitle(),
+            worldcupIdsRequest.getContentType(),
+            hashValue,
+            worldcupIdsRequest.getImage());
         insertWorldcupContents(worldcupId, worldcupIdsRequest.getId());
 
         return true;
