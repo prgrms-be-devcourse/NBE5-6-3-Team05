@@ -96,12 +96,12 @@
           </form>
         </div>
 
-
           <div class="genre-title">
-            <h4 th:text="${genre}"></h4>
+            <h4 th:if= "${movieContentWithGenre != null }" th:text="${genre}"></h4>
           </div>
 
           <div th:if="${movie != null and movie.size() > 0}" class="card-container">
+
             <div th:each="m : ${movie}" class="card-movie"
                  th:attr="onclick='showDetailModalMovie(' +
                  '\'' + ${#strings.escapeJavaScript(m.title)} + '\',' +
@@ -174,10 +174,12 @@
           </div>
 
           <div class="genre-title">
-            <h4 th:text="${genre}"></h4>
+            <h4 th:if= "${musicContentWithGenre != null }" th:text="${genre}"></h4>
           </div>
 
           <div th:if="${music != null and music.size() > 0}" class="card-container">
+
+
             <div th:each="m : ${music}" class="card-music"
                  th:attr = "onclick=
              'showDetailModalMusic(' +
@@ -268,7 +270,7 @@
           </div>
 
           <div class="genre-title">
-            <h4 th:text="${genre}"></h4>
+            <h4 th:if= "${bookContentWithGenre != null }" th:text="${genre}"></h4>
           </div>
 
           <div th:if="${book != null and book.size() > 0}" class="card-container">
