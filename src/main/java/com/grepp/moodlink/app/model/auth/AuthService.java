@@ -25,11 +25,11 @@ public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtProvider jwtProvider;
 
-    public TokenDto signin(String userId, String password){
+    public Authentication signin(String userId, String password){
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userId, password);
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return processTokenSignin(userId);
+        return authentication;
     }
 
     public TokenDto processTokenSignin(String userId) {

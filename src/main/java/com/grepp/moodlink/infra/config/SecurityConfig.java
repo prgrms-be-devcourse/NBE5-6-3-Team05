@@ -6,10 +6,6 @@ import static org.springframework.http.HttpMethod.POST;
 import com.grepp.moodlink.infra.auth.token.JwtAuthenticationEntryPoint;
 import com.grepp.moodlink.infra.auth.token.filter.AuthExceptionFilter;
 import com.grepp.moodlink.infra.auth.token.filter.JwtAuthenticationFilter;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,11 +14,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -41,28 +35,28 @@ public class SecurityConfig {
             .build();
     }
 
-    @Bean
-    public AuthenticationSuccessHandler successHandler() {
-        return new AuthenticationSuccessHandler() {
-            @Override
-            public void onAuthenticationSuccess(HttpServletRequest request,
-                HttpServletResponse response, Authentication authentication)
-                throws IOException, ServletException {
-
-                boolean isAdmin = authentication.getAuthorities()
-                    .stream()
-                    .anyMatch(authority ->
-                        authority.getAuthority().equals("ROLE_ADMIN"));
-
-                if (isAdmin) {
-                    response.sendRedirect("/admin/movies");
-                    return;
-                }
-
-                response.sendRedirect("/");
-            }
-        };
-    }
+//    @Bean
+//    public AuthenticationSuccessHandler successHandler() {
+//        return new AuthenticationSuccessHandler() {
+//            @Override
+//            public void onAuthenticationSuccess(HttpServletRequest request,
+//                HttpServletResponse response, Authentication authentication)
+//                throws IOException, ServletException {
+//
+//                boolean isAdmin = authentication.getAuthorities()
+//                    .stream()
+//                    .anyMatch(authority ->
+//                        authority.getAuthority().equals("ROLE_ADMIN"));
+//
+//                if (isAdmin) {
+//                    response.sendRedirect("/admin/movies");
+//                    return;
+//                }
+//
+//                response.sendRedirect("/");
+//            }
+//        };
+//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
