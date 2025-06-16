@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Index</title>
+  <style>
+    .center-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .recommend-form-wrapper {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(100, 50, 200, 0.07);
+      padding: 40px 32px 32px 32px;
+      max-width: 60vw;
+      min-width: 460px;
+      width: 100%;
+      margin: 90px auto;
+    }
+    textarea{
+      justify-self: center;
+    }
+    .select-group {
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      justify-content: center;
+    }
+    select {
+      display: block !important;
+      max-width: 120px;
+      min-height: 32px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #bbb;
+      padding: 4px 8px;
+    }
+    .section h3 {
+      font-size: 2em;
+      margin-bottom: 12px;
+      text-align: center;
+      color: #ffffff;
+      font-weight: 600;
+    }
+    .card-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+    .card {
+      background-color: #e0e0e0;
+      color: #222;
+      border-radius: 8px;
+      padding: 12px 18px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 2px solid transparent;
+      min-width: 70px;
+      font-size: 20px;
+      font-weight: 500;
+      box-sizing: border-box;
+    }
+    .card:hover {
+      background-color: #dadada;
+    }
+    .card.selected {
+      border-color: #a64dff;
+      background: #f5ebff;
+      color: #7c4dff;
+      font-weight: 700;
+    }
+    .additional-input {
+      display: block;
+      width: 80%;
+      padding: 10px;
+      border: 1px solid #bbb;
+      border-radius: 6px;
+      font-size: 15px;
+      box-sizing: border-box;
+      margin-left: auto;
+      margin-right: auto;
+      color: white;
+    }
+    .submit-button {
+      margin-top: 32px;
+      padding: 12px 32px;
+      border-radius: 20px;
+      border: none;
+      background: linear-gradient(to right, #a64dff, #7c4dff);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 16px;
+      box-shadow: 0 2px 8px rgba(124,77,255,0.07);
+      transition: background 0.2s, opacity 0.2s;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .loading-wrap {
+      display: flex;
+      position: fixed;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.3);
+    }
+    .loading-spinner {
+      width: 80px;
+      height: 80px;
+      margin-top: -15vh;
+      border: 8px solid #eee;
+      border-top: 8px solid #a64dff;
+      border-radius: 50%;
+      margin-bottom: 10px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+<div layout:fragment="content" class="center-container">
+  <form method="post" action="recommend/result" id="recommendForm" class="recommend-form-wrapper">
+    <input type="hidden" name="keywords" id="selectedKeywords"/>
+    <input type="hidden" name="genre" id="selectedGenre"/>
+
+    <div class="select-group">
+      <span>장르 : 전체</span>
+      <span>국가 : 대한민국</span>
+    </div>
+
+    <div class="section" data-question="오늘 기분은" data-required="true">
+      <h3>오늘 기분은 어떠신가요? (필수, 최대 3개)</h3>
+      <div class="card-grid" id="mood-cards">
+        <div class="card">기쁨</div>
+        <div class="card">슬픔</div>
+        <div class="card">화남</div>
+        <div class="card">즐거움</div>
+        <div class="card">지침</div>
+        <div class="card">설렘</div>
+        <div class="card">불안</div>
+        <div class="card">평온</div>
+      </div>
+    </div>
+
+    <div class="section" data-question="오늘 날씨는" data-required="true">
+      <h3>오늘 날씨는 어떤가요? (필수, 최대 3개)</h3>
+      <div class="card-grid">
+        <div class="card">맑음</div>
+        <div class="card">비</div>
+        <div class="card">흐림</div>
+        <div class="card">눈</div>
+        <div class="card">바람</div>
+      </div>
+    </div>
+
+    <div class="section" data-question="지금 시간대는" data-required="true" data-single="true">
+      <h3>어떤 시간대 인가요? (필수)</h3>
+      <div class="card-grid">
+        <div class="card">아침</div>
+        <div class="card">점심</div>
+        <div class="card">저녁</div>
+        <div class="card">밤</div>
+        <div class="card">새벽</div>
+      </div>
+    </div>
+
+    <div class="section" data-question="같이 있는 사람은" data-required="true" data-single="true">
+      <h3>누구와 같이 있나요? (필수)</h3>
+      <div class="card-grid">
+        <div class="card">혼자</div>
+        <div class="card">연인</div>
+        <div class="card">가족</div>
+        <div class="card">친구들</div>
+      </div>
+    </div>
+
+    <div class="section" data-question="지금 필요한거는" data-required="true" data-single="true">
+      <h3>지금 무엇이 필요한가요? (필수)</h3>
+      <div class="card-grid">
+        <div class="card">행복</div>
+        <div class="card">위로</div>
+        <div class="card">휴식</div>
+        <div class="card">즐거움</div>
+        <div class="card">짜릿함</div>
+        <div class="card">아무생각 없이</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>추가로 입력하고 싶은 내용을 자유롭게 입력해주세요.</h3>
+      <textarea class="additional-input" id="additionalText" placeholder="추가로 원하는 사항을 자유롭게 입력하세요"></textarea>
+    </div>
+
+    <button type="submit" class="submit-button" id="submitBtn" disabled >추천받기</button>
+
+  </form>
+  <div class="loading-wrap loading-wrap--js" id="loading-wrap" style="display: none">
+    <div class="loading-spinner loading-spinner--js"></div>
+    <div>컨텐츠 추천 중입니다...</div>
+  </div>
+  <script>
+    const questionToKeywords = {};
+
+    const requiredQuestions = [
+      "오늘 기분은",
+      "지금 시간대는",
+      "같이 있는 사람은",
+      "지금 필요한거는"
+    ];
+
+    // 단일 선택 섹션 처리
+    document.querySelectorAll('.section[data-single="true"] .card').forEach(card => {
+      card.addEventListener('click', () => {
+        const section = card.closest('.section');
+        section.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+
+        const question = section.getAttribute('data-question');
+        questionToKeywords[question] = new Set([card.textContent.trim()]);
+        updateKeywords();
+        validateForm();
+      });
+    });
+
+    // 다중 선택 섹션 처리
+    document.querySelectorAll('.section:not([data-single="true"]) .card').forEach(card => {
+      card.addEventListener('click', () => {
+        const section = card.closest('.section');
+        const question = section.getAttribute('data-question');
+        const keyword = card.textContent.trim();
+
+        if (!questionToKeywords[question]) {
+          questionToKeywords[question] = new Set();
+        }
+
+        // 기분, 날씨 섹션만 최대 3개 제한
+        if (
+          (question === "오늘 기분은" || question === "오늘 날씨는") &&
+          !card.classList.contains('selected') &&
+          questionToKeywords[question].size >= 3
+        ) {
+          alert(`${question} 최대 3개까지만 선택할 수 있습니다.`);
+          return;
+        }
+
+        card.classList.toggle('selected');
+
+        if (card.classList.contains('selected')) {
+          questionToKeywords[question].add(keyword);
+        } else {
+          questionToKeywords[question].delete(keyword);
+          if (questionToKeywords[question].size === 0) {
+            delete questionToKeywords[question];
+          }
+        }
+        updateKeywords();
+        validateForm();
+      });
+    });
+
+    // 추가 입력란 처리
+    document.getElementById('additionalText').addEventListener('input', () => {
+      updateKeywords();
+    });
+
+    // keywords 값 업데이트
+    function updateKeywords() {
+      const additional = document.getElementById('additionalText').value.trim();
+      const finalKeywords = Object.entries(questionToKeywords)
+        .map(([question, keywords]) => `${question}=${Array.from(keywords).join(',')}`)
+        .concat(additional ? [`추가사항=${additional}`] : [])
+        .join('이야.');
+      document.getElementById('selectedKeywords').value = finalKeywords;
+    }
+
+    // 필수 항목 체크
+    function validateForm() {
+      const isValid = requiredQuestions.every(q =>
+        questionToKeywords[q] && questionToKeywords[q].size > 0
+      );
+      document.getElementById('submitBtn').disabled = !isValid;
+    }
+
+    document.getElementById('recommendForm').addEventListener('submit', function(e) {
+      validateForm();
+      if (document.getElementById('submitBtn').disabled) {
+        e.preventDefault();
+        alert("필수 항목을 모두 선택해 주세요.");
+        return;
+      }
+      e.preventDefault();
+
+      document.getElementById('recommendForm').style.display = 'none';
+      document.getElementById('loading-wrap').style.display = 'flex';
+      setTimeout(() => {
+        e.target.submit();
+      }, 100);
+    });
+
+  </script>
+
+</div>
+</body>
+</html>

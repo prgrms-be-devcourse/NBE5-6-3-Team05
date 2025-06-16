@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>월드컵</title>
+
+  <style>
+    .back-button {
+      display: inline-block;
+      padding: 12px 24px;
+      font-weight: bold;
+      background-color: #4CAF50;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-button:hover {
+      background-color: #45a049;
+    }
+
+    #winner-percentage {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    #winner-image {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    #top5-images {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .top5-card {
+      flex: 1;
+      text-align: center;
+    }
+
+    .top5-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .top5-card .title {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .back-button-wrapper {
+      margin-top: 30px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div layout:fragment="content">
+  <div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
+  <h2>월드컵 결과</h2>
+
+  <hr>
+  <div id="winner-percentage">
+    <img id="winner-image" src="" alt="우승 콘텐츠 이미지" />
+    <div>
+      <h3>나와 같은 선택한 사람의 비율</h3>
+      <div>우승 컨텐츠: <span id="winner-title"></span></div>
+      <div>비율: <span id="percentage-value"></span>%</div>
+      <div>같은 컨텐츠가 우승한 횟수: <span id="winner-count"></span></div>
+      <div>해당 월드컵 플레이 횟수: <span id="total-count"></span></div>
+    </div>
+  </div>
+  <hr>
+
+  <div id="top5-ranking">
+    <h3>인기 콘텐츠 TOP 5 (대진 승률 순)</h3>
+    <div id="top5-images">
+      <div class="top5-card">
+        <img id="img-1" src="" alt="" />
+        <div id="title-1" class="title"></div>
+        <div id="ratio-1"></div>
+      </div>
+      <div class="top5-card">
+        <img id="img-2" src="" alt="" />
+        <div id="title-2" class="title"></div>
+        <div id="ratio-2"></div>
+      </div>
+      <div class="top5-card">
+        <img id="img-3" src="" alt="" />
+        <div id="title-3" class="title"></div>
+        <div id="ratio-3"></div>
+      </div>
+      <div class="top5-card">
+        <img id="img-4" src="" alt="" />
+        <div id="title-4" class="title"></div>
+        <div id="ratio-4"></div>
+      </div>
+      <div class="top5-card">
+        <img id="img-5" src="" alt="" />
+        <div id="title-5" class="title"></div>
+        <div id="ratio-5"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="back-button-wrapper">
+    <a href="/worldcup" class="back-button">다른 월드컵 하러 가기</a>
+  </div>
+
+
+  <script>
+    const winInfo = JSON.parse(localStorage.getItem('finalWinSummary'));
+    const worldcupItemsDetail = JSON.parse(localStorage.getItem('worldcup_items_detail'));
+    const worldcupItems = JSON.parse(localStorage.getItem('worldcupItems'));
+
+    // 우승 컨텐츠: 플레이 수 대비 우승 횟수 출력
+    const totalCountModel = winInfo.totalCount;
+    const winCountModel = winInfo.winCount;
+    const winnerId = winInfo.winnerId;
+    const percentage = ((winCountModel / totalCountModel) * 100).toFixed(1);
+    const winnerItem = worldcupItemsDetail[winnerId];
+    const winnerTitle = winnerItem.title;
+
+    document.getElementById('percentage-value').textContent = percentage;
+    document.getElementById('winner-count').textContent = winCountModel;
+    document.getElementById('total-count').textContent = totalCountModel;
+    document.getElementById('winner-title').textContent = winnerTitle;
+
+
+    if (winnerItem) {
+      document.getElementById('winner-image').src = winnerItem.image; // 또는 image
+      document.getElementById('winner-image').alt = winnerItem.title;
+    }
+
+
+    // Top 5 데이터 채우기
+
+    // 2. 인기 Top 5 이미지 출력
+    const top5 = worldcupItems
+    .filter(item => item.totalCount > 0)
+    .map(item => ({
+      id: item.contentId,
+      ratio: item.winCount / item.totalCount,
+      img: worldcupItemsDetail[item.contentId].image,
+      title: worldcupItemsDetail[item.contentId].title
+    }))
+    .sort((a, b) => b.ratio - a.ratio)
+    .slice(0, 5);
+
+
+    // 각 카드에 하나씩 주입
+    for (let i = 0; i < 5; i++) {
+      const item = top5[i];
+      const index = i + 1;
+
+      const imgEl = document.getElementById(`img-${index}`);
+      const titleEl = document.getElementById(`title-${index}`);
+      const ratioEl = document.getElementById(`ratio-${index}`);
+
+      if (item) {
+        imgEl.src = item.img;
+        imgEl.alt = item.title;
+        titleEl.textContent = item.title;
+        ratioEl.textContent = `승률 ${(item.ratio * 100).toFixed(1)}%`;
+      } else {
+        // 데이터가 부족한 경우 기본 처리
+        imgEl.style.display = 'none';
+        titleEl.textContent = '-';
+        ratioEl.textContent = '';
+      }
+    }
+  </script>
+
+
+</div>
+</body>
+</html>

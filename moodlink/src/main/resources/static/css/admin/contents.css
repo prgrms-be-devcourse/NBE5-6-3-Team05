@@ -1,0 +1,145 @@
+body {
+  background-attachment: fixed;
+  background-position: center;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #1e1e1e;
+  color: white;
+}
+
+.add-btn {
+  background: linear-gradient(to right, #A64DFF, #6A00FF);
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.menu a {
+  display: block;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  color: white;
+  font-weight: bold;
+  width: 150px;
+  text-decoration: none;
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+.menu a.active {
+  background: linear-gradient(to right, #A64DFF, #6A00FF);
+  border-radius: 5px;
+}
+
+.main-contents {
+  flex: 1;
+  padding: 0 150px 0 1rem;
+  margin-left: 1rem;
+}
+
+.item-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.helper-text {
+  color: white;
+}
+
+.pagination {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.pagination span, .pagination a {
+  margin: 0 5px;
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
+  background-color: #333;
+  color: white;
+  text-decoration: none;
+}
+
+.pagination li.active {
+  background-color: transparent;
+}
+
+.active a {
+  margin: 0 5px;
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
+  background: linear-gradient(to right, #A64DFF, #6A00FF);
+  color: white;
+  text-decoration: none;
+}
+
+.empty-message {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}
+
+
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.item-card {
+  display: flex;
+  gap: 1rem;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 10px;
+  color: black;
+}
+
+.item-thumbnail {
+  width: 120px;
+  height: 160px;
+  background-color: #ccc;
+  flex-shrink: 0;
+}
+
+.item-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.item-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.item-meta {
+  color: gray;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+
+.input-line {
+  flex: 1;
+  border: none;
+  border-bottom: 1px solid #666;
+  background-color: transparent;
+  color: white;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
