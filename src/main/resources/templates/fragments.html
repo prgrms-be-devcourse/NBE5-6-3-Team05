@@ -875,6 +875,33 @@
         cursor: pointer;
       }
 
+      #search-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /*margin-top: 100px; !* 헤더 높이보다 큰 여백을 확보 *!*/
+        z-index: 1;
+        position: relative;
+      }
+
+      #searchAllButton button {
+        background-color: #6C63FF;
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      #searchAllButton button:hover {
+        background-color: #5751d6;
+        transform: translateY(-3px);
+      }
+
     </style>
 
   </th:block>

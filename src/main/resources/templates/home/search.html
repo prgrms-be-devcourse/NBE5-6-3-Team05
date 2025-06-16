@@ -77,7 +77,7 @@
 
   <!-- 영화 -->
         <div class="category" id="movie">
-<!--          <div th:if="${movie != null}">-->
+          <div th:if="${#strings.isEmpty(contentName)}">
           <form  id="searchMovieWithGenreForm" th:action="@{/search/genre/movie}" method="get">
             <input type="hidden" id="selectedMovieCategory" th:value="${selectedMovieCategory}" />
             <input type="hidden" name="genreName" id="movieGenreNameInput"/>
@@ -97,7 +97,7 @@
             <button type="button" class = "genre-btn" onclick="submitMovieGenre('로맨스')">로맨스</button>
             <button type="button" class = "genre-btn" onclick="submitMovieGenre('전쟁')">전쟁</button>
           </form>
-<!--        </div>-->
+        </div>
 
 
           <div class="genre-title">
@@ -162,8 +162,8 @@
 
       <!--음악 -->
         <div class="category" id="music">
-<!--          <div th:if="${music != null}">-->
-          <form  id="searchMusicWithGenreForm" th:action="@{/search/genre/music}" method="get">
+          <div th:if="${#strings.isEmpty(contentName)}">
+            <form  id="searchMusicWithGenreForm" th:action="@{/search/genre/music}" method="get">
             <input type="hidden" id="selectedMusicCategory" th:value="${selectedMusicCategory}" />
             <input type="hidden" name="genreName" id="musicGenreNameInput"/>
             <button type="button" class = "genre-btn" onclick="submitMusicGenre('발라드')">발라드</button>
@@ -175,7 +175,7 @@
             <button type="button" class = "genre-btn" onclick="submitMusicGenre('트로트')">트로트</button>
             <button type="button" class = "genre-btn" onclick="submitMusicGenre('포크/블루스')">포크/블루스</button>
           </form>
-<!--          </div>-->
+          </div>
 
 
           <div class="genre-title">
@@ -250,11 +250,10 @@
 
   <!-- 도서 -->
         <div class="category" id="book">
-<!--          <div th:if="${book != null}">-->
+          <div th:if="${#strings.isEmpty(contentName)}">
           <form  id="searchBookWithGenreForm" th:action="@{/search/genre/book}" method="get">
             <input type="hidden" id ="selectedBookCategory" th:value="${selectedBookCategory}" />
             <input type="hidden" name="genreName" id="bookGenreNameInput"/>
-
             <button type="button" class = "genre-btn" onclick="submitBookGenre('동화')">동화</button>
             <button type="button" class = "genre-btn" onclick="submitBookGenre('라이트노벨')">라이트노벨</button>
             <button type="button" class = "genre-btn" onclick="submitBookGenre('무협소설')">무협소설</button>
@@ -274,7 +273,7 @@
             <button type="button" class = "genre-btn" onclick="submitBookGenre('현대문학')">현대문학</button>
             <button type="button" class = "genre-btn" onclick="submitBookGenre('사회학')">사회학</button>
           </form>
-<!--          </div>-->
+          </div>
 
           <div class="genre-title">
             <h4 th:text="${genre}"></h4>
