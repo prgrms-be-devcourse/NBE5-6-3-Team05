@@ -7,6 +7,24 @@
 <head>
   <meta charset="UTF-8">
   <style>
+    html, body {
+      height: 100%;
+      overflow: hidden; /* 전체 페이지 스크롤 막기 */
+      margin: 0;
+      padding: 0;
+    }
+
+    .container{
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      overflow-y: auto;
+      margin: auto;
+      height: 100vh;
+    }
+    .container::-webkit-scrollbar {
+      display: none;
+    }
 
     /* 전체 배경 및 기본 글자색 */
     .center-container {
@@ -429,7 +447,7 @@
 <div layout:fragment="content" class="center-container">
 
 
-  <main class="main-content">
+  <main class="main-content container">
 
     <div class="divider-wrapper">
       <div class="label-left">RESULT</div>
@@ -584,6 +602,7 @@
     </div>
 
   </div>
+    <br><br><br><br><br><br>
   </main>
   <!-- 모달창 HTML -->
   <div id="detailModalResult" class="custom-modal hidden">

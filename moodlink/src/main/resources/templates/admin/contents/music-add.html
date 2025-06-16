@@ -5,93 +5,116 @@
   <meta charset="UTF-8">
   <title>관리자 페이지 - 음악 추가</title>
   <link rel="stylesheet" th:href="@{/css/admin/contents-add.css}">
+  <style>
+    html, body {
+      height: 100%;
+      overflow: hidden; /* 전체 페이지 스크롤 막기 */
+      margin: 0;
+      padding: 0;
+    }
 
+    .container{
+      display: flex;
+      flex-direction: column;
+      width: fit-content;
+      max-width: 100vw;
+      overflow-y: auto;
+      margin-top: 80px;
+      height: 100vh;
+    }
+    .container::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
 </head>
 <main layout:fragment="content">
-  <!-- 돌아가기 버튼 -->
-  <a class="back-btn" th:href="@{/admin/music}">← 돌아가기</a>
+  <div class="container">
+    <!-- 돌아가기 버튼 -->
+    <a class="back-btn" th:href="@{/admin/music}">← 돌아가기</a>
 
-  <!-- 정보 가져오기 버튼을 누를 시 나오는 모달 -->
-  <!-- 음악 대한 정보를 받아 추가합니다. -->
-  <div id="apiLookupModal" style="display:none; position:fixed; top:30%; left:45%; background:white; padding:20px; border-radius:10px; z-index:1000;">
-    <form id="musicLookup">
-      <label>음악 제목 (정확한 제목을 입력해주세요)</label><br/>
-      <label for="searchName"></label><input type="text" id="searchName" name="name" required><br/><br/>
-      <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
-        <button type="submit" class="add-btn">정보 가져오기</button>
-        <button type="button" class="add-btn" onclick="closeModal()">닫기</button>
-      </div>
-    </form>
-  </div>
-  <!-- 모달 배경 -->
-  <div id="modalBackdrop" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;" onclick="closeModal()"></div>
+    <!-- 정보 가져오기 버튼을 누를 시 나오는 모달 -->
+    <!-- 음악 대한 정보를 받아 추가합니다. -->
+    <div id="apiLookupModal" style="display:none; position:fixed; top:30%; left:45%; background:white; padding:20px; border-radius:10px; z-index:1000;">
+      <form id="musicLookup">
+        <label>음악 제목 (정확한 제목을 입력해주세요)</label><br/>
+        <label for="searchName"></label><input type="text" id="searchName" name="name" required><br/><br/>
+        <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+          <button type="submit" class="add-btn">정보 가져오기</button>
+          <button type="button" class="add-btn" onclick="closeModal()">닫기</button>
+        </div>
+      </form>
+    </div>
+    <!-- 모달 배경 -->
+    <div id="modalBackdrop" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;" onclick="closeModal()"></div>
 
-  <!-- 중앙 배치 form -->
-  <div class="main-area">
-    <form th:action="@{/admin/music/add}" th:object="${musicAddRequest}" method="post"
-          enctype="multipart/form-data">
-      <div class="form-section">
-        <h3>음악 정보를 입력해주세요.</h3>
+    <!-- 중앙 배치 form -->
+    <div class="main-area">
+      <form th:action="@{/admin/music/add}" th:object="${musicAddRequest}" method="post"
+            enctype="multipart/form-data">
+        <div class="form-section">
+          <h3>음악 정보를 입력해주세요.</h3>
 
-        <div class="info-group">
-          <div class="image-upload">
-            <div id="preview" class="image-preview"></div>
-            <input type="file" id="image-input" name="thumbnail" style="display:none"/>
-            <input th:field="*{thumbnailPath}" id="imagePath-input"  style="display:none"/>
-            <div id="sizeInfo"></div>
-            <button class="img-btn" type="button"
-                    onclick="document.getElementById('image-input').click()">이미지 추가
-            </button>
-          </div>
-
-
-          <div>
-            <div class="form-row"><label>제목</label><input th:field="*{title}" id="title-input" class="input-line"/>
-              <a class="add-btn" id="api-lookup" onclick="openModal()">정보 가져오기</a>
+          <div class="info-group">
+            <div class="image-upload">
+              <div id="preview" class="image-preview"></div>
+              <input type="file" id="image-input" name="thumbnail" style="display:none"/>
+              <input th:field="*{thumbnailPath}" id="imagePath-input"  style="display:none"/>
+              <div id="sizeInfo"></div>
+              <button class="img-btn" type="button"
+                      onclick="document.getElementById('image-input').click()">이미지 추가
+              </button>
             </div>
-            <span class="helper-text form-row"
-                  th:if="${fieldErrors != null and fieldErrors.containsKey('title')}"
-                  th:text="${fieldErrors.title}"></span>
-            <div class="form-row"><label>가수</label><input th:field="*{singer}" id="singer-input" class="input-line"
-                                                          type="text"/></div>
-            <span class="helper-text form-row"
-                  th:if="${fieldErrors != null and fieldErrors.containsKey('singer')}"
-                  th:text="${fieldErrors.singer}"></span>
-            <div class="form-row"><label>발매일</label><input th:field="*{releaseDate}" id="releaseDate-input"
-                                                           class="input-line" type="date"/></div>
+
+
+            <div>
+              <div class="form-row"><label>제목</label><input th:field="*{title}" id="title-input" class="input-line"/>
+                <a class="add-btn" id="api-lookup" onclick="openModal()">정보 가져오기</a>
+              </div>
+              <span class="helper-text form-row"
+                    th:if="${fieldErrors != null and fieldErrors.containsKey('title')}"
+                    th:text="${fieldErrors.title}"></span>
+              <div class="form-row"><label>가수</label><input th:field="*{singer}" id="singer-input" class="input-line"
+                                                            type="text"/></div>
+              <span class="helper-text form-row"
+                    th:if="${fieldErrors != null and fieldErrors.containsKey('singer')}"
+                    th:text="${fieldErrors.singer}"></span>
+              <div class="form-row"><label>발매일</label><input th:field="*{releaseDate}" id="releaseDate-input"
+                                                             class="input-line" type="date"/></div>
+            </div>
           </div>
-        </div>
 
-        <div class="form-row" style="flex-direction: column; align-items: flex-start;">
-          <label>장르</label>
-          <select th:field="*{genre}" class="input-line">
-            <option disabled selected value="">장르 선택</option>
-            <option th:each="gen : ${genres}"
-                    th:value="${gen}"
-                    th:text="${gen}">
-            </option>
-          </select>
-          <span class="helper-text form-row"
-                th:if="${fieldErrors != null and fieldErrors.containsKey('genre')}"
-                th:text="${fieldErrors.genre}"></span>
-        </div>
+          <div class="form-row" style="flex-direction: column; align-items: flex-start;">
+            <label>장르</label>
+            <select th:field="*{genre}" class="input-line">
+              <option disabled selected value="">장르 선택</option>
+              <option th:each="gen : ${genres}"
+                      th:value="${gen}"
+                      th:text="${gen}">
+              </option>
+            </select>
+            <span class="helper-text form-row"
+                  th:if="${fieldErrors != null and fieldErrors.containsKey('genre')}"
+                  th:text="${fieldErrors.genre}"></span>
+          </div>
 
-        <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
-          <label>설명</label>
-          <textarea th:field="*{description}" id="description-input" class="textarea"></textarea>
-        </div>
-        <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
-          <label>가사</label>
-          <textarea th:field="*{lyrics}" id="lyrics-input" class="textarea"></textarea>
-          <span class="helper-text form-row"
-                th:if="${fieldErrors != null and fieldErrors.containsKey('lyrics')}"
-                th:text="${fieldErrors.lyrics}"></span>
-        </div>
+          <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
+            <label>설명</label>
+            <textarea th:field="*{description}" id="description-input" class="textarea"></textarea>
+          </div>
+          <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
+            <label>가사</label>
+            <textarea th:field="*{lyrics}" id="lyrics-input" class="textarea"></textarea>
+            <span class="helper-text form-row"
+                  th:if="${fieldErrors != null and fieldErrors.containsKey('lyrics')}"
+                  th:text="${fieldErrors.lyrics}"></span>
+          </div>
 
 
-        <button class="submit-btn" type="submit" name="action">등록</button>
-      </div>
-    </form>
+          <button class="submit-btn" type="submit" name="action">등록</button>
+        </div>
+      </form>
+    </div>
+    <br><br><br><br><br><br>
   </div>
 </main>
 <div layout:fragment="scripts">

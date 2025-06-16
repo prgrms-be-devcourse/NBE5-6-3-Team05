@@ -97,7 +97,7 @@ public class RecommendController {
         List<String> movieIds;
         List<String> bookIds;
         List<String> musicIds;
-        if(recommendationService.exists(keywords)) { // 추천 받은 적 있는 키워드의 경우 가져오기
+        if(recommendationService.exists(keywords) && recommendationService.isActivated(keywords)) {// 추천 받은 적 있는 키워드의 경우 가져오기
             movieIds = getMovieRecommendations(keywords);
             bookIds = getBookRecommendations(keywords);
             musicIds = getMusicRecommendations(keywords);

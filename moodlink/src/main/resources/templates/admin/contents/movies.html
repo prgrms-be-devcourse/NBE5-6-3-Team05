@@ -5,51 +5,75 @@
   <meta charset="UTF-8">
   <title>Moodlink 관리자 페이지</title>
   <link rel="stylesheet" th:href="@{/css/admin/contents.css}">
+  <style>
+    html, body {
+      height: 100%;
+      overflow: hidden; /* 전체 페이지 스크롤 막기 */
+      margin: 0;
+      padding: 0;
+    }
+
+    .container{
+      display: flex;
+      flex-direction: column;
+      width: fit-content;
+      max-width: 100vw;
+      overflow-y: auto;
+      margin-top: 80px;
+      height: 100vh;
+    }
+    .container::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
 </head>
 <body>
 <main layout:fragment="content">
-  <!-- 컨트롤러에서 넘어오는 에러를 담음 -->
-  <div style="display: none" id="for-alert" th:if="${error != null}" th:text="${error}"></div>
-  <div class="layout">
-    <!-- 왼쪽 메뉴 -->
-    <div class="menu">
-      <a class="active" href="movies">영화</a>
-      <a href="music">음악</a>
-      <a href="books">도서</a>
-      <a href="genres">장르</a>
-    </div>
-
-    <!-- 오른쪽 콘텐츠 -->
-    <div class="main-contents">
-      <div style="display: flex;">
-        <a class="add-btn" href="movies/add">+ 추가</a>
-        <button style="margin-left: 1rem" class="add-btn" onclick="generateRecommend()">추천 결과 업데이트 하기</button>
+  <div class="container">
+    <!-- 컨트롤러에서 넘어오는 에러를 담음 -->
+    <div style="display: none" id="for-alert" th:if="${error != null}" th:text="${error}"></div>
+    <div class="layout">
+      <!-- 왼쪽 메뉴 -->
+      <div class="menu">
+        <a class="active" href="movies">영화</a>
+        <a href="music">음악</a>
+        <a href="books">도서</a>
+        <a href="genres">장르</a>
       </div>
-      <!-- 데이터 존재 시 -->
-      <div class="item-grid" th:if="${page.content() != null}">
-        <div th:each="movie : ${page.content()}">
-          <div class="item-card"
-               th:attr="data-id=${movie.id}">
-            <div class="item-thumbnail">
-              <img th:src="${movie.thumbnail}" alt="썸네일"
-                   style="width: 100%; height: 100%; object-fit: cover;"/>
-            </div>
-            <div class="item-details">
-              <div class="item-title" th:text="${movie.title}">제목</div>
-              <div class="item-meta"
-                   th:text="${'(' + #temporals.format(movie.releaseDate, 'yyyy.MM.dd') + ')'}"></div>
+
+      <!-- 오른쪽 콘텐츠 -->
+      <div class="main-contents">
+        <div style="display: flex;">
+          <a class="add-btn" href="movies/add">+ 추가</a>
+          <button style="margin-left: 1rem" class="add-btn" onclick="generateRecommend()">추천 결과 업데이트 하기</button>
+        </div>
+        <!-- 데이터 존재 시 -->
+        <div class="item-grid" th:if="${page.content() != null}">
+          <div th:each="movie : ${page.content()}">
+            <div class="item-card"
+                 th:attr="data-id=${movie.id}">
+              <div class="item-thumbnail">
+                <img th:src="${movie.thumbnail}" alt="썸네일"
+                     style="width: 100%; height: 100%; object-fit: cover;"/>
+              </div>
+              <div class="item-details">
+                <div class="item-title" th:text="${movie.title}">제목</div>
+                <div class="item-meta"
+                     th:text="${'(' + #temporals.format(movie.releaseDate, 'yyyy.MM.dd') + ')'}"></div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- 비어있을 때 -->
-      <div th:if="${page.content() == null}" class="empty-message">
-        등록된 항목이 없습니다.
-      </div>
+        <!-- 비어있을 때 -->
+        <div th:if="${page.content() == null}" class="empty-message">
+          등록된 항목이 없습니다.
+        </div>
 
-      <div class="pagination" th:insert="~{fragments :: frg_pagination}"></div>
+        <div class="pagination" th:insert="~{fragments :: frg_pagination}"></div>
+      </div>
     </div>
+  <br><br><br><br><br><br>
   </div>
 </main>
 <div layout:fragment="scripts">

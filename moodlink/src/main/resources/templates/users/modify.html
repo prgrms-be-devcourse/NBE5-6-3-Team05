@@ -9,6 +9,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Moodlink - 사용자 정보 수정</title>
   <style layout:fragment="style">
+    html, body {
+      height: 100%;
+      overflow: hidden; /* 전체 페이지 스크롤 막기 */
+      margin: 0;
+      padding: 0;
+    }
+
+    .container{
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      overflow-y: auto;
+      margin-top: 60px;
+      height: 100vh;
+    }
+    .container::-webkit-scrollbar {
+      display: none;
+    }
+
     :root {
       --primary-color: #9D5CFF;
       --primary-dark: #7A33FF;
@@ -30,7 +49,6 @@
     }
 
     body {
-      font-family: 'Pretendard', sans-serif;
       background-color: var(--dark-bg);
       color: var(--text-color);
       line-height: 1.6;
@@ -311,6 +329,7 @@
         <button type="submit" class="submit-btn">저장하기</button>
       </form>
     </div>
+    <br><br><br><br><br><br>
   </div>
 </main>
 </body>
