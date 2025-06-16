@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,7 @@ public class RecommendationService {
     private final MusicRepository musicRepository;
 
     public List<String> getMovies(String keywords) {
-        List<String> movies = recommendationRepository.findByKeywordsAndContentType(keywords, RecommendContentType.MOVIE.name())
+        List<String> movies = recommendationRepository.findByKeywordsAndContentTypeAndActivatedTrue(keywords, RecommendContentType.MOVIE.name())
                 .stream()
                 .map(Recommendation::getContentId)
                 .toList();
@@ -42,7 +43,7 @@ public class RecommendationService {
     }
 
     public List<String> getBooks(String keywords) {
-        List<String> books = recommendationRepository.findByKeywordsAndContentType(keywords, RecommendContentType.BOOK.name())
+        List<String> books = recommendationRepository.findByKeywordsAndContentTypeAndActivatedTrue(keywords, RecommendContentType.BOOK.name())
                 .stream()
                 .map(Recommendation::getContentId)
                 .toList();
@@ -57,7 +58,7 @@ public class RecommendationService {
     }
 
     public List<String> getMusics(String keywords) {
-        List<String> musics = recommendationRepository.findByKeywordsAndContentType(keywords, RecommendContentType.MUSIC.name())
+        List<String> musics = recommendationRepository.findByKeywordsAndContentTypeAndActivatedTrue(keywords, RecommendContentType.MUSIC.name())
                 .stream()
                 .map(Recommendation::getContentId)
                 .toList();
@@ -137,7 +138,7 @@ public class RecommendationService {
 
 
     public List<Recommendation> curatingDetailDtoList(String keyword) {
-            return recommendationRepository.findByKeywords(keyword);
+            return recommendationRepository.findByKeywordsAndActivatedTrue(keyword);
     }
 
     public List<Movie> toMovie(List<Recommendation> movieRecommendation) {
