@@ -127,11 +127,11 @@
     <div th:if="${movies.isEmpty()}" class="empty-message-container">
       <div class="empty-message-box">
         <h2> 😥 아직 추천된 콘텐츠가 없어요  </h2>
-        <p>바로 추천받기를 통해 나에게 꼭 맞는 콘텐츠를 찾아보세요!</p>
+        <p>추천받기를 통해 나에게 꼭 맞는 콘텐츠를 찾아보세요!</p>
 
         <button class="fancy-button" th:onclick="|location.href='@{/recommend}'|">
           <i class="material-icons">stars</i>
-          바로 추천받기
+          추천받기
         </button>
       </div>
 
