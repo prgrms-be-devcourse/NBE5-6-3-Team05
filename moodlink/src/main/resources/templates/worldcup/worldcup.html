@@ -12,7 +12,7 @@
       padding: 0;
     }
 
-    .container{
+    .container {
       display: flex;
       flex-direction: column;
       width: 100%;
@@ -20,10 +20,12 @@
       margin-top: 60px;
       height: 100vh;
     }
+
     .container::-webkit-scrollbar {
       display: none;
     }
-    .worldcup-container{
+
+    .worldcup-container {
       display: flex;
       justify-items: center;
     }
@@ -68,6 +70,11 @@
 <body>
 <h5>월드컵 페이지입니다.</h5>
 <div layout:fragment="content" class="worldcup-container">
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
   <div class="container">
 
     <div id="worldcup-list"></div>
@@ -90,11 +97,16 @@
           item.className = 'worldcup-card';
 
           item.innerHTML = `
-    <a href="/worldcup/play?id=${wc.id}">
-      <img src="/images/sample.jpg" alt="샘플 이미지" />
-      <p class="worldcup-title">${wc.title}</p>
-    </a>
-  `;
+  <a href="/worldcup/play?id=${wc.id}" class="content-card"
+     style="display:inline-block; margin:5px; padding:10px; border:1px solid #ccc; text-decoration:none; color:inherit; width:140px;">
+    <img src="${wc.imageUrl}" alt="${wc.title}"
+         style="width:120px; height:120px; object-fit:cover; display:block; margin-bottom:5px;" />
+    <span title="${wc.title}"
+          style="display:inline-block; width:120px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+      ${wc.title.length > 10 ? wc.title.slice(0, 10) + '...' : wc.title}
+    </span>
+  </a>
+`;
 
           container.appendChild(item);
         }
