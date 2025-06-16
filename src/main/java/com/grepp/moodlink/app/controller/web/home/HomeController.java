@@ -71,6 +71,7 @@ public class HomeController {
             model.addAttribute("movies", movies);
             model.addAttribute("books", books);
             model.addAttribute("musics", musics);
+            model.addAttribute("keyword", keyword);
         }
 
         model.addAttribute("thumbnail", thumbnail);

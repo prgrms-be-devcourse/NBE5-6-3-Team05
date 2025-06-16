@@ -948,6 +948,18 @@
         to { opacity: 1; transform: translateY(0); }
       }
 
+      .recommendation-container .swiper-slide {
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 10px;
+      }
+
+      .recommendation-container .swiper-slide:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+      }
+
+
     </style>
 
   </th:block>
