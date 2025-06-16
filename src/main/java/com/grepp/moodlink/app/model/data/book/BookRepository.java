@@ -20,4 +20,6 @@ public interface BookRepository extends JpaRepository<Book, String>, BookReposit
     Optional<String> findIsbnByTitle(@Param("title") String title);
 
     List<Book> findAllByIsbnIn(List<String> isbn);
+
+    List<Book> findTop10ByOrderByLikeCountDesc();
 }
