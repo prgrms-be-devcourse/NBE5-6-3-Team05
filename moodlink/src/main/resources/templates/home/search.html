@@ -41,7 +41,6 @@
 <main layout:fragment="content" class="search-result-container">
 
     <div class="main-content">
-
       <div class="search-container">
         <form id="searchAllForm" th:action="@{/search/all}" method="get">
           <input type="text" id="search-input" name="contentName" placeholder="원하는 음악,영화,도서를 찾아보세요!">
@@ -282,7 +281,7 @@
                '\'' + ${#strings.escapeJavaScript(b.description)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(b.image)} + '\',' +
              ')'">
-              <img th:src="${b.image}" alt="도서 썸네일" class="card-thumbnail modal-bg.book"/>
+              <img th:src="${b.image}" alt="도서 썸네일22222" class="card-thumbnail modal-bg.book"/>
             </div>
           </div>
 
