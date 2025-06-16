@@ -24,7 +24,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -35,9 +34,6 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthExceptionFilter authExceptionFilter;
     private final JwtAuthenticationEntryPoint entryPoint;
-//    private final OAuth2SuccessHandler oAuth2SuccessHandler;
-//    private final OAuth2FailureHandler oAuth2FailureHandler;
-//    private final LogoutFilter logoutFilter;
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
@@ -71,9 +67,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        // * : 1depth 아래 모든 경로
-        // ** : 모든 depth 의 모든 경로
-        // Security Config 에는 인증과 관련된 설정만 지정 (PermitAll or Authenticated)
         http
             .csrf().disable() // 추가
             .authorizeHttpRequests(
@@ -85,24 +78,7 @@ public class SecurityConfig {
                     .requestMatchers(GET, "/mypage").authenticated()
                     .anyRequest().permitAll()
             )
-//            .formLogin((form) -> form
-//                    .loginPage("/signin")
-//                    .usernameParameter("userId")
-//                    .loginProcessingUrl("/signin")
-////                                     .defaultSuccessUrl("/")
-//                    .successHandler(successHandler())
-//                    .permitAll()
-//            )
-////            .rememberMe(rememberMe -> rememberMe.key(rememberMeKey))
-////            .logout(LogoutConfigurer::permitAll);
-//            .logout(logout -> logout
-//                .logoutUrl("/logout")
-//                .logoutSuccessUrl("/signin")
-//                .invalidateHttpSession(true)
-//                .deleteCookies("JSESSIONID")
-//                .permitAll());
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-//            .addFilterBefore(logoutFilter, JwtAuthenticationFilter.class)
             .addFilterBefore(authExceptionFilter, JwtAuthenticationFilter.class);
         return http.build();
     }
@@ -111,5 +87,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-
 }

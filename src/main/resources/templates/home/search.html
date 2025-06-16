@@ -67,9 +67,6 @@
         </form>
       </div>
 
-      <!-- contentName 이 비었을 때 -->
-      <!--  <h4 th:if="${#strings.isEmpty(contentName)}">전체 검색결과입니다.</h4>-->
-
   <!-- contentName 이 있을 때 -->
   <h4 th:unless="${#strings.isEmpty(contentName)}">
     "<span th:text="${contentName}"></span>" 에 대한 검색결과입니다.
@@ -104,7 +101,6 @@
             <h4 th:text="${genre}"></h4>
           </div>
 
-          <!--    <h3><span class="highlight">영화</span> 검색 결과</h3>  -->
           <div th:if="${movie != null and movie.size() > 0}" class="card-container">
             <div th:each="m : ${movie}" class="card-movie"
                  th:attr="onclick='showDetailModalMovie(' +
@@ -182,7 +178,6 @@
             <h4 th:text="${genre}"></h4>
           </div>
 
-          <!--    <h3><span class="highlight">음악</span> 검색 결과</h3>-->
           <div th:if="${music != null and music.size() > 0}" class="card-container">
             <div th:each="m : ${music}" class="card-music"
                  th:attr = "onclick=
@@ -246,8 +241,6 @@
           </div>
         </div>
 
-
-
   <!-- 도서 -->
         <div class="category" id="book">
           <div th:if="${#strings.isEmpty(contentName)}">
@@ -279,7 +272,6 @@
             <h4 th:text="${genre}"></h4>
           </div>
 
-          <!--    <h3><span class="highlight">도서</span> 검색 결과</h3>-->
           <div th:if="${book != null and book.size() > 0}" class="card-container">
             <div th:each="b : ${book}" class="card-book"
                  th:attr = "onclick=
@@ -404,17 +396,6 @@
     /* ===== 모달 표시 ===== */
     document.getElementById('musicDetailModal').classList.add('active');
 
-    // const searchBtn = document.getElementById('modalSearchMusicBtn');
-    //
-    // // 음악 구매 버튼
-    // searchBtn.textContent = '음악 구매하기 사이트 ➜';
-    //
-    // // 활성화 + 클릭 이벤트
-    // searchBtn.disabled = false;
-    // searchBtn.onclick = () => {
-    //   const query = encodeURIComponent(title);
-    //   window.open(`https://www.youtube.com/search?q=${query}`, '_blank');
-    // };
   }
 
   function showDetailModalBook(title, releaseDate, summary, thumbnail, type) {
@@ -540,9 +521,5 @@
     document.getElementById('movieGenreNameInput').value = genre;
     document.getElementById('searchMovieWithGenreForm').submit();
   }
-
-
-
-
 
 </script>

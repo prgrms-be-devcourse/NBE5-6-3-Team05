@@ -30,9 +30,9 @@ public class RedisConfig {
     private String username;
     @Value("${spring.data.redis.password}")
     private String password;
-    
-    private final ApplicationContext applicationContext;
-    
+
+//    private final ApplicationContext applicationContext;
+
     @Bean
     public RedisConnectionFactory redisConnectionFactory(){
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
@@ -50,19 +50,17 @@ public class RedisConfig {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModules( SecurityJackson2Modules.getModules(loader));
         
-        // 1. Java 8 Date/Time API 지원을 위한 모듈 등록 (필수 권장)
         mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // 날짜를 타임스탬프가 아닌 문자열로 직렬화
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         
         mapper.activateDefaultTyping(
             BasicPolymorphicTypeValidator.builder()
-                .allowIfBaseType("org.springframework.security.") // 기존 설정 (유지)
-                .allowIfBaseType("com.grepp.spring.")    // 당신의 도메인 객체 패키지 (유지)
+                .allowIfBaseType("org.springframework.security.")
+                .allowIfBaseType("com.grepp.spring.")
                 .build(),
             ObjectMapper.DefaultTyping.NON_FINAL,
             JsonTypeInfo.As.PROPERTY
         );
         return new GenericJackson2JsonRedisSerializer(mapper);
     }
-
 }

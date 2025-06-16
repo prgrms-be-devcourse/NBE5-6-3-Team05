@@ -2,7 +2,6 @@ package com.grepp.moodlink.app.model.home;
 
 import com.grepp.moodlink.app.model.data.book.BookRepositoryImpl;
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
-import com.grepp.moodlink.app.model.data.book.entity.Book;
 import com.grepp.moodlink.app.model.data.movie.MovieRepositoryImpl;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
 import com.grepp.moodlink.app.model.data.music.MusicRepositoryImpl;

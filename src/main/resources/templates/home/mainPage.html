@@ -85,44 +85,45 @@
 
     <h3>오늘의 기분, 하나의 링크로 영화·도서·음악을 만나보세요.</h3>
 
-    <p class="content-description"><i>⭐ Best Content ⭐</i></p>
-
-
-    <div class="category">
-      <div class="category-card" onclick="showContentInfo('music')">
-        <img th:src="@{${thumbnail[0]}}" alt="음악">
-        <h5>음악</h5>
-        <div class="content-info" id="music-info">
-          <h6 class="content-title" th:text="${people[0]}"></h6>
-          <ul>
-            <li th:text="${title[0]}"></li>
-          </ul>
-          <br>
+    <div th:if="${!isAuthenticated}">
+      <p class="content-description"><i>⭐ Best Content ⭐</i></p>
+      <div class="category">
+        <div class="category-card" onclick="showContentInfo('music')">
+          <img th:src="@{${thumbnail[0]}}" alt="음악">
+          <h5>음악</h5>
+          <div class="content-info" id="music-info">
+            <h6 class="content-title" th:text="${people[0]}"></h6>
+            <ul>
+              <li th:text="${title[0]}"></li>
+            </ul>
+            <br>
+          </div>
         </div>
-      </div>
 
-      <div class="category-card" onclick="showContentInfo('movie')">
-        <img th:src="@{${thumbnail[1]}}" alt="영화">
-        <h5>영화</h5>
-        <div class="content-info" id="movie-info">
-          <br>
-          <h6 class="content-title" th:text="${title[1]}"></h6>
-          <br>
+        <div class="category-card" onclick="showContentInfo('movie')">
+          <img th:src="@{${thumbnail[1]}}" alt="영화">
+          <h5>영화</h5>
+          <div class="content-info" id="movie-info">
+            <br>
+            <h6 class="content-title" th:text="${title[1]}"></h6>
+            <br>
+          </div>
         </div>
-      </div>
 
-      <div class="category-card" onclick="showContentInfo('book')">
-        <img th:src="@{${thumbnail[2]}}" alt="도서">
-        <h5>도서</h5>
-        <div class="content-info" id="book-info">
-          <h6 class="content-title" th:text="${people[1]}"></h6>
-          <ul>
-            <li th:text="${title[2]}"></li>
-          </ul>
-          <br>
+        <div class="category-card" onclick="showContentInfo('book')">
+          <img th:src="@{${thumbnail[2]}}" alt="도서">
+          <h5>도서</h5>
+          <div class="content-info" id="book-info">
+            <h6 class="content-title" th:text="${people[1]}"></h6>
+            <ul>
+              <li th:text="${title[2]}"></li>
+            </ul>
+            <br>
+          </div>
         </div>
       </div>
     </div>
+
 
     <div class="recommendation-container" th:if="${movies != null and !movies.isEmpty()}">
       <!-- 영화 추천 -->
