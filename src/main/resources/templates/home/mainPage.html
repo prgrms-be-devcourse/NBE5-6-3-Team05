@@ -144,8 +144,9 @@
     <div class="recommendation-container" th:if="${movies != null and !movies.isEmpty() and isAuthenticated }">
 
       <!-- 영화 추천 -->
+      <hr>
       <div  class="recommendation-section">
-        <h4>🎬 추천 받은 영화 </h4>
+        <h4>🎬 추천 받은 영화 </h4><br><br>
         <div class="swiper movie-swiper">
           <div class="swiper-wrapper">
             <div class="swiper-slide"
@@ -168,10 +169,11 @@
         </div>
 
       </div>
+      <hr>
 
       <!-- 책 추천 -->
       <div class="recommendation-section">
-        <h4>📚 추천 받은 도서 </h4>
+        <h4>📚 추천 받은 도서 </h4><br><br>
         <div class="swiper book-swiper">
           <div class="swiper-wrapper">
             <div class="swiper-slide" th:each="book : ${books}"
@@ -187,10 +189,11 @@
           </div>
         </div>
       </div>
+      <hr>
 
       <!-- 음악 추천 -->
       <div class="recommendation-section">
-        <h4>🎵 추천 받은 음악 </h4>
+        <h4>🎵 추천 받은 음악 </h4><br><br>
         <div class="swiper music-swiper">
           <div class="swiper-wrapper">
             <div class="swiper-slide" th:each="music : ${musics}"
