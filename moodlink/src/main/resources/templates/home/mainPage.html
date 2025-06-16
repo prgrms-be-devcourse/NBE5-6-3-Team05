@@ -10,13 +10,37 @@
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
   <style>
+    html, body {
+      height: 100%;
+      overflow: hidden; /* 전체 페이지 스크롤 막기 */
+      margin: 0;
+      padding: 0;
+    }
+
+    .container{
+      display: flex;
+      flex-direction: column;
+      width: fit-content;
+      max-width: 100vw;
+      overflow-y: auto;
+      margin-top: 80px;
+      height: 100vh;
+    }
+    .container::-webkit-scrollbar {
+      display: none;
+    }
+
     .swiper {
+      display: flex;
       width: 100%;
+      margin: 0 auto;
       padding: 10px 0;
     }
 
     .swiper-wrapper {
       display: flex;
+      width: 100%;
+      margin: 0 auto;
     }
 
     .swiper-slide {
@@ -44,38 +68,9 @@
   </style>
 </head>
 <body>
-<div layout:fragment="content">
-
-  <div style="
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-
-">
-    <form th:action="@{/search}" method="get">
-      <input type="hidden" name="contentName" value="" />
-      <button type="submit" style="
-      padding: 10px 20px;
-      border: none;
-      border-radius: 9999px;
-      background: linear-gradient(135deg, #ff0000, #FF0000);
-      color: white;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
-      transition: all 0.3s ease;
-    "
-              onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 14px rgba(255, 80, 0, 0.4)'"
-              onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 12px rgba(255, 102, 0, 0.3)'">
-        컨텐츠 전체 보기
-      </button>
-    </form>
-  </div>
-
+<div layout:fragment="content" class="container">
   <br>
-
-  <div class="main-content">
+  <div class="main-content srcoll">
     <div class="search-container">
       <form id="searchForm" th:action="@{/search}" method="get">
         <input type="text" id="search-input" name="contentName" placeholder="원하는 음악,영화,도서를 찾아보세요!">
@@ -190,6 +185,7 @@
         </div>
       </div>
     </div>
+    <br><br><br>
     <script th:inline="javascript">
 
       function showContentInfo(id) {

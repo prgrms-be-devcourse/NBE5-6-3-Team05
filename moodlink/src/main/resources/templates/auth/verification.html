@@ -4,7 +4,29 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
+<head>
+  <style>
+    html, body {
+      height: 100%;
+      overflow: hidden; /* 전체 페이지 스크롤 막기 */
+      margin: 0;
+      padding: 0;
+    }
 
+    .container{
+      display: flex;
+      flex-direction: column;
+      width: fit-content;
+      max-width: 100vw;
+      overflow-y: auto;
+      margin-top: 80px;
+      height: 100vh;
+    }
+    .container::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+</head>
 <body>
 <div layout:fragment="content">
   <div class="container">

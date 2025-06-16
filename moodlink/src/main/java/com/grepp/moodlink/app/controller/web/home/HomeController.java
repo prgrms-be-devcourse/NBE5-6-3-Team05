@@ -59,6 +59,7 @@ public class HomeController {
                 List<Book> books = recommendationService.toBook(bookRecommendation);
                 List<Music> musics = recommendationService.toMusic(musicRecommendation);
 
+                model.addAttribute("keyword", keyword); // 추가
                 model.addAttribute("movies", movies);
                 model.addAttribute("books", books);
                 model.addAttribute("musics", musics);
@@ -69,6 +70,7 @@ public class HomeController {
             List<Book> books = recommendationService.bestBooks();
             List<Music> musics = recommendationService.bestMusics();
 
+            model.addAttribute("keyword", keyword); // 추가 keyword 값을 통해서 추천 받은 적 있는지 검사
             model.addAttribute("movies", movies);
             model.addAttribute("books", books);
             model.addAttribute("musics", musics);
