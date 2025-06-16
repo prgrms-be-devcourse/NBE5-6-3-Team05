@@ -6,9 +6,12 @@
   <meta charset="UTF-8">
   <title>검색 결과</title>
   <style>
+    .header- {
+      position: static !important;
+    }
     html, body {
       height: 100%;
-      overflow: hidden; /* 전체 페이지 스크롤 막기 */
+      /*overflow: hidden; !* 전체 페이지 스크롤 막기 *!*/
       margin: 0;
       padding: 0;
     }
@@ -17,9 +20,9 @@
       display: flex;
       flex-direction: column;
       width: 100%;
-      overflow-y: auto;
+      /*overflow-y: auto;*/
       margin-top: 60px;
-      height: 100vh;
+      /*height: 100vh;*/
     }
     .container::-webkit-scrollbar {
       display: none;
@@ -31,6 +34,7 @@
       text-align: center;
       font-family: 'Noto Sans KR', sans-serif;
     }
+
 
     .main-content {
       margin: 70px auto 0;
