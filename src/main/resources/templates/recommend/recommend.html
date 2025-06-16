@@ -6,6 +6,24 @@
 <head>
   <title>Index</title>
   <style>
+    html, body {
+      height: 100%;
+      overflow: hidden; /* 전체 페이지 스크롤 막기 */
+      margin: 0;
+      padding: 0;
+    }
+
+    .container{
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      overflow-y: auto;
+      margin-top: 80px;
+      height: 100vh;
+    }
+    .container::-webkit-scrollbar {
+      display: none;
+    }
     .center-container {
       min-height: 100vh;
       display: flex;
@@ -21,7 +39,8 @@
       max-width: 60vw;
       min-width: 460px;
       width: 100%;
-      margin: 90px auto;
+      height: 100%;
+      margin: auto;
     }
     textarea{
       justify-self: center;
@@ -114,12 +133,12 @@
     .loading-wrap {
       display: flex;
       position: fixed;
+      margin: auto;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       width: 100vw;
       height: 100vh;
-      background-color: rgba(0,0,0,0.3);
     }
     .loading-spinner {
       width: 80px;
@@ -143,81 +162,83 @@
 </head>
 <body>
 <div layout:fragment="content" class="center-container">
-  <form method="post" action="recommend/result" id="recommendForm" class="recommend-form-wrapper">
-    <input type="hidden" name="keywords" id="selectedKeywords"/>
-    <input type="hidden" name="genre" id="selectedGenre"/>
+  <div class="container">
+    <form method="post" action="recommend/result" id="recommendForm" class="recommend-form-wrapper">
+      <input type="hidden" name="keywords" id="selectedKeywords"/>
+      <input type="hidden" name="genre" id="selectedGenre"/>
 
-    <div class="select-group">
-      <span>장르 : 전체</span>
-      <span>국가 : 대한민국</span>
-    </div>
-
-    <div class="section" data-question="오늘 기분은" data-required="true">
-      <h3>오늘 기분은 어떠신가요? (필수, 최대 3개)</h3>
-      <div class="card-grid" id="mood-cards">
-        <div class="card">기쁨</div>
-        <div class="card">슬픔</div>
-        <div class="card">화남</div>
-        <div class="card">즐거움</div>
-        <div class="card">지침</div>
-        <div class="card">설렘</div>
-        <div class="card">불안</div>
-        <div class="card">평온</div>
+      <div class="select-group">
+        <span>장르 : 전체</span>
+        <span>국가 : 대한민국</span>
       </div>
-    </div>
 
-    <div class="section" data-question="오늘 날씨는" data-required="true">
-      <h3>오늘 날씨는 어떤가요? (필수, 최대 3개)</h3>
-      <div class="card-grid">
-        <div class="card">맑음</div>
-        <div class="card">비</div>
-        <div class="card">흐림</div>
-        <div class="card">눈</div>
-        <div class="card">바람</div>
+      <div class="section" data-question="오늘 기분은" data-required="true">
+        <h3>오늘 기분은 어떠신가요? (필수, 최대 3개)</h3>
+        <div class="card-grid" id="mood-cards">
+          <div class="card">기쁨</div>
+          <div class="card">슬픔</div>
+          <div class="card">화남</div>
+          <div class="card">즐거움</div>
+          <div class="card">지침</div>
+          <div class="card">설렘</div>
+          <div class="card">불안</div>
+          <div class="card">평온</div>
+        </div>
       </div>
-    </div>
 
-    <div class="section" data-question="지금 시간대는" data-required="true" data-single="true">
-      <h3>어떤 시간대 인가요? (필수)</h3>
-      <div class="card-grid">
-        <div class="card">아침</div>
-        <div class="card">점심</div>
-        <div class="card">저녁</div>
-        <div class="card">밤</div>
-        <div class="card">새벽</div>
+      <div class="section" data-question="오늘 날씨는" data-required="true">
+        <h3>오늘 날씨는 어떤가요? (필수, 최대 3개)</h3>
+        <div class="card-grid">
+          <div class="card">맑음</div>
+          <div class="card">비</div>
+          <div class="card">흐림</div>
+          <div class="card">눈</div>
+          <div class="card">바람</div>
+        </div>
       </div>
-    </div>
 
-    <div class="section" data-question="같이 있는 사람은" data-required="true" data-single="true">
-      <h3>누구와 같이 있나요? (필수)</h3>
-      <div class="card-grid">
-        <div class="card">혼자</div>
-        <div class="card">연인</div>
-        <div class="card">가족</div>
-        <div class="card">친구들</div>
+      <div class="section" data-question="지금 시간대는" data-required="true" data-single="true">
+        <h3>어떤 시간대 인가요? (필수)</h3>
+        <div class="card-grid">
+          <div class="card">아침</div>
+          <div class="card">점심</div>
+          <div class="card">저녁</div>
+          <div class="card">밤</div>
+          <div class="card">새벽</div>
+        </div>
       </div>
-    </div>
 
-    <div class="section" data-question="지금 필요한거는" data-required="true" data-single="true">
-      <h3>지금 무엇이 필요한가요? (필수)</h3>
-      <div class="card-grid">
-        <div class="card">행복</div>
-        <div class="card">위로</div>
-        <div class="card">휴식</div>
-        <div class="card">즐거움</div>
-        <div class="card">짜릿함</div>
-        <div class="card">아무생각 없이</div>
+      <div class="section" data-question="같이 있는 사람은" data-required="true" data-single="true">
+        <h3>누구와 같이 있나요? (필수)</h3>
+        <div class="card-grid">
+          <div class="card">혼자</div>
+          <div class="card">연인</div>
+          <div class="card">가족</div>
+          <div class="card">친구들</div>
+        </div>
       </div>
-    </div>
 
-    <div class="section">
-      <h3>추가로 입력하고 싶은 내용을 자유롭게 입력해주세요.</h3>
-      <textarea class="additional-input" id="additionalText" placeholder="추가로 원하는 사항을 자유롭게 입력하세요"></textarea>
-    </div>
+      <div class="section" data-question="지금 필요한거는" data-required="true" data-single="true">
+        <h3>지금 무엇이 필요한가요? (필수)</h3>
+        <div class="card-grid">
+          <div class="card">행복</div>
+          <div class="card">위로</div>
+          <div class="card">휴식</div>
+          <div class="card">즐거움</div>
+          <div class="card">짜릿함</div>
+          <div class="card">아무생각 없이</div>
+        </div>
+      </div>
 
-    <button type="submit" class="submit-button" id="submitBtn" disabled >추천받기</button>
+      <div class="section">
+        <h3>추가로 입력하고 싶은 내용을 자유롭게 입력해주세요.</h3>
+        <textarea class="additional-input" id="additionalText" placeholder="추가로 원하는 사항을 자유롭게 입력하세요"></textarea>
+      </div>
 
-  </form>
+      <button type="submit" class="submit-button" id="submitBtn" disabled >추천받기</button>
+      <br><br><br><br><br><br>
+    </form>
+  </div>
   <div class="loading-wrap loading-wrap--js" id="loading-wrap" style="display: none">
     <div class="loading-spinner loading-spinner--js"></div>
     <div>컨텐츠 추천 중입니다...</div>

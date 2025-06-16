@@ -8,17 +8,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Moodlink - 사용자 정보 수정</title>
   <style>
-    .page-container {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 2rem;
+    html, body {
+      height: 100%;
+      overflow: hidden; /* 전체 페이지 스크롤 막기 */
+      margin: 0;
+      padding: 0;
     }
 
     .container{
       display: flex;
-      margin-top: 40px;
       flex-direction: column;
       width: 100%;
+      overflow-y: auto;
+      margin-top: 60px;
+      height: 100vh;
+    }
+    .container::-webkit-scrollbar {
+      display: none;
+    }
+    .page-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem;
     }
 
     .page-title {
@@ -584,6 +595,7 @@
         </ul>
       </div>
     </div>
+    <br><br><br><br><br><br>
   </div>
   <!-- 탭 스크립트 -->
   <script th:inline="javascript">

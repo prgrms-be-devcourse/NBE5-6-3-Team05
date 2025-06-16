@@ -5,6 +5,24 @@
   <meta charset="UTF-8">
   <title>월드컵</title>
   <style>
+    html, body {
+      height: 100%;
+      overflow: hidden; /* 전체 페이지 스크롤 막기 */
+      margin: 0;
+      padding: 0;
+    }
+
+    .container{
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      overflow-y: auto;
+      margin-top: 60px;
+      height: 100vh;
+    }
+    .container::-webkit-scrollbar {
+      display: none;
+    }
     .worldcup-container{
       display: flex;
       justify-items: center;

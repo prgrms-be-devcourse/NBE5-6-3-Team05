@@ -6,6 +6,24 @@
   <meta charset="UTF-8">
   <title>검색 결과</title>
   <style>
+    html, body {
+      height: 100%;
+      overflow: hidden; /* 전체 페이지 스크롤 막기 */
+      margin: 0;
+      padding: 0;
+    }
+
+    .container{
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      overflow-y: auto;
+      margin-top: 60px;
+      height: 100vh;
+    }
+    .container::-webkit-scrollbar {
+      display: none;
+    }
     .search-result-container {
       max-width: 1100px;
       margin: 0 auto;
@@ -15,7 +33,7 @@
     }
 
     .main-content {
-      margin-top: 70px;
+      margin: 70px auto 0;
       justify-items: center;
     }
 
@@ -40,7 +58,7 @@
 
 <main layout:fragment="content" class="search-result-container">
 
-    <div class="main-content">
+    <div class="main-content container">
 
       <div class="search-container">
         <form id="searchForm" th:action="@{/search}" method="get">
@@ -251,7 +269,7 @@
           </div>
         </div>
       </div>
-
+      <br><br><br>
     </div>
 
 </main>

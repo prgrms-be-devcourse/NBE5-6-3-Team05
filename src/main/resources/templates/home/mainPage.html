@@ -10,6 +10,25 @@
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
   <style>
+    html, body {
+      height: 100%;
+      overflow: hidden; /* 전체 페이지 스크롤 막기 */
+      margin: 0;
+      padding: 0;
+    }
+
+    .container{
+      display: flex;
+      flex-direction: column;
+      width: 100vw;
+      overflow-y: auto;
+      margin-top: 80px;
+      height: 100vh;
+    }
+    .container::-webkit-scrollbar {
+      display: none;
+    }
+
     .swiper {
       width: 100%;
       padding: 10px 0;
@@ -44,7 +63,7 @@
   </style>
 </head>
 <body>
-<div layout:fragment="content">
+<div layout:fragment="content" class="container">
 
   <div style="
   display: flex;
@@ -190,6 +209,7 @@
         </div>
       </div>
     </div>
+    <br><br><br>
     <script th:inline="javascript">
 
       function showContentInfo(id) {
