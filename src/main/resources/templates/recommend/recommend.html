@@ -6,13 +6,7 @@
 <head>
   <title>Index</title>
   <style>
-    body{
-      background-attachment: fixed;
-      background-position: center;
-      margin: 0;
-    }
     .center-container {
-      margin-top: -40px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -27,7 +21,7 @@
       max-width: 60vw;
       min-width: 460px;
       width: 100%;
-      margin: 40px auto;
+      margin: 90px auto;
     }
     textarea{
       justify-self: center;
@@ -154,16 +148,7 @@
     <input type="hidden" name="genre" id="selectedGenre"/>
 
     <div class="select-group">
-      영화 장르
-      <label>
-        <select name="genre" >
-          <option value="" th:selected="${userGenre == ''}">전체</option>
-          <option th:each="genre : ${genres}"
-                  th:value="${genre.name}"
-                  th:text="${genre.name}"
-                  th:selected="${genre.name == userGenre}"></option>
-        </select>
-      </label>
+      <span>장르 : 전체</span>
       <span>국가 : 대한민국</span>
     </div>
 

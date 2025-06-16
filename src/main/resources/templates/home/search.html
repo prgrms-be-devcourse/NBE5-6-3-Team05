@@ -5,6 +5,36 @@
 <head>
   <meta charset="UTF-8">
   <title>검색 결과</title>
+  <style>
+    .search-result-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem;
+      text-align: center;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    .main-content {
+      margin-top: 70px;
+      justify-items: center;
+    }
+
+    .search-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 35px;
+    }
+
+    .category {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 30px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+  </style>
 </head>
 <body>
 
@@ -141,7 +171,7 @@
           <img id="musicBg" class="modal-bg" src="" alt="배경"/>
           <div class="modal-info">
             <span class="modal-close" onclick="closeMusicModal()">×</span>
-            <h1 id="musicTitle" class="modal-title"></h1>
+            <h3 id="musicTitle" class="modal-title"></h3>
             <ul class="modal-badges">
               <li id="musicYear"></li>
               <li id="singer"></li>
