@@ -6,17 +6,13 @@ import com.grepp.moodlink.app.model.keyword.entity.KeywordSelection;
 import com.grepp.moodlink.app.model.member.dto.MemberDto;
 import com.grepp.moodlink.app.model.member.dto.MemberInfoDto;
 import com.grepp.moodlink.app.model.member.dto.ModifyDto;
-import com.grepp.moodlink.app.model.member.dto.SmtpDto;
 import com.grepp.moodlink.app.model.member.entity.Member;
 import com.grepp.moodlink.infra.error.UserNotFoundException;
 import com.grepp.moodlink.infra.error.exceptions.CommonException;
 import com.grepp.moodlink.infra.event.Outbox;
 import com.grepp.moodlink.infra.event.OutboxRepository;
-import com.grepp.moodlink.infra.feign.client.MailApi;
 import com.grepp.moodlink.infra.response.ResponseCode;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +30,6 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final KeywordRepository keywordRepository;
     private final OutboxRepository outboxRepository;
-    private final MailApi mailApi;
 
     @Transactional
     public Optional<MemberInfoDto> GetMemberInfo(String userId) {

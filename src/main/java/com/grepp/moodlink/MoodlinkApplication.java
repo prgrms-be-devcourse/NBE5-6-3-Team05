@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
 @EnableAsync
-@EnableFeignClients
 public class MoodlinkApplication {
 
     public static void main(String[] args) {
