@@ -29,5 +29,6 @@ public class Worldcup {
     private ContentType contentType;
     private String userId;
     private String hashCode;
+    private String imageUrl;
     private LocalDate createdAt;
 }

@@ -8,4 +8,5 @@ public class WorldcupIdsRequest {
     private List<String> id;
     private String title;
     private String contentType;
+    private String image;
 }

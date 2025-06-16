@@ -94,6 +94,7 @@ public class BookService {
                 Map<String, Object> map = new HashMap<>();
                 map.put("id", m.getIsbn());
                 map.put("title", m.getTitle());
+                map.put("image",m.getImage());
 
                 // 함수형 내부에서의 return(메서드의 반환이 아님.)
                 return map;
