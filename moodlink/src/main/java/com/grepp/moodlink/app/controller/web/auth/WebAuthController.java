@@ -42,7 +42,6 @@ public class WebAuthController {
         }
 
         String token = session.getId();
-        // todo 이거 맞나? redis에 저장하는 법 다시 확인
         session.setAttribute(token,signupRequest);
 
         // 이메일 발송
@@ -56,13 +55,21 @@ public class WebAuthController {
     public String signin(
         @PathVariable
         String token,
-        HttpSession session
+        HttpSession session,
+        Model model
     ){
-        log.info("aaaaaaaaaaaaaaaa");
-        SignupRequest request = (SignupRequest) session.getAttribute(token);
+        Object userInfo = session.getAttribute(token);
+        if(userInfo == null) {
+            model.addAttribute("message", "오류가 발생하였습니다. 다시 시도해주세요.");
+            return "auth/complete";
+        }
+        SignupRequest request = (SignupRequest) userInfo;
         memberService.signup(request.toDto());
 
-        log.info("bbbbbbbbbbbbbbbbbbb");
+        // 회원 가입 후에 세션 삭제
+        session.removeAttribute(token);
+
+        model.addAttribute("message", "회원 가입이 완료되었습니다!");
         return "auth/complete";
     }
 
