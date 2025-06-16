@@ -3,7 +3,6 @@ package com.grepp.moodlink.app.model.data.book;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
 import java.util.Optional;
 
-import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

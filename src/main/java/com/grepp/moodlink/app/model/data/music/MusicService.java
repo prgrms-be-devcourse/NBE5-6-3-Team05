@@ -1,6 +1,7 @@
 package com.grepp.moodlink.app.model.data.music;
 
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
+import com.grepp.moodlink.app.model.data.music.dto.MusicWorldcupDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -104,10 +105,33 @@ public class MusicService {
                 Map<String, Object> map = new HashMap<>();
                 map.put("id", m.getId());
                 map.put("title", m.getTitle());
+                map.put("image", m.getThumbnail());
 
                 // 함수형 내부에서의 return(메서드의 반환이 아님.)
                 return map;
             })
             .collect(Collectors.toList());
     }
+
+
+    public MusicWorldcupDto findDtoById(String id) {
+        Music music = musicRepository.findById(id).orElseThrow();
+
+        MusicWorldcupDto dto = new MusicWorldcupDto();
+        dto.setId(music.getId());
+        dto.setTitle(music.getTitle());
+        dto.setImage(music.getThumbnail()); // thumbnail → image 매핑
+
+        return dto;
+    }
+
+    // List로 들어온 isbn들로부터 각 Content들의 세부정보(Dto로) 가져오기
+    public Map<String, MusicWorldcupDto> getDetails(List<String> ids) {
+        return ids.stream()
+            .collect(Collectors.toMap(
+                id -> id,                    // key
+                id -> this.findDtoById(id)   // value
+            ));
+    }
+
 }
