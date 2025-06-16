@@ -902,6 +902,41 @@
         transform: translateY(-3px);
       }
 
+      .empty-message-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+        /* 배경색 제거 */
+      }
+
+      .empty-message-box {
+        background-color: #fff6e8; /* 콘텐츠 박스만 배경 */
+        border: 1px solid #f1c995;
+        border-radius: 20px;
+        padding: 40px 60px;
+        text-align: center;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        max-width: 600px;
+        animation: fadeIn 0.8s ease-in-out;
+      }
+
+      .empty-message-box h2 {
+        font-size: 1.8rem;
+        color: #b36b00;
+        margin-bottom: 12px;
+      }
+
+      .empty-message-box p {
+        font-size: 1.1rem;
+        color: #6b4c1e;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
     </style>
 
   </th:block>

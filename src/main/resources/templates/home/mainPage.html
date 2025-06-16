@@ -124,8 +124,21 @@
       </div>
     </div>
 
+    <div th:if="${movies.isEmpty()}" class="empty-message-container">
+      <div class="empty-message-box">
+        <h2>😥 추천 콘텐츠가 없습니다</h2>
+        <p>추천받기를 통해 나에게 딱 맞는 콘텐츠를 찾아보세요!</p>
+
+        <button class="fancy-button" th:onclick="|location.href='@{/recommend}'|">
+          <i class="material-icons">stars</i>
+          추천받기
+        </button>
+      </div>
+
+    </div>
 
     <div class="recommendation-container" th:if="${movies != null and !movies.isEmpty()}">
+
       <!-- 영화 추천 -->
       <div  class="recommendation-section">
         <h4>🎬 영화 추천</h4>
