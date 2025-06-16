@@ -98,6 +98,13 @@
 
   <h5>월드컵 플레이 페이지입니다.</h5>
 <div layout:fragment="content">
+  <div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
 
 
   <div id="round-info" style="margin-bottom: 20px; font-weight: bold;"></div>
@@ -171,7 +178,7 @@
         body: JSON.stringify(contentList)
       });
       detailData = await detailRes.json();
-
+      console.log(detailData);
       shuffled = shuffle(contentList);      // 무작위 섞기
       currentTable = shuffled;
       renderMatch();                       // 첫 매치 출력

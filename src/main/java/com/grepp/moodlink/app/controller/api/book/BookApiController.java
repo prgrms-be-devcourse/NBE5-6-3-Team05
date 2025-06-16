@@ -28,7 +28,7 @@ public class BookApiController {
         return ResponseEntity.ok(bookService.getBookList());
     }
 
-
+    // 해당 월드컵 실행 시 로드할 월드컵 컨텐츠 상세정보들 전달(title, image, 등등)
     @PostMapping("/details")
     public ResponseEntity<Map<String, BookDto>> getDetails(@RequestBody List<String> strings) {
         Map<String, BookDto> response;

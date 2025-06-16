@@ -74,7 +74,16 @@
 <h5>월드컵 생성 페이지입니다.</h5>
 
 <div layout:fragment="content">
+  <div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
+
   <h5>카테고리를 선택하세요:</h5>
+
   <div id="category-buttons">
     <button type="button" class="category-btn" data-category="Movie">영화</button>
     <button type="button" class="category-btn" data-category="Book">도서</button>
@@ -83,8 +92,10 @@
 
   <label>
     월드컵 제목:
-    <input type="text" id="worldcup-title" placeholder="예: 2002년 월드컵" style="width: 300px; background-color: white" />
+    <input type="text" id="worldcup-title" placeholder="예: 2002년 월드컵"
+           style="width: 300px; background-color: white"/>
   </label>
+
   <button id="create-btn" disabled>생성하기</button>
 
   <div id="content-select-area" style="margin-top: 20px;"></div>
@@ -97,6 +108,7 @@
 
     let currentCategory = null;
     const dummyContents = {};
+    let worldcupImage = null;
 
     // 영화 데이터는 비동기로 받아오기
     window.addEventListener('DOMContentLoaded', async () => {
@@ -114,6 +126,7 @@
         const BookRes = await fetch('/api/book/worldcup');
         const BookData = await BookRes.json();
         dummyContents.Book = BookData;
+        console.log(BookData);
         console.log('도서 데이터 미리 불러옴');
 
       } catch (e) {
@@ -135,12 +148,16 @@
         this.classList.add('selected');
 
         const contents = dummyContents[category] || [];
-        contentArea.innerHTML = contents.map(c => `
-          <label class="content-card" style="display:inline-block; margin:5px; padding:10px; border:1px solid #ccc; cursor:pointer;">
-            <input type="checkbox" name="contentIds" value="${c.id}" style="display:none;" />
-            <span>${c.title}</span>
-          </label>
-        `).join('');
+        contentArea.innerHTML = contents.map(c => {
+          const shortTitle = c.title.length > 10 ? c.title.slice(0, 10) + '...' : c.title;
+          return `
+    <label class="content-card" style="display:inline-block; margin:5px; padding:10px; border:1px solid #ccc; cursor:pointer; width:140px;">
+      <input type="checkbox" name="contentIds" value="${c.id}" data-image="${c.image}"  style="display:none;" />
+      <img src="${c.image}" alt="${c.title}" style="width:120px; height:120px; object-fit:cover; display:block; margin-bottom:5px;" />
+      <span title="${c.title}" style="display:inline-block; width:120px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${shortTitle}</span>
+    </label>
+  `;
+        }).join('');
 
         // 카드 클릭 이벤트 (선택/해제 처리 포함)
         document.querySelectorAll('.content-card').forEach(card => {
@@ -149,10 +166,13 @@
             checkbox.checked = !checkbox.checked;
 
             const id = checkbox.value;
+            const tempImg = checkbox.dataset.image;
             if (checkbox.checked) {
               selectedIds.add(id);
+              worldcupImage = tempImg;
             } else {
               selectedIds.delete(id);
+              worldcupImage = null;
             }
 
             createBtn.disabled = selectedIds.size !== 16;
@@ -173,11 +193,11 @@
             'Content-Type': 'application/json'
           },
 
-
           body: JSON.stringify({
-            id: Array.from(selectedIds) ,
-            title:titleInput.value.trim(),
-            contentType: currentCategory
+            id: Array.from(selectedIds),
+            title: titleInput.value.trim(),
+            contentType: currentCategory,
+            image:worldcupImage
           })
         });
 
