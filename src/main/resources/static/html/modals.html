@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<!-- 버튼-->
+<!--<button class="details-btn"-->
+<!--        data-type="books"-->
+<!--        th:attr="data-id=${book.isbn}">-->
+<!--  상세 보기-->
+<!--</button>-->
+<!--<button class="details-btn"-->
+<!--        data-type="movies"-->
+<!--        th:attr="data-id=${movie.id}">-->
+<!--  상세 보기-->
+<!--</button>-->
+<!--<button class="details-btn"-->
+<!--        data-type="musics"-->
+<!--        th:attr="data-id=${music.id}">-->
+<!--  상세 보기-->
+<!--</button>-->
+
+<!-- 모달창 HTML -->
+<div id="detailModalResult" class="custom-modal hidden">
+  <div class="custom-modal-content">
+    <span class="custom-close-btn" onclick="closeModal()">&times;</span>
+
+
+    <h2 id="custom-modal-title"></h2>
+
+    <div class="custom-modal-body-layout">
+
+      <div class="custom-modal-body-main">
+        <img id="modal-img" class="custom-modal-img" src="" alt="컨텐츠 이미지"/>
+      </div>
+
+      <div class="custom-modal-info">
+        <div id="custom-modal-meta"></div> <!-- 타입별로 여기에 JS로 채워 넣기 -->
+      </div>
+    </div>
+
+    <div id="modal-like-wrapper" style="margin-top: 1rem; text-align: right">
+      <a id="modal-search-link" class="purple-btn" href="#" target="_blank">Search</a>
+      <button class="toggle-star-btn"
+              id="modal-like-btn"
+              data-type=""
+              data-id="">
+        ★
+      </button>
+      <div id="modalButtons"></div>
+
+
+    </div>
+  </div>
+</div>
+<!-- 영화 예고편 유튜브 iframe -->
+<div id="trailerMovieModal" class="trailer-modal" style="display:none;">
+  <div class="trailer-modal-content">
+    <span class="trailer-modal-close">×</span>
+    <iframe id = "trailerMovieIframe" class="trailerIframe" width="1280" height="720" frameborder="0"
+            allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+</div>
+
+<!-- 음악 감상 유튜브 iframe -->
+<div id="trailerMusicModal" class="trailer-modal" style="display:none;" >
+  <div class="trailer-modal-content">
+    <span class="trailer-modal-close" >×</span>
+    <iframe id = "trailerMusicIframe" class="trailerIframe" width="1280" height="720" frameborder="0"
+            allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+</div>
+
+
+</body>
+</html>
