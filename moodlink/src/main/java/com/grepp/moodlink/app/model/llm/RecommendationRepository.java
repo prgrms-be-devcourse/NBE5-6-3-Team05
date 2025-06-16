@@ -18,4 +18,6 @@ public interface RecommendationRepository extends JpaRepository<Recommendation, 
     List<Recommendation> findByKeywordsAndActivatedTrue(String keyword);
 
     List<Recommendation> findByCreatedAtBeforeAndActivatedTrue(LocalDate createdAt);
+
+    List<Recommendation> findByCreatedAtBeforeAndActivatedFalse(LocalDate cutoff);
 }

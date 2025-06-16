@@ -7,7 +7,7 @@ import lombok.*;
 @Entity
 @Table(
         name = "Recommendation",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"keywords", "contentType", "contentId"}),
+        uniqueConstraints = @UniqueConstraint(columnNames = {"activated", "keywords", "contentType", "contentId"}),
         indexes = {
                 @Index(name = "idx_keywords_content_type", columnList = "keywords, contentType")
         })

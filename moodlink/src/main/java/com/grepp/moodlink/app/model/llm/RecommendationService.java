@@ -194,4 +194,9 @@ public class RecommendationService {
     public List<Music> bestMusics() {
         return musicRepository.findTop10ByOrderByLikeCountDesc();
     }
+
+    public boolean isActivated(String keywords) {
+        List<Recommendation> recommendations = recommendationRepository.findByKeywordsAndActivatedTrue(keywords);
+        return !recommendations.isEmpty();
+    }
 }

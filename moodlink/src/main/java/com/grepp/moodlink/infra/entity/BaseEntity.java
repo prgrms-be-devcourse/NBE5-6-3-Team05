@@ -25,6 +25,4 @@ public class BaseEntity {
         this.activated = false;
     }
 
-    public void setActivated(boolean b) {
-    }
 }
