@@ -72,6 +72,20 @@ public class HomeController {
         return "/home/mainPage";
     }
 
+    @GetMapping("/search/all")
+    public String searchAllContent(Model model, @RequestParam String contentName) {
+        List<MovieDto> movie = homeService.searchMovieContent(contentName);
+        List<MusicDto> music = homeService.searchMusicContent(contentName);
+        List<BookDto> book = homeService.searchBookContent(contentName);
+
+        model.addAttribute("contentName", contentName);
+        model.addAttribute("movie", movie);
+        model.addAttribute("music", music);
+        model.addAttribute("book", book);
+
+        return "/home/search";
+    }
+
     @GetMapping("/search/movie")
     public String searchMovieContent(Model model, @RequestParam String contentName) {
         List<MovieDto> movie = homeService.searchMovieContent(contentName);
