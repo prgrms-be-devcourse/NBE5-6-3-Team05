@@ -1,5 +1,5 @@
 # NBE5-6-2-Team05 
-test 글입니다.
+test 글입니다. -  lkh
 
 <hr/>
 
@@ -171,9 +171,9 @@ test 글입니다.
 | 🔧 **chore**      | 빌드 설정 변경, 패키지 매니저 설정 등                  |
 | 🔀 **merge**      | 브랜치 병합 (예: `(merge) main` → main과 병합했음) |
 | 📍 **checkpoint** | 진행중(체크포인트)                              |
+| 🎨 **design**     | 뷰 디자인 변경                                |
 
 ---
 
 [NULL NULL 하게 발표자료 보기](readmeresource/nullnullppt.pdf)<br>
 [NULL NULL 하게 팀 2차 프로젝트 WBS(Gantt)](readmeresource/wbs_timeline.pdf)<br>
-

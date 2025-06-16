@@ -3,14 +3,54 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
+<head>
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
+  <style>
+    .swiper {
+      width: 100%;
+      padding: 10px 0;
+    }
+
+    .swiper-wrapper {
+      display: flex;
+    }
+
+    .swiper-slide {
+      width: 280px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .content-image {
+      width: 200px;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .content-title {
+      margin-top: 8px;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 200px;
+    }
+
+  </style>
+</head>
 <body>
 <div layout:fragment="content">
+
   <div style="
   display: flex;
   justify-content: center;
   gap: 20px;
-  margin-top: 32px;
+
 ">
     <form th:action="@{/search}" method="get">
       <input type="hidden" name="contentName" value="" />
@@ -84,179 +124,119 @@
       </div>
     </div>
 
-    <br>
-    <p class="content-description"><i>moodlink 이용자들의 추천 콘텐츠 입니다.</i></p>
+    <div class="recommendation-container" th:if="${movies != null and !movies.isEmpty()}">
+      <!-- 영화 추천 -->
+      <div  class="recommendation-section">
+        <h4>🎬 영화 추천</h4>
+        <div class="swiper movie-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"
+                 th:each="movie : ${movies}"
+                 th:attr="onclick=|showDetailModalMovie(
+           '${#strings.escapeJavaScript(movie.title)}',
+           '${#strings.escapeJavaScript(movie.releaseDate)}',
+           '${#strings.escapeJavaScript(movie.summary)}',
+           '${#strings.escapeJavaScript(movie.thumbnail)}'
+         )|">
 
-    <br>
+              <img th:src="${movie.thumbnail}" alt="영화 이미지" class="content-image" />
 
-
-    <div class="buttons">
-      <button class="fancy-button red-button"
-              th:onclick="|location.href='@{/worldcup}'|">
-        <i class="material-icons">sports_esports</i>
-        월드컵(출시예정)
-      </button>
-
-      <button class="fancy-button blue-button" onclick="openFortuneModal()">
-        <i class="material-icons">auto_awesome</i>
-        오늘의 운세
-      </button>
-
-      <div id="fortuneModal" class="fortune-modal" onclick="closeModal(event)">
-        <div class="fortune-modal-content" onclick="event.stopPropagation()">
-          <div class="scrolling-wrapper">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h4 style="color: #814700 ; margin-bottom: 20px;">오늘의 운세</h4>
-
-            <div id="fortuneText">
-              <p id="fortuneMsg1" class="fortune-message" style="display: none;">당신의 오늘을 위한 짧은
-                안내서입니다.</p>
-              <p id="fortuneMsg2" class="fortune-message" style="display: none;">이 운세가 당신의 하루에 작은
-                방향이 되길 바랍니다.</p>
-              <p id="fortuneResult" class="fortune-result  scrolling-text"
-                 style="display: none;"></p>
-
+              <p class="recommend-content-title"
+                 th:text="${#strings.length(movie.title) > 12 ? #strings.substring(movie.title, 0, 12) + '...' : movie.title}">
+                제목
+              </p>
             </div>
+          </div>
+        </div>
 
-            <div style="margin-top: 20px; text-align: center;">
-              <button id="retryFortuneBtn" class="fancy-button blue-button"
-                      onclick="retryFortune()">
-                다시 추천받기
-              </button>
+      </div>
+
+      <!-- 책 추천 -->
+      <div class="recommendation-section">
+        <h4>📚 도서 추천</h4>
+        <div class="swiper book-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" th:each="book : ${books}"
+                 th:attr="onclick=|showDetailModalBook(
+           '${#strings.escapeJavaScript(book.title)}',
+           '${#strings.escapeJavaScript(book.publishedDate)}',
+           '${#strings.escapeJavaScript(book.description)}',
+           '${#strings.escapeJavaScript(book.image)}'
+         )|">
+              <img th:src="${book.image}" alt="도서 이미지" class="content-image" />
+              <p class="recommend-content-title" th:text="${#strings.length(book.title) > 12 ? #strings.substring(book.title, 0, 12) + '...' : book.title}">제목</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="buttons">
-        <button class="fancy-button purple-button" th:onclick="|location.href='@{/recommend}'|">
-          <i class="material-icons">stars</i>
-          추천받기
-        </button>
+      <!-- 음악 추천 -->
+      <div class="recommendation-section">
+        <h4>🎵 음악 추천</h4>
+        <div class="swiper music-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" th:each="music : ${musics}"
+                 th:attr="onclick=|showDetailModalMusic(
+           '${#strings.escapeJavaScript(music.title)}',
+           '${#strings.escapeJavaScript(music.releaseDate)}',
+           '${#strings.escapeJavaScript(music.lyrics)}',
+           '${#strings.escapeJavaScript(music.thumbnail)}',
+           '${#strings.escapeJavaScript(music.singer)}'
+         )|">
+              <img th:src="${music.thumbnail}" alt="음악 이미지" class="content-image" />
+              <p class="recommend-content-title" th:text="${#strings.length(music.title) > 12 ? #strings.substring(music.title, 0, 12) + '...' : music.title}">제목</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+    <script th:inline="javascript">
+
+      function showContentInfo(id) {
+        const info = document.getElementById(id + '-info');
+        if (info.style.display === 'block') {
+          info.style.display = 'none';
+        } else {
+          document.querySelectorAll('.content-info').forEach(el => el.style.display = 'none');
+          info.style.display = 'block';
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        new Swiper('.movie-swiper', {
+          loop: true,
+          slidesPerView: 'auto',
+          spaceBetween: 16,
+          autoplay: {
+            delay: 2500,
+            disableOnInteraction: false,
+          },
+        });
+
+        new Swiper('.book-swiper', {
+          loop: true,
+          slidesPerView: 'auto',
+          spaceBetween: 16,
+          autoplay: {
+            delay: 2700,
+            disableOnInteraction: false,
+          },
+        });
+
+        new Swiper('.music-swiper', {
+          loop: true,
+          slidesPerView: 'auto',
+          spaceBetween: 16,
+          autoplay: {
+            delay: 2900,
+            disableOnInteraction: false,
+          },
+        });
+      });
+    </script>
+    <th:block th:replace="fragments::modal"/>
   </div>
 </div>
 
 </body>
 </html>
-
-<script>
-
-  function showContentInfo(id) {
-    const info = document.getElementById(id + '-info');
-    if (info.style.display === 'block') {
-      info.style.display = 'none';
-    } else {
-      document.querySelectorAll('.content-info').forEach(el => el.style.display = 'none');
-      info.style.display = 'block';
-    }
-  }
-
-  function startScrollingAnimation() {
-    const result = document.getElementById('fortuneResult');
-    const container = result.parentElement;
-
-    const containerWidth = container.offsetWidth;
-    const textWidth = result.scrollWidth;
-
-    result.style.animation = 'none';
-    result.classList.remove('scrolling-text');
-
-    if (textWidth > containerWidth) {
-      // 애니메이션 적용
-      const distance = textWidth + containerWidth;
-      const speed = 100;
-      const duration = distance / speed;
-
-      result.style.animationName = 'scroll-left';
-      result.style.animationDuration = duration + 's';
-      result.style.animationTimingFunction = 'linear';
-      result.style.animationIterationCount = 'infinite';
-
-      result.classList.add('scrolling-text');
-    }
-  }
-
-  function openFortuneModal() {
-    const modal = document.getElementById("fortuneModal");
-    modal.classList.add('active');
-
-    const msg1 = document.getElementById("fortuneMsg1");
-    const msg2 = document.getElementById("fortuneMsg2");
-    const result = document.getElementById("fortuneResult");
-
-    msg1.style.display = "none";
-    msg2.style.display = "none";
-    result.style.display = "none";
-    result.textContent = "";
-
-    msg1.style.display = "block";
-
-    setTimeout(() => {
-      msg1.style.display = "none";
-      msg2.style.display = "block";
-
-      setTimeout(() => {
-        msg2.style.display = "none";
-
-        fetch('/fortune')
-        .then(response => response.text())
-        .then(data => {
-          const result = document.getElementById('fortuneResult');
-          result.textContent = data;
-          result.style.display = "block";
-
-          startScrollingAnimation();
-        })
-
-        .catch(() => {
-          result.textContent = "운세를 불러오지 못했습니다.";
-          result.style.display = "block";
-        });
-
-      }, 2000);
-
-    }, 2000);
-  }
-
-  function closeModal(event) {
-    if (event) {
-      event.stopPropagation();
-    }
-    const modal = document.getElementById("fortuneModal");
-    modal.classList.remove('active');   // display:none 대신 active 클래스 제거
-  }
-
-  function retryFortune() {
-    const result = document.getElementById("fortuneResult");
-
-    fetch('/fortune/ai', {
-      method: 'POST'
-    })
-    .then(res => res.text())
-    .then(data => {
-      result.textContent = data;
-      // 애니메이션 재시작을 위해 클래스 제거 후 다시 추가
-      result.classList.remove("scrolling-text");
-      void result.offsetWidth; // 리플로우 강제 발생
-      result.classList.add("scrolling-text");
-    })
-    .catch(() => {
-      result.textContent = "운세를 불러올 수 없습니다.";
-      result.classList.remove("scrolling-text");
-    });
-  }
-
-  document.addEventListener("DOMContentLoaded", function () {
-    const result = document.querySelector('.fortune-result');
-    if (result) {
-      result.style.display = 'block';
-
-      setTimeout(() => {
-        result.classList.add('done');
-      }, 15000);
-    }
-  });
-
-</script>

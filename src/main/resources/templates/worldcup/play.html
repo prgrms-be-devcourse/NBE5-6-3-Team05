@@ -5,30 +5,11 @@
   <meta charset="UTF-8">
   <title>월드컵</title>
   <style>
-    .match-button {
-      margin: 10px;
-      padding: 8px 16px;
-      font-size: 16px;
-      cursor: pointer;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      background-color: white;
-      color: black;
-      transition: background-color 0.2s ease;
-    }
 
-    .match-button:hover {
-      background-color: #f0f0f0;
-    }
     #round-info {
       margin-bottom: 20px;
       font-weight: bold;
     }
-
-    #match-area {
-      margin-top: 20px;
-    }
-
     #result-btn {
       padding: 10px 20px;
       font-weight: bold;
@@ -48,19 +29,109 @@
     #result-btn.enabled:hover {
       background-color: #66cc66;
     }
+
+    #winner-area {
+      margin-top: 20px;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #winner-area img {
+      max-width: 100%;
+      height: auto;
+    }
+
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      width: 100vw;
+      box-sizing: border-box;
+    }
+
+    .match-area {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .match-button {
+      width: 50vw; /* 좌우 절반씩 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    .content-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .match-title {
+      margin-top: 8px;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    .match-button img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+
+    /* 클릭 불가용 확장 */
+    .match-button.static {
+      cursor: default;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
 
   <h5>월드컵 플레이 페이지입니다.</h5>
 <div layout:fragment="content">
+  <div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
 
 
   <div id="round-info" style="margin-bottom: 20px; font-weight: bold;"></div>
-  <div id="match-area" style="margin-top: 20px;"></div>
+
+  <div id="match-area" class="match-area">
+    <button class="match-button">
+      <div class="content-wrapper">
+        <img src="" alt="..." />
+        <p class="match-title">컨텐츠 제목</p>
+      </div>
+    </button>
+    <button class="match-button">
+      <div class="content-wrapper">
+        <img src="" alt="..." />
+        <p class="match-title">컨텐츠 제목</p>
+      </div>
+    </button>
+  </div>
+
+  <div id="winner-area" class="match-button" style="display: none; justify-content: center;">
+    <div class="content-wrapper">
+      <img id="winner-img" src="" alt="우승 콘텐츠 이미지" />
+      <p id="winner-title" class="match-title">우승 콘텐츠 제목</p>
+    </div>
+  </div>
 
   <div style="text-align: center; margin-top: 30px;">
-
     <button id="result-btn" disabled>
       결과 확인
     </button>
@@ -72,29 +143,49 @@
     let nextRound =[];  // 다음 라운드 진출자들
     let currentTable =[]; // 현재 라운드에서 역으로 분석한 대진
     let size = 1;
+    let detailData = [] // 월드컵 컨텐츠들의 세부정보를 담을 배열
+    let finalWinnerCount = [] // 각 컨텐츠 마다 플레이 수 대비 우승한 횟수를 담을 배열
 
-    // worldcupId 에는 get 메서드로 등록된 worldcup의 id가 들어온다.
+
+    // worldcupId 에는 get HTTP 메서드로 등록된 worldcup의 id가 들어온다.
     function getQueryParam(name) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(name);
     }
     const worldcupId = getQueryParam('id');
 
-    // 최초 데이터 로딩(월드컵 id로 가져온다.)
+    // 최초 데이터 로딩
+    // 비동기 호출1.(고른 월드컵의 컨텐츠들의 정보를 가져온다.(컨텐츠 아이디, 타입 등등)
+    // 비동기 호출2. (각 컨텐츠들의 상세정보를 가져온다.(각 컨텐츠별 이미지, 제목 등등)
     window.addEventListener('DOMContentLoaded', async () => {
-      const res = await fetch(`/api/worldcup/${worldcupId}/items`);
+      // 비동기 호출1. Worldcup 정보 가져오기(월드컵 id, content-Type확인)
+      const WorldcupRes = await fetch(`/api/worldcup/${worldcupId}/items`);
+      const contentResp = await  WorldcupRes.json();
+      const contentItems = contentResp.itemIdList;  // 객체 리스트
+      const contentList = contentItems.map(item => item.contentId);
+      const contentType = contentResp.contentType.toLowerCase();
 
-      const contentItems = await res.json();  // 객체 리스트
-      const contentIds = contentItems.map(item => item.contentId);
-      console.log(contentItems);
-
+      finalWinnerCount = contentResp.finalWinnerCountMap;
       // localStorage에 저장하기
       localStorage.setItem('worldcupItems', JSON.stringify(contentItems));
 
-      shuffled = shuffle(contentIds);      // 무작위 섞기
+      // 비동기 호출2. 각 컨텐츠들의 정보 가져오기(이미지, 타이틀, 줄거리 등등)
+      const detailRes = await fetch(`/api/${contentType}/details`,{
+        method: 'POST',
+        headers:{
+          'Content-Type': `application/json`
+        },
+        body: JSON.stringify(contentList)
+      });
+      detailData = await detailRes.json();
+      console.log(detailData);
+      shuffled = shuffle(contentList);      // 무작위 섞기
       currentTable = shuffled;
       renderMatch();                       // 첫 매치 출력
     });
+
+
+
 
     // 무작위로 섞는 함수: fisher-yates 알고리즘
     function shuffle(array) {
@@ -118,9 +209,32 @@
         const winnerId = currentTable[0];
         window.finalWinnerId = winnerId; //전역으로 저장: window.finalWinnerId로 접근 가능
         roundInfo.textContent = `winner winner chicken dinner`;
-        container.textContent = `우승자: 콘텐츠 ID ${winnerId}`;
 
+        const {img, title} = createImageAndTitle(detailData[winnerId]);
+        const winnerArea = document.getElementById('winner-area');
+        const winnerImg = document.getElementById('winner-img');
+        const winnerTitle = document.getElementById('winner-title');
+
+        // 우승 컨텐츠의 우승 횟수, 해당 월드컵의 총 플레이 수를 로컬Storage에 저장
+        const winData = {
+          winCount: finalWinnerCount[winnerId] + 1,
+          totalCount: Object.values(finalWinnerCount).reduce((sum, val) => sum + val, 1),
+          winnerId: winnerId
+        };
+        localStorage.setItem("finalWinSummary", JSON.stringify(winData));
+
+        document.getElementById('match-area').style.display = 'none';
+
+        winnerImg.src = img.src || '/default.png';
+        winnerImg.alt = `콘텐츠 ID ${winnerId}`;
+        winnerTitle.textContent = title.textContent || '제목 없음';
+        winnerArea.style.display = 'flex'; // 보이게
+
+        console.log(winnerImg);
+        console.log(winnerTitle);
         const tournament = currentTable;        // 현재 트리 배열 (16강~결승)
+
+        localStorage.setItem(`worldcup_items_detail`, JSON.stringify(detailData));
 
         // 서버에 결과 전송
         fetch('/api/worldcup/result', {
@@ -149,7 +263,8 @@
       }
 
       // shuffled에 둘 이상인 경우
-      roundInfo.textContent = `현재 라운드: ${shuffled.length}강`;
+      if(shuffled.length===2) roundInfo.textContent = '현재 라운드: 결승';
+      else roundInfo.textContent = `현재 라운드: ${shuffled.length}강`;
 
       // item1, item2으로 두개씩 고르기
       const item1 = shuffled[round * 2];
@@ -159,8 +274,13 @@
       // 버튼에는 임시로 컨텐츠 id 출력
       [item1, item2].forEach(id => {
         const btn = document.createElement('button');
-        btn.textContent = `컨텐츠 ID: ${id}`;
         btn.classList.add('match-button');
+
+        const detailId = detailData[id];
+
+        const { img, title } = createImageAndTitle(detailId);
+        btn.appendChild(img);
+        btn.appendChild(title);
 
         // 선택된 항목을 다음 라운드 진출자로 저장
         btn.onclick = () => {
@@ -235,10 +355,24 @@
       const winnerId = window.finalWinnerId;
       if (winnerId && !document.getElementById('result-btn').disabled) {
         window.location.href =
-            `/worldcup/result?worldcupId=${encodeURIComponent(worldcupId)}&winner=${encodeURIComponent(winnerId)}`;
+            `/worldcup/result`;
       }
     });
 
+    function createImageAndTitle(detailId) {
+      // 이미지
+      const img = document.createElement('img');
+      img.src = detailId?.image || '/default.png';
+      img.alt = `콘텐츠 ID ${detailId}`;
+      img.style.maxWidth = '100%';
+      img.style.height = 'auto';
+      // 제목
+      const title = document.createElement('p');
+      title.classList.add('match-title');
+      title.textContent = detailId?.title || '제목 없음';
+
+      return { img, title };
+    }
 
   </script>
 

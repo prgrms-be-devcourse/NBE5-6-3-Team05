@@ -18,4 +18,6 @@ public interface MusicRepository extends JpaRepository<Music, String>, MusicRepo
 
 
     List<Music> findAllByIdIn(List<String> id);
+
+    List<Music> findTop10ByOrderByLikeCountDesc();
 }

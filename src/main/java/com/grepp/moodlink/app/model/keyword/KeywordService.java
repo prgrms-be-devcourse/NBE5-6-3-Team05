@@ -1,6 +1,8 @@
 package com.grepp.moodlink.app.model.keyword;
 
 import com.grepp.moodlink.app.model.keyword.entity.KeywordSelection;
+import com.grepp.moodlink.app.model.member.MemberRepository;
+import com.grepp.moodlink.app.model.member.entity.Member;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
@@ -18,6 +20,7 @@ public class KeywordService {
 
     private final KeywordRepository keywordRepository;
     private final EmbeddingModel embeddingModel;
+    private final MemberRepository memberRepository;
 
     public String findReason(String keywords) {
         Optional<KeywordSelection> keywordSelection = keywordRepository.findByKeywords(keywords);
@@ -68,4 +71,11 @@ public class KeywordService {
         return keywordSelection.isPresent();
     }
 
+    public String findKeywords(String userId) {
+        Optional<Member> member = memberRepository.findById(userId);
+        KeywordSelection keyword = null;
+        if (member.isPresent()) keyword = member.get().getKeywordSelection();
+        if (keyword != null) return keyword.getKeywords();
+        return "No exist keywords";
+    }
 }

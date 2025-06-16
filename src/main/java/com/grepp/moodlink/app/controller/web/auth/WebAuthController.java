@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @RequiredArgsConstructor
-public class AuthController {
+public class WebAuthController {
 
     private final MemberService memberService;
 

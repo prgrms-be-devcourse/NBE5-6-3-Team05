@@ -2,6 +2,7 @@ package com.grepp.moodlink.app.model.data.music;
 
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.entity.QMusic;
+import com.grepp.moodlink.app.model.data.music.entity.QMusicGenre;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -59,5 +60,22 @@ public class MusicRepositoryImpl implements MusicRepositoryCustom {
                 music.title.lower().like("%" + contentName.toLowerCase() + "%")
                     .or(music.singer.lower().like("%" + contentName.toLowerCase() + "%"))
             ).fetch();
+    }
+
+    @Override
+    public List<MusicDto> searchContentByGenre(String genreName) {
+        QMusic music = QMusic.music;
+        QMusicGenre genre = QMusicGenre.musicGenre;
+        return queryFactory
+            .select(Projections.constructor(MusicDto.class,
+                music.title,
+                music.singer,
+                music.thumbnail,
+                music.releaseDate,
+                music.lyrics))
+            .from(music)
+            .join(music.genre, genre)
+            .where(genre.name.eq(genreName))
+            .fetch();
     }
 }

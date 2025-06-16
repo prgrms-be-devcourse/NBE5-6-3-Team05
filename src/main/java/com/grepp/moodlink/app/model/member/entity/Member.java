@@ -5,15 +5,21 @@ import com.grepp.moodlink.app.model.keyword.entity.KeywordSelection;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Getter
-@Setter
 @ToString
 @Entity
 @Table(name = "user")
+@Builder
+@Setter // MemberService modifyProfile() 에서 빌더패턴 적용이 잘 안되어서 일단 남겨둠
+@NoArgsConstructor
+@AllArgsConstructor
 public class Member {
 
     @Id
@@ -21,8 +27,9 @@ public class Member {
     private String password;
     @ManyToOne
     @JoinColumn(name = "KEYWORD_SELECTION_ID")
-    private KeywordSelection keywordSelectionId;
+    private KeywordSelection keywordSelection;
     private String username;
+    private String email;
     private String genre;
     private String periods;
     private String countries;

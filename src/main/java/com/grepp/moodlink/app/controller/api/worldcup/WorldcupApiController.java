@@ -3,9 +3,9 @@ package com.grepp.moodlink.app.controller.api.worldcup;
 
 import com.grepp.moodlink.app.controller.api.worldcup.payload.WorldcupIdsRequest;
 import com.grepp.moodlink.app.controller.api.worldcup.payload.WorldcupPlayRequest;
+import com.grepp.moodlink.app.controller.api.worldcup.payload.WorldcupPlayResponse;
 import com.grepp.moodlink.app.model.worldcup.WorldcupService;
 import com.grepp.moodlink.app.model.worldcup.entity.Worldcup;
-import com.grepp.moodlink.app.model.worldcup.entity.WorldcupItem;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +41,7 @@ public class WorldcupApiController {
 
     // 월드컵 id의 contents들 가져오기
     @GetMapping("/{id}/items")
-    public List<WorldcupItem> getWorldcupContentIds(@PathVariable("id") Long id) {
+    public WorldcupPlayResponse getWorldcupContentIds(@PathVariable("id") Long id) {
         return worldcupService.findByWorldcupId(id);
     }
 

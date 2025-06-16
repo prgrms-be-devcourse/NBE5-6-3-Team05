@@ -76,10 +76,13 @@ public class RecommendController {
             processKeyword(keywords);
             reason = llmService.generateReason(keywords);
         }
+        String userId = getLoginUserId();
+        if (userId != null) memberService.selectKeyword(userId, keywords);
+
         session.setAttribute("reason", reason);
 
-        List<CuratingDetailIdDto> items = curatingContents(keywords);
-        System.out.println(items);
+        List<CuratingDetailIdDto> items = curatingContents(keywords, reason);
+
         session.setAttribute("items", items);
 
         return "redirect:/result";
@@ -89,7 +92,7 @@ public class RecommendController {
         keywordService.generateKeywordSelection(keywords);
     }
 
-    private List<CuratingDetailIdDto> curatingContents(String keywords) {
+    private List<CuratingDetailIdDto> curatingContents(String keywords, String reason) {
         List<CuratingDetailIdDto> details = new ArrayList<>();
         List<String> movieIds;
         List<String> bookIds;
@@ -102,8 +105,9 @@ public class RecommendController {
             movieIds = generateMovieRecommendations(keywords);
             bookIds = generateBookRecommendations(keywords);
             musicIds = generateMusicRecommendations(keywords);
+            saveRecommendation(movieIds, bookIds, musicIds, keywords, reason);
         }
-        for (int i = 0; i < musicIds.size(); i++) {
+        for (int i = 0; i < 4; i++) {
             CuratingDetailIdDto detail = new CuratingDetailIdDto();
             detail.setMovieId(movieIds.get(i));
             detail.setBookId(bookIds.get(i));
@@ -111,6 +115,10 @@ public class RecommendController {
             details.add(detail);
         }
         return details;
+    }
+
+    private void saveRecommendation(List<String> movieIds, List<String> bookIds, List<String> musicIds, String keywords, String reason) {
+        recommendationService.saveRecommendationContent(movieIds, bookIds, musicIds, keywords, reason);
     }
 
     private List<String> generateMovieRecommendations(String keywords) {
@@ -150,6 +158,5 @@ public class RecommendController {
         Principal principal = (Principal) auth.getPrincipal();
         return principal.getUsername();
     }
-
 
 }

@@ -9,15 +9,15 @@
   <style>
 
     /* 전체 배경 및 기본 글자색 */
-    body {
-      background-attachment: fixed;
-      background-position: center;
-      margin: 0;
+    .center-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     .main-content {
       text-align: center;
-      margin-top: 40px;
+      margin-top: 90px;
     }
 
     .divider-wrapper {
@@ -235,10 +235,28 @@
       0 -0.8px #f4b464;
     }
 
+    /* 별과 숫자 묶음 */
+    .like-count-group {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
     /* ON 상태 */
     .toggle-star-btn.on {
       color: #f4b464;
       text-shadow: none;
+    }
+
+    /* 좋아요 수 */
+    .like-count {
+      font-size: 16px;
+      color: #f4b464;
+      top: -20px;
+      margin-left: 4px;
+      font-weight: bold;
+      min-width: 18px;
+      text-align: left;
     }
 
     /* OFF 상태에 hover 시 노란색으로 */
@@ -255,11 +273,14 @@
       line-height: 1em;
       margin-top: 4px;
       visibility: hidden; /* 처음에는 숨김 */
+      opacity: 0;
       text-align: center;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
     }
 
     .like-msg.show {
       visibility: visible;
+      opacity: 1;
     }
 
     /* 링크 스타일 */
@@ -279,7 +300,7 @@
 </head>
 <body>
 
-<div layout:fragment="content">
+<div layout:fragment="content" class="center-container">
 
 
   <main class="main-content">
@@ -298,10 +319,9 @@
       <div class="divider"></div>
     </div>
     <p class="guide-text" th:utext="${curatingReason}">
-      오늘 해고당해서 우울한 당신! 고단한 하루를 달래줄 명작을 소개해드릴게요.
-      다음 작품들은 위로가 될 거예요!
+
     </p>
-  </main>
+
 
 
   <div class="curation-header">
@@ -327,6 +347,10 @@
           <a th:href="${item.book.externalLink}" target="_blank" class="purple-btn">Search</a>
           <button class="details-btn" data-type="books" th:attr="data-id=${item.book.id}">Details
           </button>
+          <span class="like-count-group">
+            좋아요 수 :
+            <span class="like-count" th:text="${item.book.likeCount}">0</span>
+          </span>
           <button class="toggle-star-btn"
                   th:classappend="${item.book.status} ? ' on' : ''"
                   th:id="'toggle-book-' + ${item.book.id}"
@@ -340,7 +364,7 @@
       <div th:if="${item.book.id == null}" class="image-and-info">
         <div class="image-block">
           <div class="image-wrapper no-song-wrapper">
-            <p class="no-song-msg">적절한 영화를 찾지 못했습니다.</p>
+            <p class="no-song-msg">적절한 도서를 찾지 못했습니다.</p>
           </div>
           <div class="title" style="visibility: hidden;">빈 제목</div>
         </div>
@@ -364,6 +388,10 @@
           <a th:href="${item.movie.externalLink}" target="_blank" class="purple-btn">Search</a>
           <button class="details-btn" data-type="movies" th:attr="data-id=${item.movie.id}">Details
           </button>
+          <span class="like-count-group">
+            좋아요 수 :
+            <span class="like-count" th:text="${item.movie.likeCount}">0</span>
+          </span>
           <button class="toggle-star-btn"
                   th:classappend="${item.movie.status} ? ' on' : ''"
                   th:id="'toggle-movie-' + ${item.movie.id}"
@@ -402,6 +430,10 @@
           <a th:href="${item.song.externalLink}" target="_blank" class="purple-btn">Search</a>
           <button class="details-btn" data-type="musics" th:attr="data-id=${item.song.id}">Details
           </button>
+          <span class="like-count-group">
+            좋아요 수 :
+            <span class="like-count" th:text="${item.song.likeCount}">0</span>
+          </span>
           <button class="toggle-star-btn"
                   th:classappend="${item.song.status} ? ' on' : ''"
                   th:id="'toggle-song-' + ${item.song.id}"
@@ -409,6 +441,7 @@
                   onclick="toggle(this)">
             ★
           </button>
+
           <span class="like-msg">로그인 후, 좋아요!</span>
         </div>
       </div>
@@ -428,8 +461,9 @@
 
   </div>
 
-
+  </main>
       </div>
+
     </div>
   </div>
 
@@ -451,7 +485,14 @@
     function toggle(btn) {
       const type = btn.dataset.type;
       const id = btn.dataset.id;
-
+      const isOn = btn.classList.contains('on');
+      const likeCountSpan = btn.parentElement.querySelector('.like-count');
+      let currentCount = parseInt(likeCountSpan.textContent, 10);
+      if (isOn) {
+        likeCountSpan.textContent = Math.max(currentCount - 1, 0); // 음수 방지
+      } else {
+        likeCountSpan.textContent = currentCount + 1;
+      }
       fetch(`/api/like/${type}/toggle`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -489,111 +530,6 @@
       });
 
     }
-  //
-  //   /// 모달창
-  //   // 모달 창 좋아요 버튼 연동 작성하기
-  //   document.addEventListener("DOMContentLoaded", function () {
-  //     const buttons = document.querySelectorAll(".details-btn");
-  //
-  //     buttons.forEach(btn => {
-  //       btn.addEventListener("click", () => {
-  //         const type = btn.dataset.type; // book, movie, song
-  //         const id = btn.dataset.id;
-  //
-  //         fetch(`/api/details/${type}/${id}`)
-  //         .then(res => res.json())
-  //         .then(data => {
-  //           openModal(type, data);
-  //         });
-  //       });
-  //     });
-  //   });
-  //
-  //   function openModal(type, data) {
-  //     const modal = document.getElementById("detailModalResult");
-  //     const body = document.getElementById("modal-body");
-  //     const meta = document.getElementById("custom-modal-meta");
-  //     const likeBtn = document.getElementById("modal-like-btn");
-  //     const searchLink = document.getElementById("modal-search-link");
-  //
-  //     // 제목 + 이미지는 항상 고정 위치
-  //     document.getElementById("custom-modal-title").textContent = data.name;
-  //     document.getElementById("modal-img").src = data[`${type}Img`];
-  //     document.getElementById("modal-img").alt = data.name;
-  //
-  //     // 링크 설정
-  //     searchLink.href = data.externalLink;
-  //
-  //     // 타입별 부가 정보 + description
-  //     let details = "";
-  //
-  //     if (type === "book") {
-  //       details += `<p><strong>작가:</strong> ${data.author}</p>`;
-  //       details += `<p><strong>장르:</strong> ${data.genre}</p>`;
-  //       details += `<p><strong>요약:</strong> ${buildExpandable(data.summary, "summary")}</p>`;
-  //       details += `<p><strong>설명:</strong> ${buildExpandable(data.description,
-  //           "description")}</p>`;
-  //       details += `<p><strong>출판사:</strong> ${data.publisher}</p>`;
-  //       details += `<p><strong>출판일:</strong> ${data.publishedAt}</p>`;
-  //
-  //     } else if (type === "movie") {
-  //       details += `<p><strong>장르:</strong> ${data.genre}</p>`;
-  //       details += `<p><strong>설명:</strong> ${buildExpandable(data.description,
-  //           "description")}</p>`;     //간략히
-  //       details += `<p><strong>개봉일:</strong> ${data.releaseDate}</p>`;
-  //     } else if (type === "song") {
-  //       details += `<p><strong>아티스트:</strong> ${data.artist}</p>`;
-  //       details += `<p><strong>장르:</strong> ${data.genre}</p>`;
-  //       details += `<p><strong>발매일:</strong> ${data.releasedAt}</p>`;
-  //       details += `<p><strong>요약:</strong> ${buildExpandable(data.summary, "summary")}</p>`;
-  //       details += `<p><strong>가사:</strong> ${buildExpandable(data.lyrics, "lyrics")}</p>`;
-  //     }
-  //
-  //     meta.innerHTML = details;
-  //
-  //     // 별 버튼 설정
-  //     likeBtn.dataset.type = type;
-  //     likeBtn.dataset.id = data.id;
-  //     likeBtn.textContent = '★';
-  //     likeBtn.classList.remove("on");
-  //     if (data.status) {
-  //       likeBtn.classList.add("on");
-  //     }
-  //
-  //     modal.classList.remove("hidden");
-  //   }
-  //
-  //   function closeModal() {
-  //     document.getElementById("detailModalResult").classList.add("hidden");
-  //   }
-  //
-  //   //모달 창의 텍스트 줄여서 보기
-  //   function buildExpandable(content, idPrefix) {
-  //     const shortId = `${idPrefix}-short`;
-  //     const fullId = `${idPrefix}-full`;
-  //     const btnId = `${idPrefix}-btn`;
-  //
-  //     return `
-  //   <span id="${shortId}" style="display:block; overflow: hidden; text-overflow: ellipsis; max-height: 4.5em;">
-  //     ${content}
-  //   </span>
-  //   <span id="${fullId}" style="display:none;">
-  //     ${content}
-  //   </span>
-  //   <button onclick="toggleText('${shortId}', '${fullId}', '${btnId}')" id="${btnId}" class="text-button">전체 보기</button>
-  // `;
-  //   }
-  //
-  //   function toggleText(shortId, fullId, btnId) {
-  //     const shortEl = document.getElementById(shortId);
-  //     const fullEl = document.getElementById(fullId);
-  //     const btnEl = document.getElementById(btnId);
-  //
-  //     const isShortVisible = shortEl.style.display !== "none";
-  //     shortEl.style.display = isShortVisible ? "none" : "block";
-  //     fullEl.style.display = isShortVisible ? "block" : "none";
-  //     btnEl.textContent = isShortVisible ? "간략히 보기" : "전체 보기";
-  //   }
 
   </script>
 

@@ -15,24 +15,30 @@
         width: 100%;
         height: 100%;
         margin: 0;
-        padding: 30px;
         font-family: 'Segoe UI', sans-serif;
         background: linear-gradient(#000000, #683997);
         color: white;
         background-attachment: fixed;
         background-position: center;
+        overscroll-behavior: none;
       }
 
       header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        padding-top: 30px;
+        padding-left: 30px;
+        width: 100%;
+        position: fixed;
         margin-top: -16px;
+        z-index: 9999;
+        background: linear-gradient(#000000, #0d0913);
       }
 
       .logo {
         font-size: 48px;
         font-weight: bold;
+        margin-right: 20px;
       }
 
       .logo span {
@@ -43,7 +49,7 @@
 
       .header-right {
         display: flex;
-        margin-top: -8px;
+        margin-right: 10px;
         align-items: center;
         gap: 16px;
       }
@@ -56,11 +62,11 @@
       .header-buttons {
         display: flex;
         font-size: 20px;
-        gap: 10px;
       }
 
       .header-buttons button {
         padding: 8px 16px;
+        margin-right: 10px;
         border: none;
         border-radius: 10px;
         cursor: pointer;
@@ -77,11 +83,13 @@
         color: white;
       }
 
-      .container {
-        text-align: center;
+      .login-btn {
+        background: linear-gradient(to right, #A64DFF, #6A00FF);
+        color: white;
       }
 
       .main-content {
+        margin: 30px;
         text-align: center;
       }
 
@@ -153,20 +161,26 @@
         position: relative;
       }
 
+      .header-menu{
+        display: flex;
+        justify-content: flex-start;
+      }
+
       .fancy-button {
         display: inline-flex;
         align-items: center;
-        gap: 10px;
-        padding: 14px 30px;
+        gap: 6px;
+        padding: 10px 10px;
         font-size: 18px;
         font-weight: 600;
         border: none;
-        border-radius: 50px;
+        border-radius: 10px;
         cursor: pointer;
         color: white;
         transition: all 0.3s ease-in-out;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        background-size: 200% auto;
+        background: rgb(0, 0, 0, 0.4);
+        background-size: 100% auto;
         text-transform: uppercase;
         position: relative;
         overflow: hidden;
@@ -491,13 +505,7 @@
         border-right: none;
       }
 
-      .search-result-container {
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 2rem;
-        text-align: center;
-        font-family: 'Noto Sans KR', sans-serif;
-      }
+
 
       .content-grid {
         display: flex;
@@ -569,6 +577,7 @@
       /* 카드 공통 */
       .card-container {
         display: flex;
+        justify-content: center;
         flex-wrap: wrap;
         gap: 16px
       }
@@ -764,15 +773,11 @@
         font-weight: 700; /* 굵게(선택) */
       }
 
-      /* 간단한 강조 스타일 */
-      .error-msg {
-        margin-top: 8px;
-        color: #ff5555;
-        font-weight: 600;
-      }
-
       .trailer-modal {
         position: fixed;
+        top: 30px; left: 0;
+        width: 100vw; height: 100vh;
+        background: rgba(0,0,0,0.7);
         top: 0;
         left: 0;
         width: 100vw;
@@ -936,11 +941,53 @@
   </th:block>
 </head>
 <body>
+<!--<div layout:fragment="content">-->
 <th:block th:fragment="frg_header">
   <header>
-    <a th:href="@{/}">
-      <div class="logo"><span>Moodlink</span></div>
-    </a>
+    <div class="header-menu">
+      <a th:href="@{/}">
+        <div class="logo"><span>Moodlink</span></div>
+      </a>
+      <button class="fancy-button" th:onclick="|location.href='@{/recommend}'|">
+        <i class="material-icons">stars</i>
+        추천받기
+      </button>
+      <button class="fancy-button"
+              th:onclick="|location.href='@{/worldcup}'|">
+        <i class="material-icons">sports_esports</i>
+        월드컵(출시예정)
+      </button>
+
+      <button class="fancy-button" onclick="openFortuneModal()">
+        <i class="material-icons">auto_awesome</i>
+        오늘의 운세
+      </button>
+    </div>
+    <div id="fortuneModal" class="fortune-modal" onclick="closeModal(event)">
+      <div class="fortune-modal-content" onclick="event.stopPropagation()">
+        <div class="scrolling-wrapper">
+          <span class="close-btn" onclick="closeModal()">&times;</span>
+          <h4 style="color: #814700 ; margin-bottom: 20px;">오늘의 운세</h4>
+
+          <div id="fortuneText">
+            <p id="fortuneMsg1" class="fortune-message" style="display: none;">당신의 오늘을 위한 짧은
+              안내서입니다.</p>
+            <p id="fortuneMsg2" class="fortune-message" style="display: none;">이 운세가 당신의 하루에 작은
+              방향이 되길 바랍니다.</p>
+            <p id="fortuneResult" class="fortune-result  scrolling-text"
+               style="display: none;"></p>
+
+          </div>
+
+          <div style="margin-top: 20px; text-align: center;">
+            <button id="retryFortuneBtn" class="fancy-button blue-button"
+                    onclick="retryFortune()">
+              다시 추천받기
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="header-right">
       <span th:if="${isAuthenticated}" th:text="'안녕하세요, ' + ${username} + '님!'"></span>
       <div class="header-buttons">
@@ -950,16 +997,137 @@
         <button class="mypage-btn" sec:authorize="hasRole('ADMIN')"
                 th:onclick="|location.href='@{/admin/movies}'|">관리자페이지
         </button>
-        <form th:action="@{/logout}" method="post">
-          <button class="logout-btn" th:if="${isAuthenticated}">로그아웃</button>
-        </form>
+        <button id = "logout" class="logout-btn" th:if="${isAuthenticated}">로그아웃</button>
         <form th:action="@{/signin}" method="get">
-          <button class="logout-btn" th:if="${!isAuthenticated}" th:href="@{/signin}">로그인</button>
+          <button class="login-btn" th:if="${!isAuthenticated}" th:href="@{/signin}">로그인</button>
         </form>
       </div>
     </div>
   </header>
 
+  <script th:inline="javascript">
+    function startScrollingAnimation() {
+      const result = document.getElementById('fortuneResult');
+      const container = result.parentElement;
+
+      const containerWidth = container.offsetWidth;
+      const textWidth = result.scrollWidth;
+
+      result.style.animation = 'none';
+      result.classList.remove('scrolling-text');
+
+      if (textWidth > containerWidth) {
+        // 애니메이션 적용
+        const distance = textWidth + containerWidth;
+        const speed = 100;
+        const duration = distance / speed;
+
+        result.style.animationName = 'scroll-left';
+        result.style.animationDuration = duration + 's';
+        result.style.animationTimingFunction = 'linear';
+        result.style.animationIterationCount = 'infinite';
+
+        result.classList.add('scrolling-text');
+      }
+    }
+
+    function openFortuneModal() {
+      const modal = document.getElementById("fortuneModal");
+      modal.classList.add('active');
+
+      const msg1 = document.getElementById("fortuneMsg1");
+      const msg2 = document.getElementById("fortuneMsg2");
+      const result = document.getElementById("fortuneResult");
+
+      msg1.style.display = "none";
+      msg2.style.display = "none";
+      result.style.display = "none";
+      result.textContent = "";
+
+      msg1.style.display = "block";
+
+      setTimeout(() => {
+        msg1.style.display = "none";
+        msg2.style.display = "block";
+
+        setTimeout(() => {
+          msg2.style.display = "none";
+
+          fetch('/fortune')
+            .then(response => response.text())
+            .then(data => {
+              const result = document.getElementById('fortuneResult');
+              result.textContent = data;
+              result.style.display = "block";
+
+              startScrollingAnimation();
+            })
+
+            .catch(() => {
+              result.textContent = "운세를 불러오지 못했습니다.";
+              result.style.display = "block";
+            });
+
+        }, 2000);
+
+      }, 2000);
+    }
+
+    function closeModal(event) {
+      if (event) {
+        event.stopPropagation();
+      }
+      const modal = document.getElementById("fortuneModal");
+      modal.classList.remove('active');   // display:none 대신 active 클래스 제거
+    }
+
+    function retryFortune() {
+      const result = document.getElementById("fortuneResult");
+
+      fetch('/fortune/ai', {
+        method: 'POST'
+      })
+        .then(res => res.text())
+        .then(data => {
+          result.textContent = data;
+          // 애니메이션 재시작을 위해 클래스 제거 후 다시 추가
+          result.classList.remove("scrolling-text");
+          void result.offsetWidth; // 리플로우 강제 발생
+          result.classList.add("scrolling-text");
+        })
+        .catch(() => {
+          result.textContent = "운세를 불러올 수 없습니다.";
+          result.classList.remove("scrolling-text");
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const result = document.querySelector('.fortune-result');
+      if (result) {
+        result.style.display = 'block';
+
+        setTimeout(() => {
+          result.classList.add('done');
+        }, 15000);
+      }
+    });
+    document.querySelector("#logout").addEventListener('click', async () => {
+      console.log("로그아웃 버튼 누름 확인");
+
+      await fetch('/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => {
+          if (res.ok) {
+            window.location.href = '/';
+          }
+        })
+    });
+  </script>
 
 </th:block>
 <!-- pagination -->
@@ -975,7 +1143,5 @@
     <a th:href="@{${page.url()}(page=${page.nextPage()})}"><i
         class="material-icons">chevron_right</i></a></li>
 </ul>
-
-
 </body>
 </html>

@@ -3,6 +3,7 @@ package com.grepp.moodlink.app.model.data.movie;
 import com.grepp.moodlink.app.model.data.movie.dto.GenreDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
+import com.grepp.moodlink.app.model.data.movie.dto.MovieWorldcupDto;
 import com.grepp.moodlink.app.model.data.movie.entity.Genre;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
 import java.time.LocalDate;
@@ -122,12 +123,34 @@ public class MovieService {
                 Map<String, Object> map = new HashMap<>();
                 map.put("id", m.getId());
                 map.put("title", m.getTitle());
+                map.put("image", m.getThumbnail());
 
                 // 함수형 내부에서의 return(메서드의 반환이 아님.)
                 return map;
             })
             .collect(Collectors.toList());
 
+    }
+
+
+    public MovieWorldcupDto findDtoById(String id) {
+        Movie movie = movieRepository.findById(id).orElseThrow();
+
+        MovieWorldcupDto dto = new MovieWorldcupDto();
+        dto.setId(movie.getId());
+        dto.setTitle(movie.getTitle());
+        dto.setImage(movie.getThumbnail()); // thumbnail → image 매핑
+
+        return dto;
+    }
+
+    // List로 들어온 id들로부터 각 Content들의 세부정보(Dto로) 가져오기
+    public Map<String, MovieWorldcupDto> getDetails(List<String> ids) {
+        return ids.stream()
+            .collect(Collectors.toMap(
+                id -> id,                    // key
+                id -> this.findDtoById(id)   // value
+            ));
     }
 
     public List<GenreDto> getMovieGenre(String id) {

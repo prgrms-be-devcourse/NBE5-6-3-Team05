@@ -1,6 +1,7 @@
 package com.grepp.moodlink.app.controller.web.auth.payload;
 
 import com.grepp.moodlink.app.model.member.dto.MemberDto;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
@@ -20,6 +21,10 @@ public class SignupRequest {
     private String username;
 
     @NotBlank
+    @Email
+    private String email;
+
+    @NotBlank
     private String genre;
 
     @NotBlank
@@ -33,6 +38,7 @@ public class SignupRequest {
         memberDto.setUserId(userId);
         memberDto.setPassword(password);
         memberDto.setUsername(username);
+        memberDto.setEmail(email);
         memberDto.setGenre(genre);
         memberDto.setPeriods(periods);
         memberDto.setCountries(countries);
