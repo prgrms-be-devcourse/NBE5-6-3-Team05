@@ -105,8 +105,13 @@
         backdrop-filter: blur(10px);
         background: rgba(255, 255, 255, 0.05);
         border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow:
+            0 0 15px rgba(186, 85, 211, 0.6),
+            0 0 30px rgba(186, 85, 211, 0.4),
+            0 0 45px rgba(186, 85, 211, 0.3),
+            0 0 60px rgba(186, 85, 211, 0.2),
+            0 8px 24px rgba(0, 0, 0, 0.3);
         padding: 20px;
         width: 260px;
         text-align: center;
@@ -116,8 +121,14 @@
       }
 
       .category-card:hover {
-        transform: translateY(-10px) scale(1.05);
-        box-shadow: 0 20px 40px rgba(255, 99, 71, 0.4);
+        transform: translateY(-12px) scale(1.08);
+        box-shadow:
+            0 0 20px rgba(186, 85, 211, 0.8),
+            0 0 40px rgba(186, 85, 211, 0.6),
+            0 0 60px rgba(186, 85, 211, 0.5),
+            0 0 80px rgba(186, 85, 211, 0.4),
+            0 0 100px rgba(186, 85, 211, 0.3),
+            0 20px 60px rgba(0, 0, 0, 0.5);
       }
 
       .category-card::before {
