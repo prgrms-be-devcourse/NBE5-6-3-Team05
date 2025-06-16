@@ -357,146 +357,6 @@
       }
     }
 
-
-    /* 모달 스타일 */
-
-    detailModalResult {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      background: rgba(0, 0, 0, .75);
-      justify-content: center;
-      align-items: center
-    }
-
-    detailModalResult.active {
-      display: flex
-    }
-
-    /* 전체 모달 배경 (검은 반투명 배경) */
-    .custom-modal {
-      display: flex; /* 기본 display는 JS에서 hidden 클래스로 토글 관리 */
-      justify-content: center;
-      align-items: center;
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background-color: rgba(0, 0, 0, 0.8);
-    }
-
-    /* JS에서 모달을 숨길 때 사용할 클래스 */
-    .custom-modal.hidden {
-      display: none;
-    }
-
-    /* 모달 내부 콘텐츠 영역 */
-    .custom-modal-content {
-      background-color: #1a1a1a;
-      padding: 2rem;
-      border-radius: 10px;
-      max-width: 800px;
-      width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-      color: white;
-    }
-
-    /* 닫기 버튼 (오른쪽 위 X 버튼) */
-    .custom-close-btn {
-      z-index: 10000;
-      user-select: none;
-      text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
-      position: absolute;
-      top: 16px;
-      right: 20px;
-      font-size: 24px;
-      font-weight: bold;
-      color: #fff;
-      cursor: pointer;
-      background: none;
-      border: none;
-    }
-
-    .custom-close-btn:hover {
-      color: #aaa;
-    }
-
-    /* 모달 본문 레이아웃 */
-    .custom-modal-body-layout {
-      display: flex;
-      gap: 2rem;
-      align-items: flex-start;
-      margin-top: 1rem;
-    }
-
-    /* 이미지 영역 */
-    .custom-modal-body-main img,
-    .custom-modal-img {
-      width: 200px;
-      max-height: 250px;
-      object-fit: contain;
-      border-radius: 0;
-    }
-
-    #modal-search-link:hover {
-      background-color: #a855f7;
-    }
-
-    /* 텍스트 정보 영역 */
-    .custom-modal-info {
-      flex: 1;
-      overflow-wrap: break-word;
-    }
-
-    /* 설명문 내부 여백 */
-    #custom-modal-meta p {
-      margin: 0.5rem 0;
-    }
-
-    /* 아래쪽 버튼 영역 */
-    #modal-like-wrapper {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px; /* 둘 사이 간격 */
-      z-index: 9999;
-    }
-
-
-    /* PICK 강조 태그 */
-    .pick-tag {
-      display: inline-block;
-      background-color: #a259ff;
-      color: white;
-      font-weight: bold;
-      padding: 4px 8px;
-      border-radius: 6px;
-      margin-top: 10px;
-    }
-
-    /*모달 창 내 텍스트 전체보기/간략히 보기*/
-    .text-button {
-      background: none;
-      border: none;
-      color: #aaa;
-      font-size: 0.8rem;
-      cursor: pointer;
-      padding: 0;
-      text-decoration: underline;
-      opacity: 0.7;
-      transform: scale(0.9);
-    }
-
-    .text-button:hover {
-      color: #ccc;
-      opacity: 1;
-    }
-
   </style>
 </head>
 <body>
@@ -505,6 +365,9 @@
 <div layout:fragment="content" class="page-container">
 
 
+
+<!--  모달창html-->
+  <div id="modals-container"></div>
 
 
   <h3 class="page-title">좋아요 목록</h3>
@@ -570,7 +433,7 @@
         </div>
         <div class="card-content">
 
-          <h3 class="card-title" th:text="${book.title}">테스트</h3>
+          <h3 class="card-title" th:id="${book.title}" th:text="${book.title}">테스트</h3>
           <div class="card-info">
             <div class="info-item">
               <span class="info-label">저자</span>
@@ -628,7 +491,7 @@
     </div>
 
     <div class="card-grid">
-      <div class="item-card" th:each="movie : ${likedmovies.content()}">
+      <div class="item-card"  th:each="movie : ${likedmovies.content()}">
         <div class="card-image-container">
           <button class="toggle-star-btn"
                   th:id="'toggle-movie-' + ${movie.title}"
@@ -640,7 +503,7 @@
 
         </div>
         <div class="card-content">
-          <h3 class="card-title" th:text="${movie.title}">테스트</h3>
+          <h3 class="card-title" th:id="${movie.title}" th:text="${movie.title}">테스트</h3>
           <div class="card-info">
             <div class="info-item">
               <span class="info-label">개봉일</span>
@@ -707,7 +570,7 @@
 
         </div>
         <div class="card-content">
-          <h3 class="card-title" th:text="${music.title}">테스트</h3>
+          <h3 class="card-title" th:id="${music.title}" th:text="${music.title}">테스트</h3>
           <div class="card-info">
             <div class="info-item">
               <span class="info-label">가수</span>
@@ -758,117 +621,96 @@
       </ul>
     </div>
   </div>
-
-  <!-- 모달창 HTML -->
-  <div id="detailModalResult" class="custom-modal hidden">
-    <div class="custom-modal-content">
-      <span class="custom-close-btn" onclick="closeModal()">&times;</span>
-
-
-      <h2 id="custom-modal-title"></h2>
-
-      <div class="custom-modal-body-layout">
-
-        <div class="custom-modal-body-main">
-          <img id="modal-img" class="custom-modal-img" src="" alt="컨텐츠 이미지"/>
-        </div>
-
-        <div class="custom-modal-info">
-          <div id="custom-modal-meta"></div> <!-- 타입별로 여기에 JS로 채워 넣기 -->
-        </div>
-      </div>
-
-      <div id="modal-like-wrapper" style="margin-top: 1rem; text-align: right">
-        <a id="modal-search-link" class="purple-btn" href="#" target="_blank">Search</a>
-        <button class="toggle-star-btn"
-                id="modal-like-btn"
-                data-type=""
-                data-id="">
-          ★
-        </button>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- 탭 스크립트 -->
-  <script type="module" th:inline="javascript">
-    import { setupLikeToggle } from '/js/like-toggle.js';
-
-    let currentPage = {
-      books: /*[[${likedbooks.page.number}]]*/ 0,
-      movies: /*[[${likedmovies.page.number}]]*/ 0,
-      musics: /*[[${likedmusics.page.number}]]*/ 0
-    };
-    const pageSize = /*[[${likedbooks.page.size}]]*/ 3;
-
-    function loadTab(tabName) {
-      const tabItems = document.querySelectorAll('.like-item');
-      console.log("모든 like-item:", tabItems);
-      tabItems.forEach(item => {
-        console.log(`숨기는 요소 ID: ${item.id}`);
-        item.style.display = 'none';
-      });
-      const targetTab = document.getElementById(tabName);
-      console.log(`보여줄 요소 ID: ${targetTab ? targetTab.id : '없음'}`);
-      if (targetTab) {
-        targetTab.style.display = 'block';
-      }
-
-      // 탭 버튼 활성화 상태 업데이트
-      document.querySelectorAll('.tab-button').forEach(button => {
-        button.classList.remove('active');
-        if (button.textContent.trim().toLowerCase().includes(tabName.slice(0, -1))) {
-          button.classList.add('active');
-        }
-      });
-
-      updatePaginationLinks(tabName);
-    }
-
-    function updatePaginationLinks(tabName) {
-      const paginationLinks = document.querySelectorAll(`#${tabName}-pagination a`);
-      paginationLinks.forEach(link => {
-        link.addEventListener('click', function (event) {
-          event.preventDefault();
-          const page = this.dataset.page;
-          window.location.href = `/users/like?${tabName.slice(0,
-              -1)}_page=${page}&size=${pageSize}&tab=${tabName}`;
-        });
-      });
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-      const activeTab = /*[[${activeTab}]]*/ 'books';
-      loadTab(activeTab);
-
-      // 탭 버튼 이벤트 리스너
-      document.querySelectorAll('.tab-button').forEach(button => {
-        button.addEventListener('click', function () {
-          // 버튼 텍스트에서 탭 이름 추출 (아이콘과 공백 제거)
-          const buttonText = this.textContent.trim().toLowerCase();
-          let tab;
-          if (buttonText.includes('도서')) {
-            tab = 'books';
-          } else if (buttonText.includes('영화')) {
-            tab = 'movies';
-          } else if (buttonText.includes('음악')) {
-            tab = 'musics';
-          }
-
-          loadTab(tab);
-        });
-      });
-
-        setupLikeToggle();
-
-    });
-  </script>
-
-<script type="module" src="/js/modal.js"></script>
-
 </div>
 
 
 </body>
 </html>
+
+
+<script type="module" th:inline="javascript">
+
+  // 모달창 html 불러오기
+  fetch('/html/modals.html')
+  .then(response => response.text())
+  .then(data => {
+    document.getElementById('modals-container').innerHTML = data;
+  });
+
+  // 좋아요 js 불러오기
+  import { setupLikeToggle } from '/js/like-toggle.js';
+
+  // 탭 스크립트
+  let currentPage = {
+    books: /*[[${likedbooks.page.number}]]*/ 0,
+    movies: /*[[${likedmovies.page.number}]]*/ 0,
+    musics: /*[[${likedmusics.page.number}]]*/ 0
+  };
+  const pageSize = /*[[${likedbooks.page.size}]]*/ 3;
+
+  function loadTab(tabName) {
+    const tabItems = document.querySelectorAll('.like-item');
+    console.log("모든 like-item:", tabItems);
+    tabItems.forEach(item => {
+      console.log(`숨기는 요소 ID: ${item.id}`);
+      item.style.display = 'none';
+    });
+    const targetTab = document.getElementById(tabName);
+    console.log(`보여줄 요소 ID: ${targetTab ? targetTab.id : '없음'}`);
+    if (targetTab) {
+      targetTab.style.display = 'block';
+    }
+
+    // 탭 버튼 활성화 상태 업데이트
+    document.querySelectorAll('.tab-button').forEach(button => {
+      button.classList.remove('active');
+      if (button.textContent.trim().toLowerCase().includes(tabName.slice(0, -1))) {
+        button.classList.add('active');
+      }
+    });
+
+    updatePaginationLinks(tabName);
+  }
+
+  function updatePaginationLinks(tabName) {
+    const paginationLinks = document.querySelectorAll(`#${tabName}-pagination a`);
+    paginationLinks.forEach(link => {
+      link.addEventListener('click', function (event) {
+        event.preventDefault();
+        const page = this.dataset.page;
+        window.location.href = `/users/like?${tabName.slice(0,
+            -1)}_page=${page}&size=${pageSize}&tab=${tabName}`;
+      });
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const activeTab = /*[[${activeTab}]]*/ 'books';
+    loadTab(activeTab);
+
+    // 탭 버튼 이벤트 리스너
+    document.querySelectorAll('.tab-button').forEach(button => {
+      button.addEventListener('click', function () {
+        // 버튼 텍스트에서 탭 이름 추출 (아이콘과 공백 제거)
+        const buttonText = this.textContent.trim().toLowerCase();
+        let tab;
+        if (buttonText.includes('도서')) {
+          tab = 'books';
+        } else if (buttonText.includes('영화')) {
+          tab = 'movies';
+        } else if (buttonText.includes('음악')) {
+          tab = 'musics';
+        }
+
+        loadTab(tab);
+      });
+    });
+
+    setupLikeToggle();
+
+  });
+
+</script>
+
+
+<script type="module" src="/js/modal.js" defer></script>

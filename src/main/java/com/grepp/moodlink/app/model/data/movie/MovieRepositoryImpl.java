@@ -44,6 +44,7 @@ public class MovieRepositoryImpl implements MovieRepositoryCustom {
     @Override
     public List<MovieDto> searchContent(String contentName) {
         return queryFactory.select(Projections.constructor(MovieDto.class,
+                movie.id,
                 movie.title,
                 movie.summary,
                 movie.releaseDate,

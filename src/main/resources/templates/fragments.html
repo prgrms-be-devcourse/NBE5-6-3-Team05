@@ -640,16 +640,6 @@
       /*검색 모달*/
 
       /* 영화 모달 배경 */
-      .detailMovieModal {
-        display: none;
-        position: fixed;
-        inset: 0;
-        z-index: 1000;
-        background: rgba(0, 0, 0, .75);
-        justify-content: center;
-        align-items: center
-      }
-
       .detailMovieModal.active {
         display: flex
       }
@@ -809,6 +799,138 @@
         color: #fff;
         cursor: pointer;
       }
+
+      /* 모달 본문 레이아웃 */
+      .custom-modal-body-layout {
+        display: flex;
+        gap: 2rem;
+        align-items: flex-start;
+        margin-top: 1rem;
+      }
+
+      #modal-search-link:hover {
+        background-color: #a855f7;
+      }
+
+      /*모달 창 내 텍스트 전체보기/간략히 보기*/
+      .text-button {
+        background: none;
+        border: none;
+        color: #aaa;
+        font-size: 0.8rem;
+        cursor: pointer;
+        padding: 0;
+        text-decoration: underline;
+        opacity: 0.7;
+        transform: scale(0.9);
+      }
+
+      .text-button:hover {
+        color: #ccc;
+        opacity: 1;
+      }
+
+      /* 모달 스타일 */
+
+      detailModalResult {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(0, 0, 0, .75);
+        justify-content: center;
+        align-items: center
+      }
+
+      detailModalResult.active {
+        display: flex
+      }
+
+      /* 전체 모달 배경 (검은 반투명 배경) */
+      .custom-modal {
+        display: flex; /* 기본 display는 JS에서 hidden 클래스로 토글 관리 */
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background-color: rgba(0, 0, 0, 0.8);
+      }
+
+      /* JS에서 모달을 숨길 때 사용할 클래스 */
+      .custom-modal.hidden {
+        display: none;
+      }
+
+      /* 모달 내부 콘텐츠 영역 */
+      .custom-modal-content {
+        background-color: #1a1a1a;
+        padding: 2rem;
+        border-radius: 10px;
+        max-width: 800px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        color: white;
+      }
+
+      /* 닫기 버튼 (오른쪽 위 X 버튼) */
+      .custom-close-btn {
+        position: absolute;
+        top: 16px;
+        right: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #fff;
+        cursor: pointer;
+        background: none;
+        border: none;
+      }
+
+      .custom-close-btn:hover {
+        color: #aaa;
+      }
+
+      /* 이미지 영역 */
+      .custom-modal-body-main img,
+      .custom-modal-img {
+        width: 200px;
+        max-height: 250px;
+        object-fit: contain;
+        border-radius: 0;
+      }
+
+      /* 텍스트 정보 영역 */
+      .custom-modal-info {
+        flex: 1;
+        overflow-wrap: break-word;
+      }
+
+      /* 설명문 내부 여백 */
+      #custom-modal-meta p {
+        margin: 0.5rem 0;
+      }
+
+      /* 아래쪽 버튼 영역 */
+      #modal-like-wrapper {
+        margin-top: 1.5rem;
+        text-align: right;
+      }
+
+
+      /* PICK 강조 태그 */
+      .pick-tag {
+        display: inline-block;
+        background-color: #a259ff;
+        color: white;
+        font-weight: bold;
+        padding: 4px 8px;
+        border-radius: 6px;
+        margin-top: 10px;
+      }
+
     </style>
 
   </th:block>

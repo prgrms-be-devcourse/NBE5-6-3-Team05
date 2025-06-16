@@ -272,132 +272,6 @@
       text-decoration: underline;
     }
 
-    /* 모달 스타일 */
-
-    detailModalResult {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      background: rgba(0, 0, 0, .75);
-      justify-content: center;
-      align-items: center
-    }
-
-    detailModalResult.active {
-      display: flex
-    }
-
-    /* 전체 모달 배경 (검은 반투명 배경) */
-    .custom-modal {
-      display: flex; /* 기본 display는 JS에서 hidden 클래스로 토글 관리 */
-      justify-content: center;
-      align-items: center;
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background-color: rgba(0, 0, 0, 0.8);
-    }
-
-    /* JS에서 모달을 숨길 때 사용할 클래스 */
-    .custom-modal.hidden {
-      display: none;
-    }
-
-    /* 모달 내부 콘텐츠 영역 */
-    .custom-modal-content {
-      background-color: #1a1a1a;
-      padding: 2rem;
-      border-radius: 10px;
-      max-width: 800px;
-      width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-      color: white;
-    }
-
-    /* 닫기 버튼 (오른쪽 위 X 버튼) */
-    .custom-close-btn {
-      position: absolute;
-      top: 16px;
-      right: 20px;
-      font-size: 24px;
-      font-weight: bold;
-      color: #fff;
-      cursor: pointer;
-      background: none;
-      border: none;
-    }
-
-    .custom-close-btn:hover {
-      color: #aaa;
-    }
-
-    /* 모달 본문 레이아웃 */
-    .custom-modal-body-layout {
-      display: flex;
-      gap: 2rem;
-      align-items: flex-start;
-      margin-top: 1rem;
-    }
-
-    /* 이미지 영역 */
-    .custom-modal-body-main img,
-    .custom-modal-img {
-      width: 200px;
-      max-height: 250px;
-      object-fit: contain;
-      border-radius: 0;
-    }
-
-    /* 텍스트 정보 영역 */
-    .custom-modal-info {
-      flex: 1;
-      overflow-wrap: break-word;
-    }
-
-    /* 설명문 내부 여백 */
-    #custom-modal-meta p {
-      margin: 0.5rem 0;
-    }
-
-    /* 아래쪽 버튼 영역 */
-    #modal-like-wrapper {
-      margin-top: 1.5rem;
-      text-align: right;
-    }
-
-
-    /* PICK 강조 태그 */
-    .pick-tag {
-      display: inline-block;
-      background-color: #a259ff;
-      color: white;
-      font-weight: bold;
-      padding: 4px 8px;
-      border-radius: 6px;
-      margin-top: 10px;
-    }
-
-    /*모달 창 내 텍스트 전체보기/간략히 보기*/
-    .text-button {
-      background: none;
-      border: none;
-      color: #aaa;
-      font-size: 0.8rem;
-      cursor: pointer;
-      padding: 0;
-      text-decoration: underline;
-      opacity: 0.7;
-      transform: scale(0.9);
-    }
-
-    .text-button:hover {
-      color: #ccc;
-      opacity: 1;
-    }
   </style>
 
   <title>Result Page</title>
@@ -409,6 +283,9 @@
 
 
   <main class="main-content">
+    <!--  모달창html-->
+    <div id="modals-container"></div>
+
 
     <div class="divider-wrapper">
       <div class="label-left">RESULT</div>
@@ -443,14 +320,14 @@
           <div class="image-wrapper">
             <img th:src="${item.book.imgUrl}" alt="임의의 책 이미지"/>
           </div>
-          <div class="title" th:text="${item.book.name}"></div>
+          <div class="title" th:id="${item.book.name}" th:text="${item.book.name}"></div>
         </div>
 
         <div class="info-block">
           <a th:href="${item.book.externalLink}" target="_blank" class="purple-btn">Search</a>
           <button class="details-btn" data-type="books" th:attr="data-id=${item.book.id}">Details
           </button>
-          <button class="toggle-"
+          <button class="toggle-star-btn"
                   th:classappend="${item.book.status} ? ' on' : ''"
                   th:id="'toggle-book-' + ${item.book.id}"
                   th:attr="data-type='book', data-id=${item.book.id}">
@@ -481,7 +358,7 @@
           <div class="image-wrapper">
             <img th:src="${item.movie.imgUrl}" alt="임의의 영화이미지"/>
           </div>
-          <div class="title" th:text="${item.movie.name}"></div>
+          <div class="title" th:id="${item.movie.name}" th:text="${item.movie.name}"></div>
         </div>
         <div class="info-block">
           <a th:href="${item.movie.externalLink}" target="_blank" class="purple-btn">Search</a>
@@ -519,7 +396,7 @@
           <div class="image-wrapper">
             <img th:src="${item.song.imgUrl}" alt="임의의 노래이미지"/>
           </div>
-          <div class="title" th:text="${item.song.name}"></div>
+          <div class="title" th:id="${item.song.name}" th:text="${item.song.name}"></div>
         </div>
         <div class="info-block">
           <a th:href="${item.song.externalLink}" target="_blank" class="purple-btn">Search</a>
@@ -551,39 +428,25 @@
 
   </div>
 
-  <!-- 모달창 HTML -->
-  <div id="detailModalResult" class="custom-modal hidden">
-    <div class="custom-modal-content">
-      <span class="custom-close-btn" onclick="closeModal()">&times;</span>
 
-      <h2 id="custom-modal-title"></h2>
-
-      <div class="custom-modal-body-layout">
-
-        <div class="custom-modal-body-main">
-          <img id="modal-img" class="custom-modal-img" src="" alt="컨텐츠 이미지"/>
-        </div>
-
-        <div class="custom-modal-info">
-          <div id="custom-modal-meta"></div> <!-- 타입별로 여기에 JS로 채워 넣기 -->
-        </div>
-      </div>
-
-      <div id="modal-like-wrapper" style="margin-top: 1rem; text-align: right">
-        <a id="modal-search-link" class="purple-btn" href="#" target="_blank">Search</a>
-        <button class="toggle-star-btn"
-                id="modal-like-btn"
-                data-type=""
-                data-id=""
-                onclick="toggle(this)">
-          ★
-        </button>
-        <span class="like-msg">로그인 후, 좋아요!</span>
       </div>
     </div>
   </div>
 
+</div>
+</body>
+</html>
+
   <script>
+
+    // 모달창 html 불러오기
+    fetch('/html/modals.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('modals-container').innerHTML = data;
+    });
+
+
     /// 토글 버튼 구현
     function toggle(btn) {
       const type = btn.dataset.type;
@@ -735,6 +598,4 @@
   </script>
 
   <script type="module" src="/js/modal.js"></script>
-</div>
-</body>
-</html>
+

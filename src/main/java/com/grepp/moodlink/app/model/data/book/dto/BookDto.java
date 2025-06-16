@@ -46,8 +46,9 @@ public class BookDto implements ContentDto {
         return dto;
     }
 
-    public BookDto(String title, String description, LocalDate publishedDate, String publisher,
+    public BookDto(String isbn, String title, String description, LocalDate publishedDate, String publisher,
         String image) {
+        this.isbn = isbn;
         this.title = title;
         this.description = description;
         this.publishedDate = publishedDate;
