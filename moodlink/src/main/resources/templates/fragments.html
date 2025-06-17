@@ -93,6 +93,11 @@
         text-align: center;
       }
 
+      .main-content-search {
+        margin: 30px;
+        text-align: center;
+      }
+
       .category {
         display: flex;
         justify-content: center;
@@ -552,6 +557,7 @@
 
       .content-description {
         /*font-size: 1.25rem;*/
+        position: relative;
         font-size: 1.5rem;
         margin: 1.0rem 0;
         color: #ffffff;
@@ -645,7 +651,6 @@
       .card-book {
         flex: 1 1 calc(28% - 16px);
         max-width: 250px;
-
         border: 4px solid;
         border-image: linear-gradient(to right, #a34dff, #2ebf91) 1;
         border-radius: 6px;
@@ -662,8 +667,27 @@
 
       /*검색 모달*/
 
+      .detailMovieModal {
+        display: none;
+      }
+
       /* 영화 모달 배경 */
       .detailMovieModal.active {
+        /*display: flex*/
+        display: block;
+      }
+
+      .detailMovieModal-search {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(0, 0, 0, .75);
+        justify-content: center;
+        align-items: center
+      }
+
+      .detailMovieModal-search.active {
         display: flex
       }
 
@@ -782,11 +806,10 @@
         max-height: 60vh; /* 가로·세로 비율 그대로 축소 */
       }
 
-      /*.card-book.search-result {*/
-      /*  flex: 1 1 100%;*/
-      /*  max-width: none;*/
-      /*}*/
-
+      .modal-bg.book-search {
+        flex: 1 1 35%; /* 가로폭 축소 – 숫자는 취향껏 조정 */
+        max-height: 60vh; /* 가로·세로 비율 그대로 축소 */
+      }
 
       .highlight {
         color: #a3cf22; /* 포인트 색상 */
@@ -803,6 +826,17 @@
         width: 100vw;
         height: 100vh;
         background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1200;
+      }
+
+      .trailer-modal-search {
+        position: fixed;
+        top: 30px; left: 0;
+        width: 100vw; height: 100vh;
+        background: rgba(0,0,0,0.7);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1085,7 +1119,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: 60vh;
+        height: 250px;
         /* 배경색 제거 */
       }
 
