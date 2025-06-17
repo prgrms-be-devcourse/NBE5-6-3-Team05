@@ -6,11 +6,13 @@
   <meta charset="UTF-8">
   <title>검색 결과</title>
   <style>
-    .header- {
-      position: static !important;
-    }
+    /*.header- {*/
+    /*  position: static !important;*/
+    /*}*/
+
     html, body {
       height: 100%;
+      overflow: hidden; /* 전체 페이지 스크롤 막기 */
       margin: 0;
       padding: 0;
     }
@@ -18,23 +20,20 @@
     .container{
       display: flex;
       flex-direction: column;
-      width: 100%;
-      margin-top: 60px;
+      width: 100vw;
+      align-self: center;
+      overflow-y: auto;
+      margin-top: 80px;
+      border-right: 100px;
+      height: 100vh;
     }
     .container::-webkit-scrollbar {
       display: none;
     }
+
     .search-result-container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 2rem;
       text-align: center;
       font-family: 'Noto Sans KR', sans-serif;
-    }
-
-    .main-content {
-      margin: 70px auto 0;
-      justify-items: center;
     }
 
     .search-container {
