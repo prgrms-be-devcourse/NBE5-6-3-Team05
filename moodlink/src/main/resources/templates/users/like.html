@@ -411,7 +411,8 @@
         <div class="card-image-container">
           <button class="toggle-star-btn"
                   th:id="'toggle-book-' + ${book.title}"
-                  th:attr="data-type='books', data-id=${book.isbn}"
+                  th:attr="data-type='books', data-id=${book.isbn}, data-on='true'"
+                  th:data-on="true"
           >★
           </button>
           <img class="card-image" th:src="${book.image}" alt="책 이미지">
@@ -482,7 +483,8 @@
         <div class="card-image-container">
           <button class="toggle-star-btn"
                   th:id="'toggle-movie-' + ${movie.title}"
-                  th:attr="data-type='movies', data-id=${movie.id}"
+                  th:attr="data-type='movies', data-id=${movie.id}, data-on='true'"
+          th:data-on="true"
           >
             ★
           </button>
@@ -549,7 +551,8 @@
         <div class="card-image-container">
           <button class="toggle-star-btn"
                   th:id="'toggle-music-' + ${music.title}"
-                  th:attr="data-type='musics', data-id=${music.id}"
+                  th:attr="data-type='musics', data-id=${music.id}, data-on='true'"
+                  th:data-on="true"
           >
             ★
           </button>

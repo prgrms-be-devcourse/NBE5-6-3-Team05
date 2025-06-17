@@ -1,7 +1,7 @@
 // /// 모달창
 // // 모달 창 좋아요 버튼 연동 작성하기
 
-import { setupLikeToggle } from '/js/like-toggle.js';
+// import { setupLikeToggle } from '/js/like-toggle.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   // 상세보기 버튼 클릭 시 모달 열기
@@ -109,13 +109,54 @@ function openModal(type, data) {
   // 좋아요 버튼 설정
   likeBtn.dataset.type = type;
   likeBtn.dataset.id = data.id || data.book?.id || data.movie?.id || data.music?.id;
-  likeBtn.textContent = data.status ? '★' : '☆';
+  let isLiked = false;
+  if (type === "books") {
+    isLiked = data.status || data.book?.status || false;
+  } else if (type === "movies") {
+    isLiked = data.status || data.movie?.status || false;
+  } else if (type === "musics") {
+    isLiked = data.status || data.music?.status || false;
+  }
+
+  likeBtn.textContent = isLiked ? '★' : '☆';
+  likeBtn.classList.toggle('on', isLiked);
 
   // 좋아요 버튼 재설정
   const newLikeBtn = likeBtn.cloneNode(true);
-  likeBtn.replaceWith(newLikeBtn);
-  setupLikeToggle(newLikeBtn);
+  likeBtn.parentNode.replaceChild(newLikeBtn, likeBtn);
 
+// 모달 좋아요 버튼에 직접 이벤트 추가
+  newLikeBtn.addEventListener('click', function() {
+    const type = this.dataset.type;
+    const id = this.dataset.id;
+
+    fetch(`/api/users/like/${type}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id })
+    })
+    .then(res => res.json())
+    .then(data => {
+      const isOn = data.status;
+
+      // 모달 버튼 업데이트
+      this.textContent = isOn ? '★' : '☆';
+      this.classList.toggle('on', isOn);
+
+      // 같은 type/id 가진 다른 버튼들도 동기화
+      const selector = `.toggle-star-btn[data-type='${type}'][data-id='${id}']`;
+      document.querySelectorAll(selector).forEach(otherBtn => {
+        if (otherBtn !== this) {
+          otherBtn.textContent = isOn ? '★' : '☆';
+          otherBtn.classList.toggle('on', isOn);
+        }
+      });
+    })
+    .catch(err => {
+      console.error('좋아요 토글 중 에러:', err);
+      alert('좋아요 처리 중 오류가 발생했습니다.');
+    });
+  });
   // 닫기 버튼 이벤트 연결 (모달 열릴 때마다 새로 등록)
   const closeBtn = document.querySelector(".custom-close-btn");
   if (closeBtn) {
