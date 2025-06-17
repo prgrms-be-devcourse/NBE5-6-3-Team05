@@ -1,27 +1,39 @@
-# NBE5-6-2-Team05 
-test 글입니다. -  lkh
+# NBE5-6-3-Team05
 
 <hr/>
 
 <div align="center">
   <img src="readmeresource/project_info.png" alt="Project Info" style="max-width: 100%; height: auto;">
 
-[NULL NULL 하게 팀 3차 프로젝트 일정 관리 (Trello 보드 바로가기)](https://trello.com/invite/b/6811b337d5d7ce2d450d478c/ATTIeca7861455dcaf3f28360d213a4a04c45ADC8408/nbe5-6-2-null-null-하게)<br>
 </div>
 
 ---
 
-## 📌 프로젝트 소개
+## 📌 3차 프로젝트 목표
+- 2차 프로젝트 버전업 
+    - 기능 개선, 기능 추가, 성능개선, 코틀린 마이그레이션
 
-<div align="center">
-  <img src="readmeresource/moodlink_des1.png" alt="Project Info" style="max-width: 100%; height: auto;"> <br>
-  <img src="readmeresource/moodlink_des2.png" alt="Project Info" style="max-width: 100%; height: auto;"> <br>
-  <img src="readmeresource/moodlink_des3.png" alt="Project Info" style="max-width: 100%; height: auto;">
-</div>
+---
 
-<br/>
+##  ✨ 버전업 사항
+아래는 2차 프로젝트 대비 3차 프로젝트에서 개선된 주요 기능입니다.  
+화면으로 버전업 사항을 확인할 수 있는 일부 기능은 GIF로 확인할 수 있습니다.
 
-##  ✨ 기능
+
+| 기능명          | 설명                                        |
+|--------------|-------------------------------------------|
+| JWT 로그인      | 기존 세션 로그인에서 JWT 기반 인증 방식으로 개선             |
+ 키워드 검색 개선    | 가수, 작가, 출판사명 등 다양한 조건으로 검색 가능             |
+| 장르별 조회	      | 장르를 선택하여 필터링 기능 제공                        |
+| 영화 예고편 재생    | 상세페이지에서 트레일러 영상 재생 지원                     |
+| 음악 트레일러 재생   | 음악 상세페이지에서 뮤직비디오 재생 가능                    |
+| 메일 인증 회원가입   | Kotlin + Outbox + Redis Pub/Sub 사용한 인증 구현 |
+| 관리자 페이지 개선   | 장르 관리 기능 추가, API 기반 콘텐츠 등록 개선             |
+| 모달창 통합       | 다양한 팝업 UI 통합 설계로 UX 개선                    |
+| 메인 페이지 개선    | 상위 콘텐츠 출력 , 추천 기록 출력, 헤더 변경, Moody 캐릭터 제작 |
+| LLM 기반 추천 개선 | 키워드별 추천 결과 캐싱(DB 저장)으로 안정적 추천 제공          |
+
+---
 <table>
   <tr>
     <td align="center"><b>LLM 추천 키워드</b></td>
@@ -139,13 +151,6 @@ test 글입니다. -  lkh
 
 <br/>
 
-## ✏️ UI Flow
-<div align="center">
-<img src="readmeresource/uiflow.png" alt="UI Flow" style="max-width: 100%; height: auto;">
-</div>
-
-<br/>
-
 ## 🛠️ 트러블 슈팅
 <div align="center">
 <img src="readmeresource/troubleshooting.png" alt="Troubleshooting" style="max-width: 100%; height: auto;">
@@ -174,6 +179,6 @@ test 글입니다. -  lkh
 | 🎨 **design**     | 뷰 디자인 변경                                |
 
 ---
-
-[NULL NULL 하게 발표자료 보기](readmeresource/nullnullppt.pdf)<br>
-[NULL NULL 하게 팀 2차 프로젝트 WBS(Gantt)](readmeresource/wbs_timeline.pdf)<br>
+[2차 프로젝트 보러가기](https://github.com/prgrms-be-devcourse/NBE5-6-2-Team05)<br>
+[NULL NULL 하게 3차 발표자료 보기](readmeresource/nullnullppt.pdf)<br>
+[NULL NULL 하게 팀 3차 프로젝트 WBS](readmeresource/wbs_timeline.png)<br>
