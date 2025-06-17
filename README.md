@@ -10,7 +10,8 @@
 ---
 
 ## 📌 3차 프로젝트 목표
-- 2차 프로젝트 버전업 
+
+- 2차 프로젝트 버전업 ([2차 프로젝트 보러가기](https://github.com/prgrms-be-devcourse/NBE5-6-2-Team05))<br>
     - 기능 개선, 기능 추가, 성능개선, 코틀린 마이그레이션
 
 ---
@@ -147,6 +148,5 @@
 | 🎨 **design**     | 뷰 디자인 변경                                |
 
 ---
-[2차 프로젝트 보러가기](https://github.com/prgrms-be-devcourse/NBE5-6-2-Team05)<br>
 [NULL NULL 하게 3차 발표자료 보기](readmeresource/nullnullppt.pdf)<br>
 [NULL NULL 하게 팀 3차 프로젝트 WBS](readmeresource/wbs_timeline.png)<br>
