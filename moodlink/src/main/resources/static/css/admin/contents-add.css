@@ -21,7 +21,7 @@ main {
 
 /* 돌아가기 버튼 */
 .back-btn, .delete-btn {
-  max-width: 100px;
+  max-width: 110px;
   margin-left: 2rem;
   background: linear-gradient(to right, #A64DFF, #6A00FF);
   border: none;
