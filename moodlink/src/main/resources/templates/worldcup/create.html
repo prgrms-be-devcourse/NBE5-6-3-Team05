@@ -99,6 +99,7 @@
     const createBtn = document.getElementById('create-btn');
     const contentArea = document.getElementById('content-select-area');
     const titleInput = document.getElementById("worldcup-title");
+    let currentImg = null;
 
     let currentCategory = null;
     const dummyContents = {};
@@ -159,6 +160,7 @@
 
             const id = checkbox.value;
             if (checkbox.checked) {
+              currentImg= checkbox.dataset.image;
               selectedIds.add(id);
             } else {
               selectedIds.delete(id);
@@ -186,6 +188,7 @@
           body: JSON.stringify({
             id: Array.from(selectedIds) ,
             title:titleInput.value.trim(),
+            image:currentImg,
             contentType: currentCategory
           })
         });
