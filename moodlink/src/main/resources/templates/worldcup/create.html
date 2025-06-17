@@ -74,6 +74,11 @@
 <h5>월드컵 생성 페이지입니다.</h5>
 
 <div layout:fragment="content">
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
   <h5>카테고리를 선택하세요:</h5>
   <div id="category-buttons">
     <button type="button" class="category-btn" data-category="Movie">영화</button>
@@ -135,12 +140,16 @@
         this.classList.add('selected');
 
         const contents = dummyContents[category] || [];
-        contentArea.innerHTML = contents.map(c => `
-          <label class="content-card" style="display:inline-block; margin:5px; padding:10px; border:1px solid #ccc; cursor:pointer;">
-            <input type="checkbox" name="contentIds" value="${c.id}" style="display:none;" />
-            <span>${c.title}</span>
-          </label>
-        `).join('');
+        contentArea.innerHTML = contents.map(c => {
+          const shortTitle = c.title.length > 10 ? c.title.slice(0, 10) + '...' : c.title;
+          return `
+    <label class="content-card" style="display:inline-block; margin:5px; padding:10px; border:1px solid #ccc; cursor:pointer; width:140px;">
+      <input type="checkbox" name="contentIds" value="${c.id}" data-image="${c.image}"  style="display:none;" />
+      <img src="${c.image}" alt="${c.title}" style="width:120px; height:120px; display:block; margin-bottom:5px;" />
+      <span title="${c.title}" style="display:inline-block; width:120px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${shortTitle}</span>
+    </label>
+  `;
+        }).join('');
 
         // 카드 클릭 이벤트 (선택/해제 처리 포함)
         document.querySelectorAll('.content-card').forEach(card => {
