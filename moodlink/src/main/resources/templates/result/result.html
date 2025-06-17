@@ -82,6 +82,7 @@
     .curation-header {
       display: flex;
       justify-content: space-between;
+      width: 100%;
       max-width: 1200px;
       margin: 0 auto;
       padding: 16px 0;
@@ -90,7 +91,6 @@
 
     .curation-label {
       flex: 1;
-      max-width: 33.33%;
       text-align: center;
       font-size: 20px;
       font-weight: bold;
@@ -233,6 +233,7 @@
 
     /* 별 버튼은 hover 배경 없음 */
     .toggle-star-btn {
+      position: inherit;
       background: none;
       border: none;
       padding: 0;
@@ -372,7 +373,8 @@
           <button class="toggle-star-btn"
                   th:classappend="${item.book.status} ? ' on' : ''"
                   th:id="'toggle-book-' + ${item.book.id}"
-                  th:attr="data-type='book', data-id=${item.book.id}">
+                  th:attr="data-type='book', data-id=${item.book.id}"
+                  onclick="toggle(this)">
             ★
           </button>
           <span class="like-msg">로그인 후, 좋아요!</span>
@@ -481,7 +483,7 @@
     <br><br><br><br><br><br>
   </main>
 
-
+</div>
 </body>
 </html>
 
@@ -499,14 +501,7 @@
     function toggle(btn) {
       const type = btn.dataset.type;
       const id = btn.dataset.id;
-      const isOn = btn.classList.contains('on');
-      const likeCountSpan = btn.parentElement.querySelector('.like-count');
-      let currentCount = parseInt(likeCountSpan.textContent, 10);
-      if (isOn) {
-        likeCountSpan.textContent = Math.max(currentCount - 1, 0); // 음수 방지
-      } else {
-        likeCountSpan.textContent = currentCount + 1;
-      }
+
       fetch(`/api/like/${type}/toggle`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -521,7 +516,16 @@
         const wasOn = btn.classList.contains('on'); // 이전 상태 기억
         btn.textContent = '★';
         btn.classList.toggle('on', isOn);
-
+        const likeCountSpan = btn.parentElement.querySelector('.like-count');
+        let currentCount = parseInt(likeCountSpan.textContent, 10);
+        console.log(isOn)
+        if(isOn) {
+          if (wasOn) {
+            likeCountSpan.textContent = Math.max(currentCount - 1, 0); // 음수 방지
+          } else {
+            likeCountSpan.textContent = currentCount + 1;
+          }
+        }
         const msg = btn.nextElementSibling; // <span class="like-msg"> 태그
 
         if (msg && !isOn && !wasOn) {
