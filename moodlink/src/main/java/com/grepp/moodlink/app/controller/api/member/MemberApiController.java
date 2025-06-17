@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +40,7 @@ public class MemberApiController {
         return ResponseEntity.ok(new ToggleResponse(updated));
     }
 
-    @PostMapping("/like/music")
+    @PostMapping("/like/musics")
     public ResponseEntity<ToggleResponse> toggleSong(@RequestBody ToggleRequest request,
         Authentication authentication) {
         //TODO: 비회원 시 바로 return
