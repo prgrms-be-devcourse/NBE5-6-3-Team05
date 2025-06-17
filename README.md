@@ -118,29 +118,6 @@
 
 </div>
 
-## 👨‍🔧 기술 스택 & 협업 도구
-<div align="center">
-<img src="readmeresource/stack.png" alt="stack" style="max-width: 100%; height: auto;">
-</div>
-
-<br/>
-
-## 📍 System Architeture
-<div align="center">
-<img src="readmeresource/system_architeture.jpg" alt="System Architeture" style="max-width: 100%; height: auto;">
-</div>
-
-<br/>
-
-## 📊 ERD
-<div align="center">
-<img src="readmeresource/moodlinkerd.png" alt="ERD" style="max-width: 100%; height: auto;">
-
-</div>
-
-<br/>
-
-<br/>
 
 ## 🛠️ 트러블 슈팅
 <div align="center">
