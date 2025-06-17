@@ -51,6 +51,7 @@ public class MusicRepositoryImpl implements MusicRepositoryCustom {
     @Override
     public List<MusicDto> searchContent(String contentName) {
         return queryFactory.select(Projections.constructor(MusicDto.class,
+                music.id,
                 music.title,
                 music.singer,
                 music.thumbnail,

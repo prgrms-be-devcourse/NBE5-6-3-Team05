@@ -1,8 +1,11 @@
 package com.grepp.moodlink.app.model.data.music;
 
+
 import com.grepp.moodlink.app.model.data.music.dto.MusicDto;
 import com.grepp.moodlink.app.model.data.music.dto.MusicWorldcupDto;
+import com.grepp.moodlink.app.model.data.music.dto.MusicGenreDto;
 import com.grepp.moodlink.app.model.data.music.entity.Music;
+import com.grepp.moodlink.app.model.data.music.entity.MusicGenre;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -132,6 +135,13 @@ public class MusicService {
                 id -> id,                    // key
                 id -> this.findDtoById(id)   // value
             ));
+    }
+
+
+    public MusicGenreDto getMusicGenre(String id){
+        Music music = musicRepository.findById(id).orElseThrow();
+        MusicGenre genre = music.getGenre();
+        return new MusicGenreDto(genre.getId(), genre.getName());
     }
 
 }

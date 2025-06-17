@@ -1,7 +1,10 @@
 package com.grepp.moodlink.app.model.data.book;
 
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
+import com.grepp.moodlink.app.model.data.book.dto.BookGenreDto;
 import com.grepp.moodlink.app.model.data.book.entity.Book;
+import com.grepp.moodlink.app.model.data.book.entity.BookGenre;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,6 +78,11 @@ public class BookService {
     @Transactional
     public void incrementLikeCount(String isbn) {
         Book book = bookRepository.findByIsbn(isbn);
+        if (book == null) {
+            // 예외를 던지거나 로그 남기고 종료
+            throw new EntityNotFoundException("Book not found for ISBN: " + isbn);
+        }
+
         Long currentCount = book.getLikeCount();
         book.setLikeCount(currentCount + 1);
     }
@@ -110,4 +118,11 @@ public class BookService {
                 isbn -> this.findByIsbn(isbn)   // value
             ));
     }
+
+    public BookGenreDto getBookGenre(String isbn){
+        Book book = bookRepository.findByIsbn(isbn);
+        BookGenre genre = book.getGenre();
+        return new BookGenreDto(genre.getId(), genre.getName());
+    }
+
 }

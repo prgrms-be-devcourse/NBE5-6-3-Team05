@@ -1,5 +1,6 @@
 package com.grepp.moodlink.app.model.data.movie;
 
+import com.grepp.moodlink.app.model.data.movie.dto.GenreDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieInfoDto;
 import com.grepp.moodlink.app.model.data.movie.dto.MovieWorldcupDto;
@@ -150,5 +151,13 @@ public class MovieService {
                 id -> id,                    // key
                 id -> this.findDtoById(id)   // value
             ));
+    }
+
+    public List<GenreDto> getMovieGenre(String id) {
+        Movie movie = movieRepository.findById(id).orElseThrow();
+        Set<Genre> genres = movie.getGenres();
+        return genres.stream()
+            .map(genre -> new GenreDto(genre.getId(), genre.getName()))
+            .collect(Collectors.toList());
     }
 }
