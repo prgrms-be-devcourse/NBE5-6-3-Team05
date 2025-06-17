@@ -27,36 +27,12 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthExceptionFilter authExceptionFilter;
-    private final JwtAuthenticationEntryPoint entryPoint;
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
             .build();
     }
-
-//    @Bean
-//    public AuthenticationSuccessHandler successHandler() {
-//        return new AuthenticationSuccessHandler() {
-//            @Override
-//            public void onAuthenticationSuccess(HttpServletRequest request,
-//                HttpServletResponse response, Authentication authentication)
-//                throws IOException, ServletException {
-//
-//                boolean isAdmin = authentication.getAuthorities()
-//                    .stream()
-//                    .anyMatch(authority ->
-//                        authority.getAuthority().equals("ROLE_ADMIN"));
-//
-//                if (isAdmin) {
-//                    response.sendRedirect("/admin/movies");
-//                    return;
-//                }
-//
-//                response.sendRedirect("/");
-//            }
-//        };
-//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

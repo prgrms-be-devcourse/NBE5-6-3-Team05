@@ -40,6 +40,13 @@ public class MovieDto implements ContentDto {
     private String summary;
     private String thumbnail;
 
+    public MovieDto(String title, String summary, LocalDate releaseDate, String thumbnail) {
+        this.title = title;
+        this.summary = summary;
+        this.releaseDate = releaseDate;
+        this.thumbnail = thumbnail;
+    }
+
     public MovieDto(String id, String title, String summary, LocalDate releaseDate, String thumbnail) {
         this.id = id;
         this.title = title;
