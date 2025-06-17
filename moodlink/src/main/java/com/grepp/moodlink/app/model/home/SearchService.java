@@ -18,7 +18,7 @@ public class SearchService {
     private String apiKey;
 
     public String searchYoutubeMovieTrailer(String title) throws Exception {
-        String encodedQuery = URLEncoder.encode(title + " 예고편", StandardCharsets.UTF_8);
+        String encodedQuery = URLEncoder.encode(title + "영화 예고편", StandardCharsets.UTF_8);
         String urlStr = String.format(
             "https://www.googleapis.com/youtube/v3/search?part=snippet&q=%s&type=video&maxResults=1&key=%s",
             encodedQuery, apiKey
