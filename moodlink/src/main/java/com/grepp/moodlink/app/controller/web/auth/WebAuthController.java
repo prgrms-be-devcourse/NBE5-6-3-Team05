@@ -47,7 +47,18 @@ public class WebAuthController {
         // 이메일 발송
         memberService.verify(signupRequest.toDto(), token);
 
+        return "redirect:/verification";
+    }
+
+    @GetMapping("/verification")
+    public String verification(){
         return "auth/verification";
+    }
+    
+    @GetMapping("/complete")
+    public String complete(Model model){
+        model.addAttribute("message", "회원 가입이 완료되었습니다!");
+        return "auth/complete";
     }
 
     // 이메일에서 confirm을 누를 시 회원 가입 완료
@@ -69,8 +80,7 @@ public class WebAuthController {
         // 회원 가입 후에 세션 삭제
         session.removeAttribute(token);
 
-        model.addAttribute("message", "회원 가입이 완료되었습니다!");
-        return "auth/complete";
+        return "redirect:/complete";
     }
 
     @GetMapping("/signin")
