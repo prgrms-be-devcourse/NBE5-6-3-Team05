@@ -17,75 +17,59 @@
 
 ##  ✨ 버전업 사항
 아래는 2차 프로젝트 대비 3차 프로젝트에서 개선된 주요 기능입니다.  
-화면으로 버전업 사항을 확인할 수 있는 일부 기능은 GIF로 확인할 수 있습니다.
+화면에서 버전업 사항을 확인할 수 있는 기능은 GIF 제작했습니다.
 
 
-| 기능명          | 설명                                        |
-|--------------|-------------------------------------------|
-| JWT 로그인      | 기존 세션 로그인에서 JWT 기반 인증 방식으로 개선             |
- 키워드 검색 개선    | 가수, 작가, 출판사명 등 다양한 조건으로 검색 가능             |
-| 장르별 조회	      | 장르를 선택하여 필터링 기능 제공                        |
-| 영화 예고편 재생    | 상세페이지에서 트레일러 영상 재생 지원                     |
-| 음악 트레일러 재생   | 음악 상세페이지에서 뮤직비디오 재생 가능                    |
-| 메일 인증 회원가입   | Kotlin + Outbox + Redis Pub/Sub 사용한 인증 구현 |
-| 관리자 페이지 개선   | 장르 관리 기능 추가, API 기반 콘텐츠 등록 개선             |
-| 모달창 통합       | 다양한 팝업 UI 통합 설계로 UX 개선                    |
-| 메인 페이지 개선    | 상위 콘텐츠 출력 , 추천 기록 출력, 헤더 변경, Moody 캐릭터 제작 |
-| LLM 기반 추천 개선 | 키워드별 추천 결과 캐싱(DB 저장)으로 안정적 추천 제공          |
+| 기능명          | 설명                                                     |
+|--------------|--------------------------------------------------------|
+| JWT 로그인      | 기존 세션 로그인에서 JWT 기반 인증 방식으로 개선                          |
+ 키워드 검색 개선    | 가수, 작가, 출판사명 등 다양한 조건으로 검색 가능                          |
+| 장르별 조회	      | 장르를 선택하여 필터링 기능 제공                                     |
+| 영화 예고편 재생    | 상세페이지에서 트레일러 영상 재생 지원                                  |
+| 음악 트레일러 재생   | 음악 상세페이지에서 뮤직비디오 재생 가능                                 |
+| 메일 인증 회원가입   | Kotlin + Outbox + Redis Pub/Sub 사용한 인증 구현              |
+| 관리자 페이지 개선   | 장르 관리 기능 추가, API 기반 콘텐츠 등록 개선                          |
+| 모달창 통합       | 다양한 팝업 UI 통합 설계로 UX 개선                                 |
+| 메인 페이지 개선    | 상위 콘텐츠 출력 , 추천 기록 출력, 헤더 변경, Moody 캐릭터 제작              |
+| LLM 기반 추천 개선 | 키워드별 추천 결과 캐싱(DB 저장)으로 안정적 추천 제공                       |
+| 월드컵 기능 추가    | 사용자가 영화, 음악, 도서 중 하나를 선택해 토너먼트 방식으로 자신의 최애를 골라가는 기능 제공 |
 
 ---
 <table>
   <tr>
-    <td align="center"><b>LLM 추천 키워드</b></td>
-    <td align="center"><b>추천 결과</b></td>
+    <td align="center"><b>메인 페이지 개선</b></td>
+    <td align="center"><b>월드컵 기능 추가</b></td>
+    <td align="center"><b>관리자 페이지 개선</b></td>
   </tr>
   <tr>
     <td align="center">
-      <img src="readmeresource/llm_recommend.gif" width="380"/>
+      <img src="readmeresource/mainPage.gif" width="380"/>
     </td>
     <td align="center">
-      <img src="readmeresource/recommend_result.gif" width="380"/>
-    </td>
-  </tr>
-
-  <tr>
-    <td align="center"><b>오늘의 운세</b></td>
-    <td align="center"><b>통합 검색(전체)</b></td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="readmeresource/fortune.gif" width="380"/>
+      <img src="readmeresource/worldcup.gif" width="380"/>
     </td>
     <td align="center">
-      <img src="readmeresource/main_search_all.gif" width="380"/>
+      <img src="readmeresource/.gif" width="380"/>
     </td>
   </tr>
 
   <tr>
-    <td align="center"><b>통합 검색(키워드)</b></td>
-    <td align="center"><b>마이페이지</b></td>
+    <td align="center"><b>키워드 검색 개선</b></td>
+    <td align="center"><b>장르별 조회 추가</b></td>
+    <td align="center"><b>트레일러 재생 추가</b></td>
   </tr>
   <tr>
     <td align="center">
       <img src="readmeresource/main_search_keyword.gif" width="380"/>
     </td>
     <td align="center">
-      <img src="readmeresource/mypage.gif" width="380"/>
+      <img src="readmeresource/searchGenre.gif" width="380"/>
+    </td>
+    <td align="center">
+      <img src="readmeresource/trailer.gif" width="380"/>
     </td>
   </tr>
 
-  <tr>
-    <td align="center"><b>관리자 페이지 – 추가</b></td>
-    <td align="center"><b>관리자 페이지 – 조회·수정</b></td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="readmeresource/admin_add.gif" width="380"/>
-    </td>
-    <td align="center">
-      <img src="readmeresource/admin_modify.gif" width="380"/>
-    </td>
-  </tr>
 </table>
 
 ## 🧑‍💻 팀원 소개
