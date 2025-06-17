@@ -16,9 +16,7 @@
 ---
 
 ##  ✨ 버전업 사항
-아래는 2차 프로젝트 대비 3차 프로젝트에서 개선된 주요 기능입니다.  
-화면에서 버전업 사항을 확인할 수 있는 기능은 GIF 제작했습니다.
-
+아래는 2차 프로젝트 대비 3차 프로젝트에서 개선된 주요 기능입니다.
 
 | 기능명          | 설명                                                     |
 |--------------|--------------------------------------------------------|
@@ -35,16 +33,29 @@
 | 월드컵 기능 추가    | 사용자가 영화, 음악, 도서 중 하나를 선택해 토너먼트 방식으로 자신의 최애를 골라가는 기능 제공 |
 
 ---
+
+##  👉 버전업 사항 보기
+- 화면에서 버전업 사항을 확인할 수 있는 기능은 GIF 제작했습니다.
+
 <table>
   <tr>
     <td align="center"><b>메인 페이지 개선</b></td>
-    <td align="center"><b>월드컵 기능 추가</b></td>
-    <td align="center"><b>관리자 페이지 개선</b></td>
+    <td align="center"><b>트레일러 재생 추가</b></td>
   </tr>
   <tr>
     <td align="center">
       <img src="readmeresource/mainPage.gif" width="380"/>
     </td>
+    <td align="center">
+      <img src="readmeresource/trailer.gif" width="380"/>
+    </td>
+  </tr>
+
+<tr>
+    <td align="center"><b>월드컵 기능 추가</b></td>
+    <td align="center"><b>관리자 페이지 개선</b></td>
+  </tr>
+  <tr>
     <td align="center">
       <img src="readmeresource/worldcup.gif" width="380"/>
     </td>
@@ -56,7 +67,6 @@
   <tr>
     <td align="center"><b>키워드 검색 개선</b></td>
     <td align="center"><b>장르별 조회 추가</b></td>
-    <td align="center"><b>트레일러 재생 추가</b></td>
   </tr>
   <tr>
     <td align="center">
@@ -64,9 +74,6 @@
     </td>
     <td align="center">
       <img src="readmeresource/searchGenre.gif" width="380"/>
-    </td>
-    <td align="center">
-      <img src="readmeresource/trailer.gif" width="380"/>
     </td>
   </tr>
 
