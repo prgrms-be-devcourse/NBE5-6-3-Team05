@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <th:block th:fragment="frg_static">
     <link rel="stylesheet"
@@ -390,7 +391,7 @@
         gap: 35px;
       }
 
-      h3{
+      h3 {
         margin-top: 16px;
         margin-bottom: 16px;
       }
@@ -660,16 +661,6 @@
       /*검색 모달*/
 
       /* 영화 모달 배경 */
-      .detailMovieModal {
-        display: none;
-        position: fixed;
-        inset: 0;
-        z-index: 1000;
-        background: rgba(0, 0, 0, .75);
-        justify-content: center;
-        align-items: center
-      }
-
       .detailMovieModal.active {
         display: flex
       }
@@ -779,7 +770,7 @@
       }
 
       .modal-bg.music {
-        flex: 1 1 55%;   /* 필요하면 50% 이하로 */
+        flex: 1 1 55%; /* 필요하면 50% 이하로 */
         max-height: 60vh;
         max-width: 20vw; /* 가로폭 ↓ */
       }
@@ -805,6 +796,11 @@
         top: 30px; left: 0;
         width: 100vw; height: 100vh;
         background: rgba(0,0,0,0.7);
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.7);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -826,6 +822,169 @@
         color: #fff;
         cursor: pointer;
       }
+
+      /* 모달 본문 레이아웃 */
+      .custom-modal-body-layout {
+        display: flex;
+        gap: 2rem;
+        align-items: flex-start;
+        margin-top: 1rem;
+      }
+
+      #modal-search-link:hover {
+        background-color: #a855f7;
+      }
+
+      /*모달 창 내 텍스트 전체보기/간략히 보기*/
+      .text-button {
+        background: none;
+        border: none;
+        color: #aaa;
+        font-size: 0.8rem;
+        cursor: pointer;
+        padding: 0;
+        text-decoration: underline;
+        opacity: 0.7;
+        transform: scale(0.9);
+      }
+
+      .text-button:hover {
+        color: #ccc;
+        opacity: 1;
+      }
+
+      /* 모달 스타일 */
+
+      detailModalResult {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(0, 0, 0, .75);
+        justify-content: center;
+        align-items: center
+      }
+
+      detailModalResult.active {
+        display: flex
+      }
+
+      /* 전체 모달 배경 (검은 반투명 배경) */
+      .custom-modal {
+        display: flex; /* 기본 display는 JS에서 hidden 클래스로 토글 관리 */
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background-color: rgba(0, 0, 0, 0.8);
+      }
+
+      /* JS에서 모달을 숨길 때 사용할 클래스 */
+      .custom-modal.hidden {
+        display: none;
+      }
+
+      /* 모달 내부 콘텐츠 영역 */
+      .custom-modal-content {
+        background-color: #1a1a1a;
+        padding: 2rem;
+        border-radius: 10px;
+        max-width: 800px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        color: white;
+      }
+
+      /* 닫기 버튼 (오른쪽 위 X 버튼) */
+      .custom-close-btn {
+        position: absolute;
+        top: 16px;
+        right: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #fff;
+        cursor: pointer;
+        background: none;
+        border: none;
+      }
+
+      .custom-close-btn:hover {
+        color: #aaa;
+      }
+
+      /* 이미지 영역 */
+      .custom-modal-body-main img,
+      .custom-modal-img {
+        width: 200px;
+        max-height: 250px;
+        object-fit: contain;
+        border-radius: 0;
+      }
+
+      /* 텍스트 정보 영역 */
+      .custom-modal-info {
+        flex: 1;
+        overflow-wrap: break-word;
+      }
+
+      /* 설명문 내부 여백 */
+      #custom-modal-meta p {
+        margin: 0.5rem 0;
+      }
+
+      /* 아래쪽 버튼 영역 */
+      #modal-like-wrapper {
+        margin-top: 1.5rem;
+        text-align: right;
+      }
+
+
+      /* PICK 강조 태그 */
+      .pick-tag {
+        display: inline-block;
+        background-color: #a259ff;
+        color: white;
+        font-weight: bold;
+        padding: 4px 8px;
+        border-radius: 6px;
+        margin-top: 10px;
+      }
+
+
+
+      /* 별 버튼은 hover 배경 없음 */
+      .toggle-star-btn {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(15, 23, 42, 0.7);
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+        color: #facc15;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        z-index: 2;
+      }
+
+      .toggle-star-btn:hover {
+        transform: scale(1.2) rotate(10deg);
+        color: #fef08a;
+        background: rgba(15, 23, 42, 0.9);
+        box-shadow: 0 4px 12px rgba(250, 204, 21, 0.5);
+      }
+
 
       .genre-title {
         padding-bottom: 24px;
@@ -1215,237 +1374,5 @@
     <a th:href="@{${page.url()}(page=${page.nextPage()})}"><i
         class="material-icons">chevron_right</i></a></li>
 </ul>
-<th:block th:fragment="modal">
-  <div>
-    <!-- 영화 모달 -->
-    <div class="detailMovieModal" id="movieDetailModal" onclick="if(event.target===this){closeMovieModal()}">
-      <div class="search-modal-content">
-        <img id="movieBg" class="modal-bg" src="" alt="배경"/>
-        <div class="modal-info">
-          <span class="modal-close" onclick="closeMovieModal()">×</span>
-          <h1 id="movieTitle" class="modal-title"></h1>
-          <ul class="modal-badges">
-            <li id="movieYear"></li>
-          </ul>
-          <p id="movieSummary" class="modal-summary"></p>
-          <button id="modalSearchMovieBtn" onclick="showMovieTrailer(document.getElementById('movieTitle').innerText)">예고편 보기</button>
-          <button id="modalBuyMovieBtn" onclick="youtubeMovie(document.getElementById('movieTitle').innerText)">영화 보러가기</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 음악 모달 -->
-    <div class="detailMusicModal" id="musicDetailModal" onclick="if(event.target===this){closeMusicModal()}">
-      <div class="search-modal-content">
-        <img id="musicBg" class="modal-bg" src="" alt="배경"/>
-        <div class="modal-info">
-          <span class="modal-close" onclick="closeMusicModal()">×</span>
-          <h1 id="musicTitle" class="modal-title"></h1>
-          <ul class="modal-badges">
-            <li id="musicYear"></li>
-            <li id="singer"></li>
-          </ul>
-          <h5><p id="musicDes"></p></h5>
-          <p id="musicSummary" class="modal-summary"></p>
-          <button id="modalSearchMusicBtn" onclick="showMusicTrailer(document.getElementById('musicTitle').innerText)">뮤직비디오 보기</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 도서 모달 -->
-    <div class="detailBookModal" id="bookDetailModal" onclick="if(event.target===this){closeBookModal()}">
-      <div class="search-modal-content">
-        <img id="bookBg" class="modal-bg" src="" alt="배경"/>
-        <div class="modal-info">
-          <span class="modal-close" onclick="closeBookModal()">×</span>
-          <h1 id="bookTitle" class="modal-title"></h1>
-          <ul class="modal-badges">
-            <li id="bookYear"></li>
-          </ul>
-          <h5><p id="bookDes"></p></h5>
-          <p id="bookSummary" class="modal-summary"></p>
-          <button id="modalSearchBtn" class="modal-play" disabled>도서 구매하기</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <script>
-    function showDetailModalMovie(title, releaseDate, summary, thumbnail) {
-      /* ===== 제목 ===== */
-      document.getElementById('movieTitle').textContent = title;
-      /* ===== 연도 ===== */
-      document.getElementById('movieYear').textContent = releaseDate.split('-')[0] || releaseDate;
-      /* ===== 영화 내용 ===== */
-      document.getElementById('movieSummary').innerHTML = summary;
-      /* ===== 썸네일 ===== */
-      const img = document.getElementById('movieBg');
-      img.src = thumbnail;
-
-      /* ===== 모달 표시 ===== */
-      document.getElementById('movieDetailModal').classList.add('active');
-
-    }
-
-    function youtubeMovie(title) {
-      fetch(`/api/trailer/movie?title=${encodeURIComponent(title)}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.movieVideoId) {
-            const videoUrl = `https://www.youtube.com/watch?v=${data.movieVideoId}`;
-            window.open(videoUrl, '_blank');
-          } else {
-            alert('영화를 찾을 수 없습니다.');
-          }
-        })
-        .catch(() => alert('영화를 불러오는 중 오류가 발생했습니다.'));
-    }
-
-    function showDetailModalMusic(title, releaseDate, summary, thumbnail, type, singer) {
-      /* ===== 제목·연도 ===== */
-      document.getElementById('musicTitle').textContent = title;
-      document.getElementById('musicYear').textContent =
-        releaseDate.split('-')[0] || releaseDate;
-      document.getElementById("musicDes").textContent = "가사";
-      document.getElementById("singer").textContent = singer;
-
-      /* ===== 가사·줄바꿈 처리 ===== */
-      const processedSummary = summary
-        .replace(/\n/g, '<br>')      // 줄바꿈 → <br>
-        .replace(/\[/g, '<br><br>[') // [ 앞에 <br><br>
-        .replace(/\]/g, ']<br>');    // ] 뒤에 <br>
-      document.getElementById('musicSummary').innerHTML = processedSummary;
-
-      /* ===== 썸네일 ===== */
-      const img = document.getElementById('musicBg');
-      img.src = thumbnail;
-
-      /* ===== 모달 표시 ===== */
-      document.getElementById('musicDetailModal').classList.add('active');
-
-      // const searchBtn = document.getElementById('modalSearchMusicBtn');
-      //
-      // // 음악 구매 버튼
-      // searchBtn.textContent = '음악 구매하기 사이트 ➜';
-      //
-      // // 활성화 + 클릭 이벤트
-      // searchBtn.disabled = false;
-      // searchBtn.onclick = () => {
-      //   const query = encodeURIComponent(title);
-      //   window.open(`https://www.youtube.com/search?q=${query}`, '_blank');
-      // };
-    }
-
-    function showDetailModalBook(title, releaseDate, summary, thumbnail, type) {
-      /* ===== 제목·연도 ===== */
-      document.getElementById('bookTitle').textContent = title;
-      document.getElementById('bookYear').textContent =
-        releaseDate.split('-')[0] || releaseDate;
-
-      document.getElementById("bookDes").textContent = "책 소개";
-
-      /* ===== 도서 내용 ===== */
-      document.getElementById('bookSummary').innerHTML = summary;
-
-      /* ===== 썸네일 ===== */
-      const img = document.getElementById('bookBg');
-      img.src = thumbnail;
-
-      /* ===== 모달 표시 ===== */
-      document.getElementById('bookDetailModal').classList.add('active');
-
-      /* ===== 검색 버튼 ===== */
-      const searchBtn = document.getElementById('modalSearchBtn');
-
-      // 책 구매 버튼
-      searchBtn.textContent = '책 구매하러 가기 ➜' ;
-
-      // 활성화 + 클릭 이벤트
-      searchBtn.disabled = false;
-      searchBtn.onclick = () => {
-        const query = encodeURIComponent(title);
-        window.open(`https://www.yes24.com/product/search?domain=ALL&query=${query}`, '_blank');
-      };
-    }
-
-    /* 영화 모달 닫기 */
-    function closeMovieModal() {
-      document.querySelector('.detailMovieModal').classList.remove('active');
-      const searchBtn = document.getElementById('movieDetailModal');
-      searchBtn.disabled = true;
-      searchBtn.onclick = null; // 이벤트 리셋
-    }
-
-    /* 음악 모달 닫기 */
-    function closeMusicModal() {
-      document.querySelector('.detailMusicModal').classList.remove('active');
-      const searchBtn = document.getElementById('musicDetailModal');
-      searchBtn.disabled = true;
-      searchBtn.onclick = null; // 이벤트 리셋
-    }
-
-    /* 도서 모달 닫기 */
-    function closeBookModal() {
-      document.querySelector('.detailBookModal').classList.remove('active');
-      const searchBtn = document.getElementById('bookDetailModal');
-      searchBtn.disabled = true;
-      searchBtn.onclick = null; // 이벤트 리셋
-    }
-
-    function showMovieTrailer(title) {
-      // 영화 예고편
-      fetch(`/api/trailer/movie?title=${encodeURIComponent(title)}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.movieVideoId) {
-            const iframe = document.getElementById('trailerMovieIframe');
-            iframe.src = `https://www.youtube.com/embed/${data.movieVideoId}?autoplay=1`;
-            document.getElementById('trailerMovieModal').style.display = 'flex';
-          } else {
-            alert('예고편을 찾을 수 없습니다.');
-          }
-        })
-        .catch(() => alert('영화를 불러오는 중 오류가 발생했습니다.'));
-
-    }
-
-    function showMusicTrailer(title) {
-      // 음악 유튜브 실행
-      fetch(`/api/trailer/music?title=${encodeURIComponent(title)}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.musicVideoId) {
-            const iframe = document.getElementById('trailerMusicIframe');
-            iframe.src = `https://www.youtube.com/embed/${data.musicVideoId}?autoplay=1`;
-            document.getElementById('trailerMusicModal').style.display = 'flex';
-          } else {
-            alert('음악을 찾을 수 없습니다.');
-          }
-        })
-        .catch(() => alert('음악을 불러오는 중 오류가 발생했습니다.'));
-
-    }
-
-    function closeTrailerModal(modalId, iframeId) {
-      const modal = document.getElementById(modalId);
-      const iframe = document.getElementById(iframeId);
-
-      if (modal && iframe) {
-        iframe.src = '';
-        modal.style.display = 'none';
-      }
-    }
-
-    function handleModalBackgroundClick(event) {
-      if (event.target.id === 'trailerModal') {
-        closeTrailerModal();
-      }
-    }
-  </script>
-</th:block>
 </body>
 </html>
-
-
-
-
-

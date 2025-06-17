@@ -100,6 +100,10 @@
     "<span th:text="${contentName}"></span>" 에 대한 검색결과입니다.
   </h4>
 
+
+      <!--  모달창html-->
+      <div id="modals-container"></div>
+
   <!-- 영화 -->
         <div class="category" id="movie">
           <div th:if="${#strings.isEmpty(contentName)}">
@@ -128,20 +132,26 @@
             <h4 th:if= "${movieContentWithGenre != null }" th:text="${genre}"></h4>
           </div>
 
+
           <div th:if="${movie != null and movie.size() > 0}" class="card-container">
 
-            <div th:each="m : ${movie}" class="card-movie"
-                 th:attr="onclick='showDetailModalMovie(' +
-                 '\'' + ${#strings.escapeJavaScript(m.title)} + '\',' +
-                 '\'' + ${#strings.escapeJavaScript(m.releaseDate)} + '\',' +
-                 '\'' + ${#strings.escapeJavaScript(m.summary)} + '\',' +
-                 '\'' + ${#strings.escapeJavaScript(m.thumbnail)} + '\'' +
-                 ')'"
-            >
-              <img th:src="${m.thumbnail}" alt="영화 썸네일" class="card-thumbnail"/>
-            </div>
-          </div>
 
+    </div>
+<!--    <h3><span class="highlight">영화</span> 검색 결과</h3>  -->
+    <div th:if="${movie.size() > 0}" class="card-container">
+      <div th:each="m : ${movie}" class="card-movie">
+        <button type="button"
+                class="details-btn"
+                data-type="movies"
+                th:attr="data-id=${m.id}">
+          <img th:src="${m.thumbnail}" alt="영화 썸네일" class="card-thumbnail"/>
+        </button>
+      </div>
+    </div><br><br><br><br>
+    <div th:if="${movie.size() == 0}"><h4>검색 자료가 없습니다.</h4></div>
+  </div>
+
+<!-- 
           <div th:if="${movieContentWithGenre != null and movieContentWithGenre.size() > 0 }" class="card-container">
             <div th:each="mg : ${movieContentWithGenre}" class="card-movie"
                  th:attr="onclick='showDetailModalMovie(' +
@@ -150,39 +160,7 @@
                  '\'' + ${#strings.escapeJavaScript(mg.summary)} + '\',' +
                  '\'' + ${#strings.escapeJavaScript(mg.thumbnail)} + '\'' +
                  ')'"
-            >
-              <img th:src="${mg.thumbnail}" alt="영화 썸네일" class="card-thumbnail"/>
-            </div>
-          </div><br><br><br><br>
-          <div th:if="${movieContentWithGenre == null and movie == null}"><h4>영화 검색 자료가 없습니다.</h4></div>
-        </div>
-        <!-- 영화 모달 -->
-        <div class = "detailMovieModal" id="movieDetailModal" onclick="if(event.target===this){closeMovieModal()}">
-          <div class="search-modal-content">
-            <img id="movieBg" class="modal-bg" src="" alt="배경"/>
-            <div class="modal-info">
-              <span class="modal-close" onclick="closeMovieModal()">×</span>
-              <h1 id="movieTitle" class="modal-title"></h1>
-              <ul class="modal-badges">
-                <li id="movieYear"></li>
-                <!--          <li id="modalGenre">장르</li>-->
-              </ul>
-              <p id="movieSummary" class="modal-summary"></p>
-              <button id="modalSearchMovieBtn" onclick="showMovieTrailer(document.getElementById('movieTitle').innerText)">예고편 보기</button>
-              <button id="modalBuyMovieBtn" onclick="youtubeMovie(document.getElementById('movieTitle').innerText)">영화 보러가기</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- 영화 예고편 유튜브 iframe -->
-        <div id="trailerMovieModal" class="trailer-modal" style="display:none;" onclick="handleModalBackgroundClick(event)">
-          <div class="trailer-modal-content">
-            <span class="trailer-modal-close" onclick="closeTrailerModal('trailerMovieModal', 'trailerMovieIframe')">×</span>
-            <iframe id = "trailerMovieIframe" class="trailerIframe" width="1280" height="620" frameborder="0"
-                    allow="autoplay; encrypted-media" allowfullscreen></iframe>
-          </div>
-        </div>
-
+            > -->
 
       <!--음악 -->
         <div class="category" id="music">
@@ -205,70 +183,37 @@
             <h4 th:if= "${musicContentWithGenre != null }" th:text="${genre}"></h4>
           </div>
 
-          <div th:if="${music != null and music.size() > 0}" class="card-container">
+
+    <!--    <h3><span class="highlight">음악</span> 검색 결과</h3>-->
+
+    <div th:if="${music.size() > 0}" class="card-container">
+      <div th:each="m : ${music}" class="card-music">
+        <button type="button"
+                class="details-btn"
+                data-type="musics"
+                th:attr="data-id=${m.id}">
+          <img th:src="${m.thumbnail}" alt="음악 썸네일" class="card-thumbnail"/>
+        </button>
+      </div>
+    </div><br><br><br><br>
+    <div th:if="${music.size() == 0}"><h4>검색 자료가 없습니다.</h4></div>
+  </div>
 
 
-            <div th:each="m : ${music}" class="card-music"
-                 th:attr = "onclick=
-             'showDetailModalMusic(' +
-               '\'' + ${#strings.escapeJavaScript(m.title)} + '\',' +
-               '\'' + ${#strings.escapeJavaScript(m.releaseDate)} + '\',' +
-               '\'' + ${#strings.escapeJavaScript(m.lyrics)} + '\',' +
-               '\'' + ${#strings.escapeJavaScript(m.thumbnail)} + '\',' +
-               '\'' + ${#strings.escapeJavaScript(m.singer)} + '\',' +
-             ')'"
-            >
-              <img th:src="${m.thumbnail}" alt="음악 썸네일" class="card-thumbnail music-thumb"/>
-            </div>
-          </div>
 
-          <div th:if="${musicContentWithGenre != null and musicContentWithGenre.size() > 0}" class="card-container">
+    <div th:if="${book.size() > 0}" class="card-container">
+      <div th:each="b : ${book}" class="card-book">
+        <button type="button"
+                class="details-btn"
+                data-type="books"
+                th:attr="data-id=${b.isbn}">
+          <img th:src="${b.image}" alt="도서 썸네일" class="card-thumbnail modal-bg.book"/>
+        </button>
+      </div>
+    </div><br><br><br><br>
+    <div th:if="${book.size() == 0}"><h4>검색 자료가 없습니다.</h4></div>
+  </div>
 
-            <div th:each="mg : ${musicContentWithGenre}" class="card-music"
-                 th:attr = "onclick=
-             'showDetailModalMusic(' +
-               '\'' + ${#strings.escapeJavaScript(mg.title)} + '\',' +
-               '\'' + ${#strings.escapeJavaScript(mg.releaseDate)} + '\',' +
-               '\'' + ${#strings.escapeJavaScript(mg.lyrics)} + '\',' +
-               '\'' + ${#strings.escapeJavaScript(mg.thumbnail)} + '\',' +
-               '\'' + ${#strings.escapeJavaScript(mg.singer)} + '\',' +
-             ')'"
-            >
-              <img th:src="${mg.thumbnail}" alt="음악 썸네일" class="card-thumbnail music-thumb"/>
-            </div>
-
-          </div><br><br><br><br>
-          <div th:if="${musicContentWithGenre == null and music == null}"><h4>음악 검색 자료가 없습니다.</h4></div>
-        </div>
-        <!-- 음악 모달 -->
-        <div class = "detailMusicModal" id="musicDetailModal" onclick="if(event.target===this){closeMusicModal()}">
-          <div class="search-modal-content">
-            <img id="musicBg" class="modal-bg" src="" alt="배경"/>
-            <div class="modal-info">
-              <span class="modal-close" onclick="closeMusicModal()">×</span>
-              <h1 id="musicTitle" class="modal-title"></h1>
-              <ul class="modal-badges">
-                <li id="musicYear"></li>
-                <li id="singer"></li>
-                <!--          <li id="modalGenre">장르</li>-->
-              </ul>
-              <h5><p id="musicDes"></p></h5>
-              <p id="musicSummary" class="modal-summary"></p>
-              <button id="modalSearchMusicBtn" onclick="showMusicTrailer(document.getElementById('musicTitle').innerText)">뮤직비디오 보기</button>
-
-
-            </div>
-          </div>
-        </div>
-
-        <!-- 음악 감상 유튜브 iframe -->
-        <div id="trailerMusicModal" class="trailer-modal" style="display:none;" onclick="handleModalBackgroundClick(event)">
-          <div class="trailer-modal-content">
-            <span class="trailer-modal-close" onclick="closeTrailerModal('trailerMusicModal', 'trailerMusicIframe')">×</span>
-            <iframe id = "trailerMusicIframe" class="trailerIframe" width="1280" height="620" frameborder="0"
-                    allow="autoplay; encrypted-media" allowfullscreen></iframe>
-          </div>
-        </div>
 
   <!-- 도서 -->
         <div class="category" id="book">
@@ -297,24 +242,8 @@
           </form>
           </div>
 
-          <div class="genre-title">
-            <h4 th:if= "${bookContentWithGenre != null }" th:text="${genre}"></h4>
-          </div>
 
-          <div th:if="${book != null and book.size() > 0}" class="card-container">
-            <div th:each="b : ${book}" class="card-book"
-                 th:attr = "onclick=
-             'showDetailModalBook(' +
-               '\'' + ${#strings.escapeJavaScript(b.title)} + '\',' +
-               '\'' + ${#strings.escapeJavaScript(b.publishedDate)} + '\',' +
-               '\'' + ${#strings.escapeJavaScript(b.description)} + '\',' +
-               '\'' + ${#strings.escapeJavaScript(b.image)} + '\',' +
-             ')'">
-              <img th:src="${b.image}" alt="도서 썸네일22222" class="card-thumbnail modal-bg.book"/>
-            </div>
-          </div>
-
-          <div th:if="${bookContentWithGenre != null and bookContentWithGenre.size() > 0}" class="card-container">
+<!--           <div th:if="${bookContentWithGenre != null and bookContentWithGenre.size() > 0}" class="card-container">
             <div th:each="bg : ${bookContentWithGenre}" class="card-book"
                  th:attr = "onclick=
              'showDetailModalBook(' +
@@ -327,34 +256,22 @@
             </div>
           </div><br><br><br><br>
           <div th:if="${bookContentWithGenre == null and book == null}"><h4>도서 검색 자료가 없습니다.</h4></div>
-        </div>
+        </div> -->
 
-
-        <!-- 도서 모달 -->
-        <div class = "detailBookModal" id="bookDetailModal" onclick="if(event.target===this){closeBookModal()}">
-          <div class="search-modal-content">
-            <img id="bookBg" class="modal-bg" src="" alt="배경"/>
-            <div class="modal-info">
-              <span class="modal-close" onclick="closeBookModal()">×</span>
-              <h1 id="bookTitle" class="modal-title"></h1>
-              <ul class="modal-badges">
-                <li id="bookYear"></li>
-                <!--          <li id="modalGenre">장르</li>-->
-              </ul>
-              <h5><p id="bookDes"></p></h5>
-              <p id="bookSummary" class="modal-summary"></p>
-              <button id="modalSearchBtn" class="modal-play" disabled>도서 구매하기</button>
-            </div>
-          </div>
-        </div>
-
-    </div>
 
 </main>
 </body>
 </html>
 
 <script>
+
+
+  // 모달창 html 불러오기
+  fetch('/html/modals.html')
+  .then(response => response.text())
+  .then(data => {
+    document.getElementById('modals-container').innerHTML = data;
+  });
 
   /* 카테고리 토글 */
   function showCategory(id) {
@@ -373,182 +290,11 @@
     if (movieCategory) showCategory(movieCategory);
   });
 
-  function showDetailModalMovie(title, releaseDate, summary, thumbnail) {
-    /* ===== 제목 ===== */
-    document.getElementById('movieTitle').textContent = title;
-    /* ===== 연도 ===== */
-    document.getElementById('movieYear').textContent = releaseDate.split('-')[0] || releaseDate;
-    /* ===== 영화 내용 ===== */
-    document.getElementById('movieSummary').innerHTML = summary;
-    /* ===== 썸네일 ===== */
-    const img = document.getElementById('movieBg');
-    img.src = thumbnail;
 
-    /* ===== 모달 표시 ===== */
-    document.getElementById('movieDetailModal').classList.add('active');
+  function searchByGenre(genre) {
+    window.location.href = '/search/genre?genreName=' + encodeURIComponent(genre);
 
-  }
-
-  function youtubeMovie(title) {
-    fetch(`/api/trailer/movie?title=${encodeURIComponent(title)}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.movieVideoId) {
-        const videoUrl = `https://www.youtube.com/watch?v=${data.movieVideoId}`;
-        window.open(videoUrl, '_blank');
-      } else {
-        alert('영화를 찾을 수 없습니다.');
-      }
-    })
-    .catch(() => alert('영화를 불러오는 중 오류가 발생했습니다.'));
-  }
-
-  function showDetailModalMusic(title, releaseDate, summary, thumbnail, type, singer) {
-    /* ===== 제목·연도 ===== */
-    document.getElementById('musicTitle').textContent = title;
-    document.getElementById('musicYear').textContent =
-        releaseDate.split('-')[0] || releaseDate;
-    document.getElementById("musicDes").textContent = "가사";
-    document.getElementById("singer").textContent = singer;
-
-    /* ===== 가사·줄바꿈 처리 ===== */
-    const processedSummary = summary
-    .replace(/\n/g, '<br>')      // 줄바꿈 → <br>
-    .replace(/\[/g, '<br><br>[') // [ 앞에 <br><br>
-    .replace(/\]/g, ']<br>');    // ] 뒤에 <br>
-    document.getElementById('musicSummary').innerHTML = processedSummary;
-
-    /* ===== 썸네일 ===== */
-    const img = document.getElementById('musicBg');
-    img.src = thumbnail;
-
-    /* ===== 모달 표시 ===== */
-    document.getElementById('musicDetailModal').classList.add('active');
-
-  }
-
-  function showDetailModalBook(title, releaseDate, summary, thumbnail, type) {
-    /* ===== 제목·연도 ===== */
-    document.getElementById('bookTitle').textContent = title;
-    document.getElementById('bookYear').textContent =
-        releaseDate.split('-')[0] || releaseDate;
-
-    document.getElementById("bookDes").textContent = "책 소개";
-
-    /* ===== 도서 내용 ===== */
-    document.getElementById('bookSummary').innerHTML = summary;
-
-    /* ===== 썸네일 ===== */
-    const img = document.getElementById('bookBg');
-    img.src = thumbnail;
-
-    /* ===== 모달 표시 ===== */
-    document.getElementById('bookDetailModal').classList.add('active');
-
-    /* ===== 검색 버튼 ===== */
-    const searchBtn = document.getElementById('modalSearchBtn');
-
-    // 책 구매 버튼
-    searchBtn.textContent = '책 구매하러 가기 ➜' ;
-
-    // 활성화 + 클릭 이벤트
-    searchBtn.disabled = false;
-    searchBtn.onclick = () => {
-      const query = encodeURIComponent(title);
-      window.open(`https://www.yes24.com/product/search?domain=ALL&query=${query}`, '_blank');
-    };
-  }
-
-  /* 영화 모달 닫기 */
-  function closeMovieModal() {
-    document.querySelector('.detailMovieModal').classList.remove('active');
-    const searchBtn = document.getElementById('movieDetailModal');
-    searchBtn.disabled = true;
-    searchBtn.onclick = null; // 이벤트 리셋
-  }
-
-  /* 음악 모달 닫기 */
-  function closeMusicModal() {
-    document.querySelector('.detailMusicModal').classList.remove('active');
-    const searchBtn = document.getElementById('musicDetailModal');
-    searchBtn.disabled = true;
-    searchBtn.onclick = null; // 이벤트 리셋
-  }
-
-  /* 도서 모달 닫기 */
-  function closeBookModal() {
-    document.querySelector('.detailBookModal').classList.remove('active');
-    const searchBtn = document.getElementById('bookDetailModal');
-    searchBtn.disabled = true;
-    searchBtn.onclick = null; // 이벤트 리셋
-  }
-
-  function showMovieTrailer(title) {
-    // 영화 예고편
-    fetch(`/api/trailer/movie?title=${encodeURIComponent(title)}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.movieVideoId) {
-        const iframe = document.getElementById('trailerMovieIframe');
-        iframe.src = `https://www.youtube.com/embed/${data.movieVideoId}?autoplay=1`;
-        document.getElementById('trailerMovieModal').style.display = 'flex';
-      } else {
-        alert('예고편을 찾을 수 없습니다.');
-      }
-    })
-    .catch(() => alert('영화를 불러오는 중 오류가 발생했습니다.'));
-
-  }
-
-  function showMusicTrailer(title) {
-    // 음악 유튜브 실행
-    fetch(`/api/trailer/music?title=${encodeURIComponent(title)}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.musicVideoId) {
-        const iframe = document.getElementById('trailerMusicIframe');
-        iframe.src = `https://www.youtube.com/embed/${data.musicVideoId}?autoplay=1`;
-        document.getElementById('trailerMusicModal').style.display = 'flex';
-      } else {
-        alert('음악을 찾을 수 없습니다.');
-      }
-    })
-    .catch(() => alert('음악을 불러오는 중 오류가 발생했습니다.'));
-
-  }
-
-  function closeTrailerModal(modalId, iframeId) {
-    const modal = document.getElementById(modalId);
-    const iframe = document.getElementById(iframeId);
-
-    if (modal && iframe) {
-      iframe.src = '';
-      modal.style.display = 'none';
-    }
-  }
-
-  function handleModalBackgroundClick(event) {
-    if (event.target.id === 'trailerModal') {
-      closeTrailerModal();
-    }
-  }
-
-  // 음악 장르 선택 버튼
-  function submitMusicGenre(genre) {
-    document.getElementById('musicGenreNameInput').value = genre;
-    document.getElementById('searchMusicWithGenreForm').submit();
-  }
-
-  // 도서 장르 선택 버튼
-  function submitBookGenre(genre) {
-    document.getElementById('bookGenreNameInput').value = genre;
-    document.getElementById('searchBookWithGenreForm').submit();
-  }
-
-  // 영화 장르 선택 버튼
-  function submitMovieGenre(genre) {
-    document.getElementById('movieGenreNameInput').value = genre;
-    document.getElementById('searchMovieWithGenreForm').submit();
   }
 
 </script>
+<script type="module" src="/js/modal.js"></script>

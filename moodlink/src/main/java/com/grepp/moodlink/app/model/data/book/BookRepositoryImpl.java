@@ -51,6 +51,7 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
     @Override
     public List<BookDto> searchContent(String contentName) {
         return queryFactory.select(Projections.constructor(BookDto.class,
+                book.isbn,
                 book.title,
                 book.description,
                 book.publishedDate,
