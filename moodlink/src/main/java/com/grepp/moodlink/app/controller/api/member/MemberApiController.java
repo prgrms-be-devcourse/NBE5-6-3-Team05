@@ -21,7 +21,7 @@ public class MemberApiController {
 
     private final LikeService likeService;
 
-    @PostMapping("/like/book")
+    @PostMapping("/like/books")
     public ResponseEntity<ToggleResponse> toggleBook(@RequestBody ToggleRequest request,
         Authentication authentication) {
 
@@ -56,7 +56,7 @@ public class MemberApiController {
         return ResponseEntity.ok(new ToggleResponse(updated));
     }
 
-    @PostMapping("/like/movie")
+    @PostMapping("/like/movies")
     public ResponseEntity<ToggleResponse> toggleMovie(@RequestBody ToggleRequest request,
         Authentication authentication) {
         //TODO: 비회원 시 바로 return

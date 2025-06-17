@@ -21,6 +21,8 @@ public class MusicRepositoryImpl implements MusicRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
     private final QMusic music = QMusic.music;
+    private final QMusicGenre genre = QMusicGenre.musicGenre;
+
 
 
     @Override
@@ -49,6 +51,7 @@ public class MusicRepositoryImpl implements MusicRepositoryCustom {
     @Override
     public List<MusicDto> searchContent(String contentName) {
         return queryFactory.select(Projections.constructor(MusicDto.class,
+                music.id,
                 music.title,
                 music.singer,
                 music.thumbnail,
@@ -63,8 +66,6 @@ public class MusicRepositoryImpl implements MusicRepositoryCustom {
 
     @Override
     public List<MusicDto> searchContentByGenre(String genreName) {
-        QMusic music = QMusic.music;
-        QMusicGenre genre = QMusicGenre.musicGenre;
         return queryFactory
             .select(Projections.constructor(MusicDto.class,
                 music.title,

@@ -21,7 +21,7 @@ public class MovieDto implements ContentDto {
     private String backdropPath;
     @JsonProperty("genre_ids")
     private List<Integer> genreIds;
-    private int id;
+    private String id;
     private String originalLanguage;
     private String originalTitle;
     private String overview;
@@ -40,7 +40,8 @@ public class MovieDto implements ContentDto {
     private String summary;
     private String thumbnail;
 
-    public MovieDto(String title, String summary, LocalDate releaseDate, String thumbnail) {
+    public MovieDto(String id, String title, String summary, LocalDate releaseDate, String thumbnail) {
+        this.id = id;
         this.title = title;
         this.summary = summary;
         this.releaseDate = releaseDate;

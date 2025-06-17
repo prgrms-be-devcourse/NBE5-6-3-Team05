@@ -26,20 +26,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-// JWT 토큰 검증 및 인증 처리. HTTP 요청에서 JWT 토큰을 추출하고 검증하여 사용자 인증을 처리
 
-// 동작 과정:
-// 1. 요청 헤더(Authorization) 또는 쿠키에서 JWT 토큰 추출
-// 2. 토큰 유효성 검증 (만료시간, 서명 등)
-// 3. 토큰에서 사용자 정보 추출
-// 4. SecurityContext에 Authentication 객체 설정
-
-// 위치: Spring Security 필터 체인의 앞쪽에 위치
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
-//    private final UserBlackListRepository userBlackListRepository;
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
@@ -63,10 +54,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         Claims claims = jwtProvider.parseClaim(requestAccessToken);
-//        if(userBlackListRepository.existsById(claims.getSubject())){
-//            filterChain.doFilter(request, response);
-//            return;
-//        }
 
         try {
             if(jwtProvider.validateToken(requestAccessToken)){
@@ -116,11 +103,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if(storedRefreshToken == null) {
             return null;
         }
-
-//        if (!storedRefreshToken.getToken().equals(refreshToken)) {
-//            userBlackListRepository.save(new UserBlackList(authentication.getName()));
-//            throw new CommonException(ResponseCode.SECURITY_INCIDENT);
-//        }
 
         return generateAccessToken(authentication);
     }

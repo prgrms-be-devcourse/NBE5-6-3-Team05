@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <title>MoodLink</title>
+
+  <th:block th:replace="fragments::frg_static"/>
+</head>
+
+<body th:class="${pageClass} ?: 'default'">
+<header th:replace="fragments::frg_header"></header>
+
+<main layout:fragment="content"></main>
+
+<div layout:fragment="scripts"></div>
+</body>
+</html>

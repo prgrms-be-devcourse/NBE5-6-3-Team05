@@ -11,4 +11,5 @@ public class TokenResponse {
     private String refreshToken;
     private GrantType grantType;
     private Long expiresIn;
+    private String role;
 }
