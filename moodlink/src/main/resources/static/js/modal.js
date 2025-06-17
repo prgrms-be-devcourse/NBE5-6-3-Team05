@@ -99,7 +99,7 @@ function openModal(type, data) {
     details += `<p><strong>가사:</strong> ${buildExpandable(data.music.lyrics || '가사 정보가 없습니다.', "lyrics")}</p>`;
 
     const trailerBtn = document.createElement('button');
-    trailerBtn.textContent = '예고편 보기';
+    trailerBtn.textContent = '뮤직비디오 보기';
     trailerBtn.addEventListener('click', () => showMusicTrailer(data.music.name));
     modalButtons.appendChild(trailerBtn);
   }
