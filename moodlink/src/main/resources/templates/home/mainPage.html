@@ -65,6 +65,14 @@
       width: 200px;
     }
 
+    .category-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 30px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
   </style>
 </head>
 <body>
@@ -85,13 +93,12 @@
       </form>
     </div>
 
-    <br><br>
     <h3>오늘의 기분, 하나의 링크로 영화·도서·음악을 만나보세요.</h3>
 
-    <div th:if="${!isAuthenticated}">
+    <div th:if="${!isAuthenticated or keyword == 'No exist keywords'}">
       <p class="content-description"><i>⭐ Best Content ⭐</i></p>
 
-      <div class="category">
+      <div class="category-container">
         <div class="category-card" onclick="showContentInfo('music')">
           <img th:src="@{${thumbnail[0]}}" alt="음악">
           <h5>음악</h5>
@@ -126,7 +133,7 @@
         </div>
       </div>
       <br>
-    </div><br><br>
+    </div><br>
 
     <div th:if="${keyword == 'No exist keywords'}" class="empty-message-container">
       <div class="empty-message-box">
@@ -142,10 +149,14 @@
     </div>
 
 
-    <div class="recommendation-container" th:if="${movies != null and !movies.isEmpty() and !isAuthenticated and keyword == ''}">
       <!-- 영화 추천 -->
       <div  class="recommendation-section">
+        <div class="recommendation-container" th:if="${!isAuthenticated or keyword == 'No exist keywords'}">
         <h4>🎬 인기 영화 TOP 10 </h4>
+    </div>
+    <div class="recommendation-container" th:if="${isAuthenticated and keyword != 'No exist keywords'}">
+      <h4>🎬 추천 받은 영화 </h4>
+    </div>
         <div class="swiper movie-swiper">
           <div class="swiper-wrapper">
             <div class="swiper-slide" th:each="m : ${movies}">
@@ -165,7 +176,12 @@
 
       <!-- 책 추천 -->
       <div class="recommendation-section">
-        <h4>📚 인기 도서 TOP 10 </h4>
+        <div class="recommendation-container" th:if="${!isAuthenticated or keyword == 'No exist keywords'}">
+          <h4>📚 인기 도서 TOP 10 </h4>
+        </div>
+        <div class="recommendation-container" th:if="${isAuthenticated and keyword != 'No exist keywords'}">
+          <h4>📚 추천 받은 도서 </h4>
+        </div>
         <div class="swiper book-swiper">
           <div class="swiper-wrapper">
             <div class="swiper-slide" th:each="b : ${books}">
@@ -184,7 +200,12 @@
 
       <!-- 음악 추천 -->
       <div class="recommendation-section">
-        <h4>🎵 인기 음악 TOP 10 </h4>
+        <div class="recommendation-container" th:if="${!isAuthenticated or keyword == 'No exist keywords'}">
+          <h4>🎵 인기 음악 TOP 10 </h4>
+        </div>
+        <div class="recommendation-container" th:if="${isAuthenticated and keyword != 'No exist keywords'}">
+          <h4>🎵 추천 받은 음악 </h4>
+        </div>
         <div class="swiper music-swiper">
           <div class="swiper-wrapper">
             <div class="swiper-slide" th:each="m : ${musics}">
@@ -199,129 +220,65 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="recommendation-container" th:if="${movies != null and !movies.isEmpty() and isAuthenticated and keyword != 'No exist keywords'}">
-
-      <!-- 영화 추천 -->
-      <div  class="recommendation-section">
-        <h4>🎬 추천 받은 영화 </h4><br>
-        <div class="swiper movie-swiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="m : ${movies}">
-            <button type="button"
-                    class="details-btn"
-                    data-type="movies"
-                    th:attr="data-id=${m.id}">
-              <img th:src="${m.thumbnail}" alt="영화 이미지" class="content-image"/>
-            </button>
-
-              <p class="recommend-content-title"
-                 th:text="${#strings.length(m.title) > 12 ? #strings.substring(m.title, 0, 12) + '...' : m.title}">
-                제목
-              </p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-
-      <!-- 책 추천 -->
-      <div class="recommendation-section">
-        <h4>📚 추천 받은 도서 </h4><br>
-        <div class="swiper book-swiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="b : ${books}">
-              <button type="button"
-                      class="details-btn"
-                      data-type="books"
-                      th:attr="data-id=${b.isbn}">
-                <img th:src="${b.image}" alt="도서 이미지" class="content-image" />
-              </button>
-              <p class="recommend-content-title" th:text="${#strings.length(b.title) > 12 ? #strings.substring(b.title, 0, 12) + '...' : b.title}">제목</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 음악 추천 -->
-      <div class="recommendation-section">
-        <h4>🎵 추천 받은 음악 </h4><br>
-        <div class="swiper music-swiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="m : ${musics}">
-              <button type="button"
-                      class="details-btn"
-                      data-type="musics"
-                      th:attr="data-id=${m.id}">
-                <img th:src="${m.thumbnail}" alt="음악 이미지" class="content-image"/>
-              </button>
-              <p class="recommend-content-title" th:text="${#strings.length(m.title) > 12 ? #strings.substring(m.title, 0, 12) + '...' : m.title}">제목</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  </div>
+  </div>
 
 
     <br><br><br>
 
-    <script th:inline="javascript">
+  <script th:inline="javascript">
 
-      // 모달창 html 불러오기
-      fetch('/html/modals.html')
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById('modals-container').innerHTML = data;
-      });
+    // 모달창 html 불러오기
+    fetch('/html/modals.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('modals-container').innerHTML = data;
+    });
 
-      function showContentInfo(id) {
-        const info = document.getElementById(id + '-info');
-        if (info.style.display === 'block') {
-          info.style.display = 'none';
-        } else {
-          document.querySelectorAll('.content-info').forEach(el => el.style.display = 'none');
-          info.style.display = 'block';
-        }
+    function showContentInfo(id) {
+      const info = document.getElementById(id + '-info');
+      if (info.style.display === 'block') {
+        info.style.display = 'none';
+      } else {
+        document.querySelectorAll('.content-info').forEach(el => el.style.display = 'none');
+        info.style.display = 'block';
       }
+    }
 
-      document.addEventListener('DOMContentLoaded', function () {
-        new Swiper('.movie-swiper', {
-          loop: true,
-          slidesPerView: 'auto',
-          spaceBetween: 16,
-          autoplay: {
-            delay: 2500,
-            disableOnInteraction: false,
-          },
-        });
-
-        new Swiper('.book-swiper', {
-          loop: true,
-          slidesPerView: 'auto',
-          spaceBetween: 16,
-          autoplay: {
-            delay: 2700,
-            disableOnInteraction: false,
-          },
-        });
-
-        new Swiper('.music-swiper', {
-          loop: true,
-          slidesPerView: 'auto',
-          spaceBetween: 16,
-          autoplay: {
-            delay: 2900,
-            disableOnInteraction: false,
-          },
-        });
+    document.addEventListener('DOMContentLoaded', function () {
+      new Swiper('.movie-swiper', {
+        loop: true,
+        slidesPerView: 'auto',
+        spaceBetween: 16,
+        autoplay: {
+          delay: 2500,
+          disableOnInteraction: false,
+        },
       });
-    </script>
-  </div>
-</div>
 
+      new Swiper('.book-swiper', {
+        loop: true,
+        slidesPerView: 'auto',
+        spaceBetween: 16,
+        autoplay: {
+          delay: 2700,
+          disableOnInteraction: false,
+        },
+      });
+
+      new Swiper('.music-swiper', {
+        loop: true,
+        slidesPerView: 'auto',
+        spaceBetween: 16,
+        autoplay: {
+          delay: 2900,
+          disableOnInteraction: false,
+        },
+      });
+    });
+  </script>
+</div>
 </body>
 </html>
 
