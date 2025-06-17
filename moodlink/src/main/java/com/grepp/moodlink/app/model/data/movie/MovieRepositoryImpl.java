@@ -2,6 +2,7 @@ package com.grepp.moodlink.app.model.data.movie;
 
 import com.grepp.moodlink.app.model.data.movie.dto.MovieDto;
 import com.grepp.moodlink.app.model.data.movie.entity.Movie;
+import com.grepp.moodlink.app.model.data.movie.entity.QGenre;
 import com.grepp.moodlink.app.model.data.movie.entity.QMovie;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -24,6 +25,8 @@ public class MovieRepositoryImpl implements MovieRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
     private final QMovie movie = QMovie.movie;
+    private final QGenre genre = QGenre.genre;
+
 
     @Override
     public String findTopThumbnail() {
@@ -66,5 +69,18 @@ public class MovieRepositoryImpl implements MovieRepositoryCustom {
             );
 
         return Optional.ofNullable(content.fetchOne());
+    }
+
+    public List<MovieDto> searchContentByGenre(String genreName) {
+        return queryFactory
+            .select(Projections.constructor(MovieDto.class,
+                movie.title,
+                movie.summary,
+                movie.releaseDate,
+                movie.thumbnail))
+            .from(movie)
+            .join(movie.genres, genre)
+            .where(genre.name.eq(genreName))
+            .fetch();
     }
 }

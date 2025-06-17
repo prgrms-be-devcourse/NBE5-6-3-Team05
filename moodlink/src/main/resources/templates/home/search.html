@@ -6,9 +6,12 @@
   <meta charset="UTF-8">
   <title>검색 결과</title>
   <style>
+    .header- {
+      position: static !important;
+    }
     html, body {
       height: 100%;
-      overflow: hidden; /* 전체 페이지 스크롤 막기 */
+      /*overflow: hidden; !* 전체 페이지 스크롤 막기 *!*/
       margin: 0;
       padding: 0;
     }
@@ -17,9 +20,9 @@
       display: flex;
       flex-direction: column;
       width: 100%;
-      overflow-y: auto;
+      /*overflow-y: auto;*/
       margin-top: 60px;
-      height: 100vh;
+      /*height: 100vh;*/
     }
     .container::-webkit-scrollbar {
       display: none;
@@ -31,6 +34,7 @@
       text-align: center;
       font-family: 'Noto Sans KR', sans-serif;
     }
+
 
     .main-content {
       margin: 70px auto 0;
@@ -52,6 +56,12 @@
       margin-top: 30px;
       flex-wrap: wrap;
     }
+
+    .menu {
+      display: flex;
+      flex-direction: row;
+      justify-content: center
+    }
   </style>
 </head>
 <body>
@@ -61,7 +71,7 @@
     <div class="main-content container">
 
       <div class="search-container">
-        <form id="searchForm" th:action="@{/search}" method="get">
+        <form id="searchAllForm" th:action="@{/search/all}" method="get">
           <input type="text" id="search-input" name="contentName" placeholder="원하는 음악,영화,도서를 찾아보세요!">
           <button type="submit">검색</button>
         </form>
@@ -71,44 +81,60 @@
 
       <!-- 카테고리 메뉴 -->
       <div class="menu">
+        <form id="searchMovieForm" th:action="@{/search/movie}" method="get">
+          <input type="hidden" id="search-movie" name="contentName" >
         <button onclick="showCategory('movie')">🎬 영화</button>
+        </form>
+        <form id="searchMusicForm" th:action="@{/search/music}" method="get">
+          <input type="hidden" id="search-music" name="contentName" >
         <button onclick="showCategory('music')">🎧 음악</button>
+        </form>
+        <form id="searchBookForm" th:action="@{/search/book}" method="get">
+          <input type="hidden" id="search-book" name="contentName" >
         <button onclick="showCategory('book')">📚 도서</button>
+        </form>
       </div>
-
-  <!-- contentName 이 비었을 때 -->
-  <h4 th:if="${#strings.isEmpty(contentName)}">전체 검색결과입니다.</h4>
 
   <!-- contentName 이 있을 때 -->
   <h4 th:unless="${#strings.isEmpty(contentName)}">
     "<span th:text="${contentName}"></span>" 에 대한 검색결과입니다.
   </h4>
 
+
       <!--  모달창html-->
       <div id="modals-container"></div>
 
   <!-- 영화 -->
-  <div class="category" id="movie">
-    <div id = movieGenre>
-      동화
-      라이트노벨
-      무협소설
-      수필
-      스릴러
-      시집
-      추리소설
-      판타지소설
-      프로그래밍
-      인문학
-      심리학
-      철학
-      문화인류학
-      종교학
-      한국소설
-      외국소설
-      고전문학
-      현대문학
-      사회학
+        <div class="category" id="movie">
+          <div th:if="${#strings.isEmpty(contentName)}">
+          <form  id="searchMovieWithGenreForm" th:action="@{/search/genre/movie}" method="get">
+            <input type="hidden" id="selectedMovieCategory" th:value="${selectedMovieCategory}" />
+            <input type="hidden" name="genreName" id="movieGenreNameInput"/>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('모험')">모험</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('판타지')">판타지</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('애니메이션')">애니메이션</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('드라마')">드라마</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('공포')">공포</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('액션')">액션</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('코미디')">코미디</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('역사')">역사</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('스릴러')">스릴러</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('범죄')">범죄</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('다큐멘터리')">다큐멘터리</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('SF')">SF</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('미스터리')">미스터리</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('로맨스')">로맨스</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('전쟁')">전쟁</button>
+          </form>
+        </div>
+
+          <div class="genre-title">
+            <h4 th:if= "${movieContentWithGenre != null }" th:text="${genre}"></h4>
+          </div>
+
+
+          <div th:if="${movie != null and movie.size() > 0}" class="card-container">
+
 
     </div>
 <!--    <h3><span class="highlight">영화</span> 검색 결과</h3>  -->
@@ -124,16 +150,38 @@
     </div><br><br><br><br>
     <div th:if="${movie.size() == 0}"><h4>검색 자료가 없습니다.</h4></div>
   </div>
-      <div class="category" id="music">
 
-          <button onclick="searchByGenre('발라드')">발라드</button>
-          <button onclick="searchByGenre('댄스')">댄스</button>
-          <button onclick="searchByGenre('힙합')">힙합</button>
-          <button onclick="searchByGenre('R&B')">R&B</button>
-          <button onclick="searchByGenre('인디음악')">인디음악</button>
-          <button onclick="searchByGenre('록/메탈')">록/메탈</button>
-          <button onclick="searchByGenre('트로트')">트로트</button>
-          <button onclick="searchByGenre('포크/블루스')">포크/블루스</button>
+<!-- 
+          <div th:if="${movieContentWithGenre != null and movieContentWithGenre.size() > 0 }" class="card-container">
+            <div th:each="mg : ${movieContentWithGenre}" class="card-movie"
+                 th:attr="onclick='showDetailModalMovie(' +
+                 '\'' + ${#strings.escapeJavaScript(mg.title)} + '\',' +
+                 '\'' + ${#strings.escapeJavaScript(mg.releaseDate)} + '\',' +
+                 '\'' + ${#strings.escapeJavaScript(mg.summary)} + '\',' +
+                 '\'' + ${#strings.escapeJavaScript(mg.thumbnail)} + '\'' +
+                 ')'"
+            > -->
+
+      <!--음악 -->
+        <div class="category" id="music">
+          <div th:if="${#strings.isEmpty(contentName)}">
+            <form  id="searchMusicWithGenreForm" th:action="@{/search/genre/music}" method="get">
+            <input type="hidden" id="selectedMusicCategory" th:value="${selectedMusicCategory}" />
+            <input type="hidden" name="genreName" id="musicGenreNameInput"/>
+            <button type="button" class = "genre-btn" onclick="submitMusicGenre('발라드')">발라드</button>
+            <button type="button" class = "genre-btn" onclick="submitMusicGenre('댄스')">댄스</button>
+            <button type="button" class = "genre-btn" onclick="submitMusicGenre('힙합')">힙합</button>
+            <button type="button" class = "genre-btn" onclick="submitMusicGenre('R&B')">R&B</button>
+            <button type="button" class = "genre-btn" onclick="submitMusicGenre('인디음악')">인디음악</button>
+            <button type="button" class = "genre-btn" onclick="submitMusicGenre('록/메탈')">록/메탈</button>
+            <button type="button" class = "genre-btn" onclick="submitMusicGenre('트로트')">트로트</button>
+            <button type="button" class = "genre-btn" onclick="submitMusicGenre('포크/블루스')">포크/블루스</button>
+          </form>
+          </div>
+
+          <div class="genre-title">
+            <h4 th:if= "${musicContentWithGenre != null }" th:text="${genre}"></h4>
+          </div>
 
 
     <!--    <h3><span class="highlight">음악</span> 검색 결과</h3>-->
@@ -151,27 +199,6 @@
     <div th:if="${music.size() == 0}"><h4>검색 자료가 없습니다.</h4></div>
   </div>
 
-  <!-- 도서 -->
-  <div class="category" id="book">
-    동화
-    라이트노벨
-    무협소설
-    수필
-    스릴러
-    시집
-    추리소설
-    판타지소설
-    프로그래밍
-    인문학
-    심리학
-    철학
-    문화인류학
-    종교학
-    한국소설
-    외국소설
-    고전문학
-    현대문학
-    사회학
 
 
     <div th:if="${book.size() > 0}" class="card-container">
@@ -186,6 +213,51 @@
     </div><br><br><br><br>
     <div th:if="${book.size() == 0}"><h4>검색 자료가 없습니다.</h4></div>
   </div>
+
+
+  <!-- 도서 -->
+        <div class="category" id="book">
+          <div th:if="${#strings.isEmpty(contentName)}">
+          <form  id="searchBookWithGenreForm" th:action="@{/search/genre/book}" method="get">
+            <input type="hidden" id ="selectedBookCategory" th:value="${selectedBookCategory}" />
+            <input type="hidden" name="genreName" id="bookGenreNameInput"/>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('동화')">동화</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('라이트노벨')">라이트노벨</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('무협소설')">무협소설</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('수필')">수필</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('시집')">시집</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('추리소설')">추리소설</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('판타지소설')">판타지소설</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('프로그래밍')">프로그래밍</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('인문학')">인문학</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('심리학')">심리학</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('철학')">철학</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('문화인류학')">문화인류학</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('종교학')">종교학</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('한국소설')">한국소설</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('외국소설')">외국소설</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('고전문학')">고전문학</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('현대문학')">현대문학</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('사회학')">사회학</button>
+          </form>
+          </div>
+
+
+<!--           <div th:if="${bookContentWithGenre != null and bookContentWithGenre.size() > 0}" class="card-container">
+            <div th:each="bg : ${bookContentWithGenre}" class="card-book"
+                 th:attr = "onclick=
+             'showDetailModalBook(' +
+               '\'' + ${#strings.escapeJavaScript(bg.title)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(bg.publishedDate)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(bg.description)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(bg.image)} + '\',' +
+             ')'">
+              <img th:src="${bg.image}" alt="도서 썸네일" class="card-thumbnail modal-bg.book"/>
+            </div>
+          </div><br><br><br><br>
+          <div th:if="${bookContentWithGenre == null and book == null}"><h4>도서 검색 자료가 없습니다.</h4></div>
+        </div> -->
+
 
 </main>
 </body>
@@ -207,10 +279,21 @@
     document.getElementById(id).style.display = 'block';
   }
 
-  document.addEventListener('DOMContentLoaded', () => showCategory('movie'));
+  document.addEventListener('DOMContentLoaded', () => {
+    const musicCategory = document.getElementById('selectedMusicCategory')?.value;
+    const bookCategory = document.getElementById('selectedBookCategory')?.value;
+    const movieCategory = document.getElementById('selectedMovieCategory')?.value;
+
+    // 각 카테고리 값이 존재하면 showCategory 실행
+    if (musicCategory) showCategory(musicCategory);
+    if (bookCategory) showCategory(bookCategory);
+    if (movieCategory) showCategory(movieCategory);
+  });
+
 
   function searchByGenre(genre) {
     window.location.href = '/search/genre?genreName=' + encodeURIComponent(genre);
+
   }
 
 </script>

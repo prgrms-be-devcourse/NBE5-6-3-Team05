@@ -106,8 +106,13 @@
         backdrop-filter: blur(10px);
         background: rgba(255, 255, 255, 0.05);
         border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow:
+            0 0 15px rgba(186, 85, 211, 0.6),
+            0 0 30px rgba(186, 85, 211, 0.4),
+            0 0 45px rgba(186, 85, 211, 0.3),
+            0 0 60px rgba(186, 85, 211, 0.2),
+            0 8px 24px rgba(0, 0, 0, 0.3);
         padding: 20px;
         width: 260px;
         text-align: center;
@@ -117,8 +122,14 @@
       }
 
       .category-card:hover {
-        transform: translateY(-10px) scale(1.05);
-        box-shadow: 0 20px 40px rgba(255, 99, 71, 0.4);
+        transform: translateY(-12px) scale(1.08);
+        box-shadow:
+            0 0 20px rgba(186, 85, 211, 0.8),
+            0 0 40px rgba(186, 85, 211, 0.6),
+            0 0 60px rgba(186, 85, 211, 0.5),
+            0 0 80px rgba(186, 85, 211, 0.4),
+            0 0 100px rgba(186, 85, 211, 0.3),
+            0 20px 60px rgba(0, 0, 0, 0.5);
       }
 
       .category-card::before {
@@ -630,8 +641,9 @@
 
       /* 도서 */
       .card-book {
-        flex: 0 0 calc(25% - 16px); /* 4개 = 100 / 4, gap 보정 */
-        max-width: 250px; /* 250px 이상 커지지 않도록 */
+        flex: 1 1 calc(28% - 16px);
+        max-width: 250px;
+
         border: 4px solid;
         border-image: linear-gradient(to right, #a34dff, #2ebf91) 1;
         border-radius: 6px;
@@ -764,9 +776,15 @@
       }
 
       .modal-bg.book {
-        flex: 1 1 35%; /* 가로폭 축소 – 숫자는 취향껏 조정 */
+        flex: 1 1 70%; /* 가로폭 축소 – 숫자는 취향껏 조정 */
         max-height: 60vh; /* 가로·세로 비율 그대로 축소 */
       }
+
+      /*.card-book.search-result {*/
+      /*  flex: 1 1 100%;*/
+      /*  max-width: none;*/
+      /*}*/
+
 
       .highlight {
         color: #a3cf22; /* 포인트 색상 */
@@ -786,7 +804,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 1000;
+        z-index: 1200;
       }
 
       .trailer-modal-content {
@@ -968,6 +986,180 @@
       }
 
 
+      .genre-title {
+        padding-bottom: 24px;
+        text-align: center;
+      }
+
+      .genre-title h4 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #d1b3ff; /* 연보라 */
+        font-family: 'Pretendard', 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+        letter-spacing: 0.8px;
+        text-shadow:
+            0 0 6px rgba(209, 179, 255, 0.6),
+            0 0 12px rgba(209, 179, 255, 0.4),
+            0 0 18px rgba(209, 179, 255, 0.2);
+        margin-top: 30px;
+        position: relative;
+        display: inline-block;
+      }
+
+
+      .genre-button-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 25px 0;
+        justify-content: center;
+      }
+
+      .genre-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 30px;
+        background-color: #f7f7f7;
+        color: #222;
+        font-family: 'Segoe UI', 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+        font-weight: 500;
+        font-size: 15.5px;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.2s ease;
+      }
+
+      .genre-btn:hover {
+        background-color: #0066ff;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 2px 4px 12px rgba(0,0,0,0.2);
+      }
+
+      .menu {
+        display: flex;
+        gap: 10px; /* 버튼 사이 여백 */
+      }
+
+      .menu form {
+        margin: 0; /* 기본 여백 제거 */
+      }
+
+      .menu button {
+        padding: 8px 16px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      #search-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /*margin-top: 100px; !* 헤더 높이보다 큰 여백을 확보 *!*/
+        z-index: 1;
+        position: relative;
+      }
+
+      #searchAllButton button {
+        background-color: #6C63FF;
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      #searchAllButton button:hover {
+        background-color: #5751d6;
+        transform: translateY(-3px);
+      }
+
+      .empty-message-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+        /* 배경색 제거 */
+      }
+
+      .empty-message-box {
+        background-color: #fff6e8; /* 콘텐츠 박스만 배경 */
+        border: 1px solid #f1c995;
+        border-radius: 20px;
+        padding: 40px 60px;
+        text-align: center;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        max-width: 600px;
+        animation: fadeIn 0.8s ease-in-out;
+      }
+
+      .empty-message-box h2 {
+        font-size: 1.8rem;
+        color: #b36b00;
+        margin-bottom: 12px;
+      }
+
+      .empty-message-box p {
+        font-size: 1.1rem;
+        color: #6b4c1e;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .recommendation-container .swiper-slide {
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 10px;
+      }
+
+      .recommendation-container .swiper-slide:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+      }
+
+      /* 영화 - 붉은 느낌 */
+      .search-title.movie h4 {
+        color: #ff6b6b; /* 밝은 빨강 */
+        text-shadow:
+            0 0 6px rgba(255, 107, 107, 0.6),
+            0 0 12px rgba(255, 107, 107, 0.4),
+            0 0 18px rgba(255, 107, 107, 0.2);
+        display: block;       /* 블록 요소로 확실히 */
+        width: 100%;          /* 가로 꽉 채우기 */
+        margin-bottom: 16px;  /* 아래 여백 */
+      }
+
+      /* 음악 - 파란 느낌 */
+      .search-title.music h4 {
+        color: #4a90e2; /* 밝은 파랑 */
+        text-shadow:
+            0 0 6px rgba(74, 144, 226, 0.6),
+            0 0 12px rgba(74, 144, 226, 0.4),
+            0 0 18px rgba(74, 144, 226, 0.2);
+        display: block;       /* 블록 요소로 확실히 */
+        width: 100%;          /* 가로 꽉 채우기 */
+        margin-bottom: 16px;  /* 아래 여백 */
+      }
+
+      /* 도서 - 초록 느낌 */
+      .search-title.book h4 {
+        color: #7ed56f; /* 연두 초록 */
+        text-shadow:
+            0 0 6px rgba(126, 213, 111, 0.6),
+            0 0 12px rgba(126, 213, 111, 0.4),
+            0 0 18px rgba(126, 213, 111, 0.2);
+      }
+
+
+
     </style>
 
   </th:block>
@@ -975,12 +1167,12 @@
 <body>
 <!--<div layout:fragment="content">-->
 <th:block th:fragment="frg_header">
-  <header>
+  <header class ="header-">
     <div class="header-menu">
       <a th:href="@{/}">
         <div class="logo"><span>Moodlink</span></div>
       </a>
-      <form th:action="@{/search}" method="get"
+      <form th:action="@{/search/all}" method="get"
       style="display: flex; flex-direction: row; align-items: center;">
         <input type="hidden" name="contentName" value="" />
         <button class="fancy-button" type="submit">
@@ -1006,7 +1198,7 @@
       <div class="fortune-modal-content" onclick="event.stopPropagation()">
         <div class="scrolling-wrapper">
           <span class="close-btn" onclick="closeModal()">&times;</span>
-          <h4 style="color: #814700 ; margin-bottom: 20px;">오늘의 운세</h4>
+          <h4 style="color: #814700 ; margin-bottom: 20px; text-align: center;">오늘의 운세</h4>
 
           <div id="fortuneText">
             <p id="fortuneMsg1" class="fortune-message" style="display: none;">당신의 오늘을 위한 짧은

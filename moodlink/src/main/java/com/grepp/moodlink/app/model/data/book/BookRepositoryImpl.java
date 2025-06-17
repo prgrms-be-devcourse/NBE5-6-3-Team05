@@ -2,6 +2,7 @@ package com.grepp.moodlink.app.model.data.book;
 
 import com.grepp.moodlink.app.model.data.book.dto.BookDto;
 import com.grepp.moodlink.app.model.data.book.entity.QBook;
+import com.grepp.moodlink.app.model.data.book.entity.QBookGenre;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -21,6 +22,7 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
     private final QBook book = QBook.book;
+    private final QBookGenre genre = QBookGenre.bookGenre;
 
     @Override
     public String findTopThumbnail() {
@@ -60,5 +62,19 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
                 .or(book.publisher.lower().like("%" + contentName.toLowerCase() + "%"))
                 .or(book.author.lower().like("%" + contentName.toLowerCase() + "%"))
             ).fetch();
+    }
+
+    public List<BookDto> searchContentByGenre(String genreName) {
+        return queryFactory
+            .select(Projections.constructor(BookDto.class,
+                book.title,
+                book.description,
+                book.publishedDate,
+                book.publisher,
+                book.image))
+            .from(book)
+            .join(book.genre, genre)
+            .where(genre.name.eq(genreName))
+            .fetch();
     }
 }

@@ -33,7 +33,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-// 주요 역할: JWT 토큰 생성, 검증, 파싱
 public class JwtProvider {
 
     private RefreshTokenRepository refreshTokenRepository;
@@ -126,6 +125,4 @@ public class JwtProvider {
                    .map(Cookie::getValue).findFirst()
                    .orElse(null);
     }
-
-
 }

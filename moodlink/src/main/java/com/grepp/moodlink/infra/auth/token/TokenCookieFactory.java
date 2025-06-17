@@ -5,9 +5,6 @@ import static org.springframework.http.ResponseCookie.from;
 import com.grepp.moodlink.infra.auth.token.code.TokenType;
 import org.springframework.http.ResponseCookie;
 
-// 주요 역할: JWT 토큰을 쿠키로 설정하는 유틸리티
-//목적: 토큰을 HTTP 쿠키로 안전하게 설정
-
 public class TokenCookieFactory {
     public static ResponseCookie create(String name, String value, Long expires){
         return from(name, value)
