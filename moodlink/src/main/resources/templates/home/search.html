@@ -6,9 +6,12 @@
   <meta charset="UTF-8">
   <title>검색 결과</title>
   <style>
+    .header- {
+      position: static !important;
+    }
     html, body {
       height: 100%;
-      overflow: hidden; /* 전체 페이지 스크롤 막기 */
+      /*overflow: hidden; !* 전체 페이지 스크롤 막기 *!*/
       margin: 0;
       padding: 0;
     }
@@ -17,9 +20,9 @@
       display: flex;
       flex-direction: column;
       width: 100%;
-      overflow-y: auto;
+      /*overflow-y: auto;*/
       margin-top: 60px;
-      height: 100vh;
+      /*height: 100vh;*/
     }
     .container::-webkit-scrollbar {
       display: none;
@@ -31,6 +34,7 @@
       text-align: center;
       font-family: 'Noto Sans KR', sans-serif;
     }
+
 
     .main-content {
       margin: 70px auto 0;
@@ -52,6 +56,12 @@
       margin-top: 30px;
       flex-wrap: wrap;
     }
+
+    .menu {
+      display: flex;
+      flex-direction: row;
+      justify-content: center
+    }
   </style>
 </head>
 <body>
@@ -61,7 +71,7 @@
     <div class="main-content container">
 
       <div class="search-container">
-        <form id="searchForm" th:action="@{/search}" method="get">
+        <form id="searchAllForm" th:action="@{/search/all}" method="get">
           <input type="text" id="search-input" name="contentName" placeholder="원하는 음악,영화,도서를 찾아보세요!">
           <button type="submit">검색</button>
         </form>
@@ -71,95 +81,135 @@
 
       <!-- 카테고리 메뉴 -->
       <div class="menu">
+        <form id="searchMovieForm" th:action="@{/search/movie}" method="get">
+          <input type="hidden" id="search-movie" name="contentName" >
         <button onclick="showCategory('movie')">🎬 영화</button>
+        </form>
+        <form id="searchMusicForm" th:action="@{/search/music}" method="get">
+          <input type="hidden" id="search-music" name="contentName" >
         <button onclick="showCategory('music')">🎧 음악</button>
+        </form>
+        <form id="searchBookForm" th:action="@{/search/book}" method="get">
+          <input type="hidden" id="search-book" name="contentName" >
         <button onclick="showCategory('book')">📚 도서</button>
+        </form>
       </div>
-
-  <!-- contentName 이 비었을 때 -->
-  <h4 th:if="${#strings.isEmpty(contentName)}">전체 검색결과입니다.</h4>
 
   <!-- contentName 이 있을 때 -->
   <h4 th:unless="${#strings.isEmpty(contentName)}">
     "<span th:text="${contentName}"></span>" 에 대한 검색결과입니다.
   </h4>
 
-
-
   <!-- 영화 -->
-  <div class="category" id="movie">
-    <div id = movieGenre>
-      동화
-      라이트노벨
-      무협소설
-      수필
-      스릴러
-      시집
-      추리소설
-      판타지소설
-      프로그래밍
-      인문학
-      심리학
-      철학
-      문화인류학
-      종교학
-      한국소설
-      외국소설
-      고전문학
-      현대문학
-      사회학
+        <div class="category" id="movie">
+          <div th:if="${#strings.isEmpty(contentName)}">
+          <form  id="searchMovieWithGenreForm" th:action="@{/search/genre/movie}" method="get">
+            <input type="hidden" id="selectedMovieCategory" th:value="${selectedMovieCategory}" />
+            <input type="hidden" name="genreName" id="movieGenreNameInput"/>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('모험')">모험</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('판타지')">판타지</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('애니메이션')">애니메이션</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('드라마')">드라마</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('공포')">공포</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('액션')">액션</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('코미디')">코미디</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('역사')">역사</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('스릴러')">스릴러</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('범죄')">범죄</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('다큐멘터리')">다큐멘터리</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('SF')">SF</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('미스터리')">미스터리</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('로맨스')">로맨스</button>
+            <button type="button" class = "genre-btn" onclick="submitMovieGenre('전쟁')">전쟁</button>
+          </form>
+        </div>
 
-    </div>
-<!--    <h3><span class="highlight">영화</span> 검색 결과</h3>  -->
-    <div th:if="${movie.size() > 0}" class="card-container">
-      <div th:each="m : ${movie}" class="card-movie"
-           th:attr="onclick='showDetailModalMovie(' +
+          <div class="genre-title">
+            <h4 th:if= "${movieContentWithGenre != null }" th:text="${genre}"></h4>
+          </div>
+
+          <div th:if="${movie != null and movie.size() > 0}" class="card-container">
+
+            <div th:each="m : ${movie}" class="card-movie"
+                 th:attr="onclick='showDetailModalMovie(' +
                  '\'' + ${#strings.escapeJavaScript(m.title)} + '\',' +
                  '\'' + ${#strings.escapeJavaScript(m.releaseDate)} + '\',' +
                  '\'' + ${#strings.escapeJavaScript(m.summary)} + '\',' +
                  '\'' + ${#strings.escapeJavaScript(m.thumbnail)} + '\'' +
                  ')'"
-      >
-        <img th:src="${m.thumbnail}" alt="영화 썸네일" class="card-thumbnail"/>
-      </div>
-    </div><br><br><br><br>
-    <div th:if="${movie.size() == 0}"><h4>검색 자료가 없습니다.</h4></div>
-  </div>
-      <!-- 영화 모달 -->
-      <div class = "detailMovieModal" id="movieDetailModal" onclick="if(event.target===this){closeMovieModal()}">
-        <div class="search-modal-content">
-          <img id="movieBg" class="modal-bg" src="" alt="배경"/>
-          <div class="modal-info">
-            <span class="modal-close" onclick="closeMovieModal()">×</span>
-            <h1 id="movieTitle" class="modal-title"></h1>
-            <ul class="modal-badges">
-              <li id="movieYear"></li>
-              <!--          <li id="modalGenre">장르</li>-->
-            </ul>
-            <p id="movieSummary" class="modal-summary"></p>
-            <button id="modalSearchMovieBtn" onclick="showMovieTrailer(document.getElementById('movieTitle').innerText)">예고편 보기</button>
-            <button id="modalBuyMovieBtn" onclick="youtubeMovie(document.getElementById('movieTitle').innerText)">영화 보러가기</button>
+            >
+              <img th:src="${m.thumbnail}" alt="영화 썸네일" class="card-thumbnail"/>
+            </div>
+          </div>
+
+          <div th:if="${movieContentWithGenre != null and movieContentWithGenre.size() > 0 }" class="card-container">
+            <div th:each="mg : ${movieContentWithGenre}" class="card-movie"
+                 th:attr="onclick='showDetailModalMovie(' +
+                 '\'' + ${#strings.escapeJavaScript(mg.title)} + '\',' +
+                 '\'' + ${#strings.escapeJavaScript(mg.releaseDate)} + '\',' +
+                 '\'' + ${#strings.escapeJavaScript(mg.summary)} + '\',' +
+                 '\'' + ${#strings.escapeJavaScript(mg.thumbnail)} + '\'' +
+                 ')'"
+            >
+              <img th:src="${mg.thumbnail}" alt="영화 썸네일" class="card-thumbnail"/>
+            </div>
+          </div><br><br><br><br>
+          <div th:if="${movieContentWithGenre == null and movie == null}"><h4>영화 검색 자료가 없습니다.</h4></div>
+        </div>
+        <!-- 영화 모달 -->
+        <div class = "detailMovieModal" id="movieDetailModal" onclick="if(event.target===this){closeMovieModal()}">
+          <div class="search-modal-content">
+            <img id="movieBg" class="modal-bg" src="" alt="배경"/>
+            <div class="modal-info">
+              <span class="modal-close" onclick="closeMovieModal()">×</span>
+              <h1 id="movieTitle" class="modal-title"></h1>
+              <ul class="modal-badges">
+                <li id="movieYear"></li>
+                <!--          <li id="modalGenre">장르</li>-->
+              </ul>
+              <p id="movieSummary" class="modal-summary"></p>
+              <button id="modalSearchMovieBtn" onclick="showMovieTrailer(document.getElementById('movieTitle').innerText)">예고편 보기</button>
+              <button id="modalBuyMovieBtn" onclick="youtubeMovie(document.getElementById('movieTitle').innerText)">영화 보러가기</button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- 영화 예고편 유튜브 iframe -->
-      <div class="category" id="music">
-
-          <button onclick="searchByGenre('발라드')">발라드</button>
-          <button onclick="searchByGenre('댄스')">댄스</button>
-          <button onclick="searchByGenre('힙합')">힙합</button>
-          <button onclick="searchByGenre('R&B')">R&B</button>
-          <button onclick="searchByGenre('인디음악')">인디음악</button>
-          <button onclick="searchByGenre('록/메탈')">록/메탈</button>
-          <button onclick="searchByGenre('트로트')">트로트</button>
-          <button onclick="searchByGenre('포크/블루스')">포크/블루스</button>
+        <!-- 영화 예고편 유튜브 iframe -->
+        <div id="trailerMovieModal" class="trailer-modal" style="display:none;" onclick="handleModalBackgroundClick(event)">
+          <div class="trailer-modal-content">
+            <span class="trailer-modal-close" onclick="closeTrailerModal('trailerMovieModal', 'trailerMovieIframe')">×</span>
+            <iframe id = "trailerMovieIframe" class="trailerIframe" width="1280" height="620" frameborder="0"
+                    allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
+        </div>
 
 
-        <!--    <h3><span class="highlight">음악</span> 검색 결과</h3>-->
-        <div th:if="${music.size() > 0}" class="card-container">
-          <div th:each="m : ${music}" class="card-music"
-               th:attr = "onclick=
+      <!--음악 -->
+        <div class="category" id="music">
+          <div th:if="${#strings.isEmpty(contentName)}">
+            <form  id="searchMusicWithGenreForm" th:action="@{/search/genre/music}" method="get">
+            <input type="hidden" id="selectedMusicCategory" th:value="${selectedMusicCategory}" />
+            <input type="hidden" name="genreName" id="musicGenreNameInput"/>
+            <button type="button" class = "genre-btn" onclick="submitMusicGenre('발라드')">발라드</button>
+            <button type="button" class = "genre-btn" onclick="submitMusicGenre('댄스')">댄스</button>
+            <button type="button" class = "genre-btn" onclick="submitMusicGenre('힙합')">힙합</button>
+            <button type="button" class = "genre-btn" onclick="submitMusicGenre('R&B')">R&B</button>
+            <button type="button" class = "genre-btn" onclick="submitMusicGenre('인디음악')">인디음악</button>
+            <button type="button" class = "genre-btn" onclick="submitMusicGenre('록/메탈')">록/메탈</button>
+            <button type="button" class = "genre-btn" onclick="submitMusicGenre('트로트')">트로트</button>
+            <button type="button" class = "genre-btn" onclick="submitMusicGenre('포크/블루스')">포크/블루스</button>
+          </form>
+          </div>
+
+          <div class="genre-title">
+            <h4 th:if= "${musicContentWithGenre != null }" th:text="${genre}"></h4>
+          </div>
+
+          <div th:if="${music != null and music.size() > 0}" class="card-container">
+
+
+            <div th:each="m : ${music}" class="card-music"
+                 th:attr = "onclick=
              'showDetailModalMusic(' +
                '\'' + ${#strings.escapeJavaScript(m.title)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(m.releaseDate)} + '\',' +
@@ -167,109 +217,137 @@
                '\'' + ${#strings.escapeJavaScript(m.thumbnail)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(m.singer)} + '\',' +
              ')'"
-          >
-            <img th:src="${m.thumbnail}" alt="음악 썸네일" class="card-thumbnail music-thumb"/>
+            >
+              <img th:src="${m.thumbnail}" alt="음악 썸네일" class="card-thumbnail music-thumb"/>
+            </div>
           </div>
-        </div><br><br><br><br>
-        <div th:if="${music.size() == 0}"><h4>검색 자료가 없습니다.</h4></div>
-      </div>
 
-  <!-- 음악 -->
-      <div id="trailerMovieModal" class="trailer-modal" style="display:none;" onclick="handleModalBackgroundClick(event)">
-        <div class="trailer-modal-content">
-          <span class="trailer-modal-close" onclick="closeTrailerModal('trailerMovieModal', 'trailerMovieIframe')">×</span>
-          <iframe id = "trailerMovieIframe" class="trailerIframe" width="1280" height="720" frameborder="0"
-                  allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          <div th:if="${musicContentWithGenre != null and musicContentWithGenre.size() > 0}" class="card-container">
+
+            <div th:each="mg : ${musicContentWithGenre}" class="card-music"
+                 th:attr = "onclick=
+             'showDetailModalMusic(' +
+               '\'' + ${#strings.escapeJavaScript(mg.title)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(mg.releaseDate)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(mg.lyrics)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(mg.thumbnail)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(mg.singer)} + '\',' +
+             ')'"
+            >
+              <img th:src="${mg.thumbnail}" alt="음악 썸네일" class="card-thumbnail music-thumb"/>
+            </div>
+
+          </div><br><br><br><br>
+          <div th:if="${musicContentWithGenre == null and music == null}"><h4>음악 검색 자료가 없습니다.</h4></div>
         </div>
-      </div>
+        <!-- 음악 모달 -->
+        <div class = "detailMusicModal" id="musicDetailModal" onclick="if(event.target===this){closeMusicModal()}">
+          <div class="search-modal-content">
+            <img id="musicBg" class="modal-bg" src="" alt="배경"/>
+            <div class="modal-info">
+              <span class="modal-close" onclick="closeMusicModal()">×</span>
+              <h1 id="musicTitle" class="modal-title"></h1>
+              <ul class="modal-badges">
+                <li id="musicYear"></li>
+                <li id="singer"></li>
+                <!--          <li id="modalGenre">장르</li>-->
+              </ul>
+              <h5><p id="musicDes"></p></h5>
+              <p id="musicSummary" class="modal-summary"></p>
+              <button id="modalSearchMusicBtn" onclick="showMusicTrailer(document.getElementById('musicTitle').innerText)">뮤직비디오 보기</button>
 
-      <!-- 음악 모달 -->
-      <div class = "detailMusicModal" id="musicDetailModal" onclick="if(event.target===this){closeMusicModal()}">
-        <div class="search-modal-content">
-          <img id="musicBg" class="modal-bg" src="" alt="배경"/>
-          <div class="modal-info">
-            <span class="modal-close" onclick="closeMusicModal()">×</span>
-            <h3 id="musicTitle" class="modal-title"></h3>
-            <ul class="modal-badges">
-              <li id="musicYear"></li>
-              <li id="singer"></li>
-              <!--          <li id="modalGenre">장르</li>-->
-            </ul>
-            <h5><p id="musicDes"></p></h5>
-            <p id="musicSummary" class="modal-summary"></p>
-            <button id="modalSearchMusicBtn" onclick="showMusicTrailer(document.getElementById('musicTitle').innerText)">뮤직비디오 보기</button>
 
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- 음악 감상 유튜브 iframe -->
-      <div id="trailerMusicModal" class="trailer-modal" style="display:none;" onclick="handleModalBackgroundClick(event)">
-        <div class="trailer-modal-content">
-          <span class="trailer-modal-close" onclick="closeTrailerModal('trailerMusicModal', 'trailerMusicIframe')">×</span>
-          <iframe id = "trailerMusicIframe" class="trailerIframe" width="1280" height="720" frameborder="0"
-                  allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <!-- 음악 감상 유튜브 iframe -->
+        <div id="trailerMusicModal" class="trailer-modal" style="display:none;" onclick="handleModalBackgroundClick(event)">
+          <div class="trailer-modal-content">
+            <span class="trailer-modal-close" onclick="closeTrailerModal('trailerMusicModal', 'trailerMusicIframe')">×</span>
+            <iframe id = "trailerMusicIframe" class="trailerIframe" width="1280" height="620" frameborder="0"
+                    allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
         </div>
-      </div>
-
 
   <!-- 도서 -->
-  <div class="category" id="book">
-    동화
-    라이트노벨
-    무협소설
-    수필
-    스릴러
-    시집
-    추리소설
-    판타지소설
-    프로그래밍
-    인문학
-    심리학
-    철학
-    문화인류학
-    종교학
-    한국소설
-    외국소설
-    고전문학
-    현대문학
-    사회학
+        <div class="category" id="book">
+          <div th:if="${#strings.isEmpty(contentName)}">
+          <form  id="searchBookWithGenreForm" th:action="@{/search/genre/book}" method="get">
+            <input type="hidden" id ="selectedBookCategory" th:value="${selectedBookCategory}" />
+            <input type="hidden" name="genreName" id="bookGenreNameInput"/>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('동화')">동화</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('라이트노벨')">라이트노벨</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('무협소설')">무협소설</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('수필')">수필</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('시집')">시집</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('추리소설')">추리소설</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('판타지소설')">판타지소설</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('프로그래밍')">프로그래밍</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('인문학')">인문학</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('심리학')">심리학</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('철학')">철학</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('문화인류학')">문화인류학</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('종교학')">종교학</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('한국소설')">한국소설</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('외국소설')">외국소설</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('고전문학')">고전문학</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('현대문학')">현대문학</button>
+            <button type="button" class = "genre-btn" onclick="submitBookGenre('사회학')">사회학</button>
+          </form>
+          </div>
 
-    <!--    <h3><span class="highlight">도서</span> 검색 결과</h3>-->
-    <div th:if="${book.size() > 0}" class="card-container">
-      <div th:each="b : ${book}" class="card-book"
-           th:attr = "onclick=
+          <div class="genre-title">
+            <h4 th:if= "${bookContentWithGenre != null }" th:text="${genre}"></h4>
+          </div>
+
+          <div th:if="${book != null and book.size() > 0}" class="card-container">
+            <div th:each="b : ${book}" class="card-book"
+                 th:attr = "onclick=
              'showDetailModalBook(' +
                '\'' + ${#strings.escapeJavaScript(b.title)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(b.publishedDate)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(b.description)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(b.image)} + '\',' +
              ')'">
-        <img th:src="${b.image}" alt="도서 썸네일" class="card-thumbnail modal-bg.book"/>
-      </div>
-    </div><br><br><br><br>
-    <div th:if="${book.size() == 0}"><h4>검색 자료가 없습니다.</h4></div>
-  </div>
+              <img th:src="${b.image}" alt="도서 썸네일22222" class="card-thumbnail modal-bg.book"/>
+            </div>
+          </div>
+
+          <div th:if="${bookContentWithGenre != null and bookContentWithGenre.size() > 0}" class="card-container">
+            <div th:each="bg : ${bookContentWithGenre}" class="card-book"
+                 th:attr = "onclick=
+             'showDetailModalBook(' +
+               '\'' + ${#strings.escapeJavaScript(bg.title)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(bg.publishedDate)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(bg.description)} + '\',' +
+               '\'' + ${#strings.escapeJavaScript(bg.image)} + '\',' +
+             ')'">
+              <img th:src="${bg.image}" alt="도서 썸네일" class="card-thumbnail modal-bg.book"/>
+            </div>
+          </div><br><br><br><br>
+          <div th:if="${bookContentWithGenre == null and book == null}"><h4>도서 검색 자료가 없습니다.</h4></div>
+        </div>
 
 
-      <!-- 도서 모달 -->
-      <div class = "detailBookModal" id="bookDetailModal" onclick="if(event.target===this){closeBookModal()}">
-        <div class="search-modal-content">
-          <img id="bookBg" class="modal-bg" src="" alt="배경"/>
-          <div class="modal-info">
-            <span class="modal-close" onclick="closeBookModal()">×</span>
-            <h1 id="bookTitle" class="modal-title"></h1>
-            <ul class="modal-badges">
-              <li id="bookYear"></li>
-              <!--          <li id="modalGenre">장르</li>-->
-            </ul>
-            <h5><p id="bookDes"></p></h5>
-            <p id="bookSummary" class="modal-summary"></p>
-                    <button id="modalSearchBtn" class="modal-play" disabled>도서 구매하기</button>
+        <!-- 도서 모달 -->
+        <div class = "detailBookModal" id="bookDetailModal" onclick="if(event.target===this){closeBookModal()}">
+          <div class="search-modal-content">
+            <img id="bookBg" class="modal-bg" src="" alt="배경"/>
+            <div class="modal-info">
+              <span class="modal-close" onclick="closeBookModal()">×</span>
+              <h1 id="bookTitle" class="modal-title"></h1>
+              <ul class="modal-badges">
+                <li id="bookYear"></li>
+                <!--          <li id="modalGenre">장르</li>-->
+              </ul>
+              <h5><p id="bookDes"></p></h5>
+              <p id="bookSummary" class="modal-summary"></p>
+              <button id="modalSearchBtn" class="modal-play" disabled>도서 구매하기</button>
+            </div>
           </div>
         </div>
-      </div>
-      <br><br><br>
+
     </div>
 
 </main>
@@ -284,7 +362,16 @@
     document.getElementById(id).style.display = 'block';
   }
 
-  document.addEventListener('DOMContentLoaded', () => showCategory('movie'));
+  document.addEventListener('DOMContentLoaded', () => {
+    const musicCategory = document.getElementById('selectedMusicCategory')?.value;
+    const bookCategory = document.getElementById('selectedBookCategory')?.value;
+    const movieCategory = document.getElementById('selectedMovieCategory')?.value;
+
+    // 각 카테고리 값이 존재하면 showCategory 실행
+    if (musicCategory) showCategory(musicCategory);
+    if (bookCategory) showCategory(bookCategory);
+    if (movieCategory) showCategory(movieCategory);
+  });
 
   function showDetailModalMovie(title, releaseDate, summary, thumbnail) {
     /* ===== 제목 ===== */
@@ -338,17 +425,6 @@
     /* ===== 모달 표시 ===== */
     document.getElementById('musicDetailModal').classList.add('active');
 
-    // const searchBtn = document.getElementById('modalSearchMusicBtn');
-    //
-    // // 음악 구매 버튼
-    // searchBtn.textContent = '음악 구매하기 사이트 ➜';
-    //
-    // // 활성화 + 클릭 이벤트
-    // searchBtn.disabled = false;
-    // searchBtn.onclick = () => {
-    //   const query = encodeURIComponent(title);
-    //   window.open(`https://www.youtube.com/search?q=${query}`, '_blank');
-    // };
   }
 
   function showDetailModalBook(title, releaseDate, summary, thumbnail, type) {
@@ -457,8 +533,22 @@
     }
   }
 
-  function searchByGenre(genre) {
-    window.location.href = '/search/genre?genreName=' + encodeURIComponent(genre);
+  // 음악 장르 선택 버튼
+  function submitMusicGenre(genre) {
+    document.getElementById('musicGenreNameInput').value = genre;
+    document.getElementById('searchMusicWithGenreForm').submit();
+  }
+
+  // 도서 장르 선택 버튼
+  function submitBookGenre(genre) {
+    document.getElementById('bookGenreNameInput').value = genre;
+    document.getElementById('searchBookWithGenreForm').submit();
+  }
+
+  // 영화 장르 선택 버튼
+  function submitMovieGenre(genre) {
+    document.getElementById('movieGenreNameInput').value = genre;
+    document.getElementById('searchMovieWithGenreForm').submit();
   }
 
 </script>

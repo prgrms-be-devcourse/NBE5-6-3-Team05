@@ -10,7 +10,6 @@ import com.grepp.moodlink.app.model.data.music.entity.Music;
 import com.grepp.moodlink.app.model.home.HomeService;
 import java.util.List;
 import java.util.Objects;
-
 import com.grepp.moodlink.app.model.keyword.KeywordService;
 import com.grepp.moodlink.app.model.llm.RecommendationService;
 import com.grepp.moodlink.app.model.llm.code.RecommendContentType;
@@ -74,6 +73,7 @@ public class HomeController {
             model.addAttribute("movies", movies);
             model.addAttribute("books", books);
             model.addAttribute("musics", musics);
+            model.addAttribute("keyword", keyword);
         }
 
         model.addAttribute("thumbnail", thumbnail);
@@ -83,24 +83,89 @@ public class HomeController {
         return "/home/mainPage";
     }
 
-    @GetMapping("/search")
-    public String searchContent(Model model, @RequestParam String contentName) {
-        List<MusicDto> music = homeService.searchMusicContent(contentName);
+    @GetMapping("/search/all")
+    public String searchAllContent(Model model, @RequestParam String contentName) {
         List<MovieDto> movie = homeService.searchMovieContent(contentName);
+        List<MusicDto> music = homeService.searchMusicContent(contentName);
         List<BookDto> book = homeService.searchBookContent(contentName);
 
         model.addAttribute("contentName", contentName);
-        model.addAttribute("music", music);
         model.addAttribute("movie", movie);
+        model.addAttribute("music", music);
         model.addAttribute("book", book);
 
         return "/home/search";
     }
 
-    @GetMapping("/search/genre")
-    public String searchGenre(Model model, @RequestParam String genreName) {
-        List<MusicDto> musicContentByGenre = homeService.searchMusicContentByGenre(genreName);
-        model.addAttribute("musicContentByGenre", musicContentByGenre);
+    @GetMapping("/search/movie")
+    public String searchMovieContent(Model model, @RequestParam String contentName) {
+        List<MovieDto> movie = homeService.searchMovieContent(contentName);
+
+        model.addAttribute("selectedMovieCategory", "movie");
+        model.addAttribute("contentName", contentName);
+        model.addAttribute("movie", movie);
+
+        return "/home/search";
+    }
+
+    @GetMapping("/search/music")
+    public String searchMusicContent(Model model, @RequestParam String contentName) {
+        List<MusicDto> music = homeService.searchMusicContent(contentName);
+
+        model.addAttribute("selectedMusicCategory", "music");
+        model.addAttribute("contentName", contentName);
+        model.addAttribute("music", music);
+
+        return "/home/search";
+    }
+
+    @GetMapping("/search/book")
+    public String searchBookContent(Model model, @RequestParam String contentName) {
+        List<BookDto> book = homeService.searchBookContent(contentName);
+
+        model.addAttribute("selectedBookCategory", "book");
+        model.addAttribute("contentName", contentName);
+        model.addAttribute("book", book);
+
+        return "/home/search";
+    }
+
+    @GetMapping("/search/genre/music")
+    public String searchMusicGenre(Model model, @RequestParam String genreName) {
+        System.out.println("음악 장르 검색 컨트롤러");
+        List<MusicDto> musicContentWithGenre = homeService.searchMusicContentByGenre(genreName);
+        System.out.println("음악 장르 검색 컨트롤러 ee");
+        model.addAttribute("musicContentWithGenre", musicContentWithGenre);
+        model.addAttribute("selectedMusicCategory", "music");
+        model.addAttribute("genre", genreName);
+        System.out.println("음악 장르 검색 컨트롤러 ee22");
+        System.out.println(musicContentWithGenre);
+        return"/home/search";
+    }
+
+    @GetMapping("/search/genre/book")
+    public String searchBookGenre(Model model, @RequestParam String genreName) {
+        System.out.println("도서 장르 검색 컨트롤러");
+        List<BookDto> bookContentByGenre = homeService.searchBookContentByGenre(genreName);
+        System.out.println("도서 장르 검색 컨트롤러 ee");
+        model.addAttribute("bookContentWithGenre", bookContentByGenre);
+        model.addAttribute("selectedBookCategory", "book");
+        model.addAttribute("genre", genreName);
+        System.out.println("도서 장르 검색 컨트롤러 ee22");
+        System.out.println(bookContentByGenre);
+        return"/home/search";
+    }
+
+    @GetMapping("/search/genre/movie")
+    public String searchMovieGenre(Model model, @RequestParam String genreName) {
+        System.out.println("영화 장르 검색 컨트롤러");
+        List<MovieDto> movieContentByGenre = homeService.searchMovieContentByGenre(genreName);
+        System.out.println("영화 장르 검색 컨트롤러 ee");
+        model.addAttribute("movieContentWithGenre", movieContentByGenre);
+        model.addAttribute("selectedMovieCategory", "movie");
+        model.addAttribute("genre", genreName);
+        System.out.println("영화 장르 검색 컨트롤러 ee22");
+        System.out.println(movieContentByGenre);
         return"/home/search";
     }
 
@@ -113,5 +178,4 @@ public class HomeController {
         Principal principal = (Principal) auth.getPrincipal();
         return principal.getUsername();
     }
-
 }

@@ -82,4 +82,12 @@ public class HomeService {
     public List<MusicDto> searchMusicContentByGenre(String genreName) {
         return musicRepositoryImpl.searchContentByGenre(genreName);
     }
+
+    public List<BookDto> searchBookContentByGenre(String genreName) {
+        return bookRepositoryImpl.searchContentByGenre(genreName);
+    }
+
+    public List<MovieDto> searchMovieContentByGenre(String genreName) {
+        return movieRepositoryImpl.searchContentByGenre(genreName);
+    }
 }

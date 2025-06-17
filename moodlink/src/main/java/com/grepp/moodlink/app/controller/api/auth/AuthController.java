@@ -17,11 +17,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -34,26 +34,32 @@ public class AuthController {
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
 
-//    @ResponseBody
     @PostMapping("signin")
     public ResponseEntity<ApiResponse<TokenResponse>> signin(
-        @RequestBody
-        SigninRequest req,
+        @RequestBody SigninRequest req,
         HttpServletResponse response
     ) {
-        TokenDto dto = authService.signin(req.getUserId(), req.getPassword());
+        Authentication authentication = authService.signin(req.getUserId(), req.getPassword());
+        TokenDto dto = authService.processTokenSignin(req.getUserId());
+
         ResponseCookie accessTokenCookie = TokenCookieFactory.create(TokenType.ACCESS_TOKEN.name(),
             dto.getAccessToken(), dto.getAtExpiresIn());
         ResponseCookie refreshTokenCookie = TokenCookieFactory.create(TokenType.REFRESH_TOKEN.name(),
             dto.getRefreshToken(), dto.getRtExpiresIn());
-        
+
         response.addHeader("Set-Cookie", accessTokenCookie.toString());
         response.addHeader("Set-Cookie", refreshTokenCookie.toString());
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+            .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
         TokenResponse tokenResponse = TokenResponse.builder()
-                                          .accessToken(dto.getAccessToken())
-                                          .expiresIn(dto.getAtExpiresIn())
-                                          .grantType(GrantType.BEARER)
-                                          .build();
+            .accessToken(dto.getAccessToken())
+            .expiresIn(dto.getAtExpiresIn())
+            .grantType(GrantType.BEARER)
+            .role(isAdmin ? "ROLE_ADMIN" : "ROLE_USER")
+            .build();
+
         return ResponseEntity.ok(ApiResponse.success(tokenResponse));
     }
     
@@ -69,14 +75,11 @@ public class AuthController {
         }
 
         System.out.println("qwer");
-        // 쿠키 삭제
+
         response.addHeader("Set-Cookie", TokenCookieFactory.createExpiredToken(TokenType.ACCESS_TOKEN).toString());
         response.addHeader("Set-Cookie", TokenCookieFactory.createExpiredToken(TokenType.REFRESH_TOKEN).toString());
         response.addHeader("Set-Cookie", TokenCookieFactory.createExpiredToken(TokenType.AUTH_SERVER_SESSION_ID).toString());
         System.out.println("asdasda");
-
-
-//        return "home/mainPage";
 
     }
 

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Moodlink 관리자 페이지</title>
+  <link rel="stylesheet" th:href="@{/css/admin/contents.css}">
+</head>
+<body>
+<main layout:fragment="content">
+  <!-- 컨트롤러에서 넘어오는 에러를 담음 -->
+  <div style="display: none" id="for-alert" th:if="${error != null}" th:text="${error}"></div>
+  <div class="layout" style="margin-top: 2rem">
+    <!-- 왼쪽 메뉴 -->
+    <div class="menu">
+      <a href="movies">영화</a>
+      <a href="music">음악</a>
+      <a href="books">도서</a>
+      <a class="active" href="genres">장르</a>
+    </div>
+
+    <!-- 오른쪽 콘텐츠 -->
+    <div class="main-contents" style="margin-top: 2rem">
+      <div style = "display: flex; align-items: center; gap: 10px;">
+        <button class="add-btn" onclick="openModal()">+ 추가</button>
+
+        <!-- 추가 버튼을 누를 시 나오는 모달 -->
+        <!-- 장르에 대한 정보를 받아 추가합니다. -->
+        <div id="genreModal" style="display:none; position:fixed; top:30%; left:45%; background:white; padding:20px; border-radius:10px; z-index:1000;">
+          <form id="genreForm">
+            <label>장르 이름</label><br/>
+            <input type="text" id="genreName" name="name" required><br/><br/>
+
+            <label>콘텐츠 유형</label><br/>
+            <select id="genreType" name="contentType" style="display: flex" required>
+              <option value="MOVIE">영화</option>
+              <option value="MUSIC">음악</option>
+              <option value="BOOK">도서</option>
+            </select><br/><br/>
+
+            <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+              <button type="submit" class="add-btn">저장</button>
+              <button type="button" class="add-btn" onclick="closeModal()">닫기</button>
+            </div>
+          </form>
+        </div>
+
+
+        <!-- 수정 버튼을 누를 시 나오는 모달 -->
+        <!-- 장르 이름에 대한 정보만 받아 수정합니다. -->
+        <div id="genreModifyModal" style="display:none; position:fixed; top:30%; left:45%; background:white; padding:20px; border-radius:10px; z-index:1000;">
+          <form id="genreModifyForm">
+            <label>장르 이름</label><br/>
+            <input type="text" id="genreMName" name="name" required><br/><br/>
+
+            <!-- 콘텐츠 유형은 수정할 수 없습니다. -->
+            <label>콘텐츠 유형</label><br/>
+            <div id="genreMType" style="display: flex; color: black;">
+            </div><br/><br/>
+
+            <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+              <button id="submitMBtn" type="submit" class="add-btn" data-id="">저장</button>
+              <button type="button" class="add-btn" onclick="closeModifyModal()">닫기</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- 모달 배경 -->
+        <div id="modalBackdrop" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;" onclick="closeModal()"></div>
+
+        <select id="typeFilter" style="display: flex; width: 10rem;">
+          <option value="MOVIE">영화</option>
+          <option value="MUSIC">음악</option>
+          <option value="BOOK">도서</option>
+        </select>
+      </div>
+
+      <table id="genreTable">
+        <thead>
+        <tr>
+          <th>-</th>
+          <th>장르 이름</th>
+          <th>콘텐츠 개수</th>
+          <th>수정</th>
+          <th>삭제</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- JavaScript가 채워 넣음 -->
+        </tbody>
+      </table>
+     </div>
+  </div>
+</main>
+
+<!-- 미리 컨트롤러에서 모든 정보를 가져와 저장합니다. -->
+<div layout:fragment="scripts">
+  <script th:inline="javascript">
+    const movieGenres = /*[[${movieGenres}]]*/ [];
+    const musicGenres = /*[[${musicGenres}]]*/ [];
+    const bookGenres = /*[[${bookGenres}]]*/ [];
+    const genreCount = /*[[${genreCount}]]*/ {};
+  </script>
+  <script>
+    // 장르 목록을 담을 tbody
+    const tbody = document.querySelector("#genreTable tbody");
+
+    // 장르 목록들
+    const genreMap = {
+      MOVIE: movieGenres,
+      MUSIC: musicGenres,
+      BOOK: bookGenres
+    };
+
+    // 장르 목록을 화면에 뿌림
+    function renderGenres(type) {
+      const list = genreMap[type] || [];
+      tbody.innerHTML = '';
+
+      list.forEach(g => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+        <td>${g.id}</td>
+        <td>${g.name}</td>
+        <td>${genreCount[g.name]}</td>
+        <td><button class="add-btn" onclick="openModifyModal('${g.id}', '${type}', '${g.name}')">수정</button></td>
+        <td>
+          <button class="add-btn" onclick="deleteGenre('${g.id}', '${type}')">삭제</button>
+        </td>
+      `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // select 초기값은 movie
+    document.addEventListener("DOMContentLoaded", () => renderGenres("MOVIE"));
+    // select 값이 변화할 때 감지하여 변화
+    document.getElementById("typeFilter").addEventListener("change", (e) => {
+      renderGenres(e.target.value);
+    });
+
+    // 삭제 메소드
+    function deleteGenre(id, type) {
+      if (!confirm('삭제하시겠습니까?')) return;
+
+      fetch(`http://localhost:8080/api/admin/genres/delete/${type}/${id}`, {
+        method: 'DELETE'
+      })
+      .then(res => {
+        if (res.ok) {
+          alert('삭제되었습니다.');
+          location.reload();
+        } else {
+          // 해당 장르의 count 값이 0이 아닐 시에는 삭제 불가능 합니다.
+          alert("해당 장르에 속하는 컨텐츠가 있을 경우 삭제할 수 없습니다.");
+        }
+      });
+    }
+
+
+    // 장르 추가 모달 열기
+    function openModal() {
+      document.getElementById('genreName').value = '';
+      document.getElementById('genreType').value = 'MOVIE';
+      document.getElementById('genreModal').style.display = 'block';
+      document.getElementById('modalBackdrop').style.display = 'block';
+    }
+
+    // 장르 수정 모달 열기
+    function openModifyModal(id, type, name) {
+      document.getElementById('genreMName').value = name;
+      document.getElementById('genreMType').innerText = type;
+      document.getElementById('submitMBtn').dataset.id=id;
+      document.getElementById('genreModifyModal').style.display = 'block';
+      document.getElementById('modalBackdrop').style.display = 'block';
+    }
+
+
+    // 모달 닫기
+    function closeModal() {
+      document.getElementById('genreModal').style.display = 'none';
+      document.getElementById('modalBackdrop').style.display = 'none';
+    }
+
+    // 모달 닫기
+    function closeModifyModal() {
+      document.getElementById('genreModifyModal').style.display = 'none';
+      document.getElementById('modalBackdrop').style.display = 'none';
+    }
+
+    // form 제출 시 REST API 호출
+    document.getElementById('genreForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById('genreName').value.trim();
+      const contentType = document.getElementById('genreType').value;
+
+      fetch('http://localhost:8080/api/admin/genres/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, contentType })
+      })
+      .then(res => {
+        if (res.ok) {
+          return res.json(); // 먼저 JSON으로 파싱
+        } else {
+          return res.text().then(msg => {
+            throw new Error("추가 실패: " + msg);
+          });
+        }
+      })
+      .then(json => {
+        alert(json.data); // 여기서 data에 접근
+        location.reload();
+      })
+      .catch(err => alert(err.message));
+    });
+
+    // 수정 form 제출 시 REST API 호출
+    document.getElementById('genreModifyForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById('genreMName').value.trim();
+      const contentType = document.getElementById('genreMType').innerText;
+      const id = document.getElementById('submitMBtn').dataset.id;
+
+
+      console.log(name);
+      console.log(contentType);
+      console.log(id);
+
+      fetch(`http://localhost:8080/api/admin/genres/modify/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, contentType })
+      })
+      .then(res => {
+        if (res.ok) {
+          return res.json(); // 먼저 JSON으로 파싱
+        } else {
+          return res.text().then(msg => {
+            throw new Error("수정 실패: " + msg);
+          });
+        }
+      })
+      .then(json => {
+        alert(json.data); // 여기서 data에 접근
+        location.reload();
+      })
+      .catch(err => alert(err.message));
+    });
+
+  </script>
+</div>
+</body>
+</html>

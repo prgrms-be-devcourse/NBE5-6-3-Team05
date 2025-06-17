@@ -107,6 +107,7 @@ public class RecommendController {
             musicIds = generateMusicRecommendations(keywords);
             saveRecommendation(movieIds, bookIds, musicIds, keywords, reason);
         }
+        //NOTE
         for (int i = 0; i < 4; i++) {
             CuratingDetailIdDto detail = new CuratingDetailIdDto();
             detail.setMovieId(movieIds.get(i));
