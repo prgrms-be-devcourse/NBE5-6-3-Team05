@@ -25,6 +25,9 @@
     .container::-webkit-scrollbar {
       display: none;
     }
+    th, td{
+      padding: 15px 30px;
+    }
   </style>
 </head>
 <body>
@@ -34,7 +37,7 @@
     <div style="display: none" id="for-alert" th:if="${error != null}" th:text="${error}"></div>
     <div class="layout" style="margin-top: 2rem">
       <!-- 왼쪽 메뉴 -->
-      <div class="menu">
+      <div class="admin-menu">
         <a href="movies">영화</a>
         <a href="music">음악</a>
         <a href="books">도서</a>
@@ -97,7 +100,7 @@
           </select>
         </div>
 
-        <table id="genreTable">
+        <table id="genreTable" style="margin-top: 1rem;">
           <thead>
           <tr>
             <th>-</th>

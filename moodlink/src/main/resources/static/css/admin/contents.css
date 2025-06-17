@@ -27,7 +27,7 @@ body {
   min-height: 100vh;
 }
 
-.menu a {
+.admin-menu a {
   display: block;
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
@@ -39,7 +39,7 @@ body {
   font-size: 1.3rem;
 }
 
-.menu a.active {
+.admin-menu a.active {
   background: linear-gradient(to right, #A64DFF, #6A00FF);
   border-radius: 5px;
 }
