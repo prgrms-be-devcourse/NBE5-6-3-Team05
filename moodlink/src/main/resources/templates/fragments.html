@@ -1194,7 +1194,11 @@
             0 0 18px rgba(126, 213, 111, 0.2);
       }
 
-
+      .icon {
+        height: 32px;
+        width: 32px;
+        object-fit: contain;
+      }
 
     </style>
 
@@ -1212,12 +1216,13 @@
       style="display: flex; flex-direction: row; align-items: center;">
         <input type="hidden" name="contentName" value="" />
         <button class="fancy-button" type="submit">
+          <i class="material-icons">stars</i>
           컨텐츠 전체 보기
         </button>
       </form>
       <button class="fancy-button" th:onclick="|location.href='@{/recommend}'|">
-        <i class="material-icons">stars</i>
-        추천받기
+        <img class="icon" src="/img/moody.png" alt="무디 이미지"/>
+        무디에게 추천받기
       </button>
       <button class="fancy-button"
               th:onclick="|location.href='@{/worldcup}'|">
