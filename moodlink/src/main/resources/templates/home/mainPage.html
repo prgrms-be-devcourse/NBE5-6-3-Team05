@@ -208,22 +208,21 @@
         <h4>🎬 추천 받은 영화 </h4><br>
         <div class="swiper movie-swiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide"
-                 th:each="movie : ${movies}"
-                 th:attr="onclick=|showDetailModalMovie(
-           '${#strings.escapeJavaScript(movie.title)}',
-           '${#strings.escapeJavaScript(movie.releaseDate)}',
-           '${#strings.escapeJavaScript(movie.summary)}',
-           '${#strings.escapeJavaScript(movie.thumbnail)}'
-         )|">
-
-              <img th:src="${movie.thumbnail}" alt="영화 이미지" class="content-image" />
+            <div class="swiper-slide" th:each="m : ${movies}">
+            <button type="button"
+                    class="details-btn"
+                    data-type="movies"
+                    th:attr="data-id=${m.id}">
+              <img th:src="${m.thumbnail}" alt="영화 이미지" class="content-image"/>
+            </button>
 
               <p class="recommend-content-title"
-                 th:text="${#strings.length(movie.title) > 12 ? #strings.substring(movie.title, 0, 12) + '...' : movie.title}">
+                 th:text="${#strings.length(m.title) > 12 ? #strings.substring(m.title, 0, 12) + '...' : m.title}">
                 제목
               </p>
+              </div>
             </div>
+
           </div>
         </div>
 
@@ -234,15 +233,14 @@
         <h4>📚 추천 받은 도서 </h4><br>
         <div class="swiper book-swiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="book : ${books}"
-                 th:attr="onclick=|showDetailModalBook(
-           '${#strings.escapeJavaScript(book.title)}',
-           '${#strings.escapeJavaScript(book.publishedDate)}',
-           '${#strings.escapeJavaScript(book.description)}',
-           '${#strings.escapeJavaScript(book.image)}'
-         )|">
-              <img th:src="${book.image}" alt="도서 이미지" class="content-image" />
-              <p class="recommend-content-title" th:text="${#strings.length(book.title) > 12 ? #strings.substring(book.title, 0, 12) + '...' : book.title}">제목</p>
+            <div class="swiper-slide" th:each="b : ${books}">
+              <button type="button"
+                      class="details-btn"
+                      data-type="books"
+                      th:attr="data-id=${b.isbn}">
+                <img th:src="${b.image}" alt="도서 이미지" class="content-image" />
+              </button>
+              <p class="recommend-content-title" th:text="${#strings.length(b.title) > 12 ? #strings.substring(b.title, 0, 12) + '...' : b.title}">제목</p>
             </div>
           </div>
         </div>
@@ -253,91 +251,20 @@
         <h4>🎵 추천 받은 음악 </h4><br>
         <div class="swiper music-swiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="music : ${musics}"
-                 th:attr="onclick=|showDetailModalMusic(
-           '${#strings.escapeJavaScript(music.title)}',
-           '${#strings.escapeJavaScript(music.releaseDate)}',
-           '${#strings.escapeJavaScript(music.lyrics)}',
-           '${#strings.escapeJavaScript(music.thumbnail)}',
-           '${#strings.escapeJavaScript(music.singer)}'
-         )|">
-              <img th:src="${music.thumbnail}" alt="음악 이미지" class="content-image" />
-              <p class="recommend-content-title" th:text="${#strings.length(music.title) > 12 ? #strings.substring(music.title, 0, 12) + '...' : music.title}">제목</p>
+            <div class="swiper-slide" th:each="m : ${musics}">
+              <button type="button"
+                      class="details-btn"
+                      data-type="musics"
+                      th:attr="data-id=${m.id}">
+                <img th:src="${m.thumbnail}" alt="음악 이미지" class="content-image"/>
+              </button>
+              <p class="recommend-content-title" th:text="${#strings.length(m.title) > 12 ? #strings.substring(m.title, 0, 12) + '...' : m.title}">제목</p>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-
-      <div class="recommendation-container" th:if="${movies != null and !movies.isEmpty() and isAuthenticated and keyword == 'No exist keywords'}">
-
-        <!-- 영화 추천 -->
-        <div  class="recommendation-section">
-                  <h4>🎬 인기 영화 TOP 10 </h4>
-          <div class="swiper movie-swiper">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide"
-                   th:each="movie : ${movies}"
-                   th:attr="onclick=|showDetailModalMovie(
-           '${#strings.escapeJavaScript(movie.title)}',
-           '${#strings.escapeJavaScript(movie.releaseDate)}',
-           '${#strings.escapeJavaScript(movie.summary)}',
-           '${#strings.escapeJavaScript(movie.thumbnail)}'
-         )|">
-
-                <img th:src="${movie.thumbnail}" alt="영화 이미지" class="content-image" />
-
-                <p class="recommend-content-title"
-                   th:text="${#strings.length(movie.title) > 12 ? #strings.substring(movie.title, 0, 12) + '...' : movie.title}">
-                  제목
-                </p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- 책 추천 -->
-        <div class="recommendation-section">
-                  <h4>📚 인기 도서 TOP 10  </h4>
-          <div class="swiper book-swiper">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide" th:each="book : ${books}"
-                   th:attr="onclick=|showDetailModalBook(
-           '${#strings.escapeJavaScript(book.title)}',
-           '${#strings.escapeJavaScript(book.publishedDate)}',
-           '${#strings.escapeJavaScript(book.description)}',
-           '${#strings.escapeJavaScript(book.image)}'
-         )|">
-                <img th:src="${book.image}" alt="도서 이미지" class="content-image" />
-                <p class="recommend-content-title" th:text="${#strings.length(book.title) > 12 ? #strings.substring(book.title, 0, 12) + '...' : book.title}">제목</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 음악 추천 -->
-        <div class="recommendation-section">
-                  <h4>🎵 인기 음악 TOP 10 </h4>
-          <div class="swiper music-swiper">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide" th:each="music : ${musics}"
-                   th:attr="onclick=|showDetailModalMusic(
-           '${#strings.escapeJavaScript(music.title)}',
-           '${#strings.escapeJavaScript(music.releaseDate)}',
-           '${#strings.escapeJavaScript(music.lyrics)}',
-           '${#strings.escapeJavaScript(music.thumbnail)}',
-           '${#strings.escapeJavaScript(music.singer)}'
-         )|">
-                <img th:src="${music.thumbnail}" alt="음악 이미지" class="content-image" />
-                <p class="recommend-content-title" th:text="${#strings.length(music.title) > 12 ? #strings.substring(music.title, 0, 12) + '...' : music.title}">제목</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
 
     <br><br><br>
 
