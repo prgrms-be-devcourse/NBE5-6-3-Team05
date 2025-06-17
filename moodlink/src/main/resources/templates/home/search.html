@@ -11,7 +11,6 @@
     }
     html, body {
       height: 100%;
-      /*overflow: hidden; !* 전체 페이지 스크롤 막기 *!*/
       margin: 0;
       padding: 0;
     }
@@ -20,9 +19,7 @@
       display: flex;
       flex-direction: column;
       width: 100%;
-      /*overflow-y: auto;*/
       margin-top: 60px;
-      /*height: 100vh;*/
     }
     .container::-webkit-scrollbar {
       display: none;
@@ -67,7 +64,7 @@
 
 <main layout:fragment="content" class="search-result-container">
 
-  <div class="main-content container">
+  <div class="main-content-search container">
 
     <div class="search-container">
       <form id="searchAllForm" th:action="@{/search/all}" method="get">
@@ -75,14 +72,13 @@
         <button type="submit">검색</button>
       </form>
     </div>
-
     <br>
 
     <!-- 카테고리 메뉴 -->
     <div class="menu">
       <form id="searchMovieForm" th:action="@{/search/movie}" method="get">
         <input type="hidden" id="search-movie" name="contentName" >
-        <button onclick= "showCategory('movie')">🎬 영화</button>
+        <button onclick="showCategory('movie')">🎬 영화</button>
       </form>
       <form id="searchMusicForm" th:action="@{/search/music}" method="get">
         <input type="hidden" id="search-music" name="contentName" >
@@ -156,7 +152,7 @@
       <div th:if="${movieContentWithGenre == null and movie == null}"><h4>영화 검색 자료가 없습니다.</h4></div>
     </div>
     <!-- 영화 모달 -->
-    <div class = "detailMovieModal" id="movieDetailModal" onclick="if(event.target===this){closeMovieModal()}">
+    <div class = "detailMovieModal-search" id="movieDetailModal" onclick="if(event.target===this){closeMovieModal()}">
       <div class="search-modal-content">
         <img id="movieBg" class="modal-bg" src="" alt="배경"/>
         <div class="modal-info">
@@ -174,13 +170,14 @@
     </div>
 
     <!-- 영화 예고편 유튜브 iframe -->
-    <div id="trailerMovieModal" class="trailer-modal" style="display:none;" onclick="handleModalBackgroundClick(event)">
+    <div id="trailerMovieModal" class="trailer-modal-search" style="display:none;" onclick="handleModalBackgroundClick(event)">
       <div class="trailer-modal-content">
         <span class="trailer-modal-close" onclick="closeTrailerModal('trailerMovieModal', 'trailerMovieIframe')">×</span>
         <iframe id = "trailerMovieIframe" class="trailerIframe" width="1280" height="620" frameborder="0"
                 allow="autoplay; encrypted-media" allowfullscreen></iframe>
       </div>
     </div>
+
 
     <!--음악 -->
     <div class="category" id="music">
@@ -260,7 +257,7 @@
     </div>
 
     <!-- 음악 감상 유튜브 iframe -->
-    <div id="trailerMusicModal" class="trailer-modal" style="display:none;" onclick="handleModalBackgroundClick(event)">
+    <div id="trailerMusicModal" class="trailer-modal-search" style="display:none;" onclick="handleModalBackgroundClick(event)">
       <div class="trailer-modal-content">
         <span class="trailer-modal-close" onclick="closeTrailerModal('trailerMusicModal', 'trailerMusicIframe')">×</span>
         <iframe id = "trailerMusicIframe" class="trailerIframe" width="1280" height="620" frameborder="0"
@@ -308,7 +305,7 @@
                '\'' + ${#strings.escapeJavaScript(b.description)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(b.image)} + '\',' +
              ')'">
-          <img th:src="${b.image}" alt="도서 썸네일22222" class="card-thumbnail modal-bg.book"/>
+          <img th:src="${b.image}" alt="도서 썸네일" class="card-thumbnail modal-bg.book-search"/>
         </div>
       </div>
 
@@ -321,7 +318,7 @@
                '\'' + ${#strings.escapeJavaScript(bg.description)} + '\',' +
                '\'' + ${#strings.escapeJavaScript(bg.image)} + '\',' +
              ')'">
-          <img th:src="${bg.image}" alt="도서 썸네일" class="card-thumbnail modal-bg.book"/>
+          <img th:src="${bg.image}" alt="도서 썸네일" class="card-thumbnail modal-bg.book-search"/>
         </div>
       </div><br><br><br><br>
       <div th:if="${bookContentWithGenre == null and book == null}"><h4>도서 검색 자료가 없습니다.</h4></div>
@@ -459,15 +456,10 @@
 
   /* 영화 모달 닫기 */
   function closeMovieModal() {
-    const modal = document.querySelector('.detailMovieModal');
-    modal.classList.remove('active');
-
-    // 모달 여는 버튼이 있다면, 그 버튼의 상태 초기화
-    const openBtn = document.getElementById('openModalBtn'); // 이 부분 실제 버튼 ID로 수정
-    if (openBtn) {
-      openBtn.disabled = false;
-      openBtn.onclick = () => openMovieModal(); // 다시 이벤트 부여
-    }
+    document.querySelector('.detailMovieModal-search').classList.remove('active');
+    const searchBtn = document.getElementById('movieDetailModal');
+    searchBtn.disabled = true;
+    searchBtn.onclick = null; // 이벤트 리셋
   }
 
   /* 음악 모달 닫기 */
