@@ -20,7 +20,7 @@
       max-width: 100vw;
       overflow-y: auto;
       margin-top: 80px;
-      height: 100vh;
+      height: calc(100vh - 80px);
     }
     .container::-webkit-scrollbar {
       display: none;
@@ -58,7 +58,7 @@
                      style="width: 100%; height: 100%; object-fit: cover;"/>
               </div>
               <div class="item-details">
-                <div class="item-title" th:text="${book.title}">제목</div>
+                <div class="item-title" th:text="${#strings.length(book.title) > 30 ? #strings.substring(book.title, 0, 30) + '...' : book.title}">제목</div>
                 <div class="item-meta"><span th:text="${book.author}">작가</span></div>
               </div>
             </div>
@@ -74,7 +74,7 @@
       </div>
     </div>
   </div>
-  <br><br><br><br><br><br>
+  <br><br><br><br><br><br><br><br><br><br><br><br>
 </main>
 <div layout:fragment="scripts">
   <script>
