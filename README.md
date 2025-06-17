@@ -40,7 +40,7 @@
 <table>
   <tr>
     <td align="center"><b>메인 페이지 개선</b></td>
-    <td align="center"><b>트레일러 재생 추가</b></td>
+    <td align="center"><b>트레일러 재생 기능 추가</b></td>
   </tr>
   <tr>
     <td align="center">
