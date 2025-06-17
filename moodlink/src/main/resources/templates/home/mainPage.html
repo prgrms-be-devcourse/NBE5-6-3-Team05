@@ -73,6 +73,13 @@
       margin-top: 30px;
       flex-wrap: wrap;
     }
+
+    .swiper-button-prev,
+    .swiper-button-next {
+      top: 150px;
+      margin: 0 10px;
+      color: #6200ec;
+    }
   </style>
 </head>
 <body>
@@ -158,6 +165,7 @@
       <h4>🎬 추천 받은 영화 </h4>
     </div>
         <div class="swiper movie-swiper">
+          <div class="swiper-button-prev movie-prev"></div>
           <div class="swiper-wrapper">
             <div class="swiper-slide" th:each="m : ${movies}">
               <button type="button"
@@ -170,6 +178,7 @@
               </p>
             </div>
           </div>
+          <div class="swiper-button-next movie-next"></div>
         </div>
 
       </div>
@@ -183,6 +192,7 @@
           <h4>📚 추천 받은 도서 </h4>
         </div>
         <div class="swiper book-swiper">
+          <div class="swiper-button-prev book-prev"></div>
           <div class="swiper-wrapper">
             <div class="swiper-slide" th:each="b : ${books}">
             <button type="button"
@@ -195,6 +205,7 @@
               <p class="recommend-content-title" th:text="${#strings.length(b.title) > 12 ? #strings.substring(b.title, 0, 12) + '...' : b.title}">제목</p>
             </div>
           </div>
+          <div class="swiper-button-next book-next"></div>
         </div>
       </div>
 
@@ -207,6 +218,8 @@
           <h4>🎵 추천 받은 음악 </h4>
         </div>
         <div class="swiper music-swiper">
+          <div class="swiper-button-prev music-prev"></div>
+
           <div class="swiper-wrapper">
             <div class="swiper-slide" th:each="m : ${musics}">
               <button type="button"
@@ -218,6 +231,7 @@
               <p class="recommend-content-title" th:text="${#strings.length(m.title) > 12 ? #strings.substring(m.title, 0, 12) + '...' : m.title}">제목</p>
             </div>
           </div>
+          <div class="swiper-button-next music-next"></div>
         </div>
       </div>
 
@@ -255,6 +269,10 @@
           delay: 2500,
           disableOnInteraction: false,
         },
+        navigation: {
+          nextEl: '.movie-next',
+          prevEl: '.movie-prev',
+        },
       });
 
       new Swiper('.book-swiper', {
@@ -265,6 +283,10 @@
           delay: 2700,
           disableOnInteraction: false,
         },
+        navigation: {
+          nextEl: '.book-next',
+          prevEl: '.book-prev',
+        },
       });
 
       new Swiper('.music-swiper', {
@@ -274,6 +296,10 @@
         autoplay: {
           delay: 2900,
           disableOnInteraction: false,
+        },
+        navigation: {
+          nextEl: '.music-next',
+          prevEl: '.music-prev',
         },
       });
     });
