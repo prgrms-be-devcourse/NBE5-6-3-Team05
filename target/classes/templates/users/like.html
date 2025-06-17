@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moodlink - 사용자 정보 수정</title>
+  <style>
+    .page-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .container{
+      display: flex;
+      margin-top: 40px;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      background: linear-gradient(90deg, #a855f7, #3b82f6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+      position: relative;
+    }
+
+    .page-title::after {
+      content: '';
+      position: absolute;
+      width: 30%;
+      height: 4px;
+      background: linear-gradient(90deg, #a855f7, #3b82f6);
+      bottom: -10px;
+      left: 0;
+      border-radius: 2px;
+    }
+
+    .tab-container {
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 0.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .tab-button {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #f3f4f6;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tab-button:hover {
+      background-color: rgba(168, 85, 247, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    }
+
+    .tab-button.active {
+      background: linear-gradient(135deg, #a855f7, #7e22ce);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.5);
+    }
+
+    /* 카드 스타일 */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .item-card {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 16px;
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 0.5s ease;
+    }
+
+    .item-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      border-color: rgba(168, 85, 247, 0.3);
+    }
+
+    .card-image-container {
+      position: relative;
+      overflow: hidden;
+      height: 200px;
+    }
+
+    .card-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .item-card:hover .card-image {
+      transform: scale(1.05);
+    }
+
+    .toggle-star-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(15, 23, 42, 0.7);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.5rem;
+      color: #facc15;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      z-index: 2;
+    }
+
+    .toggle-star-btn:hover {
+      transform: scale(1.2) rotate(10deg);
+      color: #fef08a;
+      background: rgba(15, 23, 42, 0.9);
+      box-shadow: 0 4px 12px rgba(250, 204, 21, 0.5);
+    }
+
+    .card-content {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, #a855f7, #3b82f6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .info-label {
+      color: #a5b4fc;
+      font-weight: 500;
+      min-width: 60px;
+    }
+
+    .info-value {
+      color: #e2e8f0;
+    }
+
+    .genre-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .genre-tag {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(79, 70, 229, 0.3));
+      border-radius: 6px;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #e0e7ff;
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .genre-tag:hover {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.5), rgba(79, 70, 229, 0.5));
+      transform: translateY(-2px);
+    }
+
+    .card-description {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      margin-top: auto;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      transition: all 0.3s ease;
+    }
+
+    .item-card:hover .card-description {
+      -webkit-line-clamp: 4;
+    }
+
+    .like-item {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .content-card {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 16px;
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 2rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 0.5s ease;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title-header {
+      font-size: 1.75rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #a855f7, #3b82f6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .pagination ul {
+      display: flex;
+      list-style: none;
+      gap: 0.5rem;
+      padding-left: 0;
+    }
+
+    .pagination li {
+      display: inline-block;
+    }
+
+    .pagination li a {
+      color: #ffffff;
+    }
+
+    .pagination a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      color: #f3f4f6;
+      text-decoration: none;
+      background-color: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      font-weight: 500;
+      min-width: 2.5rem;
+    }
+
+    .pagination li.active a {
+      background: linear-gradient(135deg, #a855f7, #7e22ce);
+      color: white;
+      font-weight: bold;
+      transform: scale(1.05);
+      box-shadow: 0 4px 8px rgba(139, 92, 246, 0.4);
+    }
+
+    .pagination a:hover {
+      background-color: rgba(139, 92, 246, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .tab-container {
+        flex-wrap: wrap;
+      }
+
+      .tab-button {
+        flex: 1;
+        text-align: center;
+        justify-content: center;
+      }
+
+      .card-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+<div layout:fragment="content" class="page-container">
+  <div class="container">
+    <h3 class="page-title">좋아요 목록</h3>
+
+    <!-- 탭 버튼 -->
+    <div class="tab-container">
+      <button class="tab-button" th:classappend="${activeTab == 'books'} ? 'active'"
+              onclick="location.href='/users/like?tab=books'">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+        도서
+      </button>
+      <button class="tab-button" th:classappend="${activeTab == 'movies'} ? 'active'"
+              onclick="location.href='/users/like?tab=movies'">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+          <line x1="7" y1="2" x2="7" y2="22"></line>
+          <line x1="17" y1="2" x2="17" y2="22"></line>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <line x1="2" y1="7" x2="7" y2="7"></line>
+          <line x1="2" y1="17" x2="7" y2="17"></line>
+          <line x1="17" y1="17" x2="22" y2="17"></line>
+          <line x1="17" y1="7" x2="22" y2="7"></line>
+        </svg>
+        영화
+      </button>
+      <button class="tab-button" th:classappend="${activeTab == 'musics'} ? 'active'"
+              onclick="location.href='/users/like?tab=musics'">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="5.5" cy="17.5" r="2.5"></circle>
+          <circle cx="18.5" cy="15.5" r="2.5"></circle>
+          <path d="M18.5 5v10.5"></path>
+          <path d="M5.5 15V5l13 2.5"></path>
+        </svg>
+        음악
+      </button>
+    </div>
+
+    <!-- 도서 탭 -->
+    <div id="books" class="like-item content-card" th:if="${activeTab == 'books'}">
+      <div class="card-header">
+        <h2 class="card-title-header">도서</h2>
+      </div>
+
+      <div class="card-grid">
+        <div class="item-card" th:each="book : ${likedbooks.content()}">
+          <div class="card-image-container">
+            <img class="card-image" th:src="${book.image}" alt="책 이미지">
+            <button class="toggle-star-btn"
+                    th:id="'toggle-book-' + ${book.title}"
+                    th:attr="data-type='book', data-id=${book.isbn}"
+                    onclick="toggle(this)">
+              ★
+            </button>
+          </div>
+          <div class="card-content">
+            <h3 class="card-title" th:text="${book.title}">테스트</h3>
+            <div class="card-info">
+              <div class="info-item">
+                <span class="info-label">저자</span>
+                <span class="info-value" th:text="${book.author}">테스트</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">출판사</span>
+                <span class="info-value" th:text="${book.publisher}">테스트</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">장르</span>
+                <div class="genre-container">
+                  <span class="genre-tag" th:text="${book.genre}">테스트</span>
+                </div>
+              </div>
+            </div>
+            <p class="card-description" th:text="${book.description}">테스트</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 도서 페이지네이션 -->
+      <div id="books-pagination" class="pagination" th:if="${likedbooks.page.totalPages > 1}">
+        <ul>
+          <!-- 이전 페이지 링크: 1보다 클 때만 표시 -->
+          <li th:if="${likedbooks.currentNumber() > 1}">
+            <a href="#" th:attr="data-page=${likedbooks.currentNumber() - 2}, data-tab='books'">«</a>
+          </li>
+
+          <!-- 페이지 번호 렌더링 -->
+          <li th:each="i : ${#numbers.sequence(likedbooks.startNumber(), likedbooks.endNumber())}"
+              th:classappend="${i == likedbooks.currentNumber} ? 'active'">
+            <a href="#"
+               th:attr="data-page=${i - 1}, data-tab='books'"
+               th:text="${i}"></a>
+          </li>
+
+          <!-- 다음 페이지 링크: 현재 페이지가 마지막 페이지보다 작을 때만 표시 -->
+          <li th:if="${likedbooks.currentNumber < likedbooks.page.totalPages}">
+            <a href="#" th:attr="data-page=${likedbooks.currentNumber}, data-tab='books'">»</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 영화 탭 -->
+    <div id="movies" class="like-item content-card" th:if="${activeTab == 'movies'}">
+      <div class="card-header">
+        <h2 class="card-title-header">영화</h2>
+      </div>
+
+      <div class="card-grid">
+        <div class="item-card" th:each="movie : ${likedmovies.content()}">
+          <div class="card-image-container">
+            <img class="card-image" th:src="${movie.thumbnail}" alt="영화 썸네일">
+            <button class="toggle-star-btn"
+                    th:id="'toggle-movie-' + ${movie.title}"
+                    th:attr="data-type='movie', data-id=${movie.id}"
+                    onclick="toggle(this)">
+              ★
+            </button>
+          </div>
+          <div class="card-content">
+            <h3 class="card-title" th:text="${movie.title}">테스트</h3>
+            <div class="card-info">
+              <div class="info-item">
+                <span class="info-label">개봉일</span>
+                <span class="info-value" th:text="${movie.releaseDate}">테스트</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">장르</span>
+                <div class="genre-container">
+                  <span th:each="genre : ${movie.genres}" class="genre-tag" th:text="${genre.name}">테스트</span>
+                </div>
+              </div>
+            </div>
+            <p class="card-description" th:text="${movie.description}">테스트</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 영화 페이지네이션 -->
+      <div id="movies-pagination" class="pagination" th:if="${likedmovies.page.totalPages > 1}">
+        <ul>
+          <!-- 이전 페이지 링크: 1보다 클 때만 표시 -->
+          <li th:if="${likedmovies.currentNumber() > 1}">
+            <a href="#"
+               th:attr="data-page=${likedmovies.currentNumber() - 2}, data-tab='movies'">«</a>
+          </li>
+
+          <!-- 페이지 번호 렌더링 -->
+          <li th:each="i : ${#numbers.sequence(likedmovies.startNumber(), likedmovies.endNumber())}"
+              th:classappend="${i == likedmovies.currentNumber} ? 'active'">
+            <a href="#"
+               th:attr="data-page=${i - 1}, data-tab='movies'"
+               th:text="${i}"></a>
+          </li>
+
+          <!-- 다음 페이지 링크: 현재 페이지가 마지막 페이지보다 작을 때만 표시 -->
+          <li th:if="${likedmovies.currentNumber < likedmovies.page.totalPages}">
+            <a href="#" th:attr="data-page=${likedmovies.currentNumber}, data-tab='movies'">»</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 음악 탭 -->
+    <div id="musics" class="like-item content-card" th:if="${activeTab == 'musics'}">
+      <div class="card-header">
+        <h2 class="card-title-header">음악</h2>
+      </div>
+
+      <div class="card-grid">
+        <div class="item-card" th:each="music : ${likedmusics.content()}">
+          <div class="card-image-container">
+            <img class="card-image" th:src="${music.thumbnail}" alt="음악 썸네일">
+            <button class="toggle-star-btn"
+                    th:id="'toggle-music-' + ${music.title}"
+                    th:attr="data-type='music', data-id=${music.id}"
+                    onclick="toggle(this)">
+              ★
+            </button>
+          </div>
+          <div class="card-content">
+            <h3 class="card-title" th:text="${music.title}">테스트</h3>
+            <div class="card-info">
+              <div class="info-item">
+                <span class="info-label">가수</span>
+                <span class="info-value" th:text="${music.singer}">테스트</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">발매일</span>
+                <span class="info-value" th:text="${music.releaseDate}">테스트</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">장르</span>
+                <div class="genre-container">
+                  <span class="genre-tag" th:text="${music.genre}">테스트</span>
+                </div>
+              </div>
+            </div>
+            <p class="card-description" th:text="${music.description}">테스트</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 음악 페이지네이션 -->
+      <div id="musics-pagination" class="pagination" th:if="${likedmusics.page.totalPages > 1}">
+        <ul>
+          <!-- 이전 페이지 링크: 1보다 클 때만 표시 -->
+          <li th:if="${likedmusics.currentNumber() > 1}">
+            <a href="#"
+               th:attr="data-page=${likedmusics.currentNumber() - 2}, data-tab='musics'">«</a>
+          </li>
+
+          <!-- 페이지 번호 렌더링 -->
+          <li th:each="i : ${#numbers.sequence(likedmusics.startNumber(), likedmusics.endNumber())}"
+              th:classappend="${i == likedmusics.currentNumber} ? 'active'">
+            <a href="#"
+               th:attr="data-page=${i - 1}, data-tab='musics'"
+               th:text="${i}"></a>
+          </li>
+
+          <!-- 다음 페이지 링크: 현재 페이지가 마지막 페이지보다 작을 때만 표시 -->
+          <li th:if="${likedmusics.currentNumber < likedmusics.page.totalPages}">
+            <a href="#" th:attr="data-page=${likedmusics.currentNumber}, data-tab='musics'">»</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- 탭 스크립트 -->
+  <script th:inline="javascript">
+    /// 토글 버튼 구현
+    function toggle(btn) {
+      const type = btn.dataset.type;
+      const id = btn.dataset.id;
+
+      fetch(`/api/users/like/${type}`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({id})
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log("서버 응답", data);
+        const isOn = data.status;
+
+        // 텍스트는 항상 별로 고정
+        btn.textContent = isOn ? '★' : '☆';
+        btn.classList.toggle('on', isOn);
+
+        // 동일 type, id를 가진 다른 버튼들 동기화
+        const selector = `.toggle-star-btn[data-type='${type}'][data-id='${id}']`;
+        document.querySelectorAll(selector).forEach(otherBtn => {
+          if (otherBtn !== btn) {
+            otherBtn.textContent = isOn ? '★' : '☆';
+            otherBtn.classList.toggle('on', isOn);
+          }
+        });
+      });
+    }
+
+    let currentPage = {
+      books: /*[[${likedbooks.page.number}]]*/ 0,
+      movies: /*[[${likedmovies.page.number}]]*/ 0,
+      musics: /*[[${likedmusics.page.number}]]*/ 0
+    };
+    const pageSize = /*[[${likedbooks.page.size}]]*/ 3;
+
+    function loadTab(tabName) {
+      const tabItems = document.querySelectorAll('.like-item');
+      console.log("모든 like-item:", tabItems);
+      tabItems.forEach(item => {
+        console.log(`숨기는 요소 ID: ${item.id}`);
+        item.style.display = 'none';
+      });
+      const targetTab = document.getElementById(tabName);
+      console.log(`보여줄 요소 ID: ${targetTab ? targetTab.id : '없음'}`);
+      if (targetTab) {
+        targetTab.style.display = 'block';
+      }
+
+      // 탭 버튼 활성화 상태 업데이트
+      document.querySelectorAll('.tab-button').forEach(button => {
+        button.classList.remove('active');
+        if (button.textContent.trim().toLowerCase().includes(tabName.slice(0, -1))) {
+          button.classList.add('active');
+        }
+      });
+
+      updatePaginationLinks(tabName);
+    }
+
+    function updatePaginationLinks(tabName) {
+      const paginationLinks = document.querySelectorAll(`#${tabName}-pagination a`);
+      paginationLinks.forEach(link => {
+        link.addEventListener('click', function (event) {
+          event.preventDefault();
+          const page = this.dataset.page;
+          window.location.href = `/users/like?${tabName.slice(0,
+              -1)}_page=${page}&size=${pageSize}&tab=${tabName}`;
+        });
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const activeTab = /*[[${activeTab}]]*/ 'books';
+      loadTab(activeTab);
+
+      // 탭 버튼 이벤트 리스너
+      document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', function () {
+          // 버튼 텍스트에서 탭 이름 추출 (아이콘과 공백 제거)
+          const buttonText = this.textContent.trim().toLowerCase();
+          let tab;
+          if (buttonText.includes('도서')) {
+            tab = 'books';
+          } else if (buttonText.includes('영화')) {
+            tab = 'movies';
+          } else if (buttonText.includes('음악')) {
+            tab = 'musics';
+          }
+
+          loadTab(tab);
+        });
+      });
+    });
+  </script>
+</div>
+</body>
+</html>

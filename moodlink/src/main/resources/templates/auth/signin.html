@@ -64,6 +64,12 @@
       return;
     }
 
-    location.href = "/";
+    const data = await res.json();
+
+    if (data.data.role === "ROLE_ADMIN") {
+      location.href = "/admin/movies";
+    } else {
+      location.href = "/";
+    }
   });
 </script>

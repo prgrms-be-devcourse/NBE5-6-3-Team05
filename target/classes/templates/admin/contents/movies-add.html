@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>관리자 페이지 - 영화 추가</title>
+  <link rel="stylesheet" th:href="@{/css/admin/contents-add.css}">
+
+</head>
+<body>
+<main layout:fragment="content">
+  <!-- 돌아가기 버튼 -->
+  <a class="back-btn" th:href="@{/admin/movies}">← 돌아가기</a>
+
+
+  <!-- 정보 가져오기 버튼을 누를 시 나오는 모달 -->
+  <!-- 장르에 대한 정보를 받아 추가합니다. -->
+  <div id="apiLookupModal" style="display:none; position:fixed; top:30%; left:45%; background:white; padding:20px; border-radius:10px; z-index:1000;">
+    <form id="movieLookup">
+      <label>영화 제목 (정확한 제목을 입력해주세요)</label><br/>
+      <label for="searchName"></label><input type="text" id="searchName" name="name" required><br/><br/>
+      <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+        <button type="submit" class="add-btn">정보 가져오기</button>
+        <button type="button" class="add-btn" onclick="closeModal()">닫기</button>
+      </div>
+    </form>
+  </div>
+  <!-- 모달 배경 -->
+  <div id="modalBackdrop" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;" onclick="closeModal()"></div>
+
+
+
+  <!-- 중앙 배치 form -->
+  <div class="main-area">
+    <form th:action="@{/admin/movies/add}" th:object="${movieAddRequest}" method="post"
+          enctype="multipart/form-data">
+      <div class="form-section">
+        <h3>영화 정보를 입력해주세요.</h3>
+
+        <div class="info-group">
+          <div class="image-upload">
+            <div id="preview" class="image-preview"></div>
+            <input type="file" id="image-input" name="thumbnail" style="display:none"/>
+            <input th:field="*{thumbnailPath}" id="imagePath-input"  style="display:none"/>
+            <div id="sizeInfo"></div>
+            <button class="img-btn" type="button"
+                    onclick="document.getElementById('image-input').click()">이미지 추가
+            </button>
+          </div>
+          <div>
+            <div class="form-row"><label>제목</label><input id="title-input" th:field="*{title}" class="input-line"/>
+              <a class="add-btn" id="api-lookup" onclick="openModal()">정보 가져오기</a>
+            </div>
+            <span class="helper-text form-row"
+                  th:if="${fieldErrors != null and fieldErrors.containsKey('title')}"
+                  th:text="${fieldErrors.title}"></span>
+            <div class="form-row"><label>개봉일</label><input id="releaseDate-input" th:field="*{releaseDate}"
+                                                           class="input-line" type="date"/></div>
+            <span class="helper-text form-row"
+                  th:if="${fieldErrors != null and fieldErrors.containsKey('releaseDate')}"
+                  th:text="${fieldErrors.releaseDate}"></span>
+          </div>
+        </div>
+
+        <div class="form-row" style="flex-direction: column; align-items: flex-start;">
+          <label style="margin-bottom: 0.3rem;">장르</label>
+          <div class="selected-genres" id="selected-genres">선택된 장르 없음</div>
+          <span class="helper-text form-row"
+                th:if="${fieldErrors != null and fieldErrors.containsKey('genres')}"
+                th:text="${fieldErrors.genres}"></span>
+          <div class="genre-list">
+            <!--            임시로 -->
+            <div th:each="gen : ${genreList}">
+              <a class="genre-btn" type="button" th:attr="data-genre-id=${gen.getId()}"
+                 th:text="${gen.getName()}">코미디</a>
+            </div>
+          </div>
+          <input th:field="*{genres}" type="hidden" id="genre-input"/>
+        </div>
+
+        <div class="form-row" style="flex-direction: column; align-items: flex-start; width: 100%;">
+          <label>설명</label>
+          <textarea id="description-input" th:field="*{description}" class="textarea"></textarea>
+          <span class="helper-text form-row"
+                th:if="${fieldErrors != null and fieldErrors.containsKey('description')}"
+                th:text="${fieldErrors.description}"></span>
+        </div>
+
+        <button class="submit-btn" type="submit">등록</button>
+      </div>
+    </form>
+  </div>
+</main>
+<div layout:fragment="scripts">
+  <script>
+    // 이미지 미리보기
+    const input = document.getElementById('image-input');
+    const preview = document.getElementById('preview');
+    input.addEventListener('change', function () {
+      let totalSize = 0;
+      const file = this.files[0];
+      if (file) {
+        totalSize += file.size;
+
+        const sizeInMB = (totalSize / (1024 * 1024)).toFixed(2);
+        document.getElementById("sizeInfo").innerText = `총 파일 용량: ${sizeInMB} MB`;
+
+        if (totalSize > 32 * 1024 * 1024) {
+          alert("이미지 총 용량은 32MB를 초과할 수 없습니다.");
+          this.value = ""; // 파일 초기화
+        }
+
+        const reader = new FileReader();
+        reader.onload = e => preview.style.backgroundImage = `url(${e.target.result})`;
+        reader.readAsDataURL(file);
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll(".genre-btn")
+      .forEach((btn) => {
+        btn.addEventListener("click", async function () {
+          btn.classList.toggle("selected");
+          updateGenre();
+        });
+      });
+
+      function updateGenre(){
+
+        const selectedId = [...document.querySelectorAll(".genre-btn.selected")].map(
+            b => b.dataset.genreId);
+        const selectedName = [...document.querySelectorAll(".genre-btn.selected")].map(
+            b => b.textContent);
+
+        document.getElementById("selected-genres").textContent = selectedName.length
+            ? selectedName.join(", ")
+            : "선택된 장르 없음";
+
+        // input에도 추가
+        document.getElementById("genre-input").value = selectedId.map(
+            (id, i) => `${id}:${selectedName[i]}`).join(",");
+
+      }
+
+      document.getElementById("api-lookup").addEventListener("click", function () {
+
+      });
+
+      // form 제출 시 REST API 호출
+      document.getElementById('movieLookup').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const title = document.getElementById('searchName').value.trim();
+        const encodedTitle = encodeURIComponent(title);
+
+        fetch(`http://localhost:8080/api/admin/lookup/movie/${encodedTitle}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        })
+        .then(res => {
+          if (res.ok) {
+            return res.json(); // 먼저 JSON으로 파싱
+          } else {
+            return res.text().then(msg => {
+              throw new Error("가져오기 실패: " + msg);
+            });
+          }
+        })
+        .then(json => {
+          console.log(json)
+          const data = json.data;
+          document.getElementById('preview').style.backgroundImage = `url(${data.thumbnail})`;
+          document.getElementById('imagePath-input').value = data.thumbnail;
+          document.getElementById('title-input').value = data.title;
+          document.getElementById('releaseDate-input').value = new Date(data.releaseDate).toISOString().slice(0,10);
+          data.genres.forEach(g =>{
+            const btn = document.querySelector(`.genre-btn[data-genre-id="${g.id}"]`);
+            if (btn) {
+              btn.classList.add("selected");
+            }
+          });
+          updateGenre();
+          document.getElementById('description-input').value=data.description;
+          closeModal();
+        })
+        .catch(err => alert("검색 결과가 없습니다."));
+      });
+    });
+
+    function openModal() {
+      document.getElementById('searchName').value = '';
+      document.getElementById('apiLookupModal').style.display = 'block';
+      document.getElementById('modalBackdrop').style.display = 'block';
+    }
+
+    // 모달 닫기
+    function closeModal() {
+      document.getElementById('apiLookupModal').style.display = 'none';
+      document.getElementById('modalBackdrop').style.display = 'none';
+    }
+    </script>
+  </div>
+</body>
+</html>

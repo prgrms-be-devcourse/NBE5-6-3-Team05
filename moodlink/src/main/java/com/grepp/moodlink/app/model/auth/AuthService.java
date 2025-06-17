@@ -25,20 +25,17 @@ public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtProvider jwtProvider;
 
-    public TokenDto signin(String userId, String password){
-        // 로그인 시도 시 권한 없이 인증 전 토큰 생성
+    public Authentication signin(String userId, String password){
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userId, password);
-        // loadUserByUsername + password 검증 후 authentication 반환
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authToken);
-        // 권한이 포함된 토큰 생성
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return processTokenSignin(userId);
+        return authentication;
     }
 
     public TokenDto processTokenSignin(String userId) {
 
-        AccessTokenDto dto = jwtProvider.generateAccessToken(userId); // Access토큰 생성
-        RefreshToken refreshToken = new RefreshToken(userId, dto.getId()); // Refresh토큰 생성
+        AccessTokenDto dto = jwtProvider.generateAccessToken(userId);
+        RefreshToken refreshToken = new RefreshToken(userId, dto.getId());
         refreshTokenRepository.save(refreshToken);
 
         return TokenDto.builder()

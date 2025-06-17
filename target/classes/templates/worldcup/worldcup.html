@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>월드컵</title>
+  <style>
+    .worldcup-container{
+      display: flex;
+      justify-items: center;
+    }
+
+    .container {
+      margin-top: 80px;
+      padding: 2rem;
+    }
+
+    #worldcup-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .worldcup-card {
+      width: 200px;
+      text-align: center;
+    }
+
+    .worldcup-card img {
+      width: 100%;
+      border: 1px solid #ccc;
+    }
+
+    .worldcup-title {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .create-button-wrapper {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .create-button-wrapper button {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+<h5>월드컵 페이지입니다.</h5>
+<div layout:fragment="content" class="worldcup-container">
+  <div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
+  <div class="container">
+
+    <div id="worldcup-list"></div>
+
+    <div class="create-button-wrapper">
+      <a href="/worldcup/create">
+        <button>월드컵 만들기</button>
+      </a>
+    </div>
+
+    <script>
+      window.addEventListener('DOMContentLoaded', async () => {
+        const res = await fetch('/api/worldcup/list');
+        const worldcups = await res.json();
+
+        const container = document.getElementById('worldcup-list');
+
+        for (const wc of worldcups) {
+          const item = document.createElement('div');
+          item.className = 'worldcup-card';
+
+          item.innerHTML = `
+  <a href="/worldcup/play?id=${wc.id}" class="content-card"
+     style="display:inline-block; margin:5px; padding:10px; border:1px solid #ccc; text-decoration:none; color:inherit; width:140px;">
+    <img src="${wc.imageUrl}" alt="${wc.title}"
+         style="width:120px; height:120px; object-fit:cover; display:block; margin-bottom:5px;" />
+    <span title="${wc.title}"
+          style="display:inline-block; width:120px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+      ${wc.title.length > 10 ? wc.title.slice(0, 10) + '...' : wc.title}
+    </span>
+  </a>
+`;
+
+          container.appendChild(item);
+        }
+      });
+    </script>
+  </div>
+</div>
+</body>
+</html>
