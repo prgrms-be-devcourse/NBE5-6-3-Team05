@@ -274,6 +274,7 @@
           });
 
 
+          localStorage.setItem('tournament', JSON.stringify(tournament));
           const resultBtn = document.getElementById('result-btn');
           resultBtn.disabled = false;
           resultBtn.classList.add('enabled');
