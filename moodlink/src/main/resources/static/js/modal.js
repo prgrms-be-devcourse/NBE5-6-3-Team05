@@ -77,10 +77,12 @@ function openModal(type, data) {
 
     const trailerBtn = document.createElement('button');
     trailerBtn.textContent = '예고편 보기';
+    trailerBtn.className = 'trailer-btn'
     trailerBtn.addEventListener('click', () => showMovieTrailer(data.movie.name));
 
     const buyBtn = document.createElement('button');
     buyBtn.textContent = '영화 보러가기';
+    buyBtn.className = 'watch-movie-btn'
     buyBtn.addEventListener('click', () => youtubeMovie(data.movie.name));
 
     modalButtons.appendChild(trailerBtn);
@@ -100,6 +102,7 @@ function openModal(type, data) {
 
     const trailerBtn = document.createElement('button');
     trailerBtn.textContent = '뮤직비디오 보기';
+    trailerBtn.className = 'music-video-btn'
     trailerBtn.addEventListener('click', () => showMusicTrailer(data.music.name));
     modalButtons.appendChild(trailerBtn);
   }
