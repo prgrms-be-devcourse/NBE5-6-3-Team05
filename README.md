@@ -136,7 +136,7 @@
 ## 📍 System Architeture
 
 <div align="center">
-<img src="readmeresource/systemArchiteture.png" alt="systemArchiteture" style="max-width: 100%; height: auto;">
+<img src="readmeresource/systemArchiteture.jpg" alt="systemArchiteture" style="max-width: 100%; height: auto;">
 </div>
 <br/>
 
@@ -151,12 +151,15 @@
 </div>
 <br/>
 
+---
 
 ## 🛠️ 트러블 슈팅
 <div align="center">
 <img src="readmeresource/troubleshooting.png" alt="Troubleshooting" style="max-width: 100%; height: auto;">
 </div>
 <br/>
+
+---
 
 ## 🧾 코드 컨벤션
 
