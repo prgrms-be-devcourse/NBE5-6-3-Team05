@@ -1,79 +1,83 @@
-# NBE5-6-2-Team05 
-test 글입니다. -  lkh
+# NBE5-6-3-Team05
 
 <hr/>
 
 <div align="center">
   <img src="readmeresource/project_info.png" alt="Project Info" style="max-width: 100%; height: auto;">
 
-[NULL NULL 하게 팀 3차 프로젝트 일정 관리 (Trello 보드 바로가기)](https://trello.com/invite/b/6811b337d5d7ce2d450d478c/ATTIeca7861455dcaf3f28360d213a4a04c45ADC8408/nbe5-6-2-null-null-하게)<br>
 </div>
 
 ---
 
-## 📌 프로젝트 소개
+## 📌 3차 프로젝트 목표
 
-<div align="center">
-  <img src="readmeresource/moodlink_des1.png" alt="Project Info" style="max-width: 100%; height: auto;"> <br>
-  <img src="readmeresource/moodlink_des2.png" alt="Project Info" style="max-width: 100%; height: auto;"> <br>
-  <img src="readmeresource/moodlink_des3.png" alt="Project Info" style="max-width: 100%; height: auto;">
-</div>
+- 2차 프로젝트 버전업 ([2차 프로젝트 보러가기](https://github.com/prgrms-be-devcourse/NBE5-6-2-Team05))<br>
+    - 기능 개선, 기능 추가, 성능개선, 코틀린 마이그레이션
 
-<br/>
+---
 
-##  ✨ 기능
+##  ✨ 버전업 사항
+아래는 2차 프로젝트 대비 3차 프로젝트에서 개선된 주요 기능입니다.
+
+| 기능명          | 설명                                                     |
+|--------------|--------------------------------------------------------|
+| JWT 로그인      | 기존 세션 로그인에서 JWT 기반 인증 방식으로 개선                          |
+ 키워드 검색 개선    | 가수, 작가, 출판사명 등 다양한 조건으로 검색 가능                          |
+| 장르별 조회	      | 장르를 선택하여 필터링 기능 제공                                     |
+| 영화 예고편 재생    | 상세페이지에서 트레일러 영상 재생 지원                                  |
+| 음악 트레일러 재생   | 음악 상세페이지에서 뮤직비디오 재생 가능                                 |
+| 메일 인증 회원가입   | Kotlin + Outbox + Redis Pub/Sub 사용한 인증 구현              |
+| 관리자 페이지 개선   | 장르 관리 기능 추가, API 기반 콘텐츠 등록 개선                          |
+| 모달창 통합       | 다양한 팝업 UI 통합 설계로 UX 개선                                 |
+| 메인 페이지 개선    | 상위 콘텐츠 출력 , 추천 기록 출력, 헤더 변경, Moody 캐릭터 제작              |
+| LLM 기반 추천 개선 | 키워드별 추천 결과 캐싱(DB 저장)으로 안정적 추천 제공                       |
+| 월드컵 기능 추가    | 사용자가 영화, 음악, 도서 중 하나를 선택해 토너먼트 방식으로 자신의 최애를 골라가는 기능 제공 |
+
+---
+
+##  👉 버전업 사항 보기
+- 화면에서 버전업 사항을 확인할 수 있는 기능은 GIF 제작했습니다.
+
 <table>
   <tr>
-    <td align="center"><b>LLM 추천 키워드</b></td>
-    <td align="center"><b>추천 결과</b></td>
+    <td align="center"><b>메인 페이지 개선</b></td>
+    <td align="center"><b>트레일러 재생 기능 추가</b></td>
   </tr>
   <tr>
     <td align="center">
-      <img src="readmeresource/llm_recommend.gif" width="380"/>
+      <img src="readmeresource/mainPage.gif" width="380"/>
     </td>
     <td align="center">
-      <img src="readmeresource/recommend_result.gif" width="380"/>
+      <img src="readmeresource/trailer.gif" width="380"/>
+    </td>
+  </tr>
+
+<tr>
+    <td align="center"><b>월드컵 기능 추가</b></td>
+    <td align="center"><b>관리자 페이지 개선</b></td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="readmeresource/worldcup.gif" width="380"/>
+    </td>
+    <td align="center">
+      <img src="readmeresource/adminnew.gif" width="380"/>
     </td>
   </tr>
 
   <tr>
-    <td align="center"><b>오늘의 운세</b></td>
-    <td align="center"><b>통합 검색(전체)</b></td>
+    <td align="center"><b>키워드 검색 개선</b></td>
+    <td align="center"><b>장르별 조회 추가</b></td>
   </tr>
   <tr>
     <td align="center">
-      <img src="readmeresource/fortune.gif" width="380"/>
+      <img src="readmeresource/search_keyword.gif" width="380"/>
     </td>
     <td align="center">
-      <img src="readmeresource/main_search_all.gif" width="380"/>
+      <img src="readmeresource/searchGenre.gif" width="380"/>
     </td>
   </tr>
 
-  <tr>
-    <td align="center"><b>통합 검색(키워드)</b></td>
-    <td align="center"><b>마이페이지</b></td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="readmeresource/main_search_keyword.gif" width="380"/>
-    </td>
-    <td align="center">
-      <img src="readmeresource/mypage.gif" width="380"/>
-    </td>
-  </tr>
-
-  <tr>
-    <td align="center"><b>관리자 페이지 – 추가</b></td>
-    <td align="center"><b>관리자 페이지 – 조회·수정</b></td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="readmeresource/admin_add.gif" width="380"/>
-    </td>
-    <td align="center">
-      <img src="readmeresource/admin_modify.gif" width="380"/>
-    </td>
-  </tr>
 </table>
 
 ## 🧑‍💻 팀원 소개
@@ -115,42 +119,47 @@ test 글입니다. -  lkh
 
 </div>
 
+---
+
 ## 👨‍🔧 기술 스택 & 협업 도구
+- 해시값 sha -256알고즘을 쓰기위한 Apache Commons codec 추가
+- JWT 추가
+- Redis 추가
+- Trello -> Jira 사용
 <div align="center">
 <img src="readmeresource/stack.png" alt="stack" style="max-width: 100%; height: auto;">
 </div>
-
 <br/>
+
+---
 
 ## 📍 System Architeture
-<div align="center">
-<img src="readmeresource/system_architeture.jpg" alt="System Architeture" style="max-width: 100%; height: auto;">
-</div>
 
+<div align="center">
+<img src="readmeresource/systemArchiteture.jpg" alt="systemArchiteture" style="max-width: 100%; height: auto;">
+</div>
 <br/>
+
+---
 
 ## 📊 ERD
+- 컨텐츠 장르 추가
+- 추천 테이블 추가
+- 큐레이팅, 큐레이팅 상세 테이블 삭제
 <div align="center">
-<img src="readmeresource/moodlinkerd.png" alt="ERD" style="max-width: 100%; height: auto;">
-
+<img src="readmeresource/erd.png" alt="erd" style="max-width: 100%; height: auto;">
 </div>
-
 <br/>
 
-<br/>
-
-## ✏️ UI Flow
-<div align="center">
-<img src="readmeresource/uiflow.png" alt="UI Flow" style="max-width: 100%; height: auto;">
-</div>
-
-<br/>
+---
 
 ## 🛠️ 트러블 슈팅
 <div align="center">
-<img src="readmeresource/troubleshooting.png" alt="Troubleshooting" style="max-width: 100%; height: auto;">
+<img src="readmeresource/issue.png" alt="issue" style="max-width: 100%; height: auto;">
 </div>
 <br/>
+
+---
 
 ## 🧾 코드 컨벤션
 
@@ -174,6 +183,5 @@ test 글입니다. -  lkh
 | 🎨 **design**     | 뷰 디자인 변경                                |
 
 ---
-
-[NULL NULL 하게 발표자료 보기](readmeresource/nullnullppt.pdf)<br>
-[NULL NULL 하게 팀 2차 프로젝트 WBS(Gantt)](readmeresource/wbs_timeline.pdf)<br>
+[NULL NULL 하게 3차 발표자료 보기](readmeresource/nullnullppt.pdf)<br>
+[NULL NULL 하게 팀 3차 프로젝트 WBS](readmeresource/wbs_timeline.png)<br>
