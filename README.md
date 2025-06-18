@@ -122,11 +122,25 @@
 ---
 
 ## 👨‍🔧 기술 스택 & 협업 도구
+- 해시값 sha -256알고즘을 쓰기위한 Apache Commons codec 추가
+- JWT 추가
+- Redis 추가
+- Trello -> Jira 사용
 <div align="center">
 <img src="readmeresource/stack.png" alt="stack" style="max-width: 100%; height: auto;">
 </div>
 <br/>
 
+---
+
+## 📊 ERD
+- 컨텐츠 장르 추가
+- 추천 테이블 추가
+- 큐레이팅, 큐레이팅 상세 테이블 삭제
+<div align="center">
+<img src="readmeresource/erd.png" alt="erd" style="max-width: 100%; height: auto;">
+</div>
+<br/>
 
 
 ## 🛠️ 트러블 슈팅
