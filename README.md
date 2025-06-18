@@ -133,6 +133,15 @@
 
 ---
 
+## 📍 System Architeture
+
+<div align="center">
+<img src="readmeresource/systemArchiteture.png" alt="systemArchiteture" style="max-width: 100%; height: auto;">
+</div>
+<br/>
+
+---
+
 ## 📊 ERD
 - 컨텐츠 장르 추가
 - 추천 테이블 추가
