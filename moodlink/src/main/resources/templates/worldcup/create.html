@@ -5,8 +5,24 @@
   <meta charset="UTF-8">
   <title>월드컵</title>
   <style>
-    body {
+    html, body {
+      height: 100%;
+      overflow: hidden; /* 전체 페이지 스크롤 막기 */
+      margin: 0;
+      padding: 0;
       color: white;
+    }
+
+    .container{
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      overflow-y: auto;
+      margin: 80px auto auto;
+      height: 100vh;
+    }
+    .container::-webkit-scrollbar {
+      display: none;
     }
 
     /* 카테고리 버튼 */
@@ -74,138 +90,137 @@
 <h5>월드컵 생성 페이지입니다.</h5>
 
 <div layout:fragment="content">
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <h5>카테고리를 선택하세요:</h5>
-  <div id="category-buttons">
-    <button type="button" class="category-btn" data-category="Movie">영화</button>
-    <button type="button" class="category-btn" data-category="Book">도서</button>
-    <button type="button" class="category-btn" data-category="Music">음악</button>
-  </div>
+  <div class="container">
+    <h5>카테고리를 선택하세요:</h5>
+    <div id="category-buttons">
+      <button type="button" class="category-btn" data-category="Movie">영화</button>
+      <button type="button" class="category-btn" data-category="Book">도서</button>
+      <button type="button" class="category-btn" data-category="Music">음악</button>
+    </div>
 
-  <label>
-    월드컵 제목:
-    <input type="text" id="worldcup-title" placeholder="예: 2002년 월드컵" style="width: 300px; background-color: white" />
-  </label>
-  <button id="create-btn" disabled>생성하기</button>
-
-  <div id="content-select-area" style="margin-top: 20px;"></div>
-
-  <script>
-    const selectedIds = new Set();
-    const createBtn = document.getElementById('create-btn');
-    const contentArea = document.getElementById('content-select-area');
-    const titleInput = document.getElementById("worldcup-title");
-    let currentImg = null;
-
-    let currentCategory = null;
-    const dummyContents = {};
-
-    // 영화 데이터는 비동기로 받아오기
-    window.addEventListener('DOMContentLoaded', async () => {
-      try {
-        const MovieRes = await fetch('/api/movie/worldcup');
-        const MovieData = await MovieRes.json();
-        dummyContents.Movie = MovieData;
-        console.log('영화 데이터 미리 불러옴');
-
-        const MusicRes = await fetch('/api/music/worldcup');
-        const MusicData = await MusicRes.json();
-        dummyContents.Music = MusicData;
-        console.log('음악 데이터 미리 불러옴');
-
-        const BookRes = await fetch('/api/book/worldcup');
-        const BookData = await BookRes.json();
-        dummyContents.Book = BookData;
-        console.log('도서 데이터 미리 불러옴');
-
-      } catch (e) {
-        console.error('데이터 로딩 실패:', e);
-      }
-    });
-
-    document.querySelectorAll('.category-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
-        const category = this.dataset.category;
-        currentCategory = category;
-
-        // 선택 초기화
-        selectedIds.clear();
-        createBtn.disabled = true;
-
-        // UI 갱신
-        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('selected'));
-        this.classList.add('selected');
-
-        const contents = dummyContents[category] || [];
-        contentArea.innerHTML = contents.map(c => {
-          const shortTitle = c.title.length > 10 ? c.title.slice(0, 10) + '...' : c.title;
-          return `
-    <label class="content-card" style="display:inline-block; margin:5px; padding:10px; border:1px solid #ccc; cursor:pointer; width:140px;">
-      <input type="checkbox" name="contentIds" value="${c.id}" data-image="${c.image}"  style="display:none;" />
-      <img src="${c.image}" alt="${c.title}" style="width:120px; height:120px; display:block; margin-bottom:5px;" />
-      <span title="${c.title}" style="display:inline-block; width:120px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${shortTitle}</span>
+    <div>
+    <label>
+      월드컵 제목:
+      <input type="text" id="worldcup-title" placeholder="예: 2002년 월드컵" style="width: 300px; background-color: white" />
     </label>
-  `;
-        }).join('');
+    <button id="create-btn" disabled>생성하기</button>
+  </div>
+    <div id="content-select-area" style="margin-top: 20px;"></div>
 
-        // 카드 클릭 이벤트 (선택/해제 처리 포함)
-        document.querySelectorAll('.content-card').forEach(card => {
-          card.addEventListener('click', function (e) {
-            const checkbox = this.querySelector('input[type="checkbox"]');
-            checkbox.checked = !checkbox.checked;
+    <script>
+      const selectedIds = new Set();
+      const createBtn = document.getElementById('create-btn');
+      const contentArea = document.getElementById('content-select-area');
+      const titleInput = document.getElementById("worldcup-title");
+      let currentImg = null;
 
-            const id = checkbox.value;
-            if (checkbox.checked) {
-              currentImg= checkbox.dataset.image;
-              selectedIds.add(id);
-            } else {
-              selectedIds.delete(id);
-            }
+      let currentCategory = null;
+      const dummyContents = {};
 
-            createBtn.disabled = selectedIds.size !== 16;
-            this.classList.toggle('selected', checkbox.checked);
-            e.preventDefault();
+      // 영화 데이터는 비동기로 받아오기
+      window.addEventListener('DOMContentLoaded', async () => {
+        try {
+          const MovieRes = await fetch('/api/movie/worldcup');
+          const MovieData = await MovieRes.json();
+          dummyContents.Movie = MovieData;
+          console.log('영화 데이터 미리 불러옴');
+
+          const MusicRes = await fetch('/api/music/worldcup');
+          const MusicData = await MusicRes.json();
+          dummyContents.Music = MusicData;
+          console.log('음악 데이터 미리 불러옴');
+
+          const BookRes = await fetch('/api/book/worldcup');
+          const BookData = await BookRes.json();
+          dummyContents.Book = BookData;
+          console.log('도서 데이터 미리 불러옴');
+
+        } catch (e) {
+          console.error('데이터 로딩 실패:', e);
+        }
+      });
+
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+          const category = this.dataset.category;
+          currentCategory = category;
+
+          // 선택 초기화
+          selectedIds.clear();
+          createBtn.disabled = true;
+
+          // UI 갱신
+          document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('selected'));
+          this.classList.add('selected');
+
+          const contents = dummyContents[category] || [];
+          contentArea.innerHTML = contents.map(c => {
+            const shortTitle = c.title.length > 10 ? c.title.slice(0, 10) + '...' : c.title;
+            return `
+      <label class="content-card" style="display:inline-block; margin:5px; padding:10px; border:1px solid #ccc; cursor:pointer; width:140px;">
+        <input type="checkbox" name="contentIds" value="${c.id}" data-image="${c.image}"  style="display:none;" />
+        <img src="${c.image}" alt="${c.title}" style="width:120px; height:120px; display:block; margin-bottom:5px;" />
+        <span title="${c.title}" style="display:inline-block; width:120px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${shortTitle}</span>
+      </label>
+    `;
+          }).join('');
+
+          // 카드 클릭 이벤트 (선택/해제 처리 포함)
+          document.querySelectorAll('.content-card').forEach(card => {
+            card.addEventListener('click', function (e) {
+              const checkbox = this.querySelector('input[type="checkbox"]');
+              checkbox.checked = !checkbox.checked;
+
+              const id = checkbox.value;
+              if (checkbox.checked) {
+                currentImg= checkbox.dataset.image;
+                selectedIds.add(id);
+              } else {
+                selectedIds.delete(id);
+              }
+
+              createBtn.disabled = selectedIds.size !== 16;
+              this.classList.toggle('selected', checkbox.checked);
+              e.preventDefault();
+            });
           });
         });
       });
-    });
 
-    // 생성하기 버튼 클릭 시 POST 요청
-    createBtn.addEventListener('click', async () => {
+      // 생성하기 버튼 클릭 시 POST 요청
+      createBtn.addEventListener('click', async () => {
 
-      try {
-        const res = await fetch('/api/worldcup/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+        try {
+          const res = await fetch('/api/worldcup/create', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
 
 
-          body: JSON.stringify({
-            id: Array.from(selectedIds) ,
-            title:titleInput.value.trim(),
-            image:currentImg,
-            contentType: currentCategory
-          })
-        });
+            body: JSON.stringify({
+              id: Array.from(selectedIds) ,
+              title:titleInput.value.trim(),
+              image:currentImg,
+              contentType: currentCategory
+            })
+          });
 
-        const result = await res.json();
+          const result = await res.json();
 
-        if (result === true) {
-          alert('월드컵 생성 완료!');
-        } else {
-          alert('월드컵 생성 실패!');
+          if (result === true) {
+            alert('월드컵 생성 완료!');
+          } else {
+            alert('월드컵 생성 실패!');
+          }
+        } catch (e) {
+          console.error('에러 발생:', e);
+          alert('요청 중 오류가 발생했습니다.');
         }
-      } catch (e) {
-        console.error('에러 발생:', e);
-        alert('요청 중 오류가 발생했습니다.');
-      }
-    });
-  </script>
+      });
+    </script>
+    <br><br><br><br><br><br><br>
+  </div>
 </div>
 
 </body>
