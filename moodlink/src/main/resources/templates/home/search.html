@@ -95,7 +95,7 @@
     </h4>
 
     <!-- 영화 -->
-    <div class="category" id="movie">
+    <div class="category" id="movie" th:if="${(movie != null and movie.size() > 0) or #strings.isEmpty(contentName)}">
       <div th:if="${#strings.isEmpty(contentName)}">
         <form  id="searchMovieWithGenreForm" th:action="@{/search/genre/movie}" method="get">
           <input type="hidden" id="selectedMovieCategory" th:value="${selectedMovieCategory}" />
@@ -179,7 +179,7 @@
 
 
     <!--음악 -->
-    <div class="category" id="music">
+    <div class="category" id="music" th:if="${(music != null and music.size() > 0) or #strings.isEmpty(contentName)}">
       <div th:if="${#strings.isEmpty(contentName)}">
         <form  id="searchMusicWithGenreForm" th:action="@{/search/genre/music}" method="get">
           <input type="hidden" id="selectedMusicCategory" th:value="${selectedMusicCategory}" />
@@ -264,7 +264,7 @@
     </div>
 
     <!-- 도서 -->
-    <div class="category" id="book">
+    <div class="category" id="book" th:if="${(book != null and book.size() > 0) or #strings.isEmpty(contentName)}">
       <div th:if="${#strings.isEmpty(contentName)}">
         <form  id="searchBookWithGenreForm" th:action="@{/search/genre/book}" method="get">
           <input type="hidden" id ="selectedBookCategory" th:value="${selectedBookCategory}" />
