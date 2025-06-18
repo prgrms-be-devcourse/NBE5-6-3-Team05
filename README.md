@@ -155,7 +155,7 @@
 
 ## 🛠️ 트러블 슈팅
 <div align="center">
-<img src="readmeresource/troubleshooting.png" alt="Troubleshooting" style="max-width: 100%; height: auto;">
+<img src="readmeresource/issue.png" alt="issue" style="max-width: 100%; height: auto;">
 </div>
 <br/>
 
