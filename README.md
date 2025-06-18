@@ -61,7 +61,7 @@
       <img src="readmeresource/worldcup.gif" width="380"/>
     </td>
     <td align="center">
-      <img src="readmeresource/.gif" width="380"/>
+      <img src="readmeresource/adminnew.gif" width="380"/>
     </td>
   </tr>
 
@@ -71,7 +71,7 @@
   </tr>
   <tr>
     <td align="center">
-      <img src="readmeresource/main_search_keyword.gif" width="380"/>
+      <img src="readmeresource/search_keyword.gif" width="380"/>
     </td>
     <td align="center">
       <img src="readmeresource/searchGenre.gif" width="380"/>
