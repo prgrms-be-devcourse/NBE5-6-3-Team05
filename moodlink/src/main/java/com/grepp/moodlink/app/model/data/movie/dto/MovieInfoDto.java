@@ -23,7 +23,7 @@ public class MovieInfoDto {
     private LocalDate releaseDate;
     private LocalDate createdAt;
     private String thumbnail;
-    private Long likeCount;
+    private Long likeCount = 0L;
 
     public static MovieInfoDto toDto(Movie movie) {
         MovieInfoDto dto = new MovieInfoDto();

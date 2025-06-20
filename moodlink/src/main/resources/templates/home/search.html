@@ -382,18 +382,25 @@
 
   }
 
+  // function youtubeMovie(title) {
+  //   fetch(`/api/trailer/movie?title=${encodeURIComponent(title)}`)
+  //   .then(res => res.json())
+  //   .then(data => {
+  //     if (data.movieVideoId) {
+  //       const videoUrl = `https://www.youtube.com/watch?v=${data.movieVideoId}`;
+  //       window.open(videoUrl, '_blank');
+  //     } else {
+  //       alert('영화를 찾을 수 없습니다.');
+  //     }
+  //   })
+  //   .catch(() => alert('영화를 불러오는 중 오류가 발생했습니다.'));
+  // }
+
   function youtubeMovie(title) {
-    fetch(`/api/trailer/movie?title=${encodeURIComponent(title)}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.movieVideoId) {
-        const videoUrl = `https://www.youtube.com/watch?v=${data.movieVideoId}`;
+
+        const videoUrl = `https://www.wavve.com/search?searchWord= ${title}`;
         window.open(videoUrl, '_blank');
-      } else {
-        alert('영화를 찾을 수 없습니다.');
-      }
-    })
-    .catch(() => alert('영화를 불러오는 중 오류가 발생했습니다.'));
+
   }
 
   function showDetailModalMusic(title, releaseDate, summary, thumbnail, type, singer) {
